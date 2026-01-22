@@ -3,22 +3,11 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Observation } from 'api/types'
-import {
-  Box,
-  DefaultList,
-  DefaultListItemObj,
-  FeatureLandingTemplate,
-  LoadingComponent,
-  TextArea,
-  TextLine,
-  TextView,
-  TextViewProps,
-} from 'components'
+import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, TextViewProps } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { VATypographyThemeVariants } from 'styles/theme'
+import LabsAndTestsResultItem from 'screens/HealthScreen/LabsAndTests/LabsAndTestsResultItem/LabsAndTestsResultItem'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -44,7 +33,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { standardMarginBetween, condensedMarginBetween, tinyMarginBetween } = theme.dimensions
+  const { standardMarginBetween } = theme.dimensions
   const placeHolder = t('noneNoted')
 
   useEffect(() => {
@@ -80,71 +69,6 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
   const displayName = labOrTest.attributes?.display
   const decodedReport = labOrTest.attributes?.encodedData ? atob(labOrTest.attributes?.encodedData) : placeHolder
   const observationsPresent = (labOrTest.attributes?.observations?.length ?? 0) > 0
-
-  // string, marginBottom, marginTop, variant
-  const getTextLine = (
-    text: string | null,
-    mb: number,
-    mt: number,
-    variant: keyof VATypographyThemeVariants = 'MobileBody',
-  ): TextLine | undefined => {
-    return text ? { text, variant, mt, mb } : undefined
-  }
-
-  const getTextLinesForLabResults = (observation: Observation): Array<TextLine> => {
-    const value = observation?.value?.text || null
-    return [
-      getTextLine(observation?.testCode, condensedMarginBetween, tinyMarginBetween, 'LabResultHeader') || {
-        text: placeHolder,
-      },
-      getTextLine(t('labsAndTests.details.sampleTested'), 0, condensedMarginBetween, 'MobileBodyBold') || {
-        text: placeHolder,
-      },
-      getTextLine(observation?.sampleTested, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
-      getTextLine(t('labsAndTests.details.bodySite'), 0, condensedMarginBetween, 'MobileBodyBold') || {
-        text: placeHolder,
-      },
-      getTextLine(observation?.bodySite, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
-
-      getTextLine(t('labsAndTests.details.result'), 0, condensedMarginBetween, 'MobileBodyBold') || {
-        text: placeHolder,
-      },
-      getTextLine(value, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
-      getTextLine(t('labsAndTests.details.referenceRange'), 0, condensedMarginBetween, 'MobileBodyBold') || {
-        text: placeHolder,
-      },
-      getTextLine(observation?.referenceRange, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
-      getTextLine(t('labsAndTests.details.status'), 0, condensedMarginBetween, 'MobileBodyBold') || {
-        text: placeHolder,
-      },
-      getTextLine(observation?.status, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
-      getTextLine(t('labsAndTests.details.comment'), 0, condensedMarginBetween, 'MobileBodyBold') || {
-        text: placeHolder,
-      },
-      getTextLine(observation?.comments, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
-    ]
-  }
-
-  const getListItemsForLabResults = (listOfResults: Array<Observation>): Array<DefaultListItemObj> => {
-    const listItems: Array<DefaultListItemObj> = []
-
-    listOfResults.map((result, index) => {
-      const textLines = getTextLinesForLabResults(result)
-
-      listItems.push({
-        textLines,
-        a11yValue: t('listPosition', { position: index + 1, total: listOfResults.length }),
-        a11yHintText: t('labsAndTests.details.results.accessibilityHint'),
-        testId: getTestIDFromTextLines(textLines),
-      })
-    })
-    return listItems
-  }
-
-  // Setting this testId also sets the a11y label for the list item
-  const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
-    return textLines.map((line) => line.text).join(' ')
-  }
 
   // style `Results` as a title to match `Details`
   const titleProps: TextViewProps = {
@@ -198,8 +122,10 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
               {t('labsAndTests.details.results')}
             </TextView>
           </Box>
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <DefaultList items={getListItemsForLabResults(labOrTest.attributes?.observations || [])} />
+          <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
+            {labOrTest.attributes?.observations?.map((o) => {
+              return <LabsAndTestsResultItem observation={o} />
+            })}
           </Box>
         </Box>
       )}
