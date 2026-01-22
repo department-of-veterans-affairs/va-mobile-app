@@ -28,6 +28,7 @@ platform :android do
   lane :qa do |options|
     notes = options[:notes]
     update_version_and_build(options[:version ])
+    tag_build
     bundle("Release")
     upload("Development Team")
     bundle("Debug")
@@ -45,6 +46,7 @@ platform :android do
 
     datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
     update_version_and_build(options[:version ])
+    tag_build
     bundle("Release")
     puts ps_track
     upload(ps_track)
@@ -65,6 +67,7 @@ platform :android do
   lane :rc do |options|
     puts('Begin RC lane' )
     update_version_and_build(options[:version ])
+    tag_build
     bundle("RC")
     rcVersion = "#{Gem::Version.new(ENV['VERSION_NAME']).bump}.0"
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
@@ -78,6 +81,7 @@ platform :android do
   lane :review do |options|
     puts 'Run the review lane'
     update_version_and_build(options[:version ])
+    tag_build
     bundle("Release")
     upload("Pre-Prod Stash", false)
     message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
@@ -153,9 +157,6 @@ platform :android do
     end
     ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
     ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
-
-    # Tag early to avoid collisions on retries
-    tag_build
   end
 
 
