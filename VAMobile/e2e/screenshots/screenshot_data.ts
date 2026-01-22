@@ -17,7 +17,7 @@ export const screenshotData: ScreenshotData[] = [
     },
     description: ['Complete health care and', 'benefits transactions'],
     deviceType: ['ios', 'android', 'ipad'],
-    setupFunction: ['goHome', 'disableAF', 'skipUpdate', 'demoUser'],
+    setupFunction: ['goHome', 'disableAF', 'skipUpdate', 'whatsNewBanner', 'demoUser'],
   },
   {
     testId: 'HealthScreen',
