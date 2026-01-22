@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, View } from 'react-native'
 import { InView } from 'react-native-intersection-observer'
@@ -355,6 +355,10 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
+  const numClaimsWithEvidenceRequests = useMemo(() => {
+    return claimsAndAppealsQuery.data?.data.filter((claim) => claim.attributes.documentsNeeded).length
+  }, [claimsAndAppealsQuery.data?.data])
+
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
@@ -430,9 +434,14 @@ export function HomeScreen({}: HomeScreenProps) {
               {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
                 <ActivityButton
                   title={t('claims.title')}
-                  subText={t('claims.activityButton.subText', {
-                    count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
-                  })}
+                  subText={
+                    t('claims.activityButton.subText', {
+                      count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
+                    }) +
+                    (numClaimsWithEvidenceRequests
+                      ? t('claims.evidenceRequest.subText', { count: numClaimsWithEvidenceRequests })
+                      : '')
+                  }
                   deepLink={'claims'}
                 />
               )}

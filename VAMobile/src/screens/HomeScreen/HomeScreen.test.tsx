@@ -8,6 +8,7 @@ import { useDebts } from 'api/debts'
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { useMedicalCopays } from 'api/medicalCopays'
 import {
+  ClaimsAndAppealsListPayload,
   DisabilityRatingData,
   FacilitiesPayload,
   MilitaryServiceHistoryData,
@@ -128,6 +129,44 @@ const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttribut
     attributes: serviceHistory,
   },
 })
+
+const mockClaimsAndAppealsPayload: ClaimsAndAppealsListPayload = {
+  data: [
+    {
+      id: '0',
+      type: 'appeal',
+      attributes: {
+        subtype: 'supplementalClaim',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-10-22',
+        updatedAt: '2020-10-28',
+        displayTitle: 'supplemental claim for disability compensation',
+      },
+    },
+    {
+      id: '2',
+      type: 'claim',
+      attributes: {
+        subtype: 'Compensation',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-10-22',
+        updatedAt: '2020-10-30',
+        displayTitle: 'Compensation',
+        documentsNeeded: true,
+      },
+    },
+  ],
+  meta: {
+    pagination: {
+      currentPage: 1,
+      perPage: 10,
+      totalEntries: 2,
+    },
+    activeClaimsCount: 3,
+  },
+}
 
 context('HomeScreen', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
@@ -373,17 +412,18 @@ context('HomeScreen', () => {
   describe('Claims module', () => {
     it('displays active claims count when there are active claims', async () => {
       const activeClaimsCount = 3
+      const evidenceRequestCount = 1
       when(get as jest.Mock)
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
-        .mockResolvedValue(getClaimsAndAppealsPayload(activeClaimsCount))
+        .mockResolvedValue(mockClaimsAndAppealsPayload)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('link', { name: t('claims.title') })).toBeTruthy())
       await waitFor(() =>
         expect(
           screen.getByRole('link', {
-            name: t('claims.activityButton.subText', {
-              count: activeClaimsCount,
-            }),
+            name:
+              t('claims.activityButton.subText', { count: activeClaimsCount }) +
+              t('claims.evidenceRequest.subText', { count: evidenceRequestCount }),
           }),
         ).toBeTruthy(),
       )
