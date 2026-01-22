@@ -118,7 +118,7 @@ platform :ios do
   desc "makes a test build to ensure changes to native directories did not break build process. DOES NOT DISTRIBUTE"
   lane :test_build_only do |options|
     ensure_xcode_version(version: "16.2", strict: false)
-    update_version(options[:version])
+    update_version(options[:version], skip_tag: true)
     sign
     build
   end
@@ -136,7 +136,7 @@ platform :ios do
   ### UTILITIES ###
 
   # updates the build and version number
-  def update_version (version)
+  def update_version (version, skip_tag: false)
     puts('version: ' + version.to_s)
 
     # Get the latest version/build info from TestFlight
@@ -164,7 +164,7 @@ platform :ios do
     increment_build_number(build_number: next_build_number, xcodeproj: ENV['IOS_PROJ_FILE'])
     
     # Tag early to avoid collisions on retries
-    tag_build(next_build_number)
+    tag_build(next_build_number) unless skip_tag
 
     if version=='qa'
     # if its a qa version, we need to check the app store because it will fail if we try and upload
