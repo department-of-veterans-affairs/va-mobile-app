@@ -1,3 +1,26 @@
+export type Facility = {
+  facilityId: number
+  facilityName: string
+}
+
+export type MigrationPhases = {
+  current: string
+  p0: string
+  p1: string
+  p2: string
+  p3: string
+  p4: string
+  p5: string
+  p6: string
+  p7: string
+}
+
+export type MigratingFacility = {
+  migrationDate: string
+  facilities: Facility[]
+  phases: MigrationPhases
+}
+
 export type AuthorizedServicesPayload = {
   data: {
     id: string
@@ -29,6 +52,7 @@ export type AuthorizedServicesPayload = {
   meta: {
     isUserAtPretransitionedOhFacility: boolean
     isUserFacilityReadyForInfoAlert: boolean
+    migratingFacilitiesList: MigratingFacility[]
   }
 }
 
@@ -54,4 +78,5 @@ export type UserAuthorizedServicesData = {
   userProfileUpdate: boolean
   isUserAtPretransitionedOhFacility: boolean
   isUserFacilityReadyForInfoAlert: boolean
+  migratingFacilitiesList: MigratingFacility[]
 }

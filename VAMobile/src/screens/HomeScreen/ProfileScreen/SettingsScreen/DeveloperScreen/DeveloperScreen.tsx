@@ -6,13 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
-import queryClient from 'api/queryClient'
+import { UserAuthorizedServicesData } from 'api/types'
 import {
   Box,
   ButtonDecoratorType,
@@ -26,7 +26,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { AnalyticsState, OfflineState, setOfflineDebugEnabled } from 'store/slices'
+import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
@@ -136,7 +136,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   // push data
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const { offlineDebugEnabled } = useSelector<RootState, OfflineState>((state) => state.offline)
   const [hideWarnings, setHideWarnings] = useState<boolean>(true)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   const [deviceToken, setDeviceToken] = useState<string>('')
@@ -185,14 +184,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           },
         },
       ],
-    })
-  }
-
-  const onResetOfflineStorage = async (): Promise<void> => {
-    await queryClient.resetQueries({
-      predicate: (query) => {
-        return `${query.queryKey}` !== `${authorizedServicesKeys.authorizedServices}`
-      },
     })
   }
 
@@ -246,18 +237,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       },
     },
   ]
-  const offlineModeList: Array<SimpleListItemObj> = [
-    {
-      text: 'Offline Debug',
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: offlineDebugEnabled,
-      },
-      onPress: async () => {
-        dispatch(setOfflineDebugEnabled(!offlineDebugEnabled))
-      },
-    },
-  ]
 
   const onFeedback = () => {
     inAppFeedback('Developer')
@@ -284,11 +263,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box>
         <TextArea>
           <Button onPress={onResetAsyncStorage} label={'Reset async storage'} />
-        </TextArea>
-      </Box>
-      <Box>
-        <TextArea>
-          <Button onPress={onResetOfflineStorage} label={'Reset offline storage'} />
         </TextArea>
       </Box>
       <Box>
@@ -322,14 +296,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           Console Warnings
         </TextView>
         {<SimpleList items={consoleWarningsList} />}
-        <TextView
-          variant={'MobileBodyBold'}
-          accessibilityRole={'header'}
-          mx={theme.dimensions.gutter}
-          my={theme.dimensions.standardMarginBetween}>
-          Offline Mode
-        </TextView>
-        <SimpleList items={offlineModeList} />
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
@@ -339,11 +305,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
           <Button onPress={onRemoteConfigTest} label={'Remote Config Test'} />
-        </TextArea>
-      </Box>
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextArea>
-          <Button onPress={() => navigateTo('MaintenanceWindows')} label={'Override Maintenance Windows'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -364,27 +325,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           </Box>
         )
       })}
-      <Box mt={theme.dimensions.condensedMarginBetween}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            Authorized Services
-          </TextView>
-        </TextArea>
-      </Box>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {userAuthorizedServices
-          ? Object.entries(userAuthorizedServices).map((key) => {
-              return (
-                <Box key={key[0]} mt={theme.dimensions.condensedMarginBetween}>
-                  <TextArea>
-                    <TextView variant="MobileBodyBold">{key}</TextView>
-                    <TextView selectable={true}>{key[1].toString()}</TextView>
-                  </TextArea>
-                </Box>
-              )
-            })
-          : undefined}
-      </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
