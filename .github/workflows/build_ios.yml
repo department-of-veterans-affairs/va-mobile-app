@@ -71,7 +71,6 @@ jobs:
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:
-
       - name: Generate token
         id: generate_token
         uses: actions/create-github-app-token@v1
@@ -91,7 +90,7 @@ jobs:
           # Do not print raw user-provided notes to logs; avoid leaking or formatting issues
           echo "Notes received"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
-          echo "${{ secrets.IOS_GS_PLIST_BASE64_TEMP }}" | base64 --decode > GoogleService-Info.plist
+          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -130,7 +129,7 @@ jobs:
       - name: Run fastlane with retries
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 45
+          timeout_minutes: 20
           max_attempts: 3
           # Use sanitized notes from the environment to avoid injection/formatting issues
           command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"$SANITIZED_NOTES" tfGroup:"${{ inputs.tf_group }}" --verbose
