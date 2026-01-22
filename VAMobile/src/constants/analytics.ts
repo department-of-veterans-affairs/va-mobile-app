@@ -859,6 +859,17 @@ export const Events = {
       },
     }
   },
+  vama_notification_receive: (notification_url?: string, state?: string): Event => {
+    // Omit the id that follows the main url path for better logging
+    const trimmed_notification_url = trimNotificationUrl(notification_url || '')
+    return {
+      name: 'vama_notification_receive',
+      params: {
+        notification_url: trimmed_notification_url,
+        notification_state: state,
+      },
+    }
+  },
   vama_offline_access: (screen_name: string): Event => {
     return {
       name: 'vama_offline_access',

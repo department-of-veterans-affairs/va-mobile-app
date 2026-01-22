@@ -75,6 +75,10 @@ const NotificationManager: FC = ({ children }) => {
     Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
       console.debug('Notification Received - Foreground', notification)
       foregroundNotifications.push(notification.identifier)
+
+      // Log analytics event for notification received in foreground
+      logAnalyticsEvent(Events.vama_notification_receive(notification.payload.url, 'foreground'))
+
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion({ alert: true, sound: true, badge: true })
     })
@@ -106,6 +110,10 @@ const NotificationManager: FC = ({ children }) => {
     // Register callbacks for notifications that happen when the app is in the background
     Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
       console.debug('Notification Received - Background', notification)
+
+      // Log analytics event for notification received in background
+      logAnalyticsEvent(Events.vama_notification_receive(notification.payload.url, 'background'))
+
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion(NotificationBackgroundFetchResult.NEW_DATA)
     })
