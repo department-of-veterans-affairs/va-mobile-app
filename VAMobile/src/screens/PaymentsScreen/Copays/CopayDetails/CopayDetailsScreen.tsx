@@ -173,7 +173,8 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
                   label: t('copays.resolveCopay'),
                   onPress: handleResolveClick,
                 }}
-                expandable>
+                expandable
+                initializeExpanded={false}>
                 <TextView variant="MobileBody">
                   <Trans
                     i18nKey="copays.balanceOverdue.description"
