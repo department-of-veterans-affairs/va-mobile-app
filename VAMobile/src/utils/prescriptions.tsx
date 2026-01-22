@@ -83,14 +83,16 @@ export const getStatusDefinitionTextForRefillStatus = (
   t: TFunction,
   medicationsOracleHealthEnabled: boolean = false,
 ): { text: string; a11yLabel: string } => {
-  let activeStatusText = medicationsOracleHealthEnabled ? t('statusDefinition.activev1') : t('statusDefinition.active')
-  let activeStatusA11yLabel = medicationsOracleHealthEnabled
+  const activeStatusText = medicationsOracleHealthEnabled
+    ? t('statusDefinition.activev1')
+    : t('statusDefinition.active')
+  const activeStatusA11yLabel = medicationsOracleHealthEnabled
     ? a11yLabelVA(t('statusDefinition.activev1'))
     : a11yLabelVA(t('statusDefinition.active'))
-  let inProgressStatusText = medicationsOracleHealthEnabled
+  const inProgressStatusText = medicationsOracleHealthEnabled
     ? t('statusDefinition.active.inProgressv1')
     : t('statusDefinition.active.inProgress')
-  let inProgressStatusA11yLabel = medicationsOracleHealthEnabled
+  const inProgressStatusA11yLabel = medicationsOracleHealthEnabled
     ? a11yLabelVA(t('statusDefinition.active.inProgressv1'))
     : a11yLabelVA(t('statusDefinition.active.inProgress'))
   switch (status) {
@@ -162,7 +164,6 @@ export const filterAndSortPrescriptions = (
   sort: string,
   ascending: boolean,
   t: TFunction,
-  medicationsOracleHealthEnabled: boolean = false,
 ): PrescriptionsList => {
   let filteredList: PrescriptionsList = []
   // If there are no filters, don't filter the list

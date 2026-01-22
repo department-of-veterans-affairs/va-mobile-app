@@ -185,14 +185,14 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         medicationsOracleHealthEnabled,
       ),
     )
-  }, [filterToUse, sortByToUse, sortOnToUse, allPrescriptions, t])
+  }, [filterToUse, sortByToUse, sortOnToUse, allPrescriptions, t, medicationsOracleHealthEnabled])
 
   useEffect(() => {
     const newPrescriptions = filteredPrescriptions?.slice((page - 1) * pageSize, page * pageSize)
     setCurrentPrescriptions(newPrescriptions || [])
   }, [page, filteredPrescriptions])
 
-  const getFilterOptions = (medicationsOracleHealthEnabled: boolean = false) => {
+  const getFilterOptions = () => {
     if (!medicationsOracleHealthEnabled) {
       return [
         {

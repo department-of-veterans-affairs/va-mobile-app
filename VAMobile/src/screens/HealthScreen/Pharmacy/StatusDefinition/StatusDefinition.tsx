@@ -20,8 +20,6 @@ function StatusDefinition({ navigation, route }: StatusDefinitionProps) {
   const { value, display } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { medicationsOracleHealthEnabled = false } = userAuthorizedServices || {}
 
   const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t, true)
   const timeOpened = DateTime.now().toMillis()
