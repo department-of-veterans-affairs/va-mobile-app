@@ -38,7 +38,9 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaMedicalRecords.title')}>
-      <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
+      {authorizedServices && (
+        <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
+      )}
       <Box mb={theme.dimensions.standardMarginBetween}>
         {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton
