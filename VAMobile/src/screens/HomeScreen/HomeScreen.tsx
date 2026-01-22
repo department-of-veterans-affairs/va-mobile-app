@@ -72,7 +72,7 @@ import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logLoadTimeEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
@@ -151,25 +151,25 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
-      logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_appts_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [appointmentsQuery.data, appointmentsQuery.isFetched, loginTimestamp])
 
   useEffect(() => {
     if (foldersQuery.isFetched && foldersQuery.data) {
-      logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_sm_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (prescriptionsQuery.isFetched && prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable) {
-      logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_rx_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [prescriptionsQuery.isFetched, prescriptionsQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (claimsAndAppealsQuery.isFetched && claimsAndAppealsQuery.data?.meta.activeClaimsCount) {
-      logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_claims_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [claimsAndAppealsQuery.isFetched, claimsAndAppealsQuery.data, loginTimestamp])
 
