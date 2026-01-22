@@ -135,9 +135,8 @@ platform :android do
     puts(" - Google Play (Store): #{latestBuildFromStore}")
     puts(" - Git Tags (Remote): #{latestBuildFromTags}")
 
+    # Get latest build number from all sources
     latestBuild = [latestBuildFromStore, latestBuildFromTags].max
-    puts("Calculated Next Build Number: #{latestBuild + 1}")
-    latestBuild = latestBuild + 1 # Increment for the new build
 
     if version=='qa'
       latestVersion = get_latest_version_name
