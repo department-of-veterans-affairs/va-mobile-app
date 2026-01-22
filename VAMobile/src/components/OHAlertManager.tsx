@@ -102,7 +102,10 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
             <Box mb={theme.dimensions.standardMarginBetween} />
             {t(`ohAlert.warning.${parentScreen}.note`) !== `ohAlert.warning.${parentScreen}.note` && (
               <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-                {t(`ohAlert.warning.${parentScreen}.note`)}
+                <Trans
+                  i18nKey={`ohAlert.warning.${parentScreen}.note`}
+                  components={{ bold: <TextView variant="MobileBodyBold" /> }}
+                />
               </TextView>
             )}
           </AlertWithHaptics>
@@ -135,7 +138,9 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
                 {t(`ohAlert.error.${parentScreen}.note`, { featureActions: t(`ohAlert.${parentScreen}.actions`) })}
               </TextView>
             )}
-            <LinkWithAnalytics {...linkProps} />
+            {(parentScreen == OHParentScreens.Appointments || parentScreen == OHParentScreens.SecureMessaging) && (
+              <LinkWithAnalytics {...linkProps} />
+            )}
           </AlertWithHaptics>
         </Box>
       )
