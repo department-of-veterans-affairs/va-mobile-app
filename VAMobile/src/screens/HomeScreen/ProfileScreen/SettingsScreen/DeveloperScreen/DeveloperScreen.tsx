@@ -10,7 +10,6 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
 import {
   Box,

@@ -1,4 +1,4 @@
-export type Facility = {
+export type FacilityInfo = {
   facilityId: number
   facilityName: string
 }
@@ -17,7 +17,7 @@ export type MigrationPhases = {
 
 export type MigratingFacility = {
   migrationDate: string
-  facilities: Facility[]
+  facilities: FacilityInfo[]
   phases: MigrationPhases
 }
 

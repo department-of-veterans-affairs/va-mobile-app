@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
-import { Facility, MigratingFacility, UserAuthorizedServicesData } from 'api/types'
+import { FacilityInfo, MigratingFacility, UserAuthorizedServicesData } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel/va'
@@ -72,7 +72,7 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
   const alertsForScreen = (migration: MigratingFacility) => {
     const alertState = getAlertState(migration.phases.current)
     const dates = migration.phases
-    const facilityNames = migration.facilities.map((facility: Facility) => facility.facilityName) || []
+    const facilityNames = migration.facilities.map((facility: FacilityInfo) => facility.facilityName) || []
     const startPhase = parentScreenToPhaseMap[parentScreen].error[0]
     const endDatePhase = parentScreenToPhaseMap[parentScreen].endDate
     const startDate = dates[startPhase as keyof typeof dates]
