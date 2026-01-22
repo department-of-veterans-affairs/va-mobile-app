@@ -4,7 +4,7 @@ import { Linking } from 'react-native'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { useDebts } from 'api/debts'
+import { useDebtsCount } from 'api/debts'
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { useMedicalCopays } from 'api/medicalCopays'
 import {
@@ -66,8 +66,8 @@ jest.mock('api/medicalCopays', () => ({
 }))
 
 jest.mock('api/debts', () => ({
-  useDebts: jest.fn(() => ({
-    summary: { amountDue: 0, count: 0 },
+  useDebtsCount: jest.fn(() => ({
+    data: 0,
     isLoading: false,
     error: undefined,
   })),
@@ -567,8 +567,8 @@ context('HomeScreen', () => {
         isLoading: false,
         error: undefined,
       })
-      ;(useDebts as jest.Mock).mockReturnValue({
-        summary: { count: 2 },
+      ;(useDebtsCount as jest.Mock).mockReturnValue({
+        data: 2,
         isLoading: false,
         error: undefined,
       })
@@ -603,8 +603,8 @@ context('HomeScreen', () => {
         isLoading: false,
         error: undefined,
       })
-      ;(useDebts as jest.Mock).mockReturnValue({
-        summary: { amountDue: 0, count: 0 },
+      ;(useDebtsCount as jest.Mock).mockReturnValue({
+        data: 0,
         isLoading: false,
         error: undefined,
       })
