@@ -190,7 +190,7 @@ platform :ios do
   def get_highest_build_number_from_asc
     puts("Fetching highest build number from App Store Connect...")
     app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
-    builds = Spaceship::ConnectAPI.get_builds(filter: { app: app.id }, sort: "-uploadedDate", limit: 50, includes: nil)
+    builds = Spaceship::ConnectAPI.get_builds(filter: { app: app.id }, sort: "-uploadedDate", limit: 5, includes: nil)
     highest_build = builds.map { |b| b.version.to_i }.max || 0
     highest_build
   rescue => e
