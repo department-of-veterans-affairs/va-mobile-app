@@ -77,7 +77,7 @@ const NotificationManager: FC = ({ children }) => {
       foregroundNotifications.push(notification.identifier)
 
       // Log analytics event for notification received in foreground
-      logAnalyticsEvent(Events.vama_notification_receive(notification.payload.url, 'foreground'))
+      logAnalyticsEvent(Events.vama_notification_rcv(notification.payload.url, 'foreground'))
 
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion({ alert: true, sound: true, badge: true })
@@ -112,7 +112,7 @@ const NotificationManager: FC = ({ children }) => {
       console.debug('Notification Received - Background', notification)
 
       // Log analytics event for notification received in background
-      logAnalyticsEvent(Events.vama_notification_receive(notification.payload.url, 'background'))
+      logAnalyticsEvent(Events.vama_notification_rcv(notification.payload.url, 'background'))
 
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion(NotificationBackgroundFetchResult.NEW_DATA)
