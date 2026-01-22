@@ -254,11 +254,19 @@ jobs:
           script: |
             yarn detox test -c android ./screenshot.e2e.ts --retries 3
 
-      - name: Upload android artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'android-screenshots-unaltered'
-          path: VAMobile/artifacts/*
+       - name: Upload android artifacts
+         uses: actions/upload-artifact@v4
+         with:
+           name: 'android-screenshots-unaltered'
+           path: VAMobile/artifacts/*
+
+       - name: Upload Detox failure screenshots
+         if: always()
+         uses: actions/upload-artifact@v4
+         with:
+           name: android-detox-failure-screenshots
+           path: VAMobile/artifacts/
+
 
   combine-and-frame-images:
     name: Combine and Frame Images
