@@ -67,7 +67,6 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
     } else {
       navigateTo('TravelPayClaimDetailsScreen', {
         claimId: claimId,
-        backLabel: t('travelPay.claims.title'),
       })
     }
   }

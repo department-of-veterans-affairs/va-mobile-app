@@ -216,7 +216,6 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   return (
     <FeatureLandingTemplate
       headerButton={headerButton}
-      backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       scrollViewProps={scrollViewProps}
       title={t('debts.title')}
