@@ -160,7 +160,6 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('appointments')}
       scrollViewProps={scrollViewProps}

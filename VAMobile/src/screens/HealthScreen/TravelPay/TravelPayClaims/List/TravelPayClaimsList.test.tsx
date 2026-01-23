@@ -191,7 +191,6 @@ describe('TravelPayClaimsList', () => {
 
     expect(mockNavigateTo).toHaveBeenCalledWith('TravelPayClaimDetailsScreen', {
       claimId: firstId,
-      backLabel: t('travelPay.claims.title'),
     })
   })
 

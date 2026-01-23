@@ -87,7 +87,7 @@ describe('Home Screen', () => {
   })
 
   it('home tab tap: verify the home screen tab items', async () => {
-    await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(1).tap()
+    await element(by.text('Back')).tap()
     await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
   })
 

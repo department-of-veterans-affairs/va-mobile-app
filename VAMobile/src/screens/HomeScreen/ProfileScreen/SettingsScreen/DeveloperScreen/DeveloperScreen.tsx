@@ -241,7 +241,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">

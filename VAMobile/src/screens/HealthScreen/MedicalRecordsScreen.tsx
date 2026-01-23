@@ -34,10 +34,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { data: authorizedServices } = useAuthorizedServices()
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('health.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('vaMedicalRecords.title')}>
+    <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('vaMedicalRecords.title')}>
       {authorizedServices && (
         <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
       )}
