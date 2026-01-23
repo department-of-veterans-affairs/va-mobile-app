@@ -126,6 +126,26 @@
                 <data android:host="www.va.gov" />
                 <data android:path="/my-health/appointments/past" />
             </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="staging.va.gov" />
+                <data android:path="/track-claims/your-claim-letters" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="www.va.gov" />
+                <data android:path="/track-claims/your-claim-letters" />
+            </intent-filter>
         </activity>
     </application>
     <uses-permission

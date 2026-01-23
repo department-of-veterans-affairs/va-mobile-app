@@ -173,6 +173,24 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
+    } else if (pathParts[0] === 'track-claims' && pathParts[1] === 'your-claim-letters') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'BenefitsTab',
+                  state: {
+                    routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
     } else if (pathParts[0] === 'copays') {
       return {
         routes: [
