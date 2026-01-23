@@ -729,9 +729,9 @@ export const Events = {
       },
     }
   },
-  vama_hs_load_time_outlier: (eventName: string, loadTime: number): Event => {
+  vama_load_time_outlier: (eventName: string, loadTime: number): Event => {
     return {
-      name: 'vama_hs_load_time_outlier',
+      name: 'vama_load_time_outlier',
       params: {
         p1: eventName,
         p2: loadTime,

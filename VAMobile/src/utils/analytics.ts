@@ -143,6 +143,6 @@ export const logLoadTimeEvent = (eventName: string, loadTimeMs: number) => {
       },
     })
   } else {
-    logAnalyticsEvent(Events.vama_hs_load_time_outlier(eventName, loadTimeMs))
+    logAnalyticsEvent(Events.vama_load_time_outlier(eventName, loadTimeMs))
   }
 }
