@@ -310,6 +310,7 @@ jobs:
         run: |
           brew install fastlane
           brew install imagemagick
+          brew install freetype
           brew install ghostscript
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
