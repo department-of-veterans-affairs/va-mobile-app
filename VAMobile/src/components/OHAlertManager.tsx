@@ -138,7 +138,7 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
                 {t(`ohAlert.error.${parentScreen}.note`, { featureActions: t(`ohAlert.${parentScreen}.actions`) })}
               </TextView>
             )}
-            {(parentScreen == OHParentScreens.Appointments || parentScreen == OHParentScreens.SecureMessaging) && (
+            {(parentScreen === OHParentScreens.Appointments || parentScreen === OHParentScreens.SecureMessaging) && (
               <LinkWithAnalytics {...linkProps} />
             )}
           </AlertWithHaptics>
