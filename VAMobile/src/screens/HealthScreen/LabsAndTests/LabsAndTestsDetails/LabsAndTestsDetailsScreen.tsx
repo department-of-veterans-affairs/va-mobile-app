@@ -103,7 +103,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
                 </TextView>
               </Box>
             ))}
-            <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
+            <Box mb={standardMarginBetween}>
               <TextView variant="MobileBodyBold">Report</TextView>
               <TextView variant="MobileBody" testID="decoded-report">
                 {decodedReport}
