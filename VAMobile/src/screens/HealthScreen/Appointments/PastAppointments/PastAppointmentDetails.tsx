@@ -92,7 +92,6 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   return (
     <FeatureLandingTemplate
       testID="PastApptDetailsTestID"
-      backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       dataUpdatedAt={lastUpdatedDate}>

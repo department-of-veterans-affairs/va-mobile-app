@@ -99,7 +99,7 @@ jobs:
             /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100  |\
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
-          engineers=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-pr-reviewers/members | jq -c '[.[] .login]')
+          engineers=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members | jq -c '[.[] .login]')
           qa_members=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members | jq -c '[.[] .login]')
 
           if [[ $(jq '. | length' <<< "$approvals") -ge 2 ]]

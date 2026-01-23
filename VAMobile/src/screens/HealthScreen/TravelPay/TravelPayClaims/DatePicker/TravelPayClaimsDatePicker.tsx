@@ -33,7 +33,7 @@ function TravelPayClaimsDatePicker({ timeFrame, onTimeFrameChanged }: TravelPayC
   )
 
   return (
-    <Box mx={theme.dimensions.gutter} accessible={true}>
+    <Box mx={theme.dimensions.gutter}>
       <VAModalPicker
         selectedValue={datePickerOption.value}
         onSelectionChange={(value) => {
