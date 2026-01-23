@@ -309,7 +309,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick ghostscript libfreetype6-dev
+          sudo apt-get install -y imagemagick imagemagick-common imagemagick-6.q16 ghostscript libfreetype6-dev
 
       - name: Download iPhone screenshots
         uses: actions/download-artifact@v4
