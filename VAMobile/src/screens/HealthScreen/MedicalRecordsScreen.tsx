@@ -33,10 +33,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { data: authorizedServices } = useAuthorizedServices()
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('health.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('vaMedicalRecords.title')}>
+    <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('vaMedicalRecords.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>
         {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton

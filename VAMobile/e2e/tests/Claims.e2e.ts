@@ -192,7 +192,7 @@ describe('Claims Screen', () => {
   })
 
   it('should back out of the file request screen and reenter a new file request screen', async () => {
-    await element(by.text('Back')).tap()
+    await element(by.text('Back')).atIndex(0).tap()
     await element(by.text('Accidental injury - 21-4176 needed')).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
   })
@@ -210,7 +210,7 @@ describe('Claims Screen', () => {
     await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER)).tap()
     await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER)).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER_ERROR))).toExist()
-    await element(by.text('Back')).tap()
+    await element(by.text('Back')).atIndex(0).tap()
 
     // Submit evidence screen
     await element(by.id(CommonE2eIdConstants.REQUEST_DETAILS_5103_ID)).scrollTo('bottom')
@@ -221,8 +221,8 @@ describe('Claims Screen', () => {
 
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT2))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT2))).toExist()
-    await element(by.text('Back')).tap()
-    await element(by.text('Back')).tap()
+    await element(by.text('Back')).atIndex(0).tap()
+    await element(by.text('Back')).atIndex(0).tap()
   })
 
   it('should verify details of claim on step 1', async () => {

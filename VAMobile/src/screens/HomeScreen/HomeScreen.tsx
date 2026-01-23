@@ -17,7 +17,7 @@ import { DateTime } from 'luxon'
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { useDebts } from 'api/debts'
+import { useDebtsCount } from 'api/debts'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useMedicalCopays } from 'api/medicalCopays'
@@ -138,10 +138,10 @@ export function HomeScreen({}: HomeScreenProps) {
   const personalInformationQuery = usePersonalInformation()
 
   const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
-  const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
+  const { data: debtsCount, isLoading: debtsLoading, error: debtsError } = useDebtsCount()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0
+  const showDebts = !debtsLoading && !debtsError && debtsCount !== undefined && debtsCount > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -466,7 +466,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
-                    count: debtsSummary.count,
+                    count: debtsCount,
                   })}
                   deepLink={'debts'}
                 />

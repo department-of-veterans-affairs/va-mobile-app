@@ -897,6 +897,19 @@ export const Events = {
       },
     }
   },
+  vama_overpay_copy_clk: (label: string): Event => {
+    return {
+      name: 'vama_overpay_copy_clk',
+      params: {
+        p1: label,
+      },
+    }
+  },
+  vama_overpay_help_clk: (): Event => {
+    return {
+      name: 'vama_overpay_help_clk',
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',
@@ -940,6 +953,14 @@ export const Events = {
   vama_prof_update_phone: (): Event => {
     return {
       name: 'vama_prof_update_phone',
+    }
+  },
+  vama_resolve_overpay_clk: (location: string): Event => {
+    return {
+      name: 'vama_resolve_overpay_clk',
+      params: {
+        p1: location,
+      },
     }
   },
   vama_review_prompt: (): Event => {
