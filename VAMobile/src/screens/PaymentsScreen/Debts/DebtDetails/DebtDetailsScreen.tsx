@@ -74,7 +74,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {debtInfo.endDate}
         </TextView>
         {/* Resolve debt button */}
-        {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
+        {debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtDetailsScreen" />}
       </>
     )
     return <MultiTouchCard mainContent={mainContent} />

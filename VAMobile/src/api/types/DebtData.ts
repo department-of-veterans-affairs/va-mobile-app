@@ -48,6 +48,7 @@ export type DebtRecord = {
 }
 
 export type DebtsPayload = {
-  data: DebtRecord[]
-  status: number
+  data?: DebtRecord[] // Present when countOnly=false is passed to /v0/debts
+  debtsCount?: number // Present when countOnly=true is passed to /v0/debts
+  status?: number
 }
