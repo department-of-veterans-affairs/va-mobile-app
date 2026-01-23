@@ -1,7 +1,6 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import {
@@ -31,8 +30,6 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'DebtDetails' ? t('debts.details.title') : t('debts.details.backButton.title') // Determine back label based on previous screen
 
   const { debt } = route.params
   const { condensedMarginBetween } = theme.dimensions
@@ -45,7 +42,6 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('debts.payDebt.title')}
       testID="payDebtTestID"

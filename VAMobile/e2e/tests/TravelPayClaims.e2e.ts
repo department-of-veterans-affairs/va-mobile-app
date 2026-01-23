@@ -150,8 +150,8 @@ describe('Travel Pay Claims Screen', () => {
       .toExist()
       .withTimeout(6000) // Increased timeout for CI/CD
 
-    // Navigate back using the back button (use atIndex(0) to select the first "Travel claims" element)
-    await element(by.text('Travel claims')).atIndex(0).tap()
+    // Navigate back using the back button
+    await element(by.id('travelClaimDetailBackButtonID')).tap()
 
     // Verify we're back on the claims list screen
     await waitFor(element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)))
