@@ -1,0 +1,82 @@
+[
+  {
+    "version": "v2.56.0",
+    "date": "2025-08-05T13:16:18Z",
+    "features": {
+      "2.56": {
+        "content": {
+          "whatsNew.bodyCopy.2.56": "We added mileage-only travel claims submission to the Health section.",
+          "whatsNew.bodyCopy.2.56.bullet.1": "Submit simple mileage-only claims for past in-person VA appointments.",
+          "whatsNew.bodyCopy.2.56.bullet.1.a11yLabel": "Submit simple mileage-only claims for past in-person V-A appointments.",
+          "whatsNew.bodyCopy.2.56.bullet.2": "View submitted travel claim status and history from your past appointment.",
+          "whatsNew.bodyCopy.2.56.bullet.3": "No paperwork or waiting—just a few taps."
+        },
+        "type": "version"
+      }
+    }
+  },
+  {
+    "version": "v2.23.0",
+    "date": "2024-03-05T20:56:23Z",
+    "features": {
+      "2.23": {
+        "content": {
+          "whatsNew.bodyCopy.2.23": "We updated how we filter and sort your prescriptions. Your active prescriptions will now show at the top of your list. You can still filter and sort your list how you want."
+        },
+        "type": "version"
+      }
+    }
+  },
+  {
+    "version": "v2.13.0",
+    "date": "2023-10-03T18:22:52Z",
+    "features": {
+      "2.13": {
+        "content": {
+          "whatsNew.bodyCopy.2.13": "You can now show proof of your Veteran status with the app."
+        },
+        "type": "version"
+      }
+    }
+  },
+  {
+    "version": "v2.3.0",
+    "date": "2023-05-09T20:53:17-04:00",
+    "features": {
+      "2.3": {
+        "content": {
+          "whatsNew.bodyCopy.2.3": "You can now add and edit your preferred name and gender identity in your Profile section."
+        },
+        "type": "version"
+      }
+    }
+  },
+  {
+    "version": "v2.2.0",
+    "date": "2023-05-02T16:08:58Z",
+    "features": {
+      "2.2": {
+        "content": {
+          "whatsNew.bodyCopy.2.2": "You can now get claim decision letters in the app."
+        },
+        "type": "version"
+      }
+    }
+  },
+  {
+    "version": "v2.0.0",
+    "date": "2023-04-04T16:44:23Z",
+    "features": {
+      "2.0": {
+        "content": {
+          "whatsNew.bodyCopy.2.0": "We updated sections to Home, Benefits, Health, and Payments.",
+          "whatsNew.bodyCopy.2.0.bullet.1": "Profile is now on Home screen.",
+          "whatsNew.bodyCopy.2.0.bullet.2": "Disability rating and VA letters are now in Benefits.",
+          "whatsNew.bodyCopy.2.0.bullet.2.a11yLabel": "Disability rating and V-A letters are now in Benefits.",
+          "whatsNew.bodyCopy.2.0.bullet.3": "Direct deposit is now in Payments."
+        },
+        "type": "version"
+      }
+    }
+  }
+]
