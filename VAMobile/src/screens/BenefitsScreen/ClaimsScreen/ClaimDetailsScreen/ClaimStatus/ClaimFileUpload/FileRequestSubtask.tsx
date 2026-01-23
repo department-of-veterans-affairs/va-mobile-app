@@ -9,6 +9,9 @@ import { ClaimData, ClaimEventData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
+import File5103RequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/File5103RequestDetails/File5103RequestDetails'
+import File5103ReviewWaiver from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/File5103ReviewWaiver/File5103ReviewWaiver'
+import File5103SubmitEvidence from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/File5103SubmitEvidence/File5103SubmitEvidence'
 import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
 import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
@@ -23,6 +26,18 @@ export type FileRequestStackParams = {
   FileRequest: {
     claimID: string
     claim: ClaimData | undefined
+  }
+  File5103RequestDetails: {
+    claimID: string
+    request: ClaimEventData
+  }
+  File5103ReviewWaiver: {
+    claimID: string
+    request: ClaimEventData
+  }
+  File5103SubmitEvidence: {
+    claimID: string
+    request: ClaimEventData
   }
   FileRequestDetails: {
     claimID: string
@@ -52,6 +67,17 @@ const FileRequestStack = createStackNavigator<FileRequestStackParams>()
 
 export const fileRequestSharedScreens = [
   <FileRequestStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} key="AskForClaimDecision" />,
+  <FileRequestStack.Screen
+    name="File5103RequestDetails"
+    component={File5103RequestDetails}
+    key="File5103RequestDetails"
+  />,
+  <FileRequestStack.Screen name="File5103ReviewWaiver" component={File5103ReviewWaiver} key="File5103ReviewWaiver" />,
+  <FileRequestStack.Screen
+    name="File5103SubmitEvidence"
+    component={File5103SubmitEvidence}
+    key="File5103SubmitEvidence"
+  />,
   <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} key="FileRequestDetails" />,
   <FileRequestStack.Screen name="SelectFile" component={SelectFile} key="SelectFile" />,
   <FileRequestStack.Screen name="TakePhotos" component={TakePhotos} key="TakePhotos" />,

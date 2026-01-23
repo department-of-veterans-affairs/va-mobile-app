@@ -122,7 +122,7 @@ context('PaymentsScreen', () => {
       const copaysTitle = t('copays.title')
       const debtsTitle = t('debts.title')
 
-      const copaysSub = t('copays.activityButton.subText', {
+      const copaysSub = t('copays.amountDueForBills', {
         amount: numberToUSDollars(396.93),
         count: 6,
       })
@@ -158,7 +158,7 @@ context('PaymentsScreen', () => {
       expect(screen.getByRole('link', { name: copaysTitle })).toBeTruthy()
       expect(screen.getByRole('link', { name: debtsTitle })).toBeTruthy()
 
-      expect(screen.queryByText(t('copays.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
+      expect(screen.queryByText(t('copays.amountDueForBills', { amount: 0, count: 0 }))).toBeNull()
       expect(screen.queryByText(t('debts.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
     })
   })
