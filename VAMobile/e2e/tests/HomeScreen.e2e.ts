@@ -1,15 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  checkImages,
-  disableAF,
-  enableAF,
-  loginToDemoMode,
-  toggleRemoteConfigFlag,
-  verifyAF,
-} from './utils'
+import { CommonE2eIdConstants, checkImages, enableAF, loginToDemoMode, toggleRemoteConfigFlag, verifyAF } from './utils'
 
 export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Veteran Status Card',
@@ -100,7 +92,7 @@ describe('Home Screen', () => {
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()
@@ -110,7 +102,7 @@ describe('Home Screen', () => {
     await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.DIRECT_DEPOSIT_BUTTON_ID))).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN))).toExist()
   })
 
   it('personalization: verify the health screen subtext', async () => {
