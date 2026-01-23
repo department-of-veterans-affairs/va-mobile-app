@@ -180,7 +180,7 @@ export function HomeScreen({}: HomeScreenProps) {
       prescriptionsQuery.isFetched &&
       foldersQuery.isFetched
     ) {
-      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [
     appointmentsQuery.isFetched,
