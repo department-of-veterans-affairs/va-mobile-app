@@ -19,6 +19,7 @@ export type ComboBoxProps = {
   onClose: () => void
   virtualized?: boolean
   hideGroupsHeaders?: boolean
+  accessibilityLabel?: string
 }
 
 const ComboBox: FC<ComboBoxProps> = ({
@@ -28,6 +29,7 @@ const ComboBox: FC<ComboBoxProps> = ({
   titleKey,
   hideGroupsHeaders = false,
   virtualized = false,
+  accessibilityLabel = '',
 }) => {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
@@ -115,6 +117,7 @@ const ComboBox: FC<ComboBoxProps> = ({
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
     },
+    accessibilityLabel: t(accessibilityLabel),
   }
 
   useEffect(() => {

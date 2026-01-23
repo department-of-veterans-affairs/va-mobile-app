@@ -1869,6 +1869,7 @@
   "secureMessaging.formMessage.to": "To",
   "secureMessaging.formMessage.careSystem": "Pick a care system",
   "secureMessaging.formMessage.careTeam": "Search for VA health care team",
+  "secureMessaging.formMessage.careTeam.a11y": "Search for V-A health care team",
   "secureMessaging.formMessage.recentCareTeams": "Recent care teams",
   "secureMessaging.formMessage.allCareTeams": "All care teams",
   "secureMessaging.formMessage.weNeedMoreInfo": "We need more information",
