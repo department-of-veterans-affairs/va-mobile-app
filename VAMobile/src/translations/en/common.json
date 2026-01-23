@@ -2322,6 +2322,7 @@
   "whatsNew.bodyCopy.PretransitionedOHInfoAlert": "You can now manage your V\ufeffA health care right here in the mobile app.\n\nStill want to use My V\ufeffA Health for now?",
   "whatsNew.bodyCopy.PretransitionedOHInfoAlert.link.url": "https://patientportal.myhealth.va.gov/",
   "whatsNew.bodyCopy.PretransitionedOHInfoAlert.link.text": "Go to My VA Health",
+  "whatsNew.bodyCopy.DecisionLetter": "If you have push notifications turned on, we'll send you a notification when your decision letter is ready.",
   "whatsNew.dismissMessage": "Dismiss this message",
   "whatsNew.title": "What's new",
   "yes": "Yes"
