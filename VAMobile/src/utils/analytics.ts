@@ -21,13 +21,13 @@ export type UserAnalytic = {
 }
 
 const LoadTimeRanges = [
-  { range: [0, 250], label: '0 ms - 249 ms' },
-  { range: [250, 500], label: '250 ms - 499 ms' },
-  { range: [500, 1000], label: '500 ms - 999 ms' },
-  { range: [1000, 2000], label: '1000 ms - 1999 ms' },
-  { range: [2000, 3000], label: '2000 ms - 2999 ms' },
-  { range: [3000, 4000], label: '3000 ms - 3999 ms' },
-  { range: [4000, 5000], label: '4000 ms - 4999 ms' },
+  { range: [0, 250], label: '0 ms - <250 ms' },
+  { range: [250, 500], label: '250 ms - <500 ms' },
+  { range: [500, 1000], label: '500 ms - <1000 ms' },
+  { range: [1000, 2000], label: '1000 ms - <2000 ms' },
+  { range: [2000, 3000], label: '2000 ms - <3000 ms' },
+  { range: [3000, 4000], label: '3000 ms - <4000 ms' },
+  { range: [4000, 5000], label: '4000 ms - <5000 ms' },
 ]
 
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
