@@ -90,7 +90,6 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('militaryInformation.title')}
       backLabelTestID="backToProfileID"
