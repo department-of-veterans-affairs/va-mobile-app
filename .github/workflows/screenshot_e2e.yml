@@ -311,6 +311,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick imagemagick-common imagemagick-6.q16 ghostscript libfreetype6-dev
 
+      - name: ImageMagick & Ghostscript info
+        run: |
+          command -v magick || command -v convert || true
+          magick --version 2>/dev/null || convert --version 2>/dev/null || true
+          command -v gs || true
+          gs --version || true
+          magick -list configure 2>/dev/null || convert -list configure 2>/dev/null || true
+
       - name: Download iPhone screenshots
         uses: actions/download-artifact@v4
         with:

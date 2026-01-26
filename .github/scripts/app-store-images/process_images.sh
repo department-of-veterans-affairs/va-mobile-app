@@ -3,6 +3,19 @@ set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+# Pick ImageMagick command: prefer `magick`, fall back to legacy `convert`/`identify` tools
+if command -v magick >/dev/null 2>&1; then
+  IM_CMD=magick
+  ID_CMD="magick identify"
+elif command -v convert >/dev/null 2>&1; then
+  IM_CMD=convert
+  ID_CMD=identify
+else
+  echo "Error: ImageMagick not found (magick or convert). Please install imagemagick."
+  exit 1
+fi
+echo "Using ImageMagick command: $IM_CMD"
+
 if [ ! -d "$SCRIPT_DIR/fastlane/screenshots/en-US" ] || [ -z "$(ls -A "$SCRIPT_DIR/fastlane/screenshots/en-US")" ]; then
   echo "Error: Source screenshot directory '$SCRIPT_DIR/fastlane/screenshots/en-US' is missing or empty."
   echo "Make sure move_screenshots.sh has been run first and found screenshots to move."
@@ -36,7 +49,7 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
       
       echo "  Resizing ${DEVICE_TYPE}-${original_img_name}.png to ${TARGET_WIDTH}x${TARGET_HEIGHT} for frameit"
       
-      magick "$source_img" \
+      $IM_CMD "$source_img" \
         -resize "${TARGET_WIDTH}x${TARGET_HEIGHT}^" \
         -gravity center \
         -extent "${TARGET_WIDTH}x${TARGET_HEIGHT}" \
@@ -51,7 +64,7 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
       
       echo "  Resizing ${DEVICE_TYPE}-${original_img_name}.png to ${TARGET_WIDTH}x${TARGET_HEIGHT} for frameit"
       
-      magick "$source_img" \
+      $IM_CMD "$source_img" \
         -resize "${TARGET_WIDTH}x${TARGET_HEIGHT}^" \
         -gravity center \
         -extent "${TARGET_WIDTH}x${TARGET_HEIGHT}" \
@@ -136,8 +149,8 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
 
   TITLE=$(echo "$DESCRIPTION" | tr -d '"' | sed 's/_NEWLINE_/\n/g')
 
-  INPUT_WIDTH=$(magick identify -format "%w" "$input_img")
-  INPUT_HEIGHT=$(magick identify -format "%h" "$input_img")
+  INPUT_WIDTH=$($ID_CMD -format "%w" "$input_img")
+  INPUT_HEIGHT=$($ID_CMD -format "%h" "$input_img")
 
   if [[ "$DEVICE_TYPE" == "ios" ]]; then
     FINAL_WIDTH=1242
@@ -181,8 +194,8 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
   if [ "$needs_custom_android_frame" = true ]; then
     ANDROID_FRAME="$SCRIPT_DIR/fastlane/google-pixel-6-pro-medium.png"
     
-    FRAME_WIDTH=$(magick identify -format "%w" "$ANDROID_FRAME")
-    FRAME_HEIGHT=$(magick identify -format "%h" "$ANDROID_FRAME")
+    FRAME_WIDTH=$($ID_CMD -format "%w" "$ANDROID_FRAME")
+    FRAME_HEIGHT=$($ID_CMD -format "%h" "$ANDROID_FRAME")
     
     TARGET_FRAME_WIDTH=$((FINAL_WIDTH * 60 / 100))
     FRAME_SCALE=$(( (TARGET_FRAME_WIDTH * 1000) / FRAME_WIDTH ))
@@ -198,7 +211,7 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
     SCREEN_X=$(( FRAME_X + (SCALED_FRAME_WIDTH - SCREEN_AREA_WIDTH) / 2 ))
     SCREEN_Y=$(( FRAME_Y + SCALED_FRAME_HEIGHT * 20 / 1000 ))
     
-    magick "$BACKGROUND_IMG" -resize "${FINAL_WIDTH}x${FINAL_HEIGHT}!" \
+    $IM_CMD "$BACKGROUND_IMG" -resize "${FINAL_WIDTH}x${FINAL_HEIGHT}!" \
       \( "$input_img" -resize "${SCREEN_AREA_WIDTH}x${SCREEN_AREA_HEIGHT}!" \) \
       -geometry "+${SCREEN_X}+${SCREEN_Y}" -composite \
       \( "$ANDROID_FRAME" -resize "${SCALED_FRAME_WIDTH}x${SCALED_FRAME_HEIGHT}!" \) \
@@ -208,7 +221,7 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
       "$OUTPUT_PATH"
       
   else
-    magick "$BACKGROUND_IMG" -resize "${FINAL_WIDTH}x${FINAL_HEIGHT}!" \
+    $IM_CMD "$BACKGROUND_IMG" -resize "${FINAL_WIDTH}x${FINAL_HEIGHT}!" \
       \( "$input_img" -resize "${NEW_INPUT_WIDTH}x${NEW_INPUT_HEIGHT}!" \) \
       -geometry "+${INPUT_X}+${INPUT_Y}" -composite \
       -font "$FONT" -pointsize "$ADJUSTED_TITLE_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
