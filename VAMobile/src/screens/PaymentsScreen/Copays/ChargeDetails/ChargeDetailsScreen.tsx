@@ -14,7 +14,6 @@ function ChargeDetailsScreen({ navigation }: ChargeDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('copays.details.title')}
       backLabelOnPress={navigation.goBack}
       title={t('copays.chargeDetails.title')}
       testID="chargeDetailsTestID"

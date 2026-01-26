@@ -17,7 +17,6 @@ function FeedbackSentScreen({}: FeedbackSentScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('giveFeedback')}
       backLabelOnPress={() => {
         navigateTo('GiveFeedback')
       }}

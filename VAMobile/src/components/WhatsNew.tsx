@@ -56,6 +56,7 @@ export const WhatsNew = () => {
   const { whatsNewDisplay, featuresDisplayed } = useMemo(() => {
     const display: React.ReactNode[] = []
     const features: string[] = []
+    let firstItemAdded = true
 
     if (whatsNewItems.length) {
       whatsNewItems.forEach((newFeature, idx) => {
@@ -96,7 +97,8 @@ export const WhatsNew = () => {
         // Check if we have a link to show
         const showLink = !linkUrl.startsWith(featureStringBase)
 
-        const topPadding = idx === 0 ? 0 : theme.dimensions.standardMarginBetween
+        const topPadding = firstItemAdded ? 0 : theme.dimensions.standardMarginBetween
+        firstItemAdded = false
 
         display.push(
           <Box key={idx} pt={topPadding}>

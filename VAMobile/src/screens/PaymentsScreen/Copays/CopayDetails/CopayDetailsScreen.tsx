@@ -157,7 +157,6 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('copays.title')}
       backLabelOnPress={navigation.goBack}
       title={t('copays.details.title')}
       testID="copayDetailsTestID"
@@ -175,7 +174,8 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
                   label: t('copays.resolveCopay'),
                   onPress: handleResolveClick,
                 }}
-                expandable>
+                expandable
+                initializeExpanded={false}>
                 <TextView variant="MobileBody">
                   <Trans
                     i18nKey="copays.balanceOverdue.description"

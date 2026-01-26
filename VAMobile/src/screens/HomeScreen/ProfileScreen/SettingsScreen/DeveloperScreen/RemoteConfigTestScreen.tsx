@@ -35,10 +35,7 @@ function RemoteConfigTestScreen({ navigation }: RemoteConfigTestScreenSettingsSc
   }
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('debug.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('Remote Config Refresh Test')}>
+    <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('Remote Config Refresh Test')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>{configTest()}</TextArea>
