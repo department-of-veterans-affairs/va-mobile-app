@@ -25,7 +25,6 @@ import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
-import _ from 'underscore'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
@@ -120,7 +119,7 @@ export const getFeaturesInDowntime = (
     return []
   }
 
-  return _.filter(features, (feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
+  return features.filter((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }
 
 /**
@@ -135,7 +134,7 @@ export const getFeaturesInDowntimeWindow = (
     return []
   }
 
-  return _.filter(features, (feature) => featureInDowntimeWindow(feature as DowntimeFeatureType, downtimeWindows))
+  return features.filter((feature) => featureInDowntimeWindow(feature as DowntimeFeatureType, downtimeWindows))
 }
 
 /**
