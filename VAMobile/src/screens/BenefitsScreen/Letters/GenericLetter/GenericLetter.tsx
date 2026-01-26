@@ -99,7 +99,6 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       backLabelTestID="BenefitSummaryServiceVerificationBackID">

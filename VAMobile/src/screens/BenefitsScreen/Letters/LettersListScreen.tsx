@@ -198,7 +198,6 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.overview.title')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.viewLetters')}
       screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID}>

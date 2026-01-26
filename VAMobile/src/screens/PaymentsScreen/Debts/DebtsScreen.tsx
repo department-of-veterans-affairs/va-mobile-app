@@ -52,7 +52,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   const [page, setPage] = useState(1)
   const { perPage, totalEntries } = {
     perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: debtsData?.data.length || 0,
+    totalEntries: debtsData?.data?.length || 0,
   }
   const [debtsToShow, setDebtsToShow] = useState<DebtRecord[]>([])
 
@@ -216,7 +216,6 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   return (
     <FeatureLandingTemplate
       headerButton={headerButton}
-      backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       scrollViewProps={scrollViewProps}
       title={t('debts.title')}

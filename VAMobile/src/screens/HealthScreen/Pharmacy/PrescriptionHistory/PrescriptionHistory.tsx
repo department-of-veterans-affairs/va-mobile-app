@@ -591,7 +591,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     <FeatureLandingTemplate
       scrollViewProps={{ scrollViewRef }}
       headerButton={headerButton}
-      backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"

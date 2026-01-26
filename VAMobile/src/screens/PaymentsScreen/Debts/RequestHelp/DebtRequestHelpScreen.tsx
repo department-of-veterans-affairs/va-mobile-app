@@ -1,7 +1,6 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import {
@@ -31,9 +30,6 @@ function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme.dimensions
-
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'DebtDetails' ? t('debts.details.title') : t('debts.details.backButton.title')
 
   const items: VABulletListText[] = [
     {
@@ -142,7 +138,6 @@ function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('debts.requestHelp.title')}
       testID="debtRequestHelpTestID"

@@ -453,8 +453,8 @@ describe('Messages Screen', () => {
     ).tap()
     await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     messageExpanded = await device.takeScreenshot('MessageExpanded')
-    await element(by.text('Sent')).tap()
-    await element(by.text('Messages')).tap()
+    await element(by.text('Back')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it('click the newest message in drafts folder', async () => {
@@ -535,7 +535,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify that custom folders exist with messages', async () => {
-    await element(by.text('Sent')).tap()
+    await element(by.text('Back')).tap()
     await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
   })

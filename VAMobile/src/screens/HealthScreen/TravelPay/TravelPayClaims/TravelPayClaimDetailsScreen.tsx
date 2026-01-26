@@ -40,7 +40,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { claimId, backLabel } = route.params
+  const { claimId } = route.params
   const [documentIdToDownload, setDocumentIdToDownload] = useState<string>('')
   const [documentFilename, setDocumentFilename] = useState<string>('')
   const [isDecisionLetter, setIsDecisionLetter] = useState<boolean>(false)
@@ -149,7 +149,6 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel || t('travelPay.claims.title')}
       backLabelOnPress={navigation.goBack}
       backLabelTestID="travelClaimDetailBackButtonID"
       title={t('travelPay.claimDetails.title')}
