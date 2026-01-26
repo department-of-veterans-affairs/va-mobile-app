@@ -130,7 +130,7 @@ context('ClaimsAndAppealsListView', () => {
       expect(screen.getByText(t('movedToThisStepOn', { date: 'November 18, 2020' }))).toBeTruthy()
 
       expect(screen.getByText('Claim for compensation')).toBeTruthy()
-      expect(screen.getByText(t('claims.moreInfoNeeded'))).toBeTruthy()
+      expect(screen.getByText(t('claims.evidenceRequested'))).toBeTruthy()
       expect(screen.getByText(t('claimDetails.receivedOn', { date: 'October 01, 2020' }))).toBeTruthy()
       expect(
         screen.getByText(`${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')}`),
@@ -156,7 +156,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('link', {
-            name: `Claim for compensation ${t('claims.moreInfoNeeded')} ${t('claimDetails.receivedOn', { date: 'October 01, 2020' })} ${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')} ${t('movedToThisStepOn', { date: 'October 05, 2020' })}`,
+            name: `Claim for compensation ${t('claims.evidenceRequested')} ${t('claimDetails.receivedOn', { date: 'October 01, 2020' })} ${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')} ${t('movedToThisStepOn', { date: 'October 05, 2020' })}`,
           }),
         ),
       )
