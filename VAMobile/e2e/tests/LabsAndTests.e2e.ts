@@ -71,7 +71,6 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
   })
 
-  // TODO Update this test to be more dynamic as it may fail every year since not all the data have dynamic dates
   it('should show different results when selecting last year', async () => {
     const currentYear = DateTime.now().year
     const lastYear = currentYear - 1
