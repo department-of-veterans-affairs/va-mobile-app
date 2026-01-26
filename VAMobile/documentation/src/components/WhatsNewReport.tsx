@@ -6,6 +6,7 @@ interface FeatureContent {
   content: Record<string, string>
   type: 'version' | 'feature'
   flag?: string
+  enabledDate?: string
 }
 
 interface WhatsNewItem {
@@ -57,9 +58,35 @@ const WhatsNewReport = () => {
             const details = parseFeatureDetails(feature.content, featureName)
             return (
               <div key={featureName} style={{ marginBottom: '1.5rem', marginLeft: '1rem' }}>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: '#333' }}>
+                <h3
+                  style={{
+                    fontSize: '1.2rem',
+                    marginBottom: '0.5rem',
+                    color: '#333',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}>
                   {details.title || `Release ${featureName}`}
+                  {feature.flag && (
+                    <span
+                      style={{
+                        fontSize: '0.7rem',
+                        backgroundColor: '#e1f5fe',
+                        color: '#01579b',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        border: '1px solid #b3e5fc',
+                      }}>
+                      Flag: {feature.flag}
+                    </span>
+                  )}
                 </h3>
+                {feature.enabledDate && (
+                  <p style={{ fontSize: '0.8rem', color: '#2e7d32', fontStyle: 'italic', marginBottom: '0.5rem' }}>
+                    Enabled on: {new Date(feature.enabledDate).toLocaleDateString()}
+                  </p>
+                )}
                 {details.bullets.length > 0 && (
                   <ul style={{ marginBottom: '0.5rem' }}>
                     {details.bullets.map((bullet, bIndex) => (

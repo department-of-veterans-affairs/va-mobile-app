@@ -1,5 +1,43 @@
 [
   {
+    "version": "v2.66.0",
+    "date": "2026-01-06T21:09:37Z",
+    "features": {
+      "PretransitionedOHInfoAlert": {
+        "content": {
+          "whatsNew.bodyCopy.PretransitionedOHInfoAlert": "You can now manage your V﻿A health care right here in the mobile app.\n\nStill want to use My V﻿A Health for now?",
+          "whatsNew.bodyCopy.PretransitionedOHInfoAlert.link.url": "https://patientportal.myhealth.va.gov/",
+          "whatsNew.bodyCopy.PretransitionedOHInfoAlert.link.text": "Go to My VA Health"
+        },
+        "type": "feature",
+        "flag": "showCernerWhatsNew"
+      }
+    }
+  },
+  {
+    "version": "v2.65.0",
+    "date": "2025-12-17T20:37:02Z",
+    "features": {
+      "COE": {
+        "content": {
+          "whatsNew.bodyCopy.COE": "If you're eligible, you can now view your Certificate of Eligibility - Home Loan Letter."
+        },
+        "type": "feature",
+        "flag": "COEAvailable"
+      },
+      "TravelListAndStatus": {
+        "content": {
+          "whatsNew.bodyCopy.TravelListAndStatus": "You can now view your Travel Claims, which includes:",
+          "whatsNew.bodyCopy.TravelListAndStatus.bullet.1": "View claim status and value",
+          "whatsNew.bodyCopy.TravelListAndStatus.bullet.2": "View and download decision letters",
+          "whatsNew.bodyCopy.TravelListAndStatus.bullet.3": "Access additional information about next steps"
+        },
+        "type": "feature",
+        "flag": "travelPayStatusList"
+      }
+    }
+  },
+  {
     "version": "v2.56.0",
     "date": "2025-08-05T13:16:18Z",
     "features": {
