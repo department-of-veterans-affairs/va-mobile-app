@@ -62,7 +62,7 @@ export const storeDeviceSecret = async (deviceSecret: string) => {
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
     }
 
-    await Keychain.resetInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+    await Keychain.resetInternetCredentials({ server: KEYCHAIN_DEVICE_SECRET_KEY })
     await Keychain.setInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, 'user', deviceSecret, options)
     console.debug('Successfully stored SSO device secret')
   } catch (error) {
