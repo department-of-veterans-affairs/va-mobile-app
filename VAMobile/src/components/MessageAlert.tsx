@@ -72,6 +72,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
         focusOnError={focusOnError}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
+          accessible
           variant="MobileBody"
           paragraphSpacing={true}
           accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
