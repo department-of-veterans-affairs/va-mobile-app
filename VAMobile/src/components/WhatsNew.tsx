@@ -103,7 +103,7 @@ export const WhatsNew = () => {
         display.push(
           <Box key={idx} pt={topPadding}>
             {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
-            <TextView accessibilityLabel={bodyA11yLabel} pb={theme.dimensions.tinyMarginBetween}>
+            <TextView accessible={true} accessibilityLabel={bodyA11yLabel} pb={theme.dimensions.tinyMarginBetween}>
               {body}
             </TextView>
             {bullets.length ? <VABulletList listOfText={bullets} /> : undefined}
