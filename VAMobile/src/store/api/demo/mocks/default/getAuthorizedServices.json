@@ -29,7 +29,8 @@
     },
     "meta": {
       "isUserAtPretransitionedOhFacility": false,
-      "isUserFacilityReadyForInfoAlert": false
+      "isUserFacilityReadyForInfoAlert": false,
+      "migratingFacilitiesList": []
     }
   }
 }

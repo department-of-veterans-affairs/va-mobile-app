@@ -21,6 +21,7 @@ import { MedicalCopaysDemoReturnTypes, MedicalCopaysDemoStore, getMedicalCopays 
 import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
 import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
 import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
+import importKimberlyForOHMigrationData from 'store/api/demo/mocks/kimberlyForOHMigration'
 import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
@@ -168,6 +169,9 @@ export const initDemoStore = async (demoUser: string | null = 'kimberlyWashingto
       break
     case 'dennisMadison':
       userData = importDennisMadisonData()
+      break
+    case 'kimberlyForOHMigration':
+      userData = importKimberlyForOHMigrationData()
       break
     case 'kimberlyWashington':
     default:

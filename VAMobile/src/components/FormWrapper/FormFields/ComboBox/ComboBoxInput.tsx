@@ -62,6 +62,8 @@ export type ComboBoxInputProps = {
   hideGroupsHeaders?: boolean
   /** i18n id for the title of the selector modal*/
   titleKey: string
+  /** i18n a11y label for the edit box of the selector modal*/
+  accessibilityLabel?: string
 }
 
 const ComboBoxInput: FC<ComboBoxInputProps> = ({
@@ -78,6 +80,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   titleKey,
   hideGroupsHeaders = false,
   hideRemoveButton = false,
+  accessibilityLabel,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -157,6 +160,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
       setFocusUpdated(true)
       setIsFocused(false)
     },
+    accessibilityLabel,
   }
 
   const showModal = () => {
