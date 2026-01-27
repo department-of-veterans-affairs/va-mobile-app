@@ -123,7 +123,6 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       testID="UpcomingApptDetailsTestID"

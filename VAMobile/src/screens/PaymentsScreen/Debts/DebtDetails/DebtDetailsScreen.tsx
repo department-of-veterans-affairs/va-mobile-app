@@ -74,7 +74,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {debtInfo.endDate}
         </TextView>
         {/* Resolve debt button */}
-        {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
+        {debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtDetailsScreen" />}
       </>
     )
     return <MultiTouchCard mainContent={mainContent} />
@@ -266,7 +266,6 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('debts.details.backButton.title')}
       backLabelOnPress={navigation.goBack}
       title={t('debts.details.title')}
       testID="debtDetailsTestID"
