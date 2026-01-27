@@ -129,17 +129,19 @@ describe('EditAddressScreen', () => {
   })
 
   describe('when the user selects a country with the picker', () => {
-    it('updates the value of country', () => {
+    it('updates the value of country', async () => {
       const countrySelector = screen.getByTestId('countryPickerTestID')
 
       fireEvent.press(countrySelector)
-      fireEvent.press(screen.getByText('Algeria'))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText('Algeria'))
+      })
       fireEvent.press(screen.getByRole('button', { name: t('done') }))
       expect(countrySelector.props.children).toEqual('Algeria')
     })
 
     describe('when the old value and new value of country are not both domestic or both international', () => {
-      it('sets state and zip code to empty strings', () => {
+      it('sets state and zip code to empty strings', async () => {
         renderWithData(false, { mailingAddress })
         const zipCodeInput = screen.getByTestId('zipCodeTestID')
 
@@ -147,7 +149,9 @@ describe('EditAddressScreen', () => {
         expect(zipCodeInput.props.value).toEqual(mailingAddress.zipCode)
 
         fireEvent.press(screen.getByTestId('countryPickerTestID'))
-        fireEvent.press(screen.getByText('Algeria'))
+        await waitFor(() => {
+          fireEvent.press(screen.getByText('Algeria'))
+        })
         fireEvent.press(screen.getByRole('button', { name: t('done') }))
 
         expect(screen.getByTestId('stateTestID').props.value).toEqual('')
@@ -156,7 +160,7 @@ describe('EditAddressScreen', () => {
     })
 
     describe('when the old and new value of country are both domestic or international', () => {
-      it('keeps the values of state and zip code', () => {
+      it('keeps the values of state and zip code', async () => {
         const newAddress: AddressData = {
           id: 0,
           addressLine1: '4313 Cassin Way',
@@ -179,7 +183,9 @@ describe('EditAddressScreen', () => {
         expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
 
         fireEvent.press(screen.getByTestId('countryPickerTestID'))
-        fireEvent.press(screen.getByText('Algeria'))
+        await waitFor(() => {
+          fireEvent.press(screen.getByText('Algeria'))
+        })
         fireEvent.press(screen.getByRole('button', { name: t('done') }))
 
         expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
@@ -225,7 +231,7 @@ describe('EditAddressScreen', () => {
   })
 
   describe('when the user selects a military post office with the picker', () => {
-    it('updates the value of militaryPostOffice', () => {
+    it('updates the value of militaryPostOffice', async () => {
       const newAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
@@ -246,16 +252,20 @@ describe('EditAddressScreen', () => {
       const militaryPostOfficeSelector = screen.getByTestId('militaryPostOfficeTestID')
 
       fireEvent.press(militaryPostOfficeSelector)
-      fireEvent.press(screen.getByText('APO'))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText('APO'))
+      })
       fireEvent.press(screen.getByRole('button', { name: t('done') }))
       expect(militaryPostOfficeSelector.props.children).toEqual('APO')
     })
   })
 
   describe('when the user selects a state with the picker', () => {
-    it('updates the value of state', () => {
+    it('updates the value of state', async () => {
       fireEvent.press(screen.getByTestId('stateTestID'))
-      fireEvent.press(screen.getByText('California'))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText('California'))
+      })
       fireEvent.press(screen.getByRole('button', { name: t('done') }))
       expect(screen.getByTestId('stateTestID').props.children).toEqual('California')
     })
@@ -345,9 +355,11 @@ describe('EditAddressScreen', () => {
       expect(screen.queryByText('countryPickerTestID')).toBeFalsy()
     })
 
-    it('sets the state picker pickerOptions to MilitaryStates', () => {
+    it('sets the state picker pickerOptions to MilitaryStates', async () => {
       fireEvent.press(screen.getByTestId('stateTestID'))
-      expect(screen.getByText('Armed Forces Americas (AA)')).toBeTruthy()
+      await waitFor(() => {
+        expect(screen.getByText('Armed Forces Americas (AA)')).toBeTruthy()
+      })
     })
 
     it('renders the military post office picker instead of the city text input', () => {
@@ -357,15 +369,19 @@ describe('EditAddressScreen', () => {
   })
 
   describe('when checkboxSelected is false', () => {
-    it('sets the state picker pickerOptions to States', () => {
+    it('sets the state picker pickerOptions to States', async () => {
       expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
       fireEvent.press(screen.getByTestId('stateTestID'))
-      expect(screen.getByText('Alabama')).toBeTruthy()
+      await waitFor(() => {
+        expect(screen.getByText('Alabama')).toBeTruthy()
+      })
     })
 
-    it('enables the country picker', () => {
+    it('enables the country picker', async () => {
       fireEvent.press(screen.getByTestId('countryPickerTestID'))
-      expect(screen.getByText('Algeria')).toBeTruthy()
+      await waitFor(() => {
+        expect(screen.getByText('Algeria')).toBeTruthy()
+      })
     })
 
     it('renders the city text input instead of the military post office picker', () => {
@@ -375,9 +391,11 @@ describe('EditAddressScreen', () => {
   })
 
   describe('when the country is domestic', () => {
-    it('renders the state picker', () => {
+    it('renders the state picker', async () => {
       fireEvent.press(screen.getByTestId('stateTestID'))
-      expect(screen.getByText('Alabama')).toBeTruthy()
+      await waitFor(() => {
+        expect(screen.getByText('Alabama')).toBeTruthy()
+      })
     })
   })
 
@@ -516,9 +534,11 @@ describe('EditAddressScreen', () => {
   })
 
   describe('when content is invalid for an international address', () => {
-    it('displays an AlertBox and a field error for each required field', () => {
+    it('displays an AlertBox and a field error for each required field', async () => {
       fireEvent.press(screen.getByTestId('countryPickerTestID'))
-      fireEvent.press(screen.getByText('Algeria'))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText('Algeria'))
+      })
       fireEvent.press(screen.getByRole('button', { name: t('save') }))
       expect(screen.getByText(t('editAddress.streetAddressLine1FieldError'))).toBeTruthy()
       expect(screen.getByText(t('editAddress.cityFieldError'))).toBeTruthy()

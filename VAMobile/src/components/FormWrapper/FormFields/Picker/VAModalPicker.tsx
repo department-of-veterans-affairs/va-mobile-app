@@ -289,8 +289,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
-          <Box backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
-          <Box backgroundColor="list" flex={1}>
+          <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
+          <Box backgroundColor="list" flexShrink={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancel} {...cancelButtonProps} testID={cancelTestID}>
                 <TextView {...commonButtonProps}>{cancelLabel}</TextView>

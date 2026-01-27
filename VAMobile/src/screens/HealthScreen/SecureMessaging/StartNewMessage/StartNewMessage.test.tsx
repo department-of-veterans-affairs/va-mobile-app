@@ -230,7 +230,10 @@ context('StartNewMessage', () => {
       initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
-      fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      await waitFor(() => {
+        fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      })
+
       fireEvent.press(screen.getByLabelText(t('done')))
       await waitFor(() =>
         expect(screen.getByText(`${t('secureMessaging.startNewMessage.subject')} ${t('required')}`)).toBeTruthy(),
@@ -250,7 +253,9 @@ context('StartNewMessage', () => {
       initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
-      fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      await waitFor(() => {
+        fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      })
       fireEvent.press(screen.getByLabelText(t('done')))
       fireEvent.press(screen.getByText(t('cancel')))
       await waitFor(() => expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled())
