@@ -1,0 +1,14 @@
+[project]
+name = "mobiledoc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "langchain-community>=0.4.1",
+    "langchain-text-splitters>=1.1.0",
+    "lxml>=6.0.2",
+    "nest-asyncio>=1.6.0",
+    "tqdm>=4.67.1",
+]
