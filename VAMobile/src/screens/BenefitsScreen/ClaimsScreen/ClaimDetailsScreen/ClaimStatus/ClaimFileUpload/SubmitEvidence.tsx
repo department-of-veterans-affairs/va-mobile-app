@@ -49,10 +49,7 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
           <TextView variant="MobileBody">{t('claimDetails.submitEvidence.whatToKnow.body')}</TextView>
         </TextArea>
       </Box>
-      <Box
-        mt={theme.dimensions.standardMarginBetween}
-        mx={theme.dimensions.gutter}
-        mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Button
           onPress={onFilePress}
           label={t('fileUpload.selectAFile')}

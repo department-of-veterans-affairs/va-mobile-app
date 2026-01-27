@@ -178,10 +178,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
       </Box>
-      <Box
-        mt={theme.dimensions.standardMarginBetween}
-        mb={theme.dimensions.contentMarginBottom}
-        mx={theme.dimensions.gutter}>
+      <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
       </Box>
     </VAScrollView>
