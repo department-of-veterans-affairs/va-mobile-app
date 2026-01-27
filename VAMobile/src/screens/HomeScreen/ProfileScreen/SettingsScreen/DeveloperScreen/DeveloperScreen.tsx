@@ -9,7 +9,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
 import queryClient from 'api/queryClient'
@@ -50,7 +49,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
   const tokenInfo =
     (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
