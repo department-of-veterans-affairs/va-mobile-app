@@ -20,7 +20,7 @@ export const fetchSSOCookies = async () => {
     let hasSSOCookies = false
     await CookieManager.clearAll()
 
-    const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+    const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, {})
     const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
       method: 'POST',
       headers: {

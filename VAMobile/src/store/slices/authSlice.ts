@@ -391,7 +391,7 @@ const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | un
       console.debug('retrieveRefreshToken')
       const tokenArray = await Promise.all([
         AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
-        Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
+        Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY, {}),
       ])
 
       refreshToken =
@@ -511,7 +511,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
 
 export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | undefined> => {
   try {
-    const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
+    const hasStoredCredentials = await Keychain.hasInternetCredentials({ server: KEYCHAIN_STORAGE_KEY })
 
     if (!hasStoredCredentials) {
       console.debug('getAuthLoginPromptType: no stored credentials')
@@ -607,7 +607,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
-      const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+      const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, {})
       const queryString = new URLSearchParams({
         refresh_token: refreshToken ?? '',
         device_secret: deviceSecret ? deviceSecret.password : '',
