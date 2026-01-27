@@ -5,6 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
+import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
@@ -34,6 +35,9 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('vaMedicalRecords.title')}>
+      {authorizedServices && (
+        <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
+      )}
       <Box mb={theme.dimensions.standardMarginBetween}>
         {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton

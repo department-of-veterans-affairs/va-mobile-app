@@ -12,6 +12,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
@@ -178,6 +179,10 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
                 testIDs={controlIDs}
               />
             </Box>
+            <OHAlertManager
+              parentScreen={OHParentScreens.SecureMessaging}
+              authorizedServices={userAuthorizedServices}
+            />
             {featureEnabled('showCernerWarningAlert') && userAuthorizedServices?.isUserAtPretransitionedOhFacility && (
               <CernerAlertSM />
             )}
