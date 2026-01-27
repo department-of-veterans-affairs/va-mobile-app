@@ -38,22 +38,3 @@ A system to help you write, design, and build digital services on the VA Mobile 
 
 ### Typography
 - [Text](/va-mobile-app/design/Components/Typography/Text)
-
------
-
-## Design system team
-
-**Product Owner**: Ryan Thurlwell
-
-### Product
-
-- Kelly Lein
-
-### Engineering
-
-- Narin Ratana
-- Tim Roettger
-
-### Design
-
-- Jessica Woodin

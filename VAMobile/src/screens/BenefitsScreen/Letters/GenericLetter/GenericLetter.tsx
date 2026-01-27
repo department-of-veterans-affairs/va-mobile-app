@@ -25,7 +25,7 @@ type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLette
 function GenericLetter({ navigation, route }: GenericLetterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { header, description, letterType, descriptionA11yLabel } = route.params
+  const { header, description, letterType, descriptionA11yLabel, displayAlert, coeStatus, referenceNum } = route.params
   const { data: letterBeneficiaryData } = useLetterBeneficiaryData()
   const lettersOptions: LettersDownloadParams = {
     militaryService: false,
@@ -60,6 +60,22 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
           <AlertWithHaptics variant="info" description={t('letters.serviceVerificationLetter.informational')} />
         </Box>
       )}
+      {letterType === LetterTypeConstants.certificateOfEligibility && displayAlert && coeStatus === 'ELIGIBLE' && (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="success"
+            expandable={true}
+            initializeExpanded={true}
+            header={t('letters.serviceVerificationLetter.informationalHeader')}
+            description={t('letters.certificateOfEligibility.success')}>
+            {referenceNum ? (
+              <TextView accessible>{t('letters.certificateOfEligibility.referenceNum', { referenceNum: referenceNum })}</TextView>
+            ) : (
+              <></>
+            )}
+          </AlertWithHaptics>
+        </Box>
+      )}
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {header}
@@ -83,7 +99,6 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       backLabelTestID="BenefitSummaryServiceVerificationBackID">

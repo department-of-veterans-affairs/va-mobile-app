@@ -1,7 +1,7 @@
 # Tool Setup
 
 ## TestFlight (iOS testing app distribution)
-1. Ask your engineering lead to grant permission for you to use the TestFlight app (they will need your company work email address, to add it to the list of allowed users).
+1. Submit a [ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=onboarding-mobile-appstores.yml) requesting TestFlight access. This ticket will be received by the Mobile Platform team. If you have not received a response after one business day, please post in the #va-mobile-app channel with your ticket number. 
 2. Download the [TestFlight](https://apps.apple.com/us/app/testflight/id899247664) app on your testing device.
 3. Wait until you receive an email invitation to test the VA app via TestFlight (from the Engineering lead, via the work in step 1), then open the email and tap “View in TestFlight” or “Start testing”, then tap “Install” or “Update” for the app you want to test.
 
@@ -10,7 +10,7 @@ By default, TestFlight only shows the most recent testing build that was built. 
 _As a general resource, here's [Apple's documentation on testing with TestFlight](https://testflight.apple.com/)._
 
 ## AppTester (Android testing app distribution)
-1. Ask your engineering lead to grant permission for you to use the AppTester app (they will need your company work email address, to add it to the list of allowed users).
+1. Submit a [ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=onboarding-mobile-appstores.yml) requesting AppTester access. This ticket will be received by the Mobile Platform team. If you have not received a response after one business day, please post in the #va-mobile-app channel with your ticket number. 
 2. Wait until you receive an email invitation to test the VA app via AppTester, then open the email and and tap either “Download the latest build” or “Install Firebase App Tester”
 3. Tap "Download App Tester" on the banner across the bottom of the next page
 4. Tap "OK" on the warning popup (this type of file can harm your device)

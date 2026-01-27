@@ -11,6 +11,7 @@ export const useAppVersion = () => {
     queryKey: deviceKeys.appVersion,
     queryFn: () => getVersionName(),
     staleTime: Infinity,
+    gcTime: Infinity,
     meta: {
       errorName: 'getAppVersion: Error getting app version',
     },

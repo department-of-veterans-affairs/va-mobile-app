@@ -10,7 +10,6 @@ import {
   openMedicalRecords,
   scrollToElement,
   testForOneOrManyOccurancesOf,
-  toggleRemoteConfigFlag,
 } from './utils'
 
 export const LabsAndTestsE2eIDConstants = {
@@ -84,6 +83,14 @@ describe('Labs And Test Screen - Date Picker', () => {
     await expect(element(by.text('Blood Work - Last Year'))).not.toExist()
     await expect(element(by.text('X-Ray - Last Year'))).not.toExist()
 
+    // Go to the next page and verify last year's records are not visible
+    await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+
+    // Verify last year's records are not visible on page 2
+    await expect(element(by.text('Blood Work - Last Year'))).not.toExist()
+    await expect(element(by.text('X-Ray - Last Year'))).not.toExist()
+
     // Open the date picker and select last year
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
     await element(by.id(`range-${lastYear}`)).tap()
@@ -92,6 +99,10 @@ describe('Labs And Test Screen - Date Picker', () => {
     // Wait for data to load and verify the date range text updated to show last year
 
     await waitFor(element(by.text(`Jan 1, ${lastYear} - Dec 31, ${lastYear}`))).toExist()
+
+    // Go to the next page to verify last year's records
+    await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
 
     // Verify last year's records are now visible
     await expect(element(by.text('Blood Work - Last Year'))).toExist()

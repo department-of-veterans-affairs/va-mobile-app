@@ -1,13 +1,12 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindow, ErrorsState } from 'store/slices'
+import { DowntimeWindow } from 'store/slices'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureInDowntime, useTheme } from 'utils/hooks'
@@ -30,13 +29,13 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { maintenanceWindows } = useMaintenanceWindows()
   const features = ScreenIDToDowntimeFeatures[screenID]
   // if there are multiple active downtime windows for the screen, use the latest endTime
   let latestDowntimeWindow: DowntimeWindow | null = null
   features.forEach((feature) => {
-    if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {
-      const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
+    if (featureInDowntime(feature as DowntimeFeatureType, maintenanceWindows)) {
+      const downtimeWindow = maintenanceWindows[feature as DowntimeFeatureType]
       if (downtimeWindow && (latestDowntimeWindow === null || latestDowntimeWindow.endTime < downtimeWindow.endTime)) {
         latestDowntimeWindow = downtimeWindow
       }
@@ -56,7 +55,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
           description={t('downtime.message.1', { endTime })}
           descriptionA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>
+          <TextView accessible accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>
             {t('downtime.message.2')}
           </TextView>
           <ClickToCallPhoneNumber

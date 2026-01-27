@@ -145,7 +145,7 @@ git checkout "$BRANCH"
 git pull
 
 ## install dependencies
-yarn install &&
+yarn install --ignore-scripts &&
 ## set ENV VARS
 yarn env:$ENV &&
 

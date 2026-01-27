@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import {
@@ -20,6 +19,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const {
   LINK_URL_ASK_VA_GOV,
@@ -40,8 +40,6 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'DebtDetails' ? t('debts.overpayment') : t('copays.details.title')
 
   function renderAskVALink() {
     return (
@@ -50,7 +48,7 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
         onPress={() => {
           navigateTo('Webview', {
             url: LINK_URL_ASK_VA_GOV,
-            displayTitle: t('webview.vagov'),
+            displayTitle: vaGovWebviewTitle(t),
             loadingMessage: t('webview.askVA.loading'),
             useSSO: true,
           })
@@ -266,7 +264,7 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
               onPress={() => {
                 navigateTo('Webview', {
                   url: LINK_URL_REQUEST_HARDSHIP_ASSISTANCE,
-                  displayTitle: t('webview.vagov'),
+                  displayTitle: vaGovWebviewTitle(t),
                   loadingMessage: t('webview.financialAssistance.loading'),
                   useSSO: true,
                 })
@@ -309,7 +307,7 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
               onPress={() => {
                 navigateTo('Webview', {
                   url: LINK_URL_VA_FORM_5655,
-                  displayTitle: t('webview.vagov'),
+                  displayTitle: vaGovWebviewTitle(t),
                   loadingMessage: t('webview.form5655.loading'),
                   useSSO: true,
                 })
@@ -348,7 +346,7 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
               onPress={() => {
                 navigateTo('Webview', {
                   url: LINK_URL_HELP_FROM_VA_ACCREDITED_REPRESENTATIVE,
-                  displayTitle: t('webview.vagov'),
+                  displayTitle: vaGovWebviewTitle(t),
                   loadingMessage: t('webview.representative.loading'),
                   useSSO: true,
                 })
@@ -487,7 +485,6 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('debts.noticeOfRights.title')}
       testID="noticeOfRightsTestID"

@@ -18,6 +18,11 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: jest.fn(),
+}))
+
 context('ClaimExamAppointment', () => {
   const defaultAppointmentAttributes: AppointmentAttributes = {
     //appointmentType and Status not used at this point in the logic, those are used in the upcoming appointments details

@@ -4,11 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
@@ -20,6 +23,8 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   function renderAppealData() {
     if (!appealId) {
@@ -36,10 +41,15 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+                showOfflineSnackbar()
+                return
+              }
+
               logAnalyticsEvent(Events.vama_webview(LINK_URL_CLAIM_APPEAL_STATUS, appealId))
               navigateTo('Webview', {
                 url: LINK_URL_CLAIM_APPEAL_STATUS + appealId,
-                displayTitle: t('webview.vagov'),
+                displayTitle: vaGovWebviewTitle(t),
                 loadingMessage: t('webview.claims.loading'),
                 useSSO: true,
               })

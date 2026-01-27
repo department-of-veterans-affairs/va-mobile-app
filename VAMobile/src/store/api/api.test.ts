@@ -10,12 +10,21 @@ jest.mock('store/slices', () => {
   }
 })
 
+jest.mock('@expo/react-native-action-sheet', () => {
+  return {
+    useActionSheet: () => {
+      return { showActionSheetWithOptions: jest.fn() }
+    },
+  }
+})
+
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'android',
   constants: {
     Model: 'Google Pixel 8 Pro',
     Release: '15',
   },
+  select: jest.fn(),
 }))
 
 context('api', () => {
@@ -110,13 +119,13 @@ context('api', () => {
     expect(result).toEqual(undefined)
   })
 
-  it('includes device information in request header', () => {
+  it('includes device information in request header', async () => {
     fetch.mockResolvedValue({ status: 204, json: () => Promise.reject({ foo: 'test' }) })
-    get('/foo')
+    await get('/foo')
     expect(fetch).toHaveBeenCalledWith('https://test-api/foo', {
       credentials: 'include',
       headers: {
-        'App-Version': '',
+        'App-Version': 'v0.0.0',
         'Authentication-Method': 'SIS',
         'Device-Model': 'Google Pixel 8 Pro',
         'OS-Version': 'Android 15',

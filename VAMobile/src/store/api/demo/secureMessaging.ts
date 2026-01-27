@@ -34,6 +34,10 @@ type folderMessages =
 type inboxFolderMessages = {
   '/v0/messaging/health/messages/2092809': SecureMessagingMessageGetData
   '/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
+  '/v0/messaging/health/messages/9000002': SecureMessagingMessageGetData
+  '/v1/messaging/health/messages/9000002/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
+  '/v0/messaging/health/messages/9000003': SecureMessagingMessageGetData
+  '/v1/messaging/health/messages/9000003/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
   '/v0/messaging/health/messages/2092803': SecureMessagingMessageGetData
   '/v1/messaging/health/messages/2092803/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
   '/v0/messaging/health/messages/2092789': SecureMessagingMessageGetData

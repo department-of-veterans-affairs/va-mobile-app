@@ -32,6 +32,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -66,7 +67,7 @@ function LoginScreen() {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('webview.vagov'),
+      displayTitle: vaGovWebviewTitle(t),
       loadingMessage: t('webview.valocation.loading'),
     })
   }

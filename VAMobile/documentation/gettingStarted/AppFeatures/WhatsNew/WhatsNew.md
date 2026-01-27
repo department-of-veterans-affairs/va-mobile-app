@@ -10,15 +10,21 @@ What's new displays to the veteran what is new in the version that they upgraded
 
 * Use Case 1: The user is on the most recent version available in the store, and there are notes for the alert to display, resulting in the alert being shown (see screenshot)
 * Use Case 2: The user is on the most recent version with notes to display, but the user has dismissed the alert, causing it to no longer be displayed
-* Use Case 3: The user is on a older version of the app and instead sees [Encouraged Update](../EncouragedUpdate/EncouragedUpdate.md)
-* Use Case 4: The user is on the most recent version, but there are no notes to be displayed, so there is no alert
+* Use Case 3: The user has dismissed the alert, but a feature flag or authorized service has been turned on causing 
+  just that feature's information to display
+* Use Case 4: The user is on a older version of the app and instead sees [Encouraged Update](..
+  /EncouragedUpdate/EncouragedUpdate.md)
+* Use Case 5: The user is on the most recent version, but there are no notes to be displayed, so there is no alert
 
-## How to force this to appear in Demo Mode
+## How to display What's New
 
-1. Go to the developer screen in the settings part of the app and scroll to the bottom where it has Encouraged Update and What's New versions
-2. Set the Encouraged Update version override to a version that is equal to or greater than the store version
-3. Set the What's New version override to a version that is a valid version in the `common.json` file in the translations folder (Valid versions at the time of writing this are 2.0, 2.2, 2.3, 2.13, and 2.23)
-Step 4: Logout of the app and log back into demo mode
+What's new is displayed based on the WhatsNewConfig, which contains an array of feature names and optional flags and authorized services.
+
+* `featureName` will be mapped to the translation file by convention to display body content, bullet points, and links 
+* `featureFlag` will prevent this feature from being displayed unless that flag is on for the user
+* `authorizedService` will prevent this feature from being displayed the user has that authorized service
+
+If the user dismisses the What's New alert and a flag or service later enables that feature, it will appear again with that feature's content.
 
 ## Example Screenshots of the What's New feature
 

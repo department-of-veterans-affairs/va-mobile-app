@@ -629,7 +629,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       <Box my={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="warning"
-          header={t('secureMessaging.reply.youCanNoLonger')}
+          header={t('secureMessaging.reply.tooOldForReplies')}
           description={t('secureMessaging.reply.olderThan45Days')}
         />
       </Box>
@@ -645,7 +645,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           scrollViewRef={scrollViewRef}>
-          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+          <LinkWithAnalytics
+            type="custom"
+            text={t('secureMessaging.goToInbox')}
+            onPress={onGoToInbox}
+            testID="editDraftGoToInbox"
+          />
         </AlertWithHaptics>
       )
     }

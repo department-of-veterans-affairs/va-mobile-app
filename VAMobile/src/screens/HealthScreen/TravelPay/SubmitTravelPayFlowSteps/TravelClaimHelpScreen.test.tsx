@@ -4,11 +4,12 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import TravelClaimHelpScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelpScreen'
-import { context, render } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 
 context('TravelClaimHelpScreen', () => {
   const initializeTestInstance = () => {
-    render(<TravelClaimHelpScreen />)
+    const props = mockNavProps()
+    render(<TravelClaimHelpScreen {...props} />)
     jest.advanceTimersByTime(50)
   }
   it('should initialize correctly', () => {

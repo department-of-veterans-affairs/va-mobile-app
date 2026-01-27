@@ -4,6 +4,7 @@ import { initialAnalyticsState } from 'store/slices/analyticsSlice'
 import { initialAuthState } from 'store/slices/authSlice'
 import { initialDemoState } from 'store/slices/demoSlice'
 import { initialErrorsState } from 'store/slices/errorSlice'
+import { initialOfflineState } from 'store/slices/offlineSlice'
 import { initialSettingsState } from 'store/slices/settingsSlice'
 
 export * from './accessibilitySlice'
@@ -11,6 +12,7 @@ export * from './analyticsSlice'
 export * from './authSlice'
 export * from './errorSlice'
 export * from './settingsSlice'
+export * from './offlineSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,
@@ -19,4 +21,5 @@ export const InitialState: RootState = {
   demo: initialDemoState,
   analytics: initialAnalyticsState,
   settings: initialSettingsState,
+  offline: initialOfflineState,
 }

@@ -1,5 +1,5 @@
 import { context } from 'testUtils'
-import { notificationsEnabled } from 'utils/notifications'
+import { notificationsEnabled, trimNotificationUrl } from 'utils/notifications'
 import { isIOS } from 'utils/platform'
 
 jest.mock('react-native-notifications', () => ({
@@ -33,5 +33,11 @@ context('notifications', () => {
     ;(isIOS as jest.Mock).mockResolvedValueOnce(false)
     const enabled = await notificationsEnabled()
     expect(enabled).toEqual(true)
+  })
+
+  it('should trim the ids from the notification url', async () => {
+    const testUrl = 'vamobile://appointments/1234%5678.9'
+    const trimmedUrl = trimNotificationUrl(testUrl)
+    expect(trimmedUrl).toEqual('vamobile://appointments/')
   })
 })

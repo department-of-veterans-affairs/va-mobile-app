@@ -153,6 +153,7 @@ function AddressValidation({
       <Box>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
+          accessible
           variant="MobileBody"
           paragraphSpacing={true}
           accessibilityLabel={t('editAddress.validation.verifyAddress.body.1.a11yLabel')}>

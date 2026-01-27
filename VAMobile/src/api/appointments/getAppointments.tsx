@@ -1,21 +1,23 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { onlineManager, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { appointmentsKeys } from 'api/appointments/queryKeys'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { offlineRetry, useQuery } from 'api/queryClient'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { setLastUpdatedTimestamp } from 'store/slices'
 import { getPastAppointmentDateRange } from 'utils/appointments'
-import { useDowntime } from 'utils/hooks'
+import { useAppDispatch, useDowntime } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Fetch user appointments
  */
-const getAppointments = (
+const getAppointments = async (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
@@ -47,6 +49,7 @@ export const useAppointments = (
   options?: { enabled?: boolean },
 ) => {
   const queryClient = useQueryClient()
+  const dispatch = useAppDispatch()
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const travelPayEnabled =
@@ -88,13 +91,20 @@ export const useAppointments = (
         // For past appointments we'll need to prefetch travel claims, unless travel pay is in downtime
         queryClient.prefetchQuery({
           queryKey: pastAppointmentsQueryKey,
-          queryFn: () =>
-            getAppointments(
+          retry: offlineRetry,
+          queryFn: async () => {
+            const pastAppointments = await getAppointments(
               pastRange.startDate,
               pastRange.endDate,
               TimeFrameTypeConstants.PAST_THREE_MONTHS,
               travelPayEnabled,
-            ),
+            )
+            // Save the last updated time here manually as this will not be saved otherwise in the prefetch
+            if (featureEnabled('offlineMode') && onlineManager.isOnline()) {
+              dispatch(setLastUpdatedTimestamp(`${pastAppointmentsQueryKey}`, Date.now().toString()))
+            }
+            return pastAppointments
+          },
           staleTime: ACTIVITY_STALE_TIME,
         })
       }

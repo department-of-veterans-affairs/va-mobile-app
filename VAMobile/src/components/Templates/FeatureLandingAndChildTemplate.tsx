@@ -1,13 +1,26 @@
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { HeaderBanner, HeaderBannerProps, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import {
+  Box,
+  HeaderBanner,
+  HeaderBannerProps,
+  HeaderButton,
+  LastUpdatedTimestamp,
+  LoadingComponent,
+  OfflineBanner,
+  TextView,
+  TextViewProps,
+  WaygateWrapper,
+} from 'components'
+import ErrorComponent, { ErrorComponentProps } from 'components/CommonErrorComponents/ErrorComponent'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypes } from 'store/api'
 import { useTheme } from 'utils/hooks'
 
 /* To use these templates:
@@ -16,10 +29,14 @@ import { useTheme } from 'utils/hooks'
 2. In the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
   Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
+export type ScreenError = Partial<ErrorComponentProps> & {
+  /** Boolean to determine if error should be displayed */
+  errorCheck: boolean
+}
 
 export type ChildTemplateProps = {
   /** Translated label text for descriptive back button */
-  backLabel: string
+  backLabel?: string
   /** Optional a11y label for back button  */
   backLabelA11y?: string
   /** On press navigation for descriptive back button */
@@ -38,6 +55,16 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
+  /** Optional boolean to display loading component */
+  isLoading?: boolean
+  /** Optional text for loading screen */
+  loadingText?: string
+  /** Optional screen id for the screen that has errors*/
+  screenID?: ScreenIDTypes
+  /** Optional array of errors to be handled by the given screen */
+  errors?: Array<ScreenError>
+  /** Optional timestamp that the data on this screen last updated */
+  dataUpdatedAt?: number
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -54,6 +81,11 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
+  isLoading,
+  loadingText,
+  screenID,
+  errors,
+  dataUpdatedAt,
 }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
@@ -73,10 +105,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
 
   const headerProps: HeaderBannerProps = {
     leftButton: {
-      text: backLabel,
-      a11yLabel: backLabelA11y
-        ? t('back.a11yLabel', { screenName: backLabelA11y })
-        : t('back.a11yLabel', { screenName: backLabel }),
+      text: backLabel ?? t('back'),
+      a11yLabel: backLabelA11y ? t('back.a11yLabel', { screenName: backLabelA11y }) : t('back'),
       testID: backLabelTestID,
       onPress: backLabelOnPress,
       descriptiveBack: true,
@@ -125,6 +155,26 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     setTransitionHeaderHeight(height)
   }
 
+  /**
+   * Determines if there is an error to display based on the provided errors array.
+   * If a valid error with `errorCheck` is found, it renders the ErrorComponent.
+   */
+  const errorToDisplay = useMemo(() => {
+    if (!errors || !screenID) return null
+    const screenError = errors.find((error) => error.errorCheck)
+    return (
+      screenError && (
+        <ErrorComponent screenID={screenID} onTryAgain={screenError.onTryAgain} error={screenError.error} />
+      )
+    )
+  }, [errors, screenID])
+
+  const renderContent = () => {
+    if (isLoading) return <LoadingComponent text={loadingText} />
+    if (errorToDisplay) return errorToDisplay
+    return children
+  }
+
   return (
     <View style={fillStyle}>
       <StatusBar
@@ -133,6 +183,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         backgroundColor={theme.colors.background.main}
       />
       <HeaderBanner {...headerProps} />
+      <OfflineBanner />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}
@@ -146,7 +197,12 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
             <TextView {...subtitleProps}>{title}</TextView>
           </View>
         ) : null}
-        <WaygateWrapper>{children}</WaygateWrapper>
+        <WaygateWrapper>
+          <Box display="flex" justifyContent="space-between" flex={1}>
+            <Box>{renderContent()}</Box>
+            <LastUpdatedTimestamp datetime={dataUpdatedAt} />
+          </Box>
+        </WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>

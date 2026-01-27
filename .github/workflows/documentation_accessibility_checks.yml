@@ -52,13 +52,13 @@ jobs:
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
-          yarn install --frozen-lockfile
+          yarn install --ignore-scripts --frozen-lockfile
       - name: Create the build and start web server
         working-directory: VAMobile/documentation
         env:
           DOCS_RELEASE_REPORT_PAT: ${{ steps.generate_token.outputs.token }}
         run: |
-          yarn install --frozen-lockfile
+          yarn install --ignore-scripts --frozen-lockfile
           yarn build
           yarn start &
           npx wait-on http://localhost:3000 &

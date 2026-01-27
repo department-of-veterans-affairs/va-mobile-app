@@ -1,0 +1,100 @@
+name: '[Security] Security Check'
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  check_for_locked_file_changes:
+    name: Check for package-lock changes
+    runs-on: ubuntu-latest
+    outputs:
+      any_changed: ${{ steps.changed-files.outputs.any_changed }}
+      has_node: ${{ steps.detect-node.outputs.has_node }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: '**/package.json,**/yarn.lock,**/Gemfile.lock'
+      - name: Detect whether repository has Node packages
+        id: detect-node
+        run: |
+          # Detect presence of package.json files tracked in the repo
+          set -euo pipefail
+          if git ls-files -- '**/package.json' | grep -q .; then
+            echo "has_node=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_node=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Debug changed files output
+        run: |
+          echo "The value of 'any_changed' is ${{ steps.changed-files.outputs.any_changed }}"
+          echo "The value of 'has_node' is ${{ steps.detect-node.outputs.has_node }}"
+
+  request_bypass_approval:
+    name: Request bypass approval
+    runs-on: ubuntu-latest
+    needs: check_for_locked_file_changes
+    if: needs.check_for_locked_file_changes.outputs.any_changed == 'true' && needs.check_for_locked_file_changes.outputs.has_node == 'true'
+    environment: bypass-package-lock
+    steps:
+      - run: echo "Approval required for package lock file change. An admin from the required group must approve this step."
+
+  security-check:
+    name: security-check
+    runs-on: ubuntu-latest
+    needs: [check_for_locked_file_changes, request_bypass_approval]
+    if: |
+      always() && (
+        needs.check_for_locked_file_changes.outputs.any_changed == 'false' ||
+        (needs.check_for_locked_file_changes.outputs.any_changed == 'true' && needs.request_bypass_approval.result == 'success')
+      )
+    outputs:
+      affected-count: ${{ steps.security_scan.outputs.affected-count }}
+      security-findings-count: ${{ steps.security_scan.outputs.security-findings-count }}
+      status: ${{ steps.security_scan.outputs.status }}
+      scan-time: ${{ steps.security_scan.outputs.scan-time }}
+      results: ${{ steps.security_scan.outputs.results }}
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
+        id: security_scan
+        with:
+          fail-on-critical: true
+
+  start_slack_thread_failure:
+    name: Start Slack thread for failure
+    needs: security-check
+    if: failure()
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: |
+        :alert:Shai-Hulud 2.0 Security Check failed! :alert:
+        See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for full results.
+        *Scan Results:*
+        *Status*: ${{ needs.security-check.outputs.status }}
+        *Affected Packages*: ${{ needs.security-check.outputs.affected-count }}
+        *Security Findings*: ${{ needs.security-check.outputs.security-findings-count }}
+        *Scan Time*: ${{ needs.security-check.outputs.scan-time }}ms
+        *Results*: ```${{ needs.security-check.outputs.results }}```
