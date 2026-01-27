@@ -126,7 +126,7 @@ context('HealthScreen', () => {
         .mockReturnValue(false)
 
       initializeTestInstance()
-      expect(screen.queryByTestId('toTravelPayClaimsLinkID')).toBeFalsy()
+      expect(screen.queryByTestId('toTravelPayClaimsLinkIDHealthScreen')).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -136,7 +136,7 @@ context('HealthScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.getByTestId('toTravelPayClaimsLinkID')).toBeTruthy()
+      expect(screen.getByTestId('toTravelPayClaimsLinkIDHealthScreen')).toBeTruthy()
     })
 
     it('navigates to Travel Claims screen when pressed', () => {
@@ -145,7 +145,7 @@ context('HealthScreen', () => {
         .mockReturnValue(true)
       initializeTestInstance()
 
-      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkID'))
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkIDHealthScreen'))
 
       expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
     })
