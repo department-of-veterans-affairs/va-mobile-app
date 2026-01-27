@@ -292,6 +292,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         isRequiredField: true,
         testID: 'to field',
         confirmTestID: 'toComboBoxConfirmID',
+        accessibilityLabel: 'secureMessaging.formMessage.careTeam.a11y',
       },
       hideField: !careSystem,
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
