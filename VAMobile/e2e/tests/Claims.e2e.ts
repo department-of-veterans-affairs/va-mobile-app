@@ -19,7 +19,7 @@ export const ClaimsE2eIdConstants = {
   CLAIM_3_ID:
     'Claim for compensation Received July 20, 2021 Step 2 of 5: Initial review Moved to this step on July 20, 2021',
   CLAIM_4_ID:
-    'Claim for disability compensation More information needed Received January 01, 2021 Step 3 of 8: Evidence gathering Moved to this step on May 05, 2021',
+    'Claim for disability compensation Evidence requested Received January 01, 2021 Step 3 of 8: Evidence gathering Moved to this step on May 05, 2021',
   CLAIM_5_ID:
     'Claim for compensation Received March 22, 2019 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on July 18, 2019',
   CLAIM_6_ID:
