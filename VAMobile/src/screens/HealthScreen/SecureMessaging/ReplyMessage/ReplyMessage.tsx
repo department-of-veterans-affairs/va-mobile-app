@@ -396,7 +396,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : (
-        <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box>
           <Box>{renderForm()}</Box>
           <Box>{renderMessageThread()}</Box>
         </Box>

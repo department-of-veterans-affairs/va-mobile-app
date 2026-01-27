@@ -62,7 +62,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   })
 
   return (
-    <VAScrollView testID="InterstitialScreen">
+    <VAScrollView removeInsets testID="InterstitialScreen">
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>

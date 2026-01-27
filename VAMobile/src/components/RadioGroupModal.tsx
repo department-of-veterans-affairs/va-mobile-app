@@ -158,7 +158,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
           <Box backgroundColor="modalOverlay" opacity={0.8} pt={insets.top} />
-          <Box backgroundColor="list" pb={insets.bottom} flex={1}>
+          <Box backgroundColor="list" flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
                 <TextView {...commonButtonProps}>{t('cancel')}</TextView>
@@ -177,7 +177,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
               </Pressable>
             </Box>
             {showScrollView && (
-              <VAScrollView testID={testID} bounces={false}>
+              <VAScrollView removeInsets testID={testID} bounces={false}>
                 {getGroups()}
               </VAScrollView>
             )}

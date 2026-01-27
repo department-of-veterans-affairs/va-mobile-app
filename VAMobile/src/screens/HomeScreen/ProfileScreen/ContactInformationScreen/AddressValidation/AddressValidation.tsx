@@ -228,7 +228,7 @@ function AddressValidation({
   }
 
   return (
-    <VAScrollView testID="AddressVerificationTestID" contentContainerStyle={scrollStyles}>
+    <VAScrollView removeInsets testID="AddressVerificationTestID" contentContainerStyle={scrollStyles}>
       <Box flex={1}>
         <AlertWithHaptics
           variant="warning"

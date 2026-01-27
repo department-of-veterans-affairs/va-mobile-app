@@ -62,7 +62,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   onFooterButtonPress,
   testID,
   dividerMarginBypass,
-  removeInsets,
+  removeInsets = true,
   hideModal,
 }) => {
   const [showScrollView, setShowScrollView] = useState(false)
@@ -147,22 +147,13 @@ export const LargePanel: FC<LargePanelProps> = ({
     top: '15%',
   }
 
-  const containerStyle: ViewStyle = {
-    flexGrow: 1,
-    backgroundColor: theme.colors.background.veteranStatus,
-    justifyContent: 'center',
-  }
-
   return (
     // Modal to ensure keyboard navigation is confined to focusable elements within panel
     <Modal visible={!hideModal} animationType="slide" transparent={true}>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
         {showScrollView && (
-          <VAScrollView
-            testID={testID}
-            removeInsets={removeInsets}
-            contentContainerStyle={removeInsets ? containerStyle : undefined}>
+          <VAScrollView testID={testID} removeInsets={removeInsets}>
             <WaygateWrapper>
               {children}
               {footerButtonText && onFooterButtonPress && (

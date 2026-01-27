@@ -75,7 +75,7 @@ function SMOCErrorScreen({ route }: SMOCErrorScreenProps) {
   const { title, textLines, content } = getErrorContent(error)
 
   return (
-    <VAScrollView testID="SMOCErrorScreen">
+    <VAScrollView removeInsets testID="SMOCErrorScreen">
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>

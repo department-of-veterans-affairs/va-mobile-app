@@ -25,8 +25,9 @@ function VeteransCrisisLineScreen() {
     <LargePanel
       title={t('veteransCrisisLine.title')}
       rightButtonText={t('done')}
-      rightButtonTestID="veteranCrisisLineBackID">
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      rightButtonTestID="veteranCrisisLineBackID"
+      removeInsets>
+      <Box mx={theme.dimensions.gutter}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBodyBold"

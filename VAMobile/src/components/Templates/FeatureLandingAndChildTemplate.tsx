@@ -190,6 +190,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         onScroll={(event) => {
           transitionHeader(event.nativeEvent.contentOffset.y)
         }}
+        removeInsets
         {...scrollViewProps}>
         {!screenReaderEnabled ? (
           // eslint-disable-next-line react-native-a11y/has-accessibility-hint

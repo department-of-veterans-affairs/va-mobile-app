@@ -130,7 +130,12 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
       />
       <HeaderBanner {...headerProps} />
       <OfflineBanner />
-      <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
+      <VAScrollView
+        removeInsets
+        testID={testID}
+        scrollEventThrottle={title ? 1 : 0}
+        onScroll={onScroll}
+        {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
           <CrisisLineButton />
           {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}

@@ -17,7 +17,7 @@ import {
   TextView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import {
   TravelPayClaimAmount,
   TravelPayClaimDecisionReason,
@@ -33,7 +33,7 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { createTravelPayDocumentListItem } from 'utils/travelPay'
 
 const { LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT } = getEnv()
-type TravelPayClaimDetailsScreenProps = StackScreenProps<HealthStackParamList, 'TravelPayClaimDetailsScreen'>
+type TravelPayClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'TravelPayClaimDetailsScreen'>
 
 function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetailsScreenProps) {
   const snackbar = useSnackbar()

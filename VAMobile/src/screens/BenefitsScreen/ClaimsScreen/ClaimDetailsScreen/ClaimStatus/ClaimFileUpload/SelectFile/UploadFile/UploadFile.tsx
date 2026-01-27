@@ -348,7 +348,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const a11yErrorLabel = t('error', { error: t('fileUpload.requiredFile') })
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef}>
+    <VAScrollView removeInsets scrollViewRef={scrollViewRef}>
       <SubtaskTitle title={t('fileUpload.uploadFiles')} />
 
       {loadingFileUpload ? (

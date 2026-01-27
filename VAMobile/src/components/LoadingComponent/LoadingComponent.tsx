@@ -102,7 +102,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
           </TextView>
         </Box>
       ) : (
-        <VAScrollView contentContainerStyle={scrollStyles}>
+        <VAScrollView removeInsets contentContainerStyle={scrollStyles}>
           <Box
             justifyContent="center"
             mx={theme.dimensions.gutter}

@@ -79,7 +79,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <VAScrollView testID="fileRequestDetailsID">
+    <VAScrollView removeInsets testID="fileRequestDetailsID">
       <SubtaskTitle title={displayName || ''} />
 
       <Box mb={contentMarginBottom} flex={1}>
@@ -121,7 +121,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
       </Box>
       {!hasUploaded && (
         <Box {...boxProps}>
-          <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
+          <Box mt={standardMarginBetween} mx={gutter}>
             <Button
               onPress={onFilePress}
               label={t('fileUpload.selectAFile')}

@@ -185,7 +185,10 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
       <OfflineBanner />
-      <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
+      <VAScrollView
+        removeInsets={!!(hasPrimaryButton || hasSecondaryButton)}
+        scrollViewRef={scrollViewRef}
+        testID={testID}>
         {showCrisisLineButton && <CrisisLineButton />}
         {title && <SubtaskTitle title={title} a11yLabel={titleA11yLabel} mt={titleMarginTop} />}
         <WaygateWrapper>{children}</WaygateWrapper>
@@ -197,7 +200,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
             flexDirection="row"
             mt={theme.dimensions.condensedMarginBetween}
             mr={theme.dimensions.gutter}
-            mb={theme.dimensions.contentMarginBottom}
+            mb={insets.bottom + theme.dimensions.contentMarginBottom}
             alignItems={'center'}>
             {hasSecondaryButton && (
               <Box ml={theme.dimensions.gutter} flex={1}>

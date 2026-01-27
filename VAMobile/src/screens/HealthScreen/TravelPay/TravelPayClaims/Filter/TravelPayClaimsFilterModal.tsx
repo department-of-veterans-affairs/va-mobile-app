@@ -129,7 +129,7 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
         testID="claimsFilterModal">
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
           <Box backgroundColor="modalOverlay" opacity={0.8} pt={insets.top} />
-          <Box backgroundColor="list" pb={insets.bottom} flex={1}>
+          <Box backgroundColor="list" flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable
                 onPress={onCancelPressed}
