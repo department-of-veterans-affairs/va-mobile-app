@@ -176,7 +176,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
                 }}
                 expandable
                 initializeExpanded={false}>
-                <TextView variant="MobileBody">
+                <TextView accessible variant="MobileBody">
                   <Trans
                     i18nKey="copays.balanceOverdue.description"
                     components={{ b: <TextView variant="MobileBodyBold" /> }}

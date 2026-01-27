@@ -93,7 +93,7 @@ export const getTestIDFromTextLinesHyphen = (textLines: Array<TextLine>): string
  * @param text - string to be separated by letter
  */
 export const getIndividualCharactersFromText = (text: string) => {
-  return text.toUpperCase().split("").join(", ")
+  return text.toUpperCase().split('').join(', ')
 }
 
 /**

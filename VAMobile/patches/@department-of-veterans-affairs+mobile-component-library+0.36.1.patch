@@ -1,0 +1,20 @@
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/main.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/main.tsx
+index fbdc110..fca3ef1 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/main.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/main.tsx
+@@ -1,13 +1,11 @@
+-import React from 'react'
+-
+ /**
+  * Module to set App environment:
+  *   - Standalone Expo App (Storybook environment)
+  *   - Component wrapper environment as part of NPM package/within external app (App = null)
+  */
+ export type AppType = {
+-  default: React.JSX.Element | null
+-  initiateExpo: ((expoApp: React.JSX.Element | null) => void) | null
++  default: JSX.Element | null
++  initiateExpo: ((expoApp: JSX.Element | null) => void) | null
+ }
+ 
+ let App: AppType
