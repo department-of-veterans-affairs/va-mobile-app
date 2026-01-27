@@ -132,6 +132,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
             text={t('copays.help.askVA')}
             a11yLabel={a11yLabelVA(t('copays.help.askVA'))}
             a11yHint={t('copays.help.askVAA11yHint')}
+            testID='copayDetailsAskVA'
           />
         </Box>
       </TextArea>
