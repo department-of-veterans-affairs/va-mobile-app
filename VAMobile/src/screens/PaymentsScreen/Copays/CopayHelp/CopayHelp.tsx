@@ -54,7 +54,7 @@ function CopayHelp({}: CopayHelpProps) {
           text={t('copays.help.askVA')}
           a11yLabel={a11yLabelVA(t('copays.help.askVA'))}
           a11yHint={t('copays.help.askVAA11yHint')}
-          testID='copayHelpAskVA'
+          testID="copayHelpAskVA"
         />
       </Box>
     </LargePanel>

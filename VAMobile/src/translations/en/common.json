@@ -2340,6 +2340,8 @@
   "whatsNew.bodyCopy.PretransitionedOHInfoAlert": "You can now manage your V\ufeffA health care right here in the mobile app.\n\nStill want to use My V\ufeffA Health for now?",
   "whatsNew.bodyCopy.PretransitionedOHInfoAlert.link.url": "https://patientportal.myhealth.va.gov/",
   "whatsNew.bodyCopy.PretransitionedOHInfoAlert.link.text": "Go to My VA Health",
+  "whatsNew.bodyCopy.DecisionLetter": "We can now notify you when a decision letter is available.",
+  "whatsNew.bodyCopy.DecisionLetter.bullet.1": "Manage this setting in your profile under Settings > Notifications > Decision letters: benefits claims and decision reviews",
   "whatsNew.dismissMessage": "Dismiss this message",
   "whatsNew.title": "What's new",
   "yes": "Yes"

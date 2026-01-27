@@ -73,7 +73,7 @@ function DebtHelp({ route, navigation }: DebtHelpProps) {
               text={t('debts.help.askVA')}
               a11yLabel={a11yLabelVA(t('debts.help.askVA'))}
               a11yHint={t('debts.help.askVAA11yHint')}
-              testID='debtHelpAskVA'
+              testID="debtHelpAskVA"
             />
           </>
         )}
