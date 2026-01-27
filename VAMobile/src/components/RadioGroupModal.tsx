@@ -8,7 +8,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { Box, BoxProps, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { setAccessibilityFocus } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useShowScrollView, useTheme } from 'utils/hooks'
 
 export type RadioPickerGroup = {
   /** Optional title appearing over the radio grouping, used if there are multiple groups in one modal */
@@ -57,22 +57,11 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   testID,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const [showScrollView, setShowScrollView] = useState(false)
+  const showScrollView = useShowScrollView(modalVisible)
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
   const ref = useRef(null)
-
-  // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
-  // https://github.com/facebook/react-native/issues/48822
-  useEffect(() => {
-    if (modalVisible) {
-      const timeout = setTimeout(() => setShowScrollView(true), 50)
-      return () => clearTimeout(timeout)
-    } else {
-      setShowScrollView(false)
-    }
-  }, [modalVisible])
 
   const showModal = () => {
     setModalVisible(true)
