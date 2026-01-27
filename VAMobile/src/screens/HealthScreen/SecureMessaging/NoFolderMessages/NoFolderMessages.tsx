@@ -47,7 +47,7 @@ function NoFolderMessages() {
             mb={theme.dimensions.standardMarginBetween}>
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
-          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} testID='noFolderMessagesGoToInbox' />
         </Box>
       </VAScrollView>
     </>

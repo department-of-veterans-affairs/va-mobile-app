@@ -132,6 +132,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
             text={t('copays.help.askVA')}
             a11yLabel={a11yLabelVA(t('copays.help.askVA'))}
             a11yHint={t('copays.help.askVAA11yHint')}
+            testID='copayDetailsAskVA'
           />
         </Box>
       </TextArea>
@@ -156,7 +157,6 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('copays.title')}
       backLabelOnPress={navigation.goBack}
       title={t('copays.details.title')}
       testID="copayDetailsTestID"

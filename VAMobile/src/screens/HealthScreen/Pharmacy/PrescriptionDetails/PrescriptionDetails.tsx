@@ -163,7 +163,6 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
 
   return (
     <ChildTemplate
-      backLabel={t('prescription.title')}
       backLabelOnPress={navigation.goBack}
       title={t('prescriptionDetails')}
       backLabelTestID="prescriptionsDetailsBackTestID">

@@ -14,6 +14,7 @@ import {
   findNodeHandle,
 } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
@@ -525,7 +526,7 @@ export function useShowActionSheet(): (
 ) => void {
   const { showActionSheetWithOptions } = useActionSheet()
   const currentTheme = getTheme()
-
+  const insets = useSafeAreaInsets()
   return (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
     // Destructive action sheets are always title case
     // Regular action sheets are title case for ios, sentence case for android
@@ -549,7 +550,7 @@ export function useShowActionSheet(): (
       messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
-      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox, marginBottom: insets.bottom },
       ...options,
       options: casedOptionsText,
       cancelButtonIndex: isIpad() ? undefined : options.options.length - 1,

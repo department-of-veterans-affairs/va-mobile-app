@@ -29,7 +29,7 @@ export const CernerIdConstants = {
     "Some care teams use My VA Health. Information from that health portal isn't included here.",
   CERNER_HEALTH_HELP_LINK_TEXT: 'Check if your care team uses My VA Health',
   MESSAGES_ID: 'messagesTestID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 4 of 4',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 5',
 }
 
 beforeAll(async () => {

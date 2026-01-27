@@ -292,6 +292,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         isRequiredField: true,
         testID: 'to field',
         confirmTestID: 'toComboBoxConfirmID',
+        accessibilityLabel: 'secureMessaging.formMessage.careTeam.a11y',
       },
       hideField: !careSystem,
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
@@ -442,7 +443,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}>
-          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} testID='startNewMessageGoToInbox' />
         </AlertWithHaptics>
       )
     }

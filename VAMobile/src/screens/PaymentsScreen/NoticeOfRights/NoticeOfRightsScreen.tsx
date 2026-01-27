@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import {
@@ -41,8 +40,6 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'DebtDetails' ? t('debts.overpayment') : t('copays.details.title')
 
   function renderAskVALink() {
     return (
@@ -488,7 +485,6 @@ function NoticeOfRightsScreen({ navigation }: NoticeOfRightsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('debts.noticeOfRights.title')}
       testID="noticeOfRightsTestID"
