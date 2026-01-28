@@ -200,7 +200,7 @@ export function HealthScreen({}: HealthScreenProps) {
             <LinkWithAnalytics
               type="custom"
               text={t('travelPay.claims.viewYourClaims')}
-              testID="toTravelPayClaimsLinkID"
+              testID="toTravelPayClaimsLinkIDHealthScreen"
               onPress={() => navigateToTravelClaims(navigateTo)}
             />
           </Box>

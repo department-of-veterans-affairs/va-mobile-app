@@ -11,6 +11,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import FloatingButton from 'components/FloatingButton'
+import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -165,10 +166,9 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       testID="appointmentsTestID"
       footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
       backLabelTestID="appointmentsBackTestID"
+      screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
       dataUpdatedAt={lastUpdatedDate}>
-      {!apptsNotInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-      ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
+      {getUserAuthorizedServicesError && !fetchingAuthServices ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
           onTryAgain={refetchUserAuthorizedServices}
@@ -195,6 +195,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
             />
           </Box>
           {serviceErrorAlert()}
+          <OHAlertManager parentScreen={OHParentScreens.Appointments} authorizedServices={userAuthorizedServices} />
           <Box>
             {selectedTab === 1 &&
               (featureEnabled('datePickerUpdate') ? (

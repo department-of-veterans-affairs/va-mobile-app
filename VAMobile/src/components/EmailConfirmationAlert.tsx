@@ -158,7 +158,7 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
         description={t('email.alert.body')}
         primaryButton={{ label: primaryButtonText, onPress: onPrimaryAction }}
         secondaryButton={{ label: secondaryButtonText, onPress: onSecondaryAction }}>
-        {emailOnFile && <TextView variant="MobileBodyBold">{emailOnFile}</TextView>}
+        {emailOnFile && <TextView accessible variant="MobileBodyBold">{emailOnFile}</TextView>}
       </AlertWithHaptics>
     </Box>
   )

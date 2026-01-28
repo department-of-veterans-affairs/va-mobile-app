@@ -645,7 +645,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           scrollViewRef={scrollViewRef}>
-          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+          <LinkWithAnalytics
+            type="custom"
+            text={t('secureMessaging.goToInbox')}
+            onPress={onGoToInbox}
+            testID="editDraftGoToInbox"
+          />
         </AlertWithHaptics>
       )
     }
@@ -785,7 +790,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       showCrisisLineButton={!(isLoading || hasError)}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID"
-      rightButtonTestID="editDraftMoreID">
+      rightButtonTestID="editDraftMoreID"
+      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

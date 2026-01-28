@@ -729,6 +729,15 @@ export const Events = {
       },
     }
   },
+  vama_load_time_outlier: (eventName: string, loadTime: number): Event => {
+    return {
+      name: 'vama_load_time_outlier',
+      params: {
+        p1: eventName,
+        p2: loadTime,
+      },
+    }
+  },
   vama_hs_scroll_banner: (): Event => {
     return {
       name: 'vama_hs_scroll_ab',
@@ -772,7 +781,19 @@ export const Events = {
   vama_link_click: (params: EventParams): Event => {
     return {
       name: 'vama_link_click',
-      params,
+      params: {
+        p1: params.locationData,
+        p2: params.phoneNumber,
+        p3: params.textNumber,
+        p4: params.TTYnumber,
+        p5: params.url,
+        p6: params.type,
+        p7: params.text,
+        p8: params.testID,
+        p9: params.claim_id,
+        p10: params.claim_type,
+        p11: params.claim_step,
+      },
     }
   },
   vama_link_confirm: (params: EventParams): Event => {

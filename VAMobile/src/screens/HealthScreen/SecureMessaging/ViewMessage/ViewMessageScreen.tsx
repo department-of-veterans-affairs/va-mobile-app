@@ -366,7 +366,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       title={t('reviewMessage')}
       headerButton={headerButton}
       testID="viewMessageTestID"
-      backLabelTestID="backToMessagesID">
+      backLabelTestID="backToMessagesID"
+      screenID={screenID}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
@@ -426,6 +427,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 testID="secureMessagingYouCanNoLongerAlertID">
                 {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
                 <TextView
+                  accessible
                   variant="MobileBody"
                   paragraphSpacing={true}
                   accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
