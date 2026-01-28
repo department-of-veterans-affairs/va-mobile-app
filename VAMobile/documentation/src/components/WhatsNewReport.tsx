@@ -92,7 +92,14 @@ const ReleaseNotesSection = ({ notes }: { notes: string }) => {
   const content: React.ReactNode[] = []
   let currentList: string[] = []
 
+  /**
+   * Takes any accumulated "bullet" lines from currentList and flushes them
+   * into the final content array as a single <ul> element.
+   *
+   * @param key - A unique react key for the generated list element.
+   */
   const flushList = (key: string) => {
+    // Only generate a list if we've actually accumulated hyphenated lines
     if (currentList.length > 0) {
       content.push(
         <ul key={key} style={STYLES.LIST}>
@@ -103,6 +110,8 @@ const ReleaseNotesSection = ({ notes }: { notes: string }) => {
           ))}
         </ul>,
       )
+
+      // Clear the buffer so we don't duplicate items in the next flush
       currentList = []
     }
   }
@@ -242,11 +251,7 @@ const WhatsNewReport = () => {
           <div style={{ marginBottom: '1.5rem' }}>
             <h2 style={{ color: COLORS.primary, fontSize: '2rem', margin: 0 }}>{release.version}</h2>
             <div style={{ color: COLORS.textMuted, fontSize: '0.95rem', fontWeight: 500, marginTop: '0.25rem' }}>
-              {new Date(release.releaseDate).toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
+              Released on: {new Date(release.releaseDate).toLocaleDateString()}
             </div>
           </div>
 
