@@ -6,11 +6,14 @@ labels: front-end, product, back-end, qa
 assignees: dumathane, BeccaTupaj, b-rocha, rtwell, kellylein, mmiddaugh
 ---
 ## Project Overview
+**Please only fill out this ticket template if your team is ready to begin the work**
 
 * Epic Ticket Link:
 * Requester / Team:
 * PO's Name & Email:
-* Team Points of Contact for Eng, UX, PM, etc.:
+* Team Points of Contact for Eng, UX, PM, etc. (FYI we will invite these individuals to the kickoff meeting):
+* Is this feature/experience already on VA.gov?
+* Is your team currently making or planning changes to the web experience related to this feature?
 
 ## Project Goals and Alignment
 
@@ -34,8 +37,6 @@ assignees: dumathane, BeccaTupaj, b-rocha, rtwell, kellylein, mmiddaugh
 ## Feature Context
 
 * Is this iteration on an existing feature or a net-new feature for the app?
-* Is this feature/experience already on VA.gov?
-* Is your team currently making or planning changes to the web experience related to this feature?
 * Is there a hard deadline associated with this request? If so:
     * Why this particular deadline?
     * Potential impacts to the app or other services if the deadline is not met
