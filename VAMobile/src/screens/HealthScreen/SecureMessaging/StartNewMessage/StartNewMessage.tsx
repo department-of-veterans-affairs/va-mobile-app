@@ -443,7 +443,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}>
-          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} testID='startNewMessageGoToInbox' />
+          <LinkWithAnalytics
+            type="custom"
+            text={t('secureMessaging.goToInbox')}
+            onPress={onGoToInbox}
+            testID="startNewMessageGoToInbox"
+          />
         </AlertWithHaptics>
       )
     }
@@ -544,7 +549,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       {...rightButtonProps}
       showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
-      leftButtonTestID="startNewMessageCancelTestID">
+      leftButtonTestID="startNewMessageCancelTestID"
+      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

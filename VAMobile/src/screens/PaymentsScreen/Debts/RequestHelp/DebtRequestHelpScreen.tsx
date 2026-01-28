@@ -80,7 +80,7 @@ function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
           text={t('debts.help.askVA')}
           a11yLabel={a11yLabelVA(t('debts.help.askVA'))}
           a11yHint={t('debts.help.askVAA11yHint')}
-          testID='debtRequestHelpAskVA'
+          testID="debtRequestHelpAskVA"
         />
       </Box>
     )

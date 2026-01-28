@@ -88,7 +88,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
               text={t('goToVAGov')}
               a11yLabel={a11yLabelVA(t('goToVAGov'))}
               variant={'base'}
-              testID='takePhotosGoToVAGov'
+              testID="takePhotosGoToVAGov"
             />
           </AlertWithHaptics>
         </Box>

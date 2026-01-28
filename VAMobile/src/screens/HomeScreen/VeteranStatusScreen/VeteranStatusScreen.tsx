@@ -207,7 +207,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
       title={t('veteranStatus.title')}
       rightButtonText={t('close')}
       dividerMarginBypass={true}
-      removeInsets={true}
       testID="veteranStatusTestID"
       rightButtonTestID="veteranStatusCloseID">
       {isVSCLoading ? (

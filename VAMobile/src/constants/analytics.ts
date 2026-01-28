@@ -729,6 +729,15 @@ export const Events = {
       },
     }
   },
+  vama_load_time_outlier: (eventName: string, loadTime: number): Event => {
+    return {
+      name: 'vama_load_time_outlier',
+      params: {
+        p1: eventName,
+        p2: loadTime,
+      },
+    }
+  },
   vama_hs_scroll_banner: (): Event => {
     return {
       name: 'vama_hs_scroll_ab',

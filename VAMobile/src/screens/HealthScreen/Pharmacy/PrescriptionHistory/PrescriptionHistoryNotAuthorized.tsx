@@ -54,7 +54,7 @@ function PrescriptionHistoryNotAuthorized() {
     text: t('prescriptions.notAuthorized.findVACare'),
     a11yLabel: a11yLabelVA(t('prescriptions.notAuthorized.findVACare')),
     a11yHint: t('prescriptions.notAuthorized.findVACare.a11yHint'),
-    testID: 'prescriptionHistoryNotAuthorizedLink'
+    testID: 'prescriptionHistoryNotAuthorizedLink',
   }
 
   return (

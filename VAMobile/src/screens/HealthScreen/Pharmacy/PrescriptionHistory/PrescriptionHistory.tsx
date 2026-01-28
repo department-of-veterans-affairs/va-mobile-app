@@ -595,7 +595,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}>
+      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}
+      screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (

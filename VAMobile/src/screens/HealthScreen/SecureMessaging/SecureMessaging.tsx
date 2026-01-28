@@ -143,7 +143,8 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       backLabelOnPress={navigation.goBack}
       title={t('messages')}
       testID="messagesTestID"
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}>
       {!smNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices && !refetchingFolders && !refetchingInbox ? (
