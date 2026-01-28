@@ -11,9 +11,8 @@ const REMOTE_CONFIG_PATH = 'VAMobile/src/utils/remoteConfig.ts'
 const RELEASE_NOTES_PATH = 'VAMobile/ios/fastlane/metadata/en-US/release_notes.txt'
 const OUTPUT_PATH = path.resolve('static', 'data', 'whats-new-history.json')
 
-const GENERIC_RELEASE_NOTES = 'We added general improvements and fixed a few bugs.'
-const GENERIC_VARIANTS = [
-  GENERIC_RELEASE_NOTES,
+const GENERIC_NOTES_VARIANTS = [
+  'We added general improvements and fixed a few bugs.',
   'We added general improvements.',
   'We added general improvements',
   'General improvements and bug fixes.',
@@ -221,7 +220,7 @@ async function fetchWhatsNewHistory() {
     if (rawReleaseNotes) {
       const cleanNotes = rawReleaseNotes.trim()
 
-      const isGeneric = !cleanNotes || GENERIC_VARIANTS.includes(cleanNotes)
+      const isGeneric = !cleanNotes || GENERIC_NOTES_VARIANTS.includes(cleanNotes)
       const isDuplicate = cleanNotes === lastReleaseNotes
       const isRedundant = isSimilar(cleanNotes, whatsNewForTag)
 
