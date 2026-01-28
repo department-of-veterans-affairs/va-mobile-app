@@ -22,21 +22,22 @@ interface WhatsNewItem {
  * Add versions or features here that aren't captured by the automated script.
  */
 const MANUAL_REPORTS: WhatsNewItem[] = [
-  {
-    version: 'v2.62.0',
-    releaseDate: '2026-03-02',
-    features: [
-      {
-        featureName: 'ManualFeature',
-        title: 'Description of a manually added feature.',
-        bullets: ['First important point.', 'Second important point.'],
-        link: {
-          text: 'Learn more online',
-          url: 'https://example.com',
-        },
-      },
-    ],
-  },
+  // {
+  //   version: 'v2.62.0',
+  //   /This is overridden by version release date if version exists already in log
+  //   releaseDate: '2026-03-02',
+  //   features: [
+  //     {
+  //       featureName: 'ManualFeature',
+  //       title: 'Description of a manually added feature.',
+  //       bullets: ['First important point.', 'Second important point.'],
+  //       link: {
+  //         text: 'Learn more online',
+  //         url: 'https://example.com',
+  //       },
+  //     },
+  //   ],
+  // },
 ]
 
 const WhatsNewReport = () => {
