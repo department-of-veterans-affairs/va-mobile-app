@@ -8,7 +8,7 @@ import data from '@site/static/data/whats-new-history.json'
 
 interface FeatureContent {
   content?: Record<string, string>
-  featureName?: string // Internal ID (e.g., 'TravelListAndStatus' or '2.65')
+  featureId?: string // Unique identifier (e.g., 'TravelListAndStatus' or '2.65')
   title?: string // Human-readable override (used in MANUAL_ENTRIES)
   bullets?: string[] // Manual bullets override
   link?: { text: string; url: string } // Manual link override
@@ -71,7 +71,7 @@ const MANUAL_ENTRIES: WhatsNewItem[] = [
   //   releaseDate: '2026-03-02',
   //   features: [
   //     {
-  //       featureName: 'ManualFeature',
+  //       featureId: 'ManualFeature',
   //       title: 'Description of a manually added feature.',
   //       bullets: ['First important point.', 'Second important point.'],
   //       link: { text: 'Learn more online', url: 'https://example.com' },
@@ -79,6 +79,81 @@ const MANUAL_ENTRIES: WhatsNewItem[] = [
   //   ],
   // },
 ]
+
+/**
+ * UTILITIES
+ */
+
+/**
+ * Resolves a feature's display details (title, bullets, link) by merging
+ * manual overrides with translation content keys.
+ */
+const resolveFeatureDetails = (feature: FeatureContent) => {
+  const fId = feature.featureId || feature.title || ''
+  const details = {
+    title: feature.title || '',
+    bullets: feature.bullets ? [...feature.bullets] : ([] as string[]),
+    link: feature.link || { text: '', url: '' },
+  }
+
+  if (feature.content) {
+    const prefix = `whatsNew.bodyCopy.${fId}`
+    Object.keys(feature.content).forEach((key) => {
+      const keyWithoutPrefix = key === prefix ? '' : key.replace(`${prefix}.`, '')
+
+      if (!keyWithoutPrefix) {
+        details.title = feature.content![key]
+      } else if (keyWithoutPrefix.startsWith('bullet.') && !key.endsWith('a11yLabel')) {
+        details.bullets.push(feature.content![key])
+      } else if (keyWithoutPrefix.startsWith('link.')) {
+        if (keyWithoutPrefix === 'link.text' && !details.link.text) {
+          details.link.text = feature.content![key]
+        } else if (keyWithoutPrefix === 'link.url' && !details.link.url) {
+          details.link.url = feature.content![key]
+        }
+      }
+    })
+  }
+
+  return details
+}
+
+/**
+ * Merges automated history and manual overrides, groups them by version,
+ * and sorts them in descending SemVer order.
+ */
+const getMergedHistory = (history: WhatsNewItem[], manual: WhatsNewItem[]) => {
+  const combined = [...history, ...manual]
+
+  const grouped = combined.reduce(
+    (acc, item) => {
+      const { version, releaseDate, features } = item
+      const existing = acc[version]
+
+      if (!existing) {
+        acc[version] = { ...item, features: [...features] }
+      } else {
+        existing.features = [...existing.features, ...features]
+        if (new Date(releaseDate) > new Date(existing.releaseDate)) {
+          existing.releaseDate = releaseDate
+        }
+      }
+      return acc
+    },
+    {} as Record<string, WhatsNewItem>,
+  )
+
+  return Object.values(grouped).sort((a, b) => {
+    const v1 = a.version.replace(/^v/, '').split('.').map(Number)
+    const v2 = b.version.replace(/^v/, '').split('.').map(Number)
+    for (let i = 0; i < Math.max(v1.length, v2.length); i++) {
+      const p1 = v1[i] || 0
+      const p2 = v2[i] || 0
+      if (p1 !== p2) return p2 - p1
+    }
+    return 0
+  })
+}
 
 /**
  * SUB-COMPONENTS
@@ -145,35 +220,13 @@ const ReleaseNotesSection = ({ notes }: { notes: string }) => {
  * Renders a single "What's New" feature entry.
  */
 const FeatureSection = ({ feature }: { feature: FeatureContent }) => {
-  const featureName = feature.featureName || feature.title || ''
-  const details = {
-    title: feature.title || '',
-    bullets: feature.bullets ? [...feature.bullets] : ([] as string[]),
-    link: feature.link || { text: '', url: '' },
-  }
-
-  if (feature.content) {
-    const prefix = `whatsNew.bodyCopy.${featureName}`
-    Object.keys(feature.content).forEach((key) => {
-      const keyWithoutPrefix = key === prefix ? '' : key.replace(`${prefix}.`, '')
-      if (!keyWithoutPrefix) {
-        details.title = feature.content![key]
-      } else if (keyWithoutPrefix.startsWith('bullet.') && !key.endsWith('a11yLabel')) {
-        details.bullets.push(feature.content![key])
-      } else if (keyWithoutPrefix.startsWith('link.')) {
-        if (keyWithoutPrefix === 'link.text' && !details.link.text) {
-          details.link.text = feature.content![key]
-        } else if (keyWithoutPrefix === 'link.url' && !details.link.url) {
-          details.link.url = feature.content![key]
-        }
-      }
-    })
-  }
+  const details = resolveFeatureDetails(feature)
+  const displayId = feature.featureId || feature.title || 'unknown'
 
   return (
     <div style={{ ...STYLES.CONTAINER, borderLeft: `5px solid ${COLORS.secondary}` }}>
       <h3 style={{ ...STYLES.SECTION_HEADER, color: COLORS.secondary }}>What's New</h3>
-      <p style={{ marginBottom: '0.75rem', color: COLORS.text }}>{details.title || `Update: ${featureName}`}</p>
+      <p style={{ marginBottom: '0.75rem', color: COLORS.text }}>{details.title || `Update: ${displayId}`}</p>
       {details.bullets.length > 0 && (
         <ul style={STYLES.LIST}>
           {details.bullets.map((bullet, i) => (
@@ -185,19 +238,7 @@ const FeatureSection = ({ feature }: { feature: FeatureContent }) => {
       )}
       {details.link.url && (
         <p style={{ marginTop: '0.5rem' }}>
-          <a
-            href={details.link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: COLORS.secondary,
-              textDecoration: 'none',
-              fontWeight: 500,
-              borderBottom: '1px solid transparent',
-              transition: 'border-color 0.2s',
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.borderColor = COLORS.secondary)}
-            onMouseOut={(e) => (e.currentTarget.style.borderColor = 'transparent')}>
+          <a href={details.link.url} target="_blank" rel="noopener noreferrer">
             {details.link.text || 'View details online'} →
           </a>
         </p>
@@ -211,40 +252,13 @@ const FeatureSection = ({ feature }: { feature: FeatureContent }) => {
  */
 
 const WhatsNewReport = () => {
-  const mergedData = React.useMemo(() => {
-    const combined = [...(data as WhatsNewItem[]), ...MANUAL_ENTRIES]
-    const grouped = combined.reduce(
-      (acc, item) => {
-        const { version, releaseDate, features } = item
-        const existing = acc[version]
-        if (!existing) {
-          acc[version] = { ...item, features: [...features] }
-        } else {
-          existing.features = [...existing.features, ...features]
-          if (new Date(releaseDate) > new Date(existing.releaseDate)) {
-            existing.releaseDate = releaseDate
-          }
-        }
-        return acc
-      },
-      {} as Record<string, WhatsNewItem>,
-    )
-
-    return Object.values(grouped).sort((a, b) => {
-      const v1 = a.version.replace(/^v/, '').split('.').map(Number)
-      const v2 = b.version.replace(/^v/, '').split('.').map(Number)
-      for (let i = 0; i < Math.max(v1.length, v2.length); i++) {
-        const p1 = v1[i] || 0
-        const p2 = v2[i] || 0
-        if (p1 !== p2) return p2 - p1
-      }
-      return 0
-    })
+  const mergedHistory = React.useMemo(() => {
+    return getMergedHistory(data as WhatsNewItem[], MANUAL_ENTRIES)
   }, [])
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', fontFamily: 'inherit' }}>
-      {mergedData.map((release, index) => (
+      {mergedHistory.map((release, index) => (
         <div
           key={index}
           style={{ marginBottom: '4rem', borderBottom: `2px solid ${COLORS.border}`, paddingBottom: '2rem' }}>
@@ -256,8 +270,9 @@ const WhatsNewReport = () => {
           </div>
 
           {release.features.map((feature, fIndex) => {
-            const isReleaseNotes = feature.featureName === 'AppStoreReleaseNotes'
+            const isReleaseNotes = feature.featureId === 'AppStoreReleaseNotes'
             const notes = feature.releaseNotes || feature.content?.releaseNotes
+
             return isReleaseNotes && notes ? (
               <ReleaseNotesSection key={fIndex} notes={notes} />
             ) : (

@@ -24,9 +24,6 @@ const GENERIC_NOTES_VARIANTS = [
 
 /**
  * Runs a git command in the repository root.
- * @param {string} cmd - The git command to run.
- * @param {boolean} silent - Whether to suppress error warnings.
- * @returns {string|null} - The command output or null if failed.
  */
 function runGit(cmd, silent = false) {
   try {
@@ -45,10 +42,6 @@ function runGit(cmd, silent = false) {
 
 /**
  * Fetches a file's content from a specific git tag.
- * @param {string} tag - The git tag (e.g., v2.65.0).
- * @param {string} filePath - Path relative to repo root.
- * @param {boolean} isJson - If true, parses the content as JSON.
- * @returns {any} - File content or parsed JSON.
  */
 function gitShow(tag, filePath, isJson = false) {
   const content = runGit(`git show ${tag}:${filePath}`, true)
@@ -64,10 +57,7 @@ function gitShow(tag, filePath, isJson = false) {
 }
 
 /**
- * Converts a TypeScript object string (from WhatsNewConfig or remoteConfig defaults)
- * into a valid JSON string for parsing.
- * @param {string} content - The TypeScript snippet.
- * @returns {string} - Cleaned JSON string.
+ * Converts a TypeScript object string into a valid JSON string for parsing.
  */
 function cleanTsObjectToJson(content) {
   return content
@@ -79,11 +69,9 @@ function cleanTsObjectToJson(content) {
 }
 
 /**
- * Extracts a feature name from a translation key like 'whatsNew.bodyCopy.FeatureName.bullet.1'.
- * @param {string} key - The full translation key.
- * @returns {string} - The extracted feature name.
+ * Extracts a feature ID from a translation key.
  */
-function extractFeatureName(key) {
+function extractFeatureId(key) {
   const keyWithoutPrefix = key.replace('whatsNew.bodyCopy.', '')
   if (keyWithoutPrefix.includes('.bullet.')) {
     return keyWithoutPrefix.substring(0, keyWithoutPrefix.indexOf('.bullet.'))
@@ -96,23 +84,130 @@ function extractFeatureName(key) {
 
 /**
  * Checks if release notes are redundant given the gathered What's New features.
+ * Uses a word-set overlap approach to handle formatting differences.
  */
 function isSimilar(releaseNotes, whatsNewFeatures) {
   if (!releaseNotes || !whatsNewFeatures || Object.keys(whatsNewFeatures).length === 0) return false
 
-  let combinedWhatsNew = ''
+  let combinedWhatsNewText = ''
   Object.values(whatsNewFeatures).forEach((feature) => {
     Object.values(feature.content || {}).forEach((text) => {
-      combinedWhatsNew += ' ' + text
+      combinedWhatsNewText += ' ' + text
     })
   })
 
-  const normalize = (str) => str.toLowerCase().replace(/[^a-z0-9]/g, '')
-  const normalizedNotes = normalize(releaseNotes)
-  const normalizedWhatsNew = normalize(combinedWhatsNew)
+  const tokenize = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .split(/\s+/)
+      .filter(Boolean)
+  const notesWords = new Set(tokenize(releaseNotes))
+  const whatsNewWords = new Set(tokenize(combinedWhatsNewText))
 
-  if (!normalizedWhatsNew) return false
-  return normalizedWhatsNew.includes(normalizedNotes) || normalizedNotes.includes(normalizedWhatsNew)
+  if (notesWords.size === 0) return false
+
+  // Calculate how many words from release notes are present in What's New content
+  let matchCount = 0
+  notesWords.forEach((word) => {
+    if (whatsNewWords.has(word)) matchCount++
+  })
+
+  const overlapRatio = matchCount / notesWords.size
+  return overlapRatio > 0.85 // 85% overlap threshold
+}
+
+/**
+ * DOMAIN SPECIFIC SCRAPERS
+ */
+
+/**
+ * Scans translations for version-matched features (e.g., 'whatsNew.bodyCopy.2.65').
+ */
+function getFeaturesFromTranslations(majorMinor, translations, seenIds) {
+  const discovered = {}
+
+  Object.keys(translations).forEach((key) => {
+    if (key.startsWith('whatsNew.bodyCopy.')) {
+      const featureId = extractFeatureId(key)
+      const isVersionString = /^\d+(\.\d+)*$/.test(featureId)
+
+      if (isVersionString && featureId === majorMinor && !seenIds.has(featureId)) {
+        if (!discovered[featureId]) {
+          discovered[featureId] = { content: {} }
+        }
+        discovered[featureId].content[key] = translations[key]
+      }
+    }
+  })
+
+  return discovered
+}
+
+/**
+ * Scans for features that were introduced via feature flag flips in this version.
+ */
+function getFeaturesFromFlagTransitions(tag, translations, lastFlags, seenIds) {
+  const discovered = {}
+  const configContent = gitShow(tag, WHATS_NEW_CONFIG_PATH)
+  if (!configContent) return { discovered, currentFlags: lastFlags }
+
+  // Parse WhatsNewConfig array
+  const configMatch = configContent.match(/export const WhatsNewConfig: WhatsNewConfigItem\[\] = (\[[\s\S]*?\])/)
+  const config = configMatch ? JSON.parse(cleanTsObjectToJson(configMatch[1])) : []
+
+  // Parse Remote Config Defaults
+  const rcContent = gitShow(tag, REMOTE_CONFIG_PATH)
+  const rcDefaultsMatch = rcContent
+    ? rcContent.match(/export const defaults: FeatureToggleValues = ({[\s\S]*?})/)
+    : null
+  const currentFlags = rcDefaultsMatch ? JSON.parse(cleanTsObjectToJson(rcDefaultsMatch[1])) : {}
+
+  config.forEach((item) => {
+    const { featureName, featureFlag } = item
+    const featureId = featureName // Renaming for consistency
+    if (seenIds.has(featureId)) return
+
+    // Introduce if flag transitioned false/undefined -> true
+    const wasTrueBefore = lastFlags[featureFlag] === true
+    const isTrueNow = currentFlags[featureFlag] === true
+
+    if (!wasTrueBefore && isTrueNow) {
+      const baseKey = `whatsNew.bodyCopy.${featureId}`
+      const featureTranslations = {}
+
+      Object.keys(translations).forEach((k) => {
+        if (k === baseKey || k.startsWith(`${baseKey}.`)) {
+          featureTranslations[k] = translations[k]
+        }
+      })
+
+      if (Object.keys(featureTranslations).length > 0) {
+        discovered[featureId] = { content: featureTranslations }
+      }
+    }
+  })
+
+  return { discovered, currentFlags }
+}
+
+/**
+ * Fetches and filters the App Store release notes for a specific tag.
+ */
+function getReleaseNotes(tag, discoveredFeatures, lastNotes) {
+  const rawNotes = gitShow(tag, RELEASE_NOTES_PATH)
+  if (!rawNotes) return null
+
+  const cleanNotes = rawNotes.trim()
+  const isGeneric = !cleanNotes || GENERIC_NOTES_VARIANTS.includes(cleanNotes)
+  const isDuplicate = cleanNotes === lastNotes
+  const isRedundant = isSimilar(cleanNotes, discoveredFeatures)
+
+  if (isGeneric || isDuplicate) return null
+  return {
+    notes: isRedundant ? "Same content as What's New" : cleanNotes,
+    rawNotes: cleanNotes,
+  }
 }
 
 /**
@@ -123,18 +218,16 @@ async function fetchWhatsNewHistory() {
   console.log('🔍 Discovering version tags locally...')
 
   const tagsOutput = runGit('git tag -l "v*" --sort=-v:refname')
-  if (!tagsOutput) {
-    console.error('❌ Could not find any git tags.')
-    return
-  }
+  if (!tagsOutput) return console.error('❌ Could not find any git tags.')
 
   const tags = tagsOutput.split('\n')
   const historyData = []
-  const seenFeatures = new Set()
+  const seenIds = new Set()
+
   let lastReleaseNotes = ''
   let lastFlags = {}
 
-  // Process chronologically to track flag transitions
+  // Process chronologically to track flag transitions accurately
   const chronologicalTags = [...tags].reverse()
 
   for (const tag of chronologicalTags) {
@@ -142,105 +235,36 @@ async function fetchWhatsNewHistory() {
     if (!versionMatch) continue
 
     const majorMinor = versionMatch[1]
-    const whatsNewForTag = {} // Stores features found in this version
-    const introducedThisTag = new Set()
-
-    // 1. Fetch Key Files
     const translations = gitShow(tag, TRANSLATIONS_PATH, true)
     if (!translations) continue
 
-    /**
-     * SECTION A: VERSION-MATCHED FEATURES
-     * Looks for keys like 'whatsNew.bodyCopy.2.65'
-     */
-    Object.keys(translations).forEach((key) => {
-      if (key.startsWith('whatsNew.bodyCopy.')) {
-        const featureName = extractFeatureName(key)
-        const isVersionString = /^\d+(\.\d+)*$/.test(featureName)
+    // 1. Collect features from translations and flags
+    const versionFeatures = getFeaturesFromTranslations(majorMinor, translations, seenIds)
+    const { discovered: flagFeatures, currentFlags } = getFeaturesFromFlagTransitions(
+      tag,
+      translations,
+      lastFlags,
+      seenIds,
+    )
 
-        if (isVersionString && featureName === majorMinor && !seenFeatures.has(featureName)) {
-          if (!whatsNewForTag[featureName]) {
-            whatsNewForTag[featureName] = { content: {} }
-          }
-          whatsNewForTag[featureName].content[key] = translations[key]
-          introducedThisTag.add(featureName)
-        }
-      }
-    })
+    lastFlags = currentFlags
+    const allDiscoveredForTag = { ...versionFeatures, ...flagFeatures }
 
-    /**
-     * SECTION B: FEATURE FLAG TRANSITIONS
-     * Triggered if a flag in remoteConfig.ts flips to 'true' in this version.
-     */
-    const configContent = runGit(`git show ${tag}:${WHATS_NEW_CONFIG_PATH}`, true)
-    if (configContent) {
-      // Parse Config
-      const configMatch = configContent.match(/export const WhatsNewConfig: WhatsNewConfigItem\[\] = (\[[\s\S]*?\])/)
-      const config = configMatch ? JSON.parse(cleanTsObjectToJson(configMatch[1])) : []
-
-      // Parse current Remote Config Defaults
-      const rcContent = runGit(`git show ${tag}:${REMOTE_CONFIG_PATH}`, true)
-      const rcDefaultsMatch = rcContent
-        ? rcContent.match(/export const defaults: FeatureToggleValues = ({[\s\S]*?})/)
-        : null
-      const currentFlags = rcDefaultsMatch ? JSON.parse(cleanTsObjectToJson(rcDefaultsMatch[1])) : {}
-
-      config.forEach((item) => {
-        const { featureName, featureFlag } = item
-        if (seenFeatures.has(featureName)) return
-
-        // We introduce if flag transitioned false -> true
-        const wasTrueBefore = lastFlags[featureFlag] === true
-        const isTrueNow = currentFlags[featureFlag] === true
-
-        if (!wasTrueBefore && isTrueNow) {
-          const baseKey = `whatsNew.bodyCopy.${featureName}`
-          const featureTranslations = {}
-
-          // Gather all translation keys for this feature
-          Object.keys(translations).forEach((k) => {
-            if (k === baseKey || k.startsWith(`${baseKey}.`)) {
-              featureTranslations[k] = translations[k]
-            }
-          })
-
-          if (Object.keys(featureTranslations).length > 0) {
-            whatsNewForTag[featureName] = { content: featureTranslations }
-            introducedThisTag.add(featureName)
-          }
-        }
-      })
-      lastFlags = currentFlags
+    // 2. Process Release Notes
+    const releaseNotesResult = getReleaseNotes(tag, allDiscoveredForTag, lastReleaseNotes)
+    if (releaseNotesResult) {
+      allDiscoveredForTag['AppStoreReleaseNotes'] = { content: { releaseNotes: releaseNotesResult.notes } }
+      lastReleaseNotes = releaseNotesResult.rawNotes
     }
 
-    /**
-     * SECTION 2: APP STORE RELEASE NOTES
-     */
-    const rawReleaseNotes = runGit(`git show ${tag}:${RELEASE_NOTES_PATH}`, true)
-    if (rawReleaseNotes) {
-      const cleanNotes = rawReleaseNotes.trim()
-
-      const isGeneric = !cleanNotes || GENERIC_NOTES_VARIANTS.includes(cleanNotes)
-      const isDuplicate = cleanNotes === lastReleaseNotes
-      const isRedundant = isSimilar(cleanNotes, whatsNewForTag)
-
-      if (!isGeneric && !isDuplicate && !isRedundant) {
-        whatsNewForTag['AppStoreReleaseNotes'] = {
-          content: { releaseNotes: cleanNotes },
-        }
-        lastReleaseNotes = cleanNotes
-      }
-    }
-
-    // Wrap up version data
-    if (Object.keys(whatsNewForTag).length > 0) {
+    // 3. Finalize version entry
+    if (Object.keys(allDiscoveredForTag).length > 0) {
       console.log(`✅ Found content for ${tag}`)
       const tagDate = runGit(`git log -1 --format=%cI ${tag}`)
 
-      // Convert features to array format
-      const featuresArray = Object.keys(whatsNewForTag).map((name) => ({
-        ...whatsNewForTag[name],
-        featureName: name,
+      const featuresArray = Object.keys(allDiscoveredForTag).map((id) => ({
+        ...allDiscoveredForTag[id],
+        featureId: id,
       }))
 
       historyData.unshift({
@@ -249,12 +273,12 @@ async function fetchWhatsNewHistory() {
         features: featuresArray,
       })
 
-      // Update seen status
-      introducedThisTag.forEach((f) => seenFeatures.add(f))
+      // Mark IDs as seen to prevent repetition in future versions
+      Object.keys(allDiscoveredForTag).forEach((id) => seenIds.add(id))
     }
   }
 
-  // OUTPUT
+  // Final Output
   fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true })
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify(historyData, null, 2))
   console.log(`✅ What's New history data written to ${OUTPUT_PATH}`)
