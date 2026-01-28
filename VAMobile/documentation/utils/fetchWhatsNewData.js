@@ -3,6 +3,8 @@ const fs = require('fs')
 const path = require('path')
 
 const TRANSLATIONS_PATH = 'VAMobile/src/translations/en/common.json'
+const WHATS_NEW_CONFIG_PATH = 'VAMobile/src/constants/whatsNew.ts'
+const REMOTE_CONFIG_PATH = 'VAMobile/src/utils/remoteConfig.ts'
 const RELEASE_NOTES_PATH = 'VAMobile/ios/fastlane/metadata/en-US/release_notes.txt'
 const OUTPUT_PATH = path.resolve('static', 'data', 'whats-new-history.json')
 const MD_OUTPUT_PATH = path.resolve('static', 'data', 'whats-new-report.md')
@@ -54,7 +56,6 @@ function isSimilar(releaseNotes, whatsNewFeatures) {
  */
 function generateMarkdownReport(historyData) {
   let md = "# What's New Historical Report\n\n"
-  md += `*Generated on: ${new Date().toLocaleString()}*\n\n---\n\n`
 
   historyData.forEach((item) => {
     md += `## ${item.version}\n`
@@ -96,10 +97,49 @@ function generateMarkdownReport(historyData) {
       }
     })
 
-    md += '---\n\n'
+    md += '\n\n'
   })
 
   return md
+}
+
+/**
+ * Parses the WhatsNewConfig.ts file content to extract the array of feature objects.
+ */
+function parseWhatsNewConfig(content) {
+  const match = content.match(/export const WhatsNewConfig: WhatsNewConfigItem\[\] = (\[[\s\S]*?\])/)
+  if (!match) return []
+  try {
+    let jsonStr = match[1]
+      .replace(/,\s*/g, ',') // Basic whitespace cleanup
+      .replace(/,}/g, '}') // Trailing commas in objects
+      .replace(/,]/g, ']') // Trailing commas in arrays
+      .replace(/([a-zA-Z0-9]+):/g, '"$1":') // Quote keys
+      .replace(/'/g, '"')
+
+    return JSON.parse(jsonStr)
+  } catch (e) {
+    return []
+  }
+}
+
+/**
+ * Parses the remoteConfig.ts file content to extract flag defaults.
+ */
+function parseRemoteConfigDefaults(content) {
+  const match = content.match(/export const defaults: FeatureToggleValues = ({[\s\S]*?})/)
+  if (!match) return {}
+  try {
+    let jsonStr = match[1]
+      .replace(/,\s*/g, ',') // Basic cleanup
+      .replace(/,}/g, '}') // Trailing commas
+      .replace(/([a-zA-Z0-9]+):/g, '"$1":') // Quote keys
+      .replace(/'/g, '"')
+
+    return JSON.parse(jsonStr)
+  } catch (e) {
+    return {}
+  }
 }
 
 async function fetchWhatsNewHistory() {
@@ -115,6 +155,7 @@ async function fetchWhatsNewHistory() {
   const historyData = []
   const seenFeatures = new Set()
   let lastReleaseNotes = ''
+  let lastFlags = {}
 
   // We process chronologically to track when a feature first "appeared"
   const chronologicalTags = [...tags].reverse()
@@ -127,7 +168,7 @@ async function fetchWhatsNewHistory() {
     const whatsNewContentForVersion = {}
     const featuresIntroducedInThisTag = new Set()
 
-    // 1. Translations
+    // 1. Translations, Config, & Flags
     const translationsContent = runGit(`git show ${tag}:${TRANSLATIONS_PATH}`, true)
     let translations = null
     if (translationsContent) {
@@ -137,7 +178,7 @@ async function fetchWhatsNewHistory() {
     }
 
     if (translations) {
-      // Version-matched features ONLY (e.g., "2.56")
+      // A. Version-matched features (e.g., "2.56")
       Object.keys(translations).forEach((key) => {
         if (key.startsWith('whatsNew.bodyCopy.')) {
           const keyWithoutPrefix = key.replace('whatsNew.bodyCopy.', '')
@@ -160,6 +201,48 @@ async function fetchWhatsNewHistory() {
           }
         }
       })
+
+      // B. Config & Flag Detection (Only if WhatsNewConfig exists)
+      const configContent = runGit(`git show ${tag}:${WHATS_NEW_CONFIG_PATH}`, true)
+      if (configContent) {
+        const config = parseWhatsNewConfig(configContent)
+        const rcContent = runGit(`git show ${tag}:${REMOTE_CONFIG_PATH}`, true)
+        const currentFlags = rcContent ? parseRemoteConfigDefaults(rcContent) : {}
+
+        config.forEach((item) => {
+          const { featureName, featureFlag } = item
+          if (seenFeatures.has(featureName)) return
+
+          let shouldIntroduce = false
+
+          if (featureFlag) {
+            const wasTrueBefore = lastFlags[featureFlag] === true
+            const isTrueNow = currentFlags[featureFlag] === true
+            if (!wasTrueBefore && isTrueNow) {
+              shouldIntroduce = true
+            }
+          }
+
+          if (shouldIntroduce) {
+            const featureKeyBase = `whatsNew.bodyCopy.${featureName}`
+            const featureTranslations = {}
+
+            Object.keys(translations).forEach((key) => {
+              if (key === featureKeyBase || key.startsWith(`${featureKeyBase}.`)) {
+                featureTranslations[key] = translations[key]
+              }
+            })
+
+            if (Object.keys(featureTranslations).length > 0) {
+              whatsNewContentForVersion[featureName] = {
+                content: featureTranslations,
+              }
+              featuresIntroducedInThisTag.add(featureName)
+            }
+          }
+        })
+        lastFlags = currentFlags
+      }
     }
 
     // 2. App Store Release Notes

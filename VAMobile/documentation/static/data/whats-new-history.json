@@ -5,6 +5,15 @@
     "features": [
       {
         "content": {
+          "whatsNew.bodyCopy.TravelListAndStatus": "You can now view your Travel Claims, which includes:",
+          "whatsNew.bodyCopy.TravelListAndStatus.bullet.1": "View claim status and value",
+          "whatsNew.bodyCopy.TravelListAndStatus.bullet.2": "View and download decision letters",
+          "whatsNew.bodyCopy.TravelListAndStatus.bullet.3": "Access additional information about next steps"
+        },
+        "featureName": "TravelListAndStatus"
+      },
+      {
+        "content": {
           "releaseNotes": "We have expanded Travel Claims functionality which includes viewing their status and value, reading and downloading decision letters, and accessing additional information about next steps.\nWe also fixed a few bugs."
         },
         "featureName": "AppStoreReleaseNotes"
