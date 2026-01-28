@@ -30,7 +30,6 @@
     "docusaurus-plugin-react-docgen-typescript": "^1.0.0",
     "docusaurus-plugin-remote-content": "^4.0.0",
     "file-loader": "^6.2.0",
-    "firebase-admin": "^13.6.0",
     "mdx-mermaid": "^2.0.0",
     "mermaid": "^11.10.1",
     "node-fetch": "2",
