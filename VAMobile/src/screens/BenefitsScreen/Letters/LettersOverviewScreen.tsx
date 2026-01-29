@@ -36,7 +36,6 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('benefits.title')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.title')}
       testID="lettersPageID">

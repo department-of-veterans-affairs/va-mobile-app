@@ -1,0 +1,109 @@
+{
+  "/v0/user/authorized-services": {
+    "data": {
+      "type": "user",
+      "id": "abe3f152-90b0-45cb-8776-4958bad0e0ef",
+      "attributes": {
+        "authorizedServices": {
+          "allergiesOracleHealthEnabled": true,
+          "appeals": true,
+          "appointments": true,
+          "claims": true,
+          "decisionLetters": true,
+          "directDepositBenefits": true,
+          "directDepositBenefitsUpdate": true,
+          "disabilityRating": true,
+          "labsAndTestsEnabled": true,
+          "lettersAndDocuments": true,
+          "medicationsOracleHealthEnabled": true,
+          "militaryServiceHistory": true,
+          "paymentHistory": true,
+          "preferredName": true,
+          "prescriptions": true,
+          "scheduleAppointments": true,
+          "secureMessaging": true,
+          "secureMessagingOracleHealthEnabled": true,
+          "userProfileUpdate": true
+        }
+      }
+    },
+    "meta": {
+      "isUserAtPretransitionedOhFacility": true,
+      "isUserFacilityReadyForInfoAlert": false,
+      "migratingFacilitiesList": [
+        {
+          "migrationDate": "2026-04-01",
+          "facilities": [
+            {
+              "facilityId": 528,
+              "facilityName": "Test VA Medical Center"
+            },
+            {
+              "facilityId": 123,
+              "facilityName": "Different VA Medical Center"
+            }
+          ],
+          "phases": {
+            "current": "p5",
+            "p0": "February 1, 2026",
+            "p1": "February 15, 2026",
+            "p2": "March 1, 2026",
+            "p3": "March 24, 2026",
+            "p4": "March 27, 2026",
+            "p5": "April 1, 2026",
+            "p6": "April 3, 2026",
+            "p7": "April 8, 2026"
+          }
+        },
+        {
+          "migrationDate": "2026-05-01",
+          "facilities": [
+            {
+              "facilityId": 528,
+              "facilityName": "Test VA Medical Center"
+            },
+            {
+              "facilityId": 123,
+              "facilityName": "Different VA Medical Center"
+            }
+          ],
+          "phases": {
+            "current": "p1",
+            "p0": "March 1, 2026",
+            "p1": "March 15, 2026",
+            "p2": "April 1, 2026",
+            "p3": "April 24, 2026",
+            "p4": "April 27, 2026",
+            "p5": "May 1, 2026",
+            "p6": "May 3, 2026",
+            "p7": "May 8, 2026"
+          }
+        },
+        {
+          "migrationDate": "2026-06-01",
+          "facilities": [
+            {
+              "facilityId": 528,
+              "facilityName": "Test VA Medical Center"
+            },
+            {
+              "facilityId": 123,
+              "facilityName": "Different VA Medical Center"
+            }
+          ],
+          "phases": {
+            "current": "p0",
+            "p0": "April 1, 2026",
+            "p1": "April 15, 2026",
+            "p2": "May 1, 2026",
+            "p3": "May 24, 2026",
+            "p4": "May 27, 2026",
+            "p5": "June 1, 2026",
+            "p6": "June 3, 2026",
+            "p7": "June 8, 2026"
+          }
+        }
+      ]
+    }
+  }
+}

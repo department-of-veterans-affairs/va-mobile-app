@@ -167,11 +167,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     }, [claimID, claim, attributes]),
   )
 
-  const backLabel =
-    featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
-      ? t('claimsHistory.title')
-      : t('claims.title')
-
   const onTabChange = (tab: number) => {
     if (tab !== selectedTab && claim) {
       const analyticsEvent =
@@ -315,12 +310,12 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
       scrollViewProps={{ scrollViewRef }}
       testID="ClaimDetailsScreen"
-      backLabelTestID="claimsDetailsBackTestID">
+      backLabelTestID="claimsDetailsBackTestID"
+      screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID}>
       {loadingClaim || loadingEFolder || downloading ? (
         <LoadingComponent text={downloading ? t('claimFile.loading') : t('claimInformation.loading')} />
       ) : claimError || claimEfolderError ? (

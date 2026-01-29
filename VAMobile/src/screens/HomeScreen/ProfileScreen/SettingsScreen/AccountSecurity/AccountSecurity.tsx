@@ -16,7 +16,6 @@ function AccountSecurity({ navigation }: AccountSecurityProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       title={t('accountSecurity')}
       testID="accountSecurityScreenID"

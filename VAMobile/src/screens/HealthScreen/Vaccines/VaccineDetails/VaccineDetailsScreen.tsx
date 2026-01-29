@@ -16,7 +16,7 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 
 /**
- * Screen providing details on an vaccine
+ * Screen providing details on a vaccine
  */
 function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) {
   const { vaccine } = route.params
@@ -55,8 +55,6 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('vaVaccines')}
-      backLabelA11y={a11yLabelVA(t('vaVaccines'))}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       backLabelTestID="vaccinesDetailsBackID">

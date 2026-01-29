@@ -22,10 +22,12 @@ import {
 import EmptyStateMessage from 'components/EmptyStateMessage'
 import PhoneNumberComponent from 'components/PhoneNumberComponent'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getDebtInfo } from 'utils/debts'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -50,7 +52,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   const [page, setPage] = useState(1)
   const { perPage, totalEntries } = {
     perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: debtsData?.data.length || 0,
+    totalEntries: debtsData?.data?.length || 0,
   }
   const [debtsToShow, setDebtsToShow] = useState<DebtRecord[]>([])
 
@@ -68,6 +70,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     label: t('help'),
     icon: helpIconProps,
     onPress: () => {
+      logAnalyticsEvent(Events.vama_overpay_help_clk())
       navigateTo('DebtHelp', { helpType: 'questionsAboutDebt' })
     },
     testID: 'debtHelpID',
@@ -178,7 +181,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
           {/* Review details link */}
           {renderReviewDetailsLink(debt)}
           {/* Resolve debt button */}
-          {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
+          {debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtsScreen" />}
         </>
       )
       return (
@@ -213,7 +216,6 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   return (
     <FeatureLandingTemplate
       headerButton={headerButton}
-      backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       scrollViewProps={scrollViewProps}
       title={t('debts.title')}
