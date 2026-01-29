@@ -25,7 +25,7 @@ const GENERIC_NOTES_VARIANTS = [
 /**
  * Runs a git command in the repository root.
  */
-function runGit(cmd, silent = false) {
+function runGitCommand(cmd, silent = false) {
   try {
     return execSync(cmd, {
       cwd: path.resolve('..', '..'),
@@ -43,8 +43,8 @@ function runGit(cmd, silent = false) {
 /**
  * Fetches a file's content from a specific git tag.
  */
-function gitShow(tag, filePath, isJson = false) {
-  const content = runGit(`git show ${tag}:${filePath}`, true)
+function gitFetchFileAtTag(tag, filePath, isJson = false) {
+  const content = runGitCommand(`git show ${tag}:${filePath}`, true)
   if (!content) return null
   if (isJson) {
     try {
@@ -149,7 +149,7 @@ function getFeaturesFromTranslations(majorMinor, translations, seenIds) {
  */
 function getFeaturesFromFlagTransitions(tag, translations, lastFlags, seenIds) {
   const discovered = {}
-  const configContent = gitShow(tag, WHATS_NEW_CONFIG_PATH)
+  const configContent = gitFetchFileAtTag(tag, WHATS_NEW_CONFIG_PATH)
   if (!configContent) return { discovered, currentFlags: lastFlags }
 
   // Parse WhatsNewConfig array
@@ -157,7 +157,7 @@ function getFeaturesFromFlagTransitions(tag, translations, lastFlags, seenIds) {
   const config = configMatch ? JSON.parse(cleanTsObjectToJson(configMatch[1])) : []
 
   // Parse Remote Config Defaults
-  const rcContent = gitShow(tag, REMOTE_CONFIG_PATH)
+  const rcContent = gitFetchFileAtTag(tag, REMOTE_CONFIG_PATH)
   const rcDefaultsMatch = rcContent
     ? rcContent.match(/export const defaults: FeatureToggleValues = ({[\s\S]*?})/)
     : null
@@ -195,7 +195,7 @@ function getFeaturesFromFlagTransitions(tag, translations, lastFlags, seenIds) {
  * Fetches and filters the App Store release notes for a specific tag.
  */
 function getReleaseNotes(tag, discoveredFeatures, lastNotes) {
-  const rawNotes = gitShow(tag, RELEASE_NOTES_PATH)
+  const rawNotes = gitFetchFileAtTag(tag, RELEASE_NOTES_PATH)
   if (!rawNotes) return null
 
   const cleanNotes = rawNotes.trim()
@@ -217,7 +217,7 @@ function getReleaseNotes(tag, discoveredFeatures, lastNotes) {
 async function fetchWhatsNewHistory() {
   console.log('🔍 Discovering version tags locally...')
 
-  const tagsOutput = runGit('git tag -l "v*" --sort=-v:refname')
+  const tagsOutput = runGitCommand('git tag -l "v*" --sort=-v:refname')
   if (!tagsOutput) return console.error('❌ Could not find any git tags.')
 
   const tags = tagsOutput.split('\n')
@@ -235,7 +235,7 @@ async function fetchWhatsNewHistory() {
     if (!versionMatch) continue
 
     const majorMinor = versionMatch[1]
-    const translations = gitShow(tag, TRANSLATIONS_PATH, true)
+    const translations = gitFetchFileAtTag(tag, TRANSLATIONS_PATH, true)
     if (!translations) continue
 
     // 1. Collect features from translations and flags
@@ -260,7 +260,7 @@ async function fetchWhatsNewHistory() {
     // 3. Finalize version entry
     if (Object.keys(allDiscoveredForTag).length > 0) {
       console.log(`✅ Found content for ${tag}`)
-      const tagDate = runGit(`git log -1 --format=%cI ${tag}`)
+      const tagDate = runGitCommand(`git log -1 --format=%cI ${tag}`)
 
       const featuresArray = Object.keys(allDiscoveredForTag).map((id) => ({
         ...allDiscoveredForTag[id],
