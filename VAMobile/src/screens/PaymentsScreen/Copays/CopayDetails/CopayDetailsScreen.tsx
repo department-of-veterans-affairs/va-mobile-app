@@ -132,6 +132,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
             text={t('copays.help.askVA')}
             a11yLabel={a11yLabelVA(t('copays.help.askVA'))}
             a11yHint={t('copays.help.askVAA11yHint')}
+            testID="copayDetailsAskVA"
           />
         </Box>
       </TextArea>
@@ -156,7 +157,6 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('copays.title')}
       backLabelOnPress={navigation.goBack}
       title={t('copays.details.title')}
       testID="copayDetailsTestID"
@@ -176,7 +176,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
                 }}
                 expandable
                 initializeExpanded={false}>
-                <TextView variant="MobileBody">
+                <TextView accessible variant="MobileBody">
                   <Trans
                     i18nKey="copays.balanceOverdue.description"
                     components={{ b: <TextView variant="MobileBodyBold" /> }}

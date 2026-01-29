@@ -119,11 +119,11 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('vaMedicalRecords.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
       titleA11y={a11yLabelVA(t('vaVaccines'))}
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}>
       {loading ? (
         <LoadingComponent text={t('vaccines.loading')} />
       ) : vaccineError || vaccinesInDowntime ? (

@@ -57,7 +57,6 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -263,11 +262,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     return filteredFolder
   }
 
-  const backLabel =
-    Number(folderWhereMessagePreviousewas.current) === SecureMessagingSystemFolderIdConstants.INBOX
-      ? t('messages')
-      : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
-
   const replyExpired =
     demoMode && (message?.messageId === 2092809 || message?.messageId === 2092803)
       ? false
@@ -368,12 +362,12 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 
   return (
     <ChildTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('reviewMessage')}
       headerButton={headerButton}
       testID="viewMessageTestID"
-      backLabelTestID="backToMessagesID">
+      backLabelTestID="backToMessagesID"
+      screenID={screenID}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
@@ -433,6 +427,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 testID="secureMessagingYouCanNoLongerAlertID">
                 {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
                 <TextView
+                  accessible
                   variant="MobileBody"
                   paragraphSpacing={true}
                   accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>

@@ -65,7 +65,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { maintenanceWindows } = useMaintenanceWindows()
-  const endTime = formatDateTimeReadable(maintenanceWindows[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime)
+  const endTime = formatDateTimeReadable(maintenanceWindows?.[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime)
 
   const mutationState = useTravelClaimSubmissionMutationState(appointmentID)
   const isSubmitting = mutationState?.status === 'pending'
@@ -193,7 +193,6 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
                 logAnalyticsEvent(Events.vama_link_click)
                 navigateTo('TravelPayClaimDetailsScreen', {
                   claimId,
-                  backLabel: t('appointments.appointment'),
                 })
               } else {
                 logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))

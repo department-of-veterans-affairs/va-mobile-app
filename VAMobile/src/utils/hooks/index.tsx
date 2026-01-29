@@ -14,6 +14,7 @@ import {
   findNodeHandle,
 } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
@@ -29,14 +30,20 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
-import { WebProtocolTypesConstants } from 'constants/common'
+import { MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS, WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState, OfflineState, queueOfflineEvent } from 'store/slices'
+import {
+  DowntimeWindow,
+  DowntimeWindowsByFeatureType,
+  ErrorsState,
+  OfflineState,
+  queueOfflineEvent,
+} from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
@@ -77,17 +84,80 @@ export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean =
 
 export const featureInDowntime = (
   feature: DowntimeFeatureType,
-  downtimeWindows: DowntimeWindowsByFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
 ): boolean => {
-  const mw = downtimeWindows[feature]
+  const mw = downtimeWindows?.[feature]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
+}
+
+export const featureInDowntimeWindow = (
+  feature: DowntimeFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
+): boolean => {
+  const mw = downtimeWindows?.[feature]
+  return (
+    !!mw &&
+    mw.startTime <= DateTime.now().plus({ hour: MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS }) &&
+    DateTime.now() <= mw.endTime
+  )
 }
 
 export const oneOfFeaturesInDowntime = (
   features: DowntimeFeatureType[],
-  downtimeWindows: DowntimeWindowsByFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
 ): boolean => {
   return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+/**
+ * Returns the list of features currently under maintenance
+ */
+export const getFeaturesInDowntime = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeFeatureType[] => {
+  if (!features) {
+    return []
+  }
+
+  return features.filter((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+/**
+ * Returns the list of features either under maintenance or have maintenance upcoming within the window
+ * defined by MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS
+ */
+export const getFeaturesInDowntimeWindow = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeFeatureType[] => {
+  if (!features) {
+    return []
+  }
+
+  return features.filter((feature) => featureInDowntimeWindow(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+/**
+ * Finds the latest end time of an active window for a list of downtime windows
+ */
+export const latestDowntimeWindow = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeWindow | undefined => {
+  let downtimeWindow: DowntimeWindow | undefined
+
+  features.forEach((feature) => {
+    if (!downtimeWindow) {
+      downtimeWindow = downtimeWindows[feature]
+    } else {
+      if (downtimeWindows[feature]?.endTime && downtimeWindows[feature]?.endTime > downtimeWindow?.endTime) {
+        downtimeWindow = downtimeWindows[feature]
+      }
+    }
+  })
+
+  return downtimeWindow
 }
 
 /**
@@ -296,7 +366,7 @@ export function useAutoScrollToElement(): [
               const offsetValue = offset || 0
               viewRef.current.measureLayout(
                 scrollPoint,
-                (_, y) => {
+                (_ignore, y) => {
                   currentObject.scrollTo({ y: y + offsetValue, animated: !screenReaderEnabled })
                 },
                 () => {
@@ -525,7 +595,7 @@ export function useShowActionSheet(): (
 ) => void {
   const { showActionSheetWithOptions } = useActionSheet()
   const currentTheme = getTheme()
-
+  const insets = useSafeAreaInsets()
   return (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
     // Destructive action sheets are always title case
     // Regular action sheets are title case for ios, sentence case for android
@@ -549,7 +619,7 @@ export function useShowActionSheet(): (
       messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
-      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox, marginBottom: insets.bottom },
       ...options,
       options: casedOptionsText,
       cancelButtonIndex: isIpad() ? undefined : options.options.length - 1,

@@ -25,7 +25,6 @@ function ContactVAScreen({ navigation }: ContactVAScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('home.title')}
       backLabelOnPress={navigation.goBack}
       title={t('contactVA.title')}
       titleA11y={a11yLabelVA(t('contactVA.title'))}>

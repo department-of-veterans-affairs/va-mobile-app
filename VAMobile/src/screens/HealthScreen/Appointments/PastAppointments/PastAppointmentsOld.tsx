@@ -41,7 +41,7 @@ function PastAppointmentsOld({
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { maintenanceWindows } = useMaintenanceWindows()
-  const endTime = maintenanceWindows[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
+  const endTime = maintenanceWindows?.[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
   const pagination = {
