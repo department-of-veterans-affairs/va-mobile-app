@@ -4,12 +4,10 @@
  * This script reconstructs the historical timeline of the VA Mobile App's "What's New" content
  * and App Store release notes. It works by iterating through all git version tags and:
  *
- * 1.  Version-based Discovery: Identifying features explicitly tied to a version in translations.
- * 2.  Feature Flag-based Discovery: Identifying features that "launched" when a feature flag transitioned
+ * 1.  Version-based Discovery: Identifying what's new explicitly tied to a version in translations.
+ * 2.  Feature Flag-based Discovery: Identifying what's new that "launched" when a feature flag transitioned
  *     from false to true in that specific version's remote configuration.
  * 3.  Release Notes History: Fetching the raw App Store metadata from Fastlane for each version.
- * 4.  Redundancy Filtering: Detecting when release notes are nearly identical to the feature content
- *     to prevent repetitive reading.
  *
  * The output is a sorted JSON file used to power the WhatsNewReport documentation page.
  */
@@ -110,48 +108,13 @@ function extractFeatureId(key) {
 }
 
 /**
- * Checks if release notes are redundant given the gathered What's New features.
- * Uses a word-set overlap approach to handle formatting differences.
- */
-function checkNotesRedundancy(releaseNotes, whatsNewFeatures) {
-  if (!releaseNotes || !whatsNewFeatures || Object.keys(whatsNewFeatures).length === 0) return false
-
-  let combinedWhatsNewText = ''
-  Object.values(whatsNewFeatures).forEach((feature) => {
-    Object.values(feature.content || {}).forEach((text) => {
-      combinedWhatsNewText += ' ' + text
-    })
-  })
-
-  const tokenize = (str) =>
-    str
-      .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .split(/\s+/)
-      .filter(Boolean)
-  const notesWords = new Set(tokenize(releaseNotes))
-  const whatsNewWords = new Set(tokenize(combinedWhatsNewText))
-
-  if (notesWords.size === 0) return false
-
-  // Calculate how many words from release notes are present in What's New content
-  let matchCount = 0
-  notesWords.forEach((word) => {
-    if (whatsNewWords.has(word)) matchCount++
-  })
-
-  const overlapRatio = matchCount / notesWords.size
-  return overlapRatio > 0.85 // 85% overlap threshold
-}
-
-/**
  * Resolves raw translation keys for a feature into a structured object.
  *
  * @param {string} featureId - The unique identifier for the feature (e.g. '2.65').
  * @param {Object} rawContent - Map of translation keys to their values.
  * @returns {Object} Structured content with title, bullets, and link.
  */
-function resolveFeatureContent(featureId, rawContent) {
+function resolveWhatsNewContent(featureId, rawContent) {
   const result = {
     title: '',
     bullets: [],
@@ -184,10 +147,6 @@ function resolveFeatureContent(featureId, rawContent) {
 }
 
 /**
- * DOMAIN SPECIFIC SCRAPERS
- */
-
-/**
  * Identifies features explicitly tied to a version string in translations.
  * (e.g. 'whatsNew.bodyCopy.2.65' for v2.65.0)
  *
@@ -195,7 +154,7 @@ function resolveFeatureContent(featureId, rawContent) {
  * @param {Object} groupedTranslations - Map of featureId to its translation keys.
  * @param {Set} seenIds - Set of features already discovered in previous versions.
  */
-function getStaticVersionFeatures(versionSegment, groupedTranslations, seenIds) {
+function getVersionWhatsNew(versionSegment, groupedTranslations, seenIds) {
   if (groupedTranslations[versionSegment] && !seenIds.has(versionSegment)) {
     return { [versionSegment]: { content: groupedTranslations[versionSegment] } }
   }
@@ -210,7 +169,7 @@ function getStaticVersionFeatures(versionSegment, groupedTranslations, seenIds) 
  * @param {Object} lastFlags - The state of feature flags in the previous version.
  * @param {Set} seenIds - Set of features already discovered.
  */
-function getFeaturesFromFlagTransitions(tag, groupedTranslations, lastFlags, seenIds) {
+function getFeatureFlagWhatsNew(tag, groupedTranslations, lastFlags, seenIds) {
   const discovered = {}
   const configContent = gitFetchFileAtTag(tag, WHATS_NEW_CONFIG_PATH)
   if (!configContent) return { discovered, currentFlags: lastFlags }
@@ -238,20 +197,16 @@ function getFeaturesFromFlagTransitions(tag, groupedTranslations, lastFlags, see
 /**
  * Fetches and filters the App Store release notes for a specific tag.
  */
-function getReleaseNotes(tag, discoveredFeatures, lastNotes) {
+function getReleaseNotes(tag, lastNotes) {
   const rawNotes = gitFetchFileAtTag(tag, RELEASE_NOTES_PATH)
   if (!rawNotes) return null
 
   const cleanNotes = rawNotes.trim()
   const isGeneric = !cleanNotes || GENERIC_NOTES_VARIANTS.includes(cleanNotes)
   const isDuplicate = cleanNotes === lastNotes
-  const isRedundant = checkNotesRedundancy(cleanNotes, discoveredFeatures)
 
   if (isGeneric || isDuplicate) return null
-  return {
-    notes: isRedundant ? "Same content as What's New" : cleanNotes,
-    rawNotes: cleanNotes,
-  }
+  return cleanNotes
 }
 
 /**
@@ -267,7 +222,7 @@ async function fetchWhatsNewHistory() {
 
   const tags = tagsOutput.split('\n')
   const historyData = []
-  const seenIds = new Set() // Track discovered features to avoid duplicates in older tags
+  const seenIds = new Set() // Track discovered whats new to avoid duplicates in older tags
 
   let lastReleaseNotes = ''
   let lastFlags = {}
@@ -297,12 +252,12 @@ async function fetchWhatsNewHistory() {
     const groupedTranslations = groupTranslationsByFeature(translations)
 
     /**
-     * Step 4: Discover features.
-     * We look for features explicitly named after the version (e.g., whatsNew.bodyCopy.2.65)
-     * and features that were "launched" via flag flips in this specific version.
+     * Step 4: Discover what's new.
+     * We look for what's new explicitly named after the version (e.g., whatsNew.bodyCopy.2.65)
+     * and what's new that was "launched" via flag flips in this specific version.
      */
-    const versionFeatures = getStaticVersionFeatures(majorMinor, groupedTranslations, seenIds)
-    const { discovered: flagFeatures, currentFlags } = getFeaturesFromFlagTransitions(
+    const versionWhatsNew = getVersionWhatsNew(majorMinor, groupedTranslations, seenIds)
+    const { discovered: featureFlagsWhatsNew, currentFlags } = getFeatureFlagWhatsNew(
       tag,
       groupedTranslations,
       lastFlags,
@@ -310,22 +265,20 @@ async function fetchWhatsNewHistory() {
     )
 
     lastFlags = currentFlags
-    const allDiscoveredForTag = { ...versionFeatures, ...flagFeatures }
+    const allDiscoveredForTag = { ...versionWhatsNew, ...featureFlagsWhatsNew }
 
     /**
      * Step 5: Process App Store Release Notes.
-     * Fetch the raw notes and check if they are redundant (similar to What's New content).
+     * Fetch the raw notes and check if they are generic or duplicates of the previous version.
      */
-    const releaseNotesResult = getReleaseNotes(tag, allDiscoveredForTag, lastReleaseNotes)
-    let versionReleaseNotes = null
-    if (releaseNotesResult) {
-      versionReleaseNotes = releaseNotesResult.notes
-      lastReleaseNotes = releaseNotesResult.rawNotes
+    const versionReleaseNotes = getReleaseNotes(tag, lastReleaseNotes)
+    if (versionReleaseNotes) {
+      lastReleaseNotes = versionReleaseNotes
     }
 
     /**
      * Step 6: Create the finalized version entry.
-     * If we found either specific features or unique release notes, save the entry.
+     * If we found either specific what's new or unique release notes, save the entry.
      */
     if (Object.keys(allDiscoveredForTag).length > 0 || versionReleaseNotes) {
       console.log(`✅ Found content for ${tag}`)
@@ -334,7 +287,7 @@ async function fetchWhatsNewHistory() {
       // Resolve raw translation keys into clean title/bullets/link objects
       const whatsNew = []
       Object.keys(allDiscoveredForTag).forEach((id) => {
-        const resolved = resolveFeatureContent(id, allDiscoveredForTag[id].content)
+        const resolved = resolveWhatsNewContent(id, allDiscoveredForTag[id].content)
         whatsNew.push({
           featureId: id,
           ...resolved,
