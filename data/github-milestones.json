@@ -1,5 +1,131 @@
 [
   {
+    "title": "v2.68.0",
+    "due_on": "2026-02-10T00:00:00Z",
+    "issues": [
+      {
+        "title": "BUG - 3- Android - Action sheet buttons are cut off on Samsung Galaxy devices",
+        "number": 12398,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12398",
+        "isPR": false
+      },
+      {
+        "title": "Add alerts for VistA -> OH Migrations",
+        "number": 12388,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12388",
+        "isPR": true
+      },
+      {
+        "title": "Chore/1037 | Added support for calling debts endpoint with countOnly query param",
+        "number": 12378,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12378",
+        "isPR": true
+      },
+      {
+        "title": "Task/933 overpay analytics",
+        "number": 12372,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12372",
+        "isPR": true
+      },
+      {
+        "title": "CU - Update Demo Mode data for Dynamic dates for LabsAndTests e2e tests",
+        "number": 12309,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12309",
+        "isPR": false
+      },
+      {
+        "title": "Adding refillable meds for rx demo mode data and fixing metadata",
+        "number": 12303,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12303",
+        "isPR": true
+      },
+      {
+        "title": "Go-Live Approval Request - 5103 waiver improvements",
+        "number": 12281,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12281",
+        "isPR": false
+      },
+      {
+        "title": "CU - Bucket loadTime Values for Analytics Events",
+        "number": 12257,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12257",
+        "isPR": false
+      },
+      {
+        "title": "CST 128092 Update ClaimsHistoryScreen Claims and Appeals Service Error Alert",
+        "number": 12225,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12225",
+        "isPR": true
+      },
+      {
+        "title": "'Whats New' padding fix",
+        "number": 12198,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12198",
+        "isPR": false
+      },
+      {
+        "title": "CU - LinkWithAnalytics housekeeping",
+        "number": 12148,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12148",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 3 - Android - Accessibility: Travel Pay Claim ID read out incorrectly",
+        "number": 12147,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12147",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 2 - Android - Accessibility: Screen reader skipping over certain content within What's New notification box",
+        "number": 12119,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12119",
+        "isPR": false
+      },
+      {
+        "title": "copay details screen A11y issues - High - All - Voiceover / Talkback not speaking the correct information",
+        "number": 12107,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12107",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 2 - All - Accessibility: User cannot swipe left/right out of Date Ranger picker after selecting option",
+        "number": 12102,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12102",
+        "isPR": false
+      },
+      {
+        "title": "Universal Back Button",
+        "number": 12006,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12006",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 2 - All - Offline Mode: Cancelling Appointment in Offline Mode leaves user on spinning wheel page",
+        "number": 12001,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12001",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 2 - All - Accessibility: Labs & Tests Report section is read as large block of text, cannot navigate within it",
+        "number": 11996,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11996",
+        "isPR": false
+      },
+      {
+        "title": "Update \"Information Needed\" Claims Status Label",
+        "number": 11984,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11984",
+        "isPR": false
+      },
+      {
+        "title": "BUG - High - iOS and Android - \"Search for VA health care team\" edit box is unlabeled",
+        "number": 11937,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11937",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.67.0",
     "due_on": "2026-01-27T00:00:00Z",
     "issues": [
