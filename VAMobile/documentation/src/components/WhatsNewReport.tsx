@@ -37,43 +37,8 @@ interface ReleaseEntry {
 
 /**
  * SHARED STYLES
+ * We use Infima (Docusaurus's CSS framework) classes for consistency.
  */
-const COLORS = {
-  primary: '#003e67', // Dark Blue
-  secondary: '#0071bb', // Light Blue
-  text: '#1a1a1a',
-  textSecondary: '#444',
-  textMuted: '#666',
-  background: '#f8f9fa',
-  border: '#eaebec',
-}
-
-const STYLES = {
-  CONTAINER: {
-    marginBottom: '2rem',
-    marginLeft: '1rem',
-    padding: '1.25rem',
-    backgroundColor: COLORS.background,
-    borderRadius: '12px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-  },
-  SECTION_HEADER: {
-    fontSize: '0.9rem',
-    fontWeight: 700,
-    marginBottom: '0.75rem',
-    textTransform: 'uppercase' as const,
-    letterSpacing: '1.5px',
-  },
-  LIST: {
-    marginBottom: '1rem',
-    paddingLeft: '1.5rem',
-    color: COLORS.textSecondary,
-  },
-  LIST_ITEM: {
-    marginBottom: '0.4rem',
-  },
-}
-
 /**
  * SUB-COMPONENTS
  */
@@ -83,13 +48,11 @@ const STYLES = {
  */
 const ReleaseNotesSection = ({ notes }: { notes: string }) => {
   return (
-    <div style={{ ...STYLES.CONTAINER, borderLeft: `5px solid ${COLORS.primary}` }}>
-      <h3 style={{ ...STYLES.SECTION_HEADER, color: COLORS.primary }}>Release Notes</h3>
+    <div className="alert alert--info margin-bottom--lg">
+      <h3 className="margin-bottom--sm text--bold">Release Notes</h3>
       <div
         style={{
           lineHeight: '1.6',
-          fontSize: '1rem',
-          color: COLORS.textSecondary,
           whiteSpace: 'pre-line',
         }}>
         {notes}
@@ -103,21 +66,25 @@ const ReleaseNotesSection = ({ notes }: { notes: string }) => {
  */
 const WhatsNewSection = ({ feature }: { feature: FeatureContent }) => {
   return (
-    <div style={{ ...STYLES.CONTAINER, borderLeft: `5px solid ${COLORS.secondary}` }}>
-      <h3 style={{ ...STYLES.SECTION_HEADER, color: COLORS.secondary }}>What's New</h3>
-      <p style={{ marginBottom: '0.75rem', color: COLORS.text }}>{feature.title}</p>
+    <div className="alert alert--warning margin-bottom--lg">
+      <h3 className="margin-bottom--sm text--bold">What's New</h3>
+      <p className="margin-bottom--sm">{feature.title}</p>
       {feature.bullets.length > 0 && (
-        <ul style={STYLES.LIST}>
+        <ul className="margin-top--sm">
           {feature.bullets.map((bullet, i) => (
-            <li key={i} style={STYLES.LIST_ITEM}>
+            <li key={i} className="margin-bottom--xs">
               {bullet}
             </li>
           ))}
         </ul>
       )}
       {feature.link.url && (
-        <div style={{ marginTop: '0.5rem' }}>
-          <a href={feature.link.url} target="_blank" rel="noopener noreferrer">
+        <div className="margin-top--sm">
+          <a
+            href={feature.link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button button--link button--sm padding-left--none">
             {feature.link.text || 'View details online'} →
           </a>
         </div>
@@ -134,14 +101,12 @@ const WhatsNewReport = () => {
   const history = data as unknown as ReleaseEntry[]
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', fontFamily: 'inherit' }}>
+    <div className="container margin-vert--lg">
       {history.map((release, index) => (
-        <div
-          key={index}
-          style={{ marginBottom: '4rem', borderBottom: `2px solid ${COLORS.border}`, paddingBottom: '2rem' }}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h2 style={{ color: COLORS.primary, fontSize: '2rem', margin: 0 }}>{release.version}</h2>
-            <div style={{ color: COLORS.textMuted, fontSize: '0.95rem', fontWeight: 500, marginTop: '0.25rem' }}>
+        <div key={index} className="margin-bottom--lg padding-bottom--lg border-bottom">
+          <div className="margin-bottom--md">
+            <h2 className="text--primary margin-bottom--xs">{release.version}</h2>
+            <div className="font-weight--medium margin-bottom--lg">
               Released on: {new Date(release.releaseDate).toLocaleDateString()}
             </div>
           </div>
