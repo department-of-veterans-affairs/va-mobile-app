@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { VeteranStatusCardResponse } from 'api/types'
-import { veteranStatusKeys } from 'api/veteranStatus'
+import { VeteranStatusCardResponse } from 'api/types/VeteranStatusCardData'
+import { veteranStatusCardKeys } from 'api/veteranStatusCard'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 
@@ -21,7 +21,7 @@ const getVeteranStatusCard = async (): Promise<VeteranStatusCardResponse | undef
 export const useVeteranStatusCard = (options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
-    queryKey: veteranStatusKeys.card,
+    queryKey: veteranStatusCardKeys.card,
     queryFn: () => getVeteranStatusCard(),
     meta: {
       errorName: 'getVeteranStatusCard: Service error',
