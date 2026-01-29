@@ -1,3 +1,19 @@
+/**
+ * What's New History Scraper
+ *
+ * This script reconstructs the historical timeline of the VA Mobile App's "What's New" content
+ * and App Store release notes. It works by iterating through all git version tags and:
+ *
+ * 1.  Static Feature Discovery: Identifying features explicitly tied to a version in translations.
+ * 2.  Launch-Based Discovery: Identifying features that "launched" when a feature flag transitioned
+ *     from false to true in that specific version's remote configuration.
+ * 3.  Release Notes Extraction: Fetching the raw App Store metadata from Fastlane for each version.
+ * 4.  Redundancy Filtering: Detecting when release notes are nearly identical to the feature content
+ *     to prevent repetitive reading.
+ *
+ * The output is a flattened, sorted JSON file used to power the WhatsNewReport documentation page.
+ */
+
 const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
