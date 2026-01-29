@@ -19,7 +19,7 @@ import data from '@site/static/data/whats-new-history.json'
  */
 
 interface FeatureContent {
-  featureId?: string // Link to technical tracking (e.g., 'TravelListAndStatus' or '2.65')
+  featureId?: string // Feature or version identifier (e.g., 'TravelListAndStatus' or '2.65')
   title: string // The primary descriptive sentence
   bullets: string[] // Optional supporting details
   link: { text: string; url: string } // Optional 'Learn More' action
@@ -82,46 +82,18 @@ const STYLES = {
  * Renders the App Store Release Notes block.
  */
 const ReleaseNotesSection = ({ notes }: { notes: string }) => {
-  const lines = notes.split('\n')
-  const content: React.ReactNode[] = []
-  let currentList: string[] = []
-
-  const flushList = (key: string) => {
-    if (currentList.length > 0) {
-      content.push(
-        <ul key={key} style={STYLES.LIST}>
-          {currentList.map((item, i) => (
-            <li key={i} style={STYLES.LIST_ITEM}>
-              {item}
-            </li>
-          ))}
-        </ul>,
-      )
-      currentList = []
-    }
-  }
-
-  lines.forEach((line, index) => {
-    const trimmed = line.trim()
-    if (trimmed.startsWith('-')) {
-      currentList.push(trimmed.slice(1).trim())
-    } else {
-      flushList(`list-before-${index}`)
-      if (trimmed) {
-        content.push(
-          <p key={index} style={{ marginBottom: '1rem', color: COLORS.textSecondary }}>
-            {trimmed}
-          </p>,
-        )
-      }
-    }
-  })
-  flushList('list-final')
-
   return (
     <div style={{ ...STYLES.CONTAINER, borderLeft: `5px solid ${COLORS.primary}` }}>
       <h3 style={{ ...STYLES.SECTION_HEADER, color: COLORS.primary }}>Release Notes</h3>
-      <div style={{ lineHeight: '1.6', fontSize: '1rem' }}>{content}</div>
+      <div
+        style={{
+          lineHeight: '1.6',
+          fontSize: '1rem',
+          color: COLORS.textSecondary,
+          whiteSpace: 'pre-line',
+        }}>
+        {notes}
+      </div>
     </div>
   )
 }

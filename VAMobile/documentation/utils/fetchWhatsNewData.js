@@ -113,7 +113,7 @@ function extractFeatureId(key) {
  * Checks if release notes are redundant given the gathered What's New features.
  * Uses a word-set overlap approach to handle formatting differences.
  */
-function isSimilar(releaseNotes, whatsNewFeatures) {
+function checkNotesRedundancy(releaseNotes, whatsNewFeatures) {
   if (!releaseNotes || !whatsNewFeatures || Object.keys(whatsNewFeatures).length === 0) return false
 
   let combinedWhatsNewText = ''
@@ -245,7 +245,7 @@ function getReleaseNotes(tag, discoveredFeatures, lastNotes) {
   const cleanNotes = rawNotes.trim()
   const isGeneric = !cleanNotes || GENERIC_NOTES_VARIANTS.includes(cleanNotes)
   const isDuplicate = cleanNotes === lastNotes
-  const isRedundant = isSimilar(cleanNotes, discoveredFeatures)
+  const isRedundant = checkNotesRedundancy(cleanNotes, discoveredFeatures)
 
   if (isGeneric || isDuplicate) return null
   return {
