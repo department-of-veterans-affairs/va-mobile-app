@@ -127,9 +127,13 @@ function isSimilar(releaseNotes, whatsNewFeatures) {
   const overlapRatio = matchCount / notesWords.size
   return overlapRatio > 0.85 // 85% overlap threshold
 }
+
 /**
- * Resolves raw translation keys for a feature into a structured object
- * (title, bullets, link).
+ * Resolves raw translation keys for a feature into a structured object.
+ *
+ * @param {string} featureId - The unique identifier for the feature (e.g. '2.65').
+ * @param {Object} rawContent - Map of translation keys to their values.
+ * @returns {Object} Structured content with title, bullets, and link.
  */
 function resolveFeatureContent(featureId, rawContent) {
   const result = {
@@ -168,17 +172,27 @@ function resolveFeatureContent(featureId, rawContent) {
  */
 
 /**
- * Scans for version-matched features (e.g., 'whatsNew.bodyCopy.2.65').
+ * Identifies features explicitly tied to a version string in translations.
+ * (e.g. 'whatsNew.bodyCopy.2.65' for v2.65.0)
+ *
+ * @param {string} versionSegment - The major.minor version (e.g. '2.65').
+ * @param {Object} groupedTranslations - Map of featureId to its translation keys.
+ * @param {Set} seenIds - Set of features already discovered in previous versions.
  */
-function getVersionMappedFeatures(majorMinor, groupedTranslations, seenIds) {
-  if (groupedTranslations[majorMinor] && !seenIds.has(majorMinor)) {
-    return { [majorMinor]: { content: groupedTranslations[majorMinor] } }
+function getStaticVersionFeatures(versionSegment, groupedTranslations, seenIds) {
+  if (groupedTranslations[versionSegment] && !seenIds.has(versionSegment)) {
+    return { [versionSegment]: { content: groupedTranslations[versionSegment] } }
   }
   return {}
 }
 
 /**
- * Scans for features introduced via feature flag flips.
+ * Identifies features that "launched" in this version via a feature flag flip.
+ *
+ * @param {string} tag - The git tag being analyzed.
+ * @param {Object} groupedTranslations - Map of featureId to its translation keys.
+ * @param {Object} lastFlags - The state of feature flags in the previous version.
+ * @param {Set} seenIds - Set of features already discovered.
  */
 function getFeaturesFromFlagTransitions(tag, groupedTranslations, lastFlags, seenIds) {
   const discovered = {}
@@ -254,8 +268,8 @@ async function fetchWhatsNewHistory() {
 
     const groupedTranslations = groupTranslationsByFeature(translations)
 
-    // 1. Collect features
-    const versionFeatures = getVersionMappedFeatures(majorMinor, groupedTranslations, seenIds)
+    // 1. Collect features from both static versioning and flag transitions
+    const versionFeatures = getStaticVersionFeatures(majorMinor, groupedTranslations, seenIds)
     const { discovered: flagFeatures, currentFlags } = getFeaturesFromFlagTransitions(
       tag,
       groupedTranslations,
