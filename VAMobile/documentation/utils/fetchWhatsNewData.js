@@ -261,30 +261,46 @@ function getReleaseNotes(tag, discoveredFeatures, lastNotes) {
 async function fetchWhatsNewHistory() {
   console.log('🔍 Discovering version tags locally...')
 
+  // Step 1: Get all version tags from git (v1.0.0, etc.)
   const tagsOutput = runGitCommand('git tag -l "v*" --sort=-v:refname')
   if (!tagsOutput) return console.error('❌ Could not find any git tags.')
 
   const tags = tagsOutput.split('\n')
   const historyData = []
-  const seenIds = new Set()
+  const seenIds = new Set() // Track discovered features to avoid duplicates in older tags
 
   let lastReleaseNotes = ''
   let lastFlags = {}
 
-  // Process chronologically to track flag transitions accurately
+  /**
+   * Step 2: Process tags chronologically (oldest to newest).
+   * This is critical because feature flag transitions (false -> true)
+   * can only be determined by comparing a tag to its predecessor.
+   */
   const chronologicalTags = [...tags].reverse()
 
   for (const tag of chronologicalTags) {
+    // Extract Major.Minor (e.g., '2.65' from 'v2.65.0')
     const versionMatch = tag.match(/^v(\d+\.\d+)\.\d+$/)
     if (!versionMatch) continue
 
     const majorMinor = versionMatch[1]
+
+    /**
+     * Step 3: Fetch common.json for this tag.
+     * We group translations by feature ID immediately to optimize lookups
+     * in the subsequent scraping steps.
+     */
     const translations = gitFetchFileAtTag(tag, TRANSLATIONS_PATH, true)
     if (!translations) continue
 
     const groupedTranslations = groupTranslationsByFeature(translations)
 
-    // 1. Collect features from both static versioning and flag transitions
+    /**
+     * Step 4: Discover features.
+     * We look for features explicitly named after the version (e.g., whatsNew.bodyCopy.2.65)
+     * and features that were "launched" via flag flips in this specific version.
+     */
     const versionFeatures = getStaticVersionFeatures(majorMinor, groupedTranslations, seenIds)
     const { discovered: flagFeatures, currentFlags } = getFeaturesFromFlagTransitions(
       tag,
@@ -296,7 +312,10 @@ async function fetchWhatsNewHistory() {
     lastFlags = currentFlags
     const allDiscoveredForTag = { ...versionFeatures, ...flagFeatures }
 
-    // 2. Process Release Notes
+    /**
+     * Step 5: Process App Store Release Notes.
+     * Fetch the raw notes and check if they are redundant (similar to What's New content).
+     */
     const releaseNotesResult = getReleaseNotes(tag, allDiscoveredForTag, lastReleaseNotes)
     let versionReleaseNotes = null
     if (releaseNotesResult) {
@@ -304,11 +323,15 @@ async function fetchWhatsNewHistory() {
       lastReleaseNotes = releaseNotesResult.rawNotes
     }
 
-    // 3. Finalize version entry
+    /**
+     * Step 6: Create the finalized version entry.
+     * If we found either specific features or unique release notes, save the entry.
+     */
     if (Object.keys(allDiscoveredForTag).length > 0 || versionReleaseNotes) {
       console.log(`✅ Found content for ${tag}`)
       const tagDate = runGitCommand(`git log -1 --format=%cI ${tag}`)
 
+      // Resolve raw translation keys into clean title/bullets/link objects
       const whatsNew = []
       Object.keys(allDiscoveredForTag).forEach((id) => {
         const resolved = resolveFeatureContent(id, allDiscoveredForTag[id].content)
@@ -318,6 +341,7 @@ async function fetchWhatsNewHistory() {
         })
       })
 
+      // Unshift to keep the final JSON in descending SemVer order (newest first)
       historyData.unshift({
         version: tag,
         releaseDate: tagDate || new Date().toISOString(),
@@ -325,12 +349,12 @@ async function fetchWhatsNewHistory() {
         whatsNew,
       })
 
-      // Mark IDs as seen to prevent repetition in future versions
+      // Mark IDs as seen to prevent repetition in past versions (since tags are processed chrono)
       Object.keys(allDiscoveredForTag).forEach((id) => seenIds.add(id))
     }
   }
 
-  // Final Output
+  // Step 7: Write final history to disk
   fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true })
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify(historyData, null, 2))
   console.log(`✅ What's New history data written to ${OUTPUT_PATH}`)
