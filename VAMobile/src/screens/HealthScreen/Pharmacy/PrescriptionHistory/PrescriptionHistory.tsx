@@ -33,6 +33,7 @@ import {
   TextView,
 } from 'components'
 import FloatingButton from 'components/FloatingButton'
+import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
@@ -594,7 +595,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}>
+      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}
+      screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
@@ -617,6 +619,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
+          <OHAlertManager parentScreen={OHParentScreens.Medications} authorizedServices={userAuthorizedServices} />
           {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
           {getTransferAlert()}
           {screenReaderEnabled ? getRequestRefillButton() : undefined}

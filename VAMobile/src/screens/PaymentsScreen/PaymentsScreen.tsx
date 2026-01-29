@@ -105,7 +105,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
           <LinkWithAnalytics
             type="custom"
             text={t('travelPay.claims.viewYourClaims')}
-            testID="toTravelPayClaimsLinkID"
+            testID="toTravelPayClaimsLinkIDPaymentsScreen"
             onPress={() => navigateToTravelClaims(navigateTo)}
           />
         </Box>

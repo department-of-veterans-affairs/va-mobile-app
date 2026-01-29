@@ -127,6 +127,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       title={t('details')}
       testID="UpcomingApptDetailsTestID"
       backLabelTestID="apptDetailsBackID"
+      screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
       dataUpdatedAt={lastUpdatedDate}>
       {isLoading ? (
         <LoadingComponent

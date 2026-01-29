@@ -197,7 +197,10 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   })
 
   return (
-    <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
+    <FeatureLandingTemplate
+      backLabelOnPress={navigation.goBack}
+      title={t('letters.overview.viewLetters')}
+      screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID}>
       {!lettersNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
       ) : loading || loadingUserAuthorizedServices ? (

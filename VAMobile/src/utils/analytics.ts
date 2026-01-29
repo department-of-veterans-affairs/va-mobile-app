@@ -20,6 +20,15 @@ export type UserAnalytic = {
   value: string | null
 }
 
+const LoadTimeRanges = [
+  { range: [0, 1000], label: '0 ms - <1000 ms' },
+  { range: [1000, 3000], label: '1000 ms - <3000 ms' },
+  { range: [3000, 5000], label: '3000 ms - <5000 ms' },
+  { range: [5000, 7000], label: '5000 ms - <7000 ms' },
+  { range: [7000, 10000], label: '7000 ms - <10000 ms' },
+  { range: [10000, 15000], label: '10000 ms - <15000 ms' },
+]
+
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
   const demoMode = store.getState().demo.demoMode
@@ -107,5 +116,32 @@ export const logNonFatalErrorToFirebase = async (error: any, errorName?: string)
     }
 
     crashlytics().recordError(errorObject, errorName)
+  }
+}
+
+/**
+ * Logs a load time event by mapping the given load time (in milliseconds) to a predefined range.
+ * If the load time falls within one of the defined ranges, the corresponding range label is logged.
+ * If the load time does not match any range, an "outlier" event is logged instead.
+ *
+ * @param eventName - the name of the load time event to be logged
+ * @param loadTimeMs - the measured load time in milliseconds
+ */
+export const logLoadTimeEvent = (eventName: string, loadTimeMs: number) => {
+  // Map the load time to it's corresponding load time range
+  const matchingLoadTimeRange = LoadTimeRanges.find(({ range }) => {
+    const [lowerBound, upperBound] = range
+    return loadTimeMs >= lowerBound && loadTimeMs < upperBound
+  })
+
+  if (matchingLoadTimeRange) {
+    logAnalyticsEvent({
+      name: eventName,
+      params: {
+        p1: matchingLoadTimeRange.label,
+      },
+    })
+  } else {
+    logAnalyticsEvent(Events.vama_load_time_outlier(eventName, loadTimeMs))
   }
 }

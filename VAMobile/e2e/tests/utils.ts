@@ -193,7 +193,8 @@ export const CommonE2eIdConstants = {
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
   TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsButtonID',
-  TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID: 'toTravelPayClaimsLinkID',
+  TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN: 'toTravelPayClaimsLinkIDHealthScreen',
+  TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_PAYMENTS_SCREEN: 'toTravelPayClaimsLinkIDPaymentsScreen',
   DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
   DEMO_MODE_USERS_SAVE_BUTTON_ID: 'demoModeUserSave',
   SHOW_5103_FLOW: 'show5103Flow',
@@ -442,7 +443,7 @@ export async function openAppointments() {
 
 export async function openTravelPayClaims({ useNativeLink = false }) {
   if (useNativeLink) {
-    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN)).tap()
   } else {
     await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
   }

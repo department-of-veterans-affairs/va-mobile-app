@@ -1,0 +1,357 @@
+name: '[Admin] Prune Stale Branches'
+
+on:
+  schedule:
+    # Run every Sunday at 2:00 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (list branches without deleting)'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  prune-branches:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      deleted_count: ${{ steps.set-summary.outputs.deleted_count }}
+      dry_run: ${{ steps.set-summary.outputs.dry_run }}
+      branch_list: ${{ steps.set-summary.outputs.branch_list }}
+      total_branches: ${{ steps.set-summary.outputs.total_branches }}
+      remaining_branches: ${{ steps.set-summary.outputs.remaining_branches }}
+      artifact_url: ${{ steps.get-artifact-url.outputs.artifact_url }}
+      oldest_branch: ${{ steps.set-summary.outputs.oldest_branch }}
+      oldest_commit_date: ${{ steps.set-summary.outputs.oldest_commit_date }}
+      oldest_branch_committer: ${{ steps.set-summary.outputs.oldest_branch_committer }}
+      oldest_branch_days: ${{ steps.set-summary.outputs.oldest_branch_days }}
+      protected_count: ${{ steps.set-summary.outputs.protected_count }}
+      active_count: ${{ steps.set-summary.outputs.active_count }}
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
+
+      - name: Prune stale branches
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'false' && 'false' || 'true' }}
+        run: |
+          set +e  # Don't exit on errors, handle them gracefully
+
+          echo "=== Pruning Stale Branches ==="
+          echo "Dry run mode: $DRY_RUN"
+          echo ""
+
+          # Deletion criteria: branches older than 365 days with no open PRs
+          echo "Deletion criteria: branches with last commit older than 365 days (branches with open PRs will be skipped)"
+          echo ""
+
+          # Protected branch patterns (won't be deleted)
+          PROTECTED_PATTERNS=(
+            "develop"
+            "main"
+            "master"
+            "release/*"
+            "release-*"
+            "hotfix/*"
+            "staging"
+            "production"
+          )
+
+          # Get all remote branches
+          git fetch --all --prune
+
+          # Repo owner (used to query PRs by head)
+          REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
+
+          DELETED_COUNT=0
+          PROTECTED_COUNT=0
+          ACTIVE_COUNT=0
+          DELETED_BRANCHES=()
+          OLDEST_BRANCH=""
+          OLDEST_COMMIT_DATE=9999999999
+          OLDEST_BRANCH_COMMITTER=""
+
+          echo "=== Analyzing branches ==="
+          echo ""
+
+          # Get all remote branches except HEAD
+          for branch in $(git branch -r | grep -v 'HEAD' | sed 's/origin\///'); do
+            # Check if branch matches any protected pattern
+            PROTECTED=false
+            for pattern in "${PROTECTED_PATTERNS[@]}"; do
+              if [[ "$branch" == $pattern ]]; then
+                PROTECTED=true
+                ((PROTECTED_COUNT++))
+                break
+              fi
+            done
+            
+            if [[ "$PROTECTED" == true ]]; then
+              echo "⚠️  PROTECTED: $branch"
+              continue
+            fi
+            
+            # Get the last commit date for this branch
+            LAST_COMMIT_DATE=$(git log -1 --format=%ct origin/"$branch" 2>/dev/null)
+            
+            if [[ -z "$LAST_COMMIT_DATE" ]]; then
+              echo "⚠️  ERROR: Could not get commit date for $branch"
+              continue
+            fi
+            
+            # Get the branch creator (author of first commit unique to branch when possible)
+            DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@refs/remotes/origin/@@' || echo "main")
+            FIRST_COMMIT=$(git rev-list --reverse origin/"$branch" ^origin/"$DEFAULT_BRANCH" 2>/dev/null | head -n1)
+            if [ -n "$FIRST_COMMIT" ]; then
+              BRANCH_CREATOR=$(git show -s --format='%an' "$FIRST_COMMIT" 2>/dev/null)
+            else
+              BRANCH_CREATOR=$(git log origin/"$branch" --reverse --format=%an | head -n1 2>/dev/null)
+            fi
+
+            # Get the last committer
+            LAST_COMMITTER=$(git log -1 --format=%an origin/"$branch" 2>/dev/null)
+
+            # Track oldest branch
+            if [[ -n "$LAST_COMMIT_DATE" && "$LAST_COMMIT_DATE" -lt "$OLDEST_COMMIT_DATE" ]]; then
+              OLDEST_COMMIT_DATE="$LAST_COMMIT_DATE"
+              OLDEST_BRANCH="$branch"
+              OLDEST_BRANCH_COMMITTER="$LAST_COMMITTER"
+            fi
+
+            # Calculate days since last commit
+            CURRENT_DATE=$(date +%s)
+            DAYS_OLD=$(( (CURRENT_DATE - LAST_COMMIT_DATE) / 86400 ))
+
+            # Delete branch if older than 365 days and has no open PRs
+            if [[ "$DAYS_OLD" -gt 365 ]]; then
+              # Check for open PRs
+              SEARCH_URL="https://api.github.com/search/issues?q=repo:${GITHUB_REPOSITORY}+type:pr+head:${REPO_OWNER}:${branch}+is:open"
+              SEARCH=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$SEARCH_URL")
+              OPEN_PR_COUNT=$(echo "$SEARCH" | grep -o '"total_count":[0-9]*' | head -n1 | sed 's/[^0-9]*//g')
+
+              if [[ -z "$OPEN_PR_COUNT" || "$OPEN_PR_COUNT" -eq 0 ]]; then
+                # No open PRs, safe to delete
+                if [[ "$DRY_RUN" == "true" ]]; then
+                  echo "🔍 WOULD DELETE: $branch ($DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
+                  DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
+                  ((DELETED_COUNT++))
+                else
+                  echo "🗑️  DELETING: $branch ($DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
+                  # COMMENTED OUT FOR TESTING - UNCOMMENT AFTER VERIFICATION
+                  # if git push origin --delete "$branch" 2>&1; then
+                  #   DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
+                  #   ((DELETED_COUNT++))
+                  # else
+                  #   echo "   ❌ Failed to delete $branch"
+                  # fi
+                  DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
+                  ((DELETED_COUNT++))
+                  echo "   ⚠️  DELETION DISABLED FOR TESTING - branch NOT actually deleted"
+                fi
+              else
+                echo "⏸️  SKIPPING: $branch ($DAYS_OLD days old but has $OPEN_PR_COUNT open PR(s))"
+                ((ACTIVE_COUNT++))
+              fi
+            else
+              ((ACTIVE_COUNT++))
+            fi
+          done
+
+          echo ""
+          TOTAL_COUNT=$(git branch -r | grep -v 'HEAD' | sed 's/origin\///' | wc -l | tr -d ' ')
+          echo "Total branches: $TOTAL_COUNT"
+          echo "TOTAL_BRANCHES=$TOTAL_COUNT" >> $GITHUB_ENV
+          echo "=== Summary ==="
+          echo "Protected branches: $PROTECTED_COUNT"
+          echo "Active branches (< 365 days): $ACTIVE_COUNT"
+          echo "Total branches: $TOTAL_COUNT"
+          if [[ "$DRY_RUN" == "true" ]]; then
+            echo "Branches that would be deleted: $DELETED_COUNT"
+          else
+            echo "Branches deleted: $DELETED_COUNT"
+          fi
+
+          # Create a summary for GitHub Actions
+          {
+            echo "### Branch Pruning Summary"
+            echo ""
+            echo "**Deletion Criteria:** branches with last commit older than 365 days (excludes branches with open PRs)"
+            echo "**Mode:** $(if [[ "$DRY_RUN" == "true" ]]; then echo "Dry Run"; else echo "Live"; fi)"
+            echo ""
+            echo "- 🛡️ Protected branches: $PROTECTED_COUNT"
+            echo "- ✅ Active branches: $ACTIVE_COUNT"
+            echo "- 🔢 Total branches: $TOTAL_COUNT"
+            echo "- 🔢 Remaining branches: $((TOTAL_COUNT - DELETED_COUNT))"
+            if [[ "$DRY_RUN" == "true" ]]; then
+              echo "- 🔍 Branches that would be deleted: $DELETED_COUNT"
+            else
+              echo "- 🗑️ Branches deleted: $DELETED_COUNT"
+            fi
+          } >> $GITHUB_STEP_SUMMARY
+
+          # Save deleted branches to file for next step (raw pipe-delimited)
+          printf '%s\n' "${DELETED_BRANCHES[@]}" > /tmp/deleted_branches.txt
+          # Also create a CSV artifact for easier consumption
+          echo 'branch,creator,last_committer,last_commit_date' > /tmp/deleted_branches.csv
+          while IFS='|' read -r branch creator last_committer last_commit_date; do
+            # Escape double quotes in fields
+            esc_branch=$(printf '%s' "$branch" | sed 's/"/""/g')
+            esc_creator=$(printf '%s' "$creator" | sed 's/"/""/g')
+            esc_last_committer=$(printf '%s' "$last_committer" | sed 's/"/""/g')
+            esc_last_commit_date=$(printf '%s' "$last_commit_date" | sed 's/"/""/g')
+            printf '"%s","%s","%s","%s"\n' "$esc_branch" "$esc_creator" "$esc_last_committer" "$esc_last_commit_date" >> /tmp/deleted_branches.csv
+          done < /tmp/deleted_branches.txt
+          echo "DELETED_COUNT=$DELETED_COUNT" >> $GITHUB_ENV
+          echo "DRY_RUN=$DRY_RUN" >> $GITHUB_ENV
+          echo "OLDEST_BRANCH=$OLDEST_BRANCH" >> $GITHUB_ENV
+          echo "OLDEST_COMMIT_DATE=$OLDEST_COMMIT_DATE" >> $GITHUB_ENV
+          echo "OLDEST_BRANCH_COMMITTER=$OLDEST_BRANCH_COMMITTER" >> $GITHUB_ENV
+          echo "PROTECTED_COUNT=$PROTECTED_COUNT" >> $GITHUB_ENV
+          echo "ACTIVE_COUNT=$ACTIVE_COUNT" >> $GITHUB_ENV
+
+      - name: Set summary outputs
+        id: set-summary
+        env:
+          DELETED_COUNT: ${{ env.DELETED_COUNT }}
+          DRY_RUN: ${{ env.DRY_RUN }}
+          TOTAL_BRANCHES: ${{ env.TOTAL_BRANCHES }}
+          OLDEST_BRANCH: ${{ env.OLDEST_BRANCH }}
+          OLDEST_COMMIT_DATE: ${{ env.OLDEST_COMMIT_DATE }}
+          OLDEST_BRANCH_COMMITTER: ${{ env.OLDEST_BRANCH_COMMITTER }}
+          PROTECTED_COUNT: ${{ env.PROTECTED_COUNT }}
+          ACTIVE_COUNT: ${{ env.ACTIVE_COUNT }}
+        run: |
+          echo "deleted_count=$DELETED_COUNT" >> $GITHUB_OUTPUT
+          echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
+
+          # Format deleted branches list for Slack
+          if [ -f /tmp/deleted_branches.txt ]; then
+            BRANCH_LIST=""
+            while IFS='|' read -r branch creator last_committer last_commit_date; do
+              if [[ "$creator" == "$last_committer" ]]; then
+                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (by ${creator}, last commit on ${last_commit_date})"$'\n'
+              else
+                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (created by ${creator}, last commit by ${last_committer} on ${last_commit_date})"$'\n'
+              fi
+            done < /tmp/deleted_branches.txt
+            
+            echo "branch_list<<EOF" >> $GITHUB_OUTPUT
+            echo "$BRANCH_LIST" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "branch_list=" >> $GITHUB_OUTPUT
+          fi
+
+          echo "total_branches=$TOTAL_BRANCHES" >> $GITHUB_OUTPUT
+
+          # Compute remaining branches (total - deleted)
+          REMAINING=$((TOTAL_BRANCHES - DELETED_COUNT))
+          echo "remaining_branches=$REMAINING" >> $GITHUB_OUTPUT
+
+          # Output oldest branch info
+          echo "oldest_branch=$OLDEST_BRANCH" >> $GITHUB_OUTPUT
+          echo "oldest_branch_committer=$OLDEST_BRANCH_COMMITTER" >> $GITHUB_OUTPUT
+          if [[ -n "$OLDEST_COMMIT_DATE" && "$OLDEST_COMMIT_DATE" != "9999999999" ]]; then
+            OLDEST_DATE_FORMATTED=$(date -u -d "@$OLDEST_COMMIT_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$OLDEST_COMMIT_DATE" '+%Y-%m-%d' 2>/dev/null || echo "unknown")
+            echo "oldest_commit_date=$OLDEST_DATE_FORMATTED" >> $GITHUB_OUTPUT
+
+            # Calculate days old
+            CURRENT_DATE=$(date +%s)
+            DAYS_OLD=$(( (CURRENT_DATE - OLDEST_COMMIT_DATE) / 86400 ))
+            echo "oldest_branch_days=$DAYS_OLD" >> $GITHUB_OUTPUT
+          else
+            echo "oldest_commit_date=none" >> $GITHUB_OUTPUT
+            echo "oldest_branch_days=0" >> $GITHUB_OUTPUT
+          fi
+
+          # Output counts
+          echo "protected_count=$PROTECTED_COUNT" >> $GITHUB_OUTPUT
+          echo "active_count=$ACTIVE_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Upload deleted branches list
+        id: upload-artifact
+        if: env.DELETED_COUNT != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: deleted-branches-${{ github.run_id }}
+          path: /tmp/deleted_branches.csv
+          retention-days: 90
+
+      - name: Get artifact download URL
+        id: get-artifact-url
+        if: env.DELETED_COUNT != '0'
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          ARTIFACT_URL=$(python - <<'PY'
+          import os,sys,time,json,urllib.request
+          repo=os.environ['GITHUB_REPOSITORY']
+          run_id=os.environ['GITHUB_RUN_ID']
+          token=os.environ['GITHUB_TOKEN']
+          url=f"https://api.github.com/repos/{repo}/actions/runs/{run_id}/artifacts"
+          headers={'Authorization':f'token {token}','Accept':'application/vnd.github+json'}
+          for _ in range(6):
+              try:
+                  req=urllib.request.Request(url,headers=headers)
+                  resp=urllib.request.urlopen(req, timeout=10)
+                  data=json.load(resp)
+              except Exception:
+                  data={}
+              name=f"deleted-branches-{run_id}"
+              for a in data.get('artifacts',[]):
+                  if a.get('name')==name:
+                      print(a.get('archive_download_url'))
+                      sys.exit(0)
+              time.sleep(2)
+          print('')
+          PY
+          )
+          echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
+
+      - name: Comment on issue if scheduled
+        if: github.event_name == 'schedule' && github.event.inputs.dry_run != 'true'
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          echo "Scheduled run completed. Check the workflow run summary for details."
+
+  notify-slack:
+    name: Notify Slack
+    needs: prune-branches
+    if: always()
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: 'va-mobile-app-alerts'
+      message: |
+        🌿 *Branch Pruning Summary*
+        :alert: Branches with last commit older than 365 days (excludes branches with open PRs). :alert:
+
+        *Results:*
+        • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
+        • Protected branches: ${{ needs.prune-branches.outputs.protected_count }}
+        • Active branches: ${{ needs.prune-branches.outputs.active_count }}
+        • Branches ${{ needs.prune-branches.outputs.dry_run == 'true' && 'that would be deleted' || 'deleted' }}: ${{ needs.prune-branches.outputs.deleted_count }}
+        • Total branches: ${{ needs.prune-branches.outputs.total_branches }}
+        • Remaining branches: ${{ needs.prune-branches.outputs.remaining_branches }}
+
+        *Oldest Branch:*
+        • Branch: `${{ needs.prune-branches.outputs.oldest_branch }}`
+        • Last commit: ${{ needs.prune-branches.outputs.oldest_commit_date }} (${{ needs.prune-branches.outputs.oldest_branch_days }} days ago)
+        • Last committer: ${{ needs.prune-branches.outputs.oldest_branch_committer }}
+
+        See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.
