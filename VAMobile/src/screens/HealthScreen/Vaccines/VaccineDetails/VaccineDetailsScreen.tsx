@@ -80,7 +80,7 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
             variant="MobileBody"
             selectable={true}
             mb={standardMarginBetween}
-            testID={'Type And Dosage ' + vaccine.attributes?.shortDescription || placeHolder}>
+            testID={'Type And Dosage ' + (vaccine.attributes?.shortDescription || placeHolder)}>
             {vaccine.attributes?.shortDescription || placeHolder}
           </TextView>
           {isCovidVaccine && (
@@ -90,13 +90,13 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
                 variant="MobileBody"
                 selectable={true}
                 mb={standardMarginBetween}
-                testID={'Manufacturer ' + vaccine.attributes?.manufacturer || placeHolder}>
+                testID={'Manufacturer ' + (vaccine.attributes?.manufacturer || placeHolder)}>
                 {vaccine.attributes?.manufacturer || placeHolder}
               </TextView>
             </>
           )}
           <TextView variant="MobileBodyBold">{t('vaccines.details.series')}</TextView>
-          <TextView variant="MobileBody" selectable={true} testID={'Series status' + displaySeries}>
+          <TextView variant="MobileBody" selectable={true} testID={'Series status ' + displaySeries}>
             {displaySeries}
           </TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
@@ -116,7 +116,7 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
             <TextView
               variant="MobileBody"
               selectable={true}
-              testID={'Notes ' + vaccine.attributes?.note || 'None noted'}>
+              testID={'Notes ' + (vaccine.attributes?.note || 'None noted')}>
               {vaccine.attributes?.note || placeHolder}
             </TextView>
           </Box>

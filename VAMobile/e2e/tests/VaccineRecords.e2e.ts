@@ -53,7 +53,7 @@ describe('Vaccine Records Screen', () => {
     await expect(element(by.text('COVID-19 vaccine'))).toExist()
     await expect(element(by.id('Type And Dosage COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose'))).toExist()
     await expect(element(by.id('Manufacturer Moderna US, Inc.'))).toExist()
-    await expect(element(by.id('Series status None noted')))
+    await expect(element(by.id('Series status None noted'))).toExist()
     await expect(element(by.text('Provider'))).toExist()
     await expect(element(by.text('Reactions'))).toExist()
     await expect(element(by.text('None noted')).atIndex(1)).toExist()
