@@ -69,7 +69,9 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
             header={t('letters.serviceVerificationLetter.informationalHeader')}
             description={t('letters.certificateOfEligibility.success')}>
             {referenceNum ? (
-              <TextView>{t('letters.certificateOfEligibility.referenceNum', { referenceNum: referenceNum })}</TextView>
+              <TextView accessible>
+                {t('letters.certificateOfEligibility.referenceNum', { referenceNum: referenceNum })}
+              </TextView>
             ) : (
               <></>
             )}
@@ -99,7 +101,6 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       backLabelTestID="BenefitSummaryServiceVerificationBackID">

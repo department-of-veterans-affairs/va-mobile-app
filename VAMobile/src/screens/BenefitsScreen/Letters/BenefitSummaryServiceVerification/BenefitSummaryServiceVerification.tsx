@@ -248,7 +248,6 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       testID="BenefitSummaryServiceVerificationTestID"

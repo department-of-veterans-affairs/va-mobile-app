@@ -35,7 +35,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   let latestDowntimeWindow: DowntimeWindow | null = null
   features.forEach((feature) => {
     if (featureInDowntime(feature as DowntimeFeatureType, maintenanceWindows)) {
-      const downtimeWindow = maintenanceWindows[feature as DowntimeFeatureType]
+      const downtimeWindow = maintenanceWindows?.[feature as DowntimeFeatureType]
       if (downtimeWindow && (latestDowntimeWindow === null || latestDowntimeWindow.endTime < downtimeWindow.endTime)) {
         latestDowntimeWindow = downtimeWindow
       }
@@ -55,7 +55,10 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
           description={t('downtime.message.1', { endTime })}
           descriptionA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>
+          <TextView
+            accessible
+            accessibilityLabel={t('downtime.message.2.a11yLabel')}
+            my={theme.dimensions.contentMarginTop}>
             {t('downtime.message.2')}
           </TextView>
           <ClickToCallPhoneNumber

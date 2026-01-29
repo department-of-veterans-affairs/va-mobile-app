@@ -12,6 +12,7 @@ import {
   HeaderButton,
   LastUpdatedTimestamp,
   LoadingComponent,
+  MaintenanceBanner,
   OfflineBanner,
   TextView,
   TextViewProps,
@@ -36,7 +37,7 @@ export type ScreenError = Partial<ErrorComponentProps> & {
 
 export type ChildTemplateProps = {
   /** Translated label text for descriptive back button */
-  backLabel: string
+  backLabel?: string
   /** Optional a11y label for back button  */
   backLabelA11y?: string
   /** On press navigation for descriptive back button */
@@ -105,10 +106,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
 
   const headerProps: HeaderBannerProps = {
     leftButton: {
-      text: backLabel,
-      a11yLabel: backLabelA11y
-        ? t('back.a11yLabel', { screenName: backLabelA11y })
-        : t('back.a11yLabel', { screenName: backLabel }),
+      text: backLabel ?? t('back'),
+      a11yLabel: backLabelA11y ? t('back.a11yLabel', { screenName: backLabelA11y }) : t('back'),
       testID: backLabelTestID,
       onPress: backLabelOnPress,
       descriptiveBack: true,
@@ -186,6 +185,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
       />
       <HeaderBanner {...headerProps} />
       <OfflineBanner />
+      <MaintenanceBanner screenID={screenID} />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}

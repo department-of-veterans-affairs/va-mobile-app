@@ -74,7 +74,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {debtInfo.endDate}
         </TextView>
         {/* Resolve debt button */}
-        {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
+        {debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtDetailsScreen" />}
       </>
     )
     return <MultiTouchCard mainContent={mainContent} />
@@ -209,6 +209,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
             text={t('debts.help.askVA')}
             a11yLabel={a11yLabelVA(t('debts.help.askVA'))}
             a11yHint={t('debts.help.askVAA11yHint')}
+            testID="debtDetailsAskVA"
           />
         </TextArea>
       </Box>
@@ -266,7 +267,6 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('debts.details.backButton.title')}
       backLabelOnPress={navigation.goBack}
       title={t('debts.details.title')}
       testID="debtDetailsTestID"

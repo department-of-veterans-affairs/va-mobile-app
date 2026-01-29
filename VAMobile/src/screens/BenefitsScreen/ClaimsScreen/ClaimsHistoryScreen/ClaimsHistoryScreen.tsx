@@ -60,10 +60,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
       ? t('claimsHistory.title')
       : t('claims.title')
-  const backLabel =
-    featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
-      ? t('claims.title')
-      : t('benefits.title')
 
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()
@@ -86,27 +82,24 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const serviceErrorAlert = (): ReactElement => {
     // if there is a claims service error or an appeals service error
     if (claimsServiceErrors || appealsServiceErrors) {
-      let alertTitle, alertText
+      let alertTitle
 
       // if both services failed
       if (claimsAndAppealsServiceErrors) {
         alertTitle = t('claimsAndAppeal.claimAndAppealStatusUnavailable')
-        alertText = t('claimsAndAppeal.troubleLoadingClaimsAndAppeals')
 
         // if claims service fails but appeals did not
       } else if (claimsServiceErrors && !appealsServiceErrors) {
         alertTitle = t('claimsAndAppeal.claimStatusUnavailable')
-        alertText = t('claimsAndAppeal.troubleLoadingClaims')
 
         // if appeals service fails but claims does not
       } else if (appealsServiceErrors && !claimsServiceErrors) {
         alertTitle = t('claimsAndAppeal.appealStatusUnavailable')
-        alertText = t('claimsAndAppeal.troubleLoadingAppeals')
       }
 
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertWithHaptics variant="error" header={alertTitle} description={alertText} />
+          <AlertWithHaptics variant="warning" header={alertTitle} />
         </Box>
       )
     }
@@ -136,7 +129,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID"

@@ -56,6 +56,10 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureName: 'TravelListAndStatus',
     featureFlag: 'travelPayStatusList',
   },
+  {
+    featureName: 'DecisionLetter',
+    authorizedService: 'benefitsPushNotification',
+  },
 ]
 
 export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {

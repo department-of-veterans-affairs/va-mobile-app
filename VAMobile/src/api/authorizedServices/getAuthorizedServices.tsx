@@ -19,6 +19,7 @@ export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesDat
         ...response.data.attributes.authorizedServices,
         isUserAtPretransitionedOhFacility: response.meta.isUserAtPretransitionedOhFacility,
         isUserFacilityReadyForInfoAlert: response.meta.isUserFacilityReadyForInfoAlert,
+        migratingFacilitiesList: response.meta.migratingFacilitiesList || [],
       }
     : undefined
 }
