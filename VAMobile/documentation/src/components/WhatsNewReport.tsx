@@ -7,18 +7,17 @@ import data from '@site/static/data/whats-new-history.json'
  */
 
 interface FeatureContent {
-  content?: Record<string, string>
-  featureId?: string // Unique identifier (e.g., 'TravelListAndStatus' or '2.65')
-  title?: string // Human-readable override (used in MANUAL_ENTRIES)
-  bullets?: string[] // Manual bullets override
-  link?: { text: string; url: string } // Manual link override
-  releaseNotes?: string // For AppStoreReleaseNotes type
+  featureId?: string // Unique identifier
+  title: string
+  bullets: string[]
+  link: { text: string; url: string }
 }
 
 interface WhatsNewItem {
   version: string
   releaseDate: string
-  features: FeatureContent[]
+  releaseNotes?: string | null
+  whatsNew: FeatureContent[]
 }
 
 /**
@@ -62,61 +61,12 @@ const STYLES = {
 
 /**
  * MANUAL OVERRIDES
- * Add versions or features here that aren't captured by the automated script.
  */
-const MANUAL_ENTRIES: WhatsNewItem[] = [
-  // Example structure for manual entries:
-  // {
-  //   version: 'v2.62.0',
-  //   releaseDate: '2026-03-02',
-  //   features: [
-  //     {
-  //       featureId: 'ManualFeature',
-  //       title: 'Description of a manually added feature.',
-  //       bullets: ['First important point.', 'Second important point.'],
-  //       link: { text: 'Learn more online', url: 'https://example.com' },
-  //     },
-  //   ],
-  // },
-]
+const MANUAL_ENTRIES: WhatsNewItem[] = []
 
 /**
  * UTILITIES
  */
-
-/**
- * Resolves a feature's display details (title, bullets, link) by merging
- * manual overrides with translation content keys.
- */
-const resolveFeatureDetails = (feature: FeatureContent) => {
-  const fId = feature.featureId || feature.title || ''
-  const details = {
-    title: feature.title || '',
-    bullets: feature.bullets ? [...feature.bullets] : ([] as string[]),
-    link: feature.link || { text: '', url: '' },
-  }
-
-  if (feature.content) {
-    const prefix = `whatsNew.bodyCopy.${fId}`
-    Object.keys(feature.content).forEach((key) => {
-      const keyWithoutPrefix = key === prefix ? '' : key.replace(`${prefix}.`, '')
-
-      if (!keyWithoutPrefix) {
-        details.title = feature.content![key]
-      } else if (keyWithoutPrefix.startsWith('bullet.') && !key.endsWith('a11yLabel')) {
-        details.bullets.push(feature.content![key])
-      } else if (keyWithoutPrefix.startsWith('link.')) {
-        if (keyWithoutPrefix === 'link.text' && !details.link.text) {
-          details.link.text = feature.content![key]
-        } else if (keyWithoutPrefix === 'link.url' && !details.link.url) {
-          details.link.url = feature.content![key]
-        }
-      }
-    })
-  }
-
-  return details
-}
 
 /**
  * Merges automated history and manual overrides, groups them by version,
@@ -127,13 +77,14 @@ const getMergedHistory = (history: WhatsNewItem[], manual: WhatsNewItem[]) => {
 
   const grouped = combined.reduce(
     (acc, item) => {
-      const { version, releaseDate, features } = item
+      const { version, releaseDate, whatsNew, releaseNotes } = item
       const existing = acc[version]
 
       if (!existing) {
-        acc[version] = { ...item, features: [...features] }
+        acc[version] = { ...item, whatsNew: [...whatsNew] }
       } else {
-        existing.features = [...existing.features, ...features]
+        existing.whatsNew = [...existing.whatsNew, ...whatsNew]
+        existing.releaseNotes = releaseNotes || existing.releaseNotes
         if (new Date(releaseDate) > new Date(existing.releaseDate)) {
           existing.releaseDate = releaseDate
         }
@@ -167,14 +118,7 @@ const ReleaseNotesSection = ({ notes }: { notes: string }) => {
   const content: React.ReactNode[] = []
   let currentList: string[] = []
 
-  /**
-   * Takes any accumulated "bullet" lines from currentList and flushes them
-   * into the final content array as a single <ul> element.
-   *
-   * @param key - A unique react key for the generated list element.
-   */
   const flushList = (key: string) => {
-    // Only generate a list if we've actually accumulated hyphenated lines
     if (currentList.length > 0) {
       content.push(
         <ul key={key} style={STYLES.LIST}>
@@ -185,8 +129,6 @@ const ReleaseNotesSection = ({ notes }: { notes: string }) => {
           ))}
         </ul>,
       )
-
-      // Clear the buffer so we don't duplicate items in the next flush
       currentList = []
     }
   }
@@ -220,28 +162,25 @@ const ReleaseNotesSection = ({ notes }: { notes: string }) => {
  * Renders a single "What's New" feature entry.
  */
 const FeatureSection = ({ feature }: { feature: FeatureContent }) => {
-  const details = resolveFeatureDetails(feature)
-  const displayId = feature.featureId || feature.title || 'unknown'
-
   return (
     <div style={{ ...STYLES.CONTAINER, borderLeft: `5px solid ${COLORS.secondary}` }}>
       <h3 style={{ ...STYLES.SECTION_HEADER, color: COLORS.secondary }}>What's New</h3>
-      <p style={{ marginBottom: '0.75rem', color: COLORS.text }}>{details.title || `Update: ${displayId}`}</p>
-      {details.bullets.length > 0 && (
+      <p style={{ marginBottom: '0.75rem', color: COLORS.text }}>{feature.title}</p>
+      {feature.bullets.length > 0 && (
         <ul style={STYLES.LIST}>
-          {details.bullets.map((bullet, i) => (
+          {feature.bullets.map((bullet, i) => (
             <li key={i} style={STYLES.LIST_ITEM}>
               {bullet}
             </li>
           ))}
         </ul>
       )}
-      {details.link.url && (
-        <p style={{ marginTop: '0.5rem' }}>
-          <a href={details.link.url} target="_blank" rel="noopener noreferrer">
-            {details.link.text || 'View details online'} →
+      {feature.link.url && (
+        <div style={{ marginTop: '0.5rem' }}>
+          <a href={feature.link.url} target="_blank" rel="noopener noreferrer">
+            {feature.link.text || 'View details online'} →
           </a>
-        </p>
+        </div>
       )}
     </div>
   )
@@ -253,7 +192,7 @@ const FeatureSection = ({ feature }: { feature: FeatureContent }) => {
 
 const WhatsNewReport = () => {
   const mergedHistory = React.useMemo(() => {
-    return getMergedHistory(data as WhatsNewItem[], MANUAL_ENTRIES)
+    return getMergedHistory(data as unknown as WhatsNewItem[], MANUAL_ENTRIES)
   }, [])
 
   return (
@@ -269,16 +208,11 @@ const WhatsNewReport = () => {
             </div>
           </div>
 
-          {release.features.map((feature, fIndex) => {
-            const isReleaseNotes = feature.featureId === 'AppStoreReleaseNotes'
-            const notes = feature.releaseNotes || feature.content?.releaseNotes
+          {release.whatsNew.map((feature, fIndex) => (
+            <FeatureSection key={fIndex} feature={feature} />
+          ))}
 
-            return isReleaseNotes && notes ? (
-              <ReleaseNotesSection key={fIndex} notes={notes} />
-            ) : (
-              <FeatureSection key={fIndex} feature={feature} />
-            )
-          })}
+          {release.releaseNotes && <ReleaseNotesSection notes={release.releaseNotes} />}
         </div>
       ))}
     </div>

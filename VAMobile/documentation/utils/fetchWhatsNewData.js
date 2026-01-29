@@ -57,29 +57,40 @@ function gitFetchFileAtTag(tag, filePath, isJson = false) {
 }
 
 /**
- * Converts a TypeScript object string into a valid JSON string for parsing.
+ * Converts a TypeScript object string into a valid JSON string.
  */
-function cleanTsObjectToJson(content) {
+function cleanTsToJson(content) {
   return content
-    .replace(/,\s*/g, ',') // Basic whitespace cleanup
-    .replace(/,}/g, '}') // Trailing commas in objects
-    .replace(/,]/g, ']') // Trailing commas in arrays
+    .replace(/,\s*(?=[\]}])/g, '') // Trailing commas
     .replace(/([a-zA-Z0-9]+):/g, '"$1":') // Quote keys
-    .replace(/'/g, '"') // Replace single quotes with double quotes
+    .replace(/'/g, '"') // Single to double quotes
+}
+
+/**
+ * Groups translation keys by their feature ID (e.g., '2.65' or 'TravelListAndStatus').
+ */
+function groupTranslationsByFeature(translations) {
+  const grouped = {}
+  Object.keys(translations).forEach((key) => {
+    if (key.startsWith('whatsNew.bodyCopy.')) {
+      const featureId = extractFeatureId(key)
+      if (!grouped[featureId]) grouped[featureId] = {}
+      grouped[featureId][key] = translations[key]
+    }
+  })
+  return grouped
 }
 
 /**
  * Extracts a feature ID from a translation key.
  */
 function extractFeatureId(key) {
-  const keyWithoutPrefix = key.replace('whatsNew.bodyCopy.', '')
-  if (keyWithoutPrefix.includes('.bullet.')) {
-    return keyWithoutPrefix.substring(0, keyWithoutPrefix.indexOf('.bullet.'))
+  const parts = key.replace('whatsNew.bodyCopy.', '').split('.')
+  // Handle segments like '2.65' or 'featureName'
+  if (/^\d+$/.test(parts[0]) && parts[1] && /^\d+$/.test(parts[1])) {
+    return `${parts[0]}.${parts[1]}`
   }
-  if (keyWithoutPrefix.includes('.link.')) {
-    return keyWithoutPrefix.substring(0, keyWithoutPrefix.indexOf('.link.'))
-  }
-  return keyWithoutPrefix
+  return parts[0]
 }
 
 /**
@@ -116,74 +127,77 @@ function isSimilar(releaseNotes, whatsNewFeatures) {
   const overlapRatio = matchCount / notesWords.size
   return overlapRatio > 0.85 // 85% overlap threshold
 }
+/**
+ * Resolves raw translation keys for a feature into a structured object
+ * (title, bullets, link).
+ */
+function resolveFeatureContent(featureId, rawContent) {
+  const result = {
+    title: '',
+    bullets: [],
+    link: { text: '', url: '' },
+  }
+
+  const prefix = `whatsNew.bodyCopy.${featureId}`
+  Object.keys(rawContent).forEach((key) => {
+    const keyWithoutPrefix = key === prefix ? '' : key.replace(`${prefix}.`, '')
+
+    if (!keyWithoutPrefix) {
+      result.title = rawContent[key]
+    } else if (keyWithoutPrefix.startsWith('bullet.') && !key.endsWith('a11yLabel')) {
+      result.bullets.push(rawContent[key])
+    } else if (keyWithoutPrefix.startsWith('link.')) {
+      if (keyWithoutPrefix === 'link.text' && !result.link.text) {
+        result.link.text = rawContent[key]
+      } else if (keyWithoutPrefix === 'link.url' && !result.link.url) {
+        result.link.url = rawContent[key]
+      }
+    }
+  })
+
+  // Fallback title if none found
+  if (!result.title) {
+    result.title = `Update: ${featureId}`
+  }
+
+  return result
+}
 
 /**
  * DOMAIN SPECIFIC SCRAPERS
  */
 
 /**
- * Scans translations for version-matched features (e.g., 'whatsNew.bodyCopy.2.65').
+ * Scans for version-matched features (e.g., 'whatsNew.bodyCopy.2.65').
  */
-function getFeaturesFromTranslations(majorMinor, translations, seenIds) {
-  const discovered = {}
-
-  Object.keys(translations).forEach((key) => {
-    if (key.startsWith('whatsNew.bodyCopy.')) {
-      const featureId = extractFeatureId(key)
-      const isVersionString = /^\d+(\.\d+)*$/.test(featureId)
-
-      if (isVersionString && featureId === majorMinor && !seenIds.has(featureId)) {
-        if (!discovered[featureId]) {
-          discovered[featureId] = { content: {} }
-        }
-        discovered[featureId].content[key] = translations[key]
-      }
-    }
-  })
-
-  return discovered
+function getVersionMappedFeatures(majorMinor, groupedTranslations, seenIds) {
+  if (groupedTranslations[majorMinor] && !seenIds.has(majorMinor)) {
+    return { [majorMinor]: { content: groupedTranslations[majorMinor] } }
+  }
+  return {}
 }
 
 /**
- * Scans for features that were introduced via feature flag flips in this version.
+ * Scans for features introduced via feature flag flips.
  */
-function getFeaturesFromFlagTransitions(tag, translations, lastFlags, seenIds) {
+function getFeaturesFromFlagTransitions(tag, groupedTranslations, lastFlags, seenIds) {
   const discovered = {}
   const configContent = gitFetchFileAtTag(tag, WHATS_NEW_CONFIG_PATH)
   if (!configContent) return { discovered, currentFlags: lastFlags }
 
-  // Parse WhatsNewConfig array
   const configMatch = configContent.match(/export const WhatsNewConfig: WhatsNewConfigItem\[\] = (\[[\s\S]*?\])/)
-  const config = configMatch ? JSON.parse(cleanTsObjectToJson(configMatch[1])) : []
+  const config = configMatch ? JSON.parse(cleanTsToJson(configMatch[1])) : []
 
-  // Parse Remote Config Defaults
   const rcContent = gitFetchFileAtTag(tag, REMOTE_CONFIG_PATH)
-  const rcDefaultsMatch = rcContent
-    ? rcContent.match(/export const defaults: FeatureToggleValues = ({[\s\S]*?})/)
-    : null
-  const currentFlags = rcDefaultsMatch ? JSON.parse(cleanTsObjectToJson(rcDefaultsMatch[1])) : {}
+  const rcDefaultsMatch = rcContent?.match(/export const defaults: FeatureToggleValues = ({[\s\S]*?})/)
+  const currentFlags = rcDefaultsMatch ? JSON.parse(cleanTsToJson(rcDefaultsMatch[1])) : {}
 
-  config.forEach((item) => {
-    const { featureName, featureFlag } = item
-    const featureId = featureName // Renaming for consistency
-    if (seenIds.has(featureId)) return
+  config.forEach(({ featureName, featureFlag }) => {
+    if (seenIds.has(featureName)) return
 
-    // Introduce if flag transitioned false/undefined -> true
-    const wasTrueBefore = lastFlags[featureFlag] === true
-    const isTrueNow = currentFlags[featureFlag] === true
-
-    if (!wasTrueBefore && isTrueNow) {
-      const baseKey = `whatsNew.bodyCopy.${featureId}`
-      const featureTranslations = {}
-
-      Object.keys(translations).forEach((k) => {
-        if (k === baseKey || k.startsWith(`${baseKey}.`)) {
-          featureTranslations[k] = translations[k]
-        }
-      })
-
-      if (Object.keys(featureTranslations).length > 0) {
-        discovered[featureId] = { content: featureTranslations }
+    if (!lastFlags[featureFlag] && currentFlags[featureFlag]) {
+      if (groupedTranslations[featureName]) {
+        discovered[featureName] = { content: groupedTranslations[featureName] }
       }
     }
   })
@@ -238,11 +252,13 @@ async function fetchWhatsNewHistory() {
     const translations = gitFetchFileAtTag(tag, TRANSLATIONS_PATH, true)
     if (!translations) continue
 
-    // 1. Collect features from translations and flags
-    const versionFeatures = getFeaturesFromTranslations(majorMinor, translations, seenIds)
+    const groupedTranslations = groupTranslationsByFeature(translations)
+
+    // 1. Collect features
+    const versionFeatures = getVersionMappedFeatures(majorMinor, groupedTranslations, seenIds)
     const { discovered: flagFeatures, currentFlags } = getFeaturesFromFlagTransitions(
       tag,
-      translations,
+      groupedTranslations,
       lastFlags,
       seenIds,
     )
@@ -252,25 +268,31 @@ async function fetchWhatsNewHistory() {
 
     // 2. Process Release Notes
     const releaseNotesResult = getReleaseNotes(tag, allDiscoveredForTag, lastReleaseNotes)
+    let versionReleaseNotes = null
     if (releaseNotesResult) {
-      allDiscoveredForTag['AppStoreReleaseNotes'] = { content: { releaseNotes: releaseNotesResult.notes } }
+      versionReleaseNotes = releaseNotesResult.notes
       lastReleaseNotes = releaseNotesResult.rawNotes
     }
 
     // 3. Finalize version entry
-    if (Object.keys(allDiscoveredForTag).length > 0) {
+    if (Object.keys(allDiscoveredForTag).length > 0 || versionReleaseNotes) {
       console.log(`✅ Found content for ${tag}`)
       const tagDate = runGitCommand(`git log -1 --format=%cI ${tag}`)
 
-      const featuresArray = Object.keys(allDiscoveredForTag).map((id) => ({
-        ...allDiscoveredForTag[id],
-        featureId: id,
-      }))
+      const whatsNew = []
+      Object.keys(allDiscoveredForTag).forEach((id) => {
+        const resolved = resolveFeatureContent(id, allDiscoveredForTag[id].content)
+        whatsNew.push({
+          featureId: id,
+          ...resolved,
+        })
+      })
 
       historyData.unshift({
         version: tag,
         releaseDate: tagDate || new Date().toISOString(),
-        features: featuresArray,
+        releaseNotes: versionReleaseNotes,
+        whatsNew,
       })
 
       // Mark IDs as seen to prevent repetition in future versions
