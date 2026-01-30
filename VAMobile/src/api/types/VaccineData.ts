@@ -1,6 +1,6 @@
 export type VaccineListPayload = {
   data: Array<Vaccine>
-  links: {
+  links?: {
     self: string
     first: string
     prev: string
@@ -9,10 +9,10 @@ export type VaccineListPayload = {
   }
   meta?: {
     pagination?: {
-      currentPage: number
-      perPage: number
-      totalPages: number
-      totalEntries: number
+      currentPage?: number
+      perPage?: number
+      totalPages?: number
+      totalEntries?: number
     }
     dataFromStore: boolean
   }
