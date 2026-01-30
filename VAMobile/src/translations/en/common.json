@@ -1911,6 +1911,8 @@
   "secureMessaging.reply.messageConversation": "Messages in this conversation",
   "secureMessaging.reply.olderThan45Days": "The last message in this conversation is more than 45 days old. To continue this conversation, start a new message.",
   "secureMessaging.reply.tooOldForReplies": "This conversation is too old for new replies",
+  "secureMessaging.reply.cannotReplyBody": "If you need to contact your care team, start a new message.",
+  "secureMessaging.reply.cannotReplyHeader": "You can’t reply to this message",
   "secureMessaging.reply.youCanNoLonger": "You can’t send messages to some of your care teams",
   "secureMessaging.reply.youCanNoLonger.description": "If you need to contact your care team contact your VA health facility.",
   "secureMessaging.replyHelp.3BusinessDays": "3 business days",

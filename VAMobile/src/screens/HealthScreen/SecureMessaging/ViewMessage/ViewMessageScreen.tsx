@@ -262,6 +262,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     return filteredFolder
   }
 
+  const providerAllowsReply = message?.canReply ?? true
   const replyExpired =
     demoMode && (message?.messageId === 2092809 || message?.messageId === 2092803)
       ? false
@@ -407,12 +408,22 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && userInTriageTeam && (
+          {(replyExpired && providerAllowsReply) && userInTriageTeam && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
                 header={t('secureMessaging.reply.tooOldForReplies')}
                 description={t('secureMessaging.reply.olderThan45Days')}
+                testID="secureMessagingOlderThan45DaysAlertID"
+              />
+            </Box>
+          )}
+          {!providerAllowsReply && userInTriageTeam && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                variant="warning"
+                header={t('secureMessaging.reply.cannotReplyHeader')}
+                description={t('secureMessaging.reply.cannotReplyBody')}
                 testID="secureMessagingOlderThan45DaysAlertID"
               />
             </Box>

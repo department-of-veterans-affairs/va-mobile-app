@@ -58,6 +58,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
     fileToGet.size = file.size
     refetchFile()
   }
+  const providerAllowsReply = message?.canReply ?? true
 
   function getHeader() {
     return (
@@ -160,7 +161,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
   function getReplyOrStartNewMessageButton() {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {!replyExpired && userInTriageTeam ? (
+        {!replyExpired && providerAllowsReply && userInTriageTeam ? (
           <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
         ) : (
           <Button
