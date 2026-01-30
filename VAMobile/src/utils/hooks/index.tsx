@@ -14,27 +14,36 @@ import {
   findNodeHandle,
 } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationProp } from '@react-navigation/stack'
 
-import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
-import { WebProtocolTypesConstants } from 'constants/common'
+import { MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS, WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
+import {
+  DowntimeWindow,
+  DowntimeWindowsByFeatureType,
+  ErrorsState,
+  OfflineState,
+  queueOfflineEvent,
+} from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
@@ -42,6 +51,7 @@ import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -62,29 +72,92 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  return featureInDowntime(feature, downtimeWindowsByFeature)
+  const { maintenanceWindows } = useMaintenanceWindows()
+  return featureInDowntime(feature, maintenanceWindows)
 }
 
 export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { maintenanceWindows } = useMaintenanceWindows()
   const features = ScreenIDToDowntimeFeatures[currentScreenID]
-  return oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+  return oneOfFeaturesInDowntime(features, maintenanceWindows)
 }
 
 export const featureInDowntime = (
   feature: DowntimeFeatureType,
-  downtimeWindows: DowntimeWindowsByFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
 ): boolean => {
-  const mw = downtimeWindows[feature]
+  const mw = downtimeWindows?.[feature]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
+}
+
+export const featureInDowntimeWindow = (
+  feature: DowntimeFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
+): boolean => {
+  const mw = downtimeWindows?.[feature]
+  return (
+    !!mw &&
+    mw.startTime <= DateTime.now().plus({ hour: MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS }) &&
+    DateTime.now() <= mw.endTime
+  )
 }
 
 export const oneOfFeaturesInDowntime = (
   features: DowntimeFeatureType[],
-  downtimeWindows: DowntimeWindowsByFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
 ): boolean => {
   return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+/**
+ * Returns the list of features currently under maintenance
+ */
+export const getFeaturesInDowntime = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeFeatureType[] => {
+  if (!features) {
+    return []
+  }
+
+  return features.filter((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+/**
+ * Returns the list of features either under maintenance or have maintenance upcoming within the window
+ * defined by MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS
+ */
+export const getFeaturesInDowntimeWindow = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeFeatureType[] => {
+  if (!features) {
+    return []
+  }
+
+  return features.filter((feature) => featureInDowntimeWindow(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+/**
+ * Finds the latest end time of an active window for a list of downtime windows
+ */
+export const latestDowntimeWindow = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeWindow | undefined => {
+  let downtimeWindow: DowntimeWindow | undefined
+
+  features.forEach((feature) => {
+    if (!downtimeWindow) {
+      downtimeWindow = downtimeWindows[feature]
+    } else {
+      if (downtimeWindows[feature]?.endTime && downtimeWindows[feature]?.endTime > downtimeWindow?.endTime) {
+        downtimeWindow = downtimeWindows[feature]
+      }
+    }
+  })
+
+  return downtimeWindow
 }
 
 /**
@@ -188,6 +261,8 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
  */
 export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   return (url: string, eventParams?: EventParams) => {
     logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
@@ -198,6 +273,11 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
     }
 
     if (url.startsWith(WebProtocolTypesConstants.http)) {
+      if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+        showOfflineSnackbar()
+        return
+      }
+
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
           text: t('leavingApp.cancel'),
@@ -286,7 +366,7 @@ export function useAutoScrollToElement(): [
               const offsetValue = offset || 0
               viewRef.current.measureLayout(
                 scrollPoint,
-                (_, y) => {
+                (_ignore, y) => {
                   currentObject.scrollTo({ y: y + offsetValue, animated: !screenReaderEnabled })
                 },
                 () => {
@@ -494,8 +574,17 @@ export function useOpenAppStore(): () => void {
   const launchExternalLink = useExternalLink()
   const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
-  return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
+  return () => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
+    launchExternalLink(appStoreLink, { appStore: 'app_store' })
+  }
 }
 
 export type ActionSheetProps = ActionSheetOptions & { destructiveButtonIndex?: number }
@@ -506,7 +595,7 @@ export function useShowActionSheet(): (
 ) => void {
   const { showActionSheetWithOptions } = useActionSheet()
   const currentTheme = getTheme()
-
+  const insets = useSafeAreaInsets()
   return (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
     // Destructive action sheets are always title case
     // Regular action sheets are title case for ios, sentence case for android
@@ -530,12 +619,36 @@ export function useShowActionSheet(): (
       messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
-      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox, marginBottom: insets.bottom },
       ...options,
       options: casedOptionsText,
       cancelButtonIndex: isIpad() ? undefined : options.options.length - 1,
     }
 
     showActionSheetWithOptions(sheetOptions, callback)
+  }
+}
+
+/**
+ * Returns true if the user is currently focusing on a modal
+ */
+export function useIsWithinModal(): boolean {
+  const { viewingModal } = useSelector<RootState, OfflineState>((state) => state.offline)
+  return !!viewingModal
+}
+
+export const useOfflineSnackbar = () => {
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation()
+  const snackbar = useSnackbar()
+  const inModal = useIsWithinModal()
+
+  return () => {
+    if (inModal) {
+      Alert.alert(t('offline.alert.title'), t('offline.alert.body'), [{ text: t('dismiss'), style: 'default' }])
+    } else {
+      snackbar.show(t('offline.toast.checkConnection'), { isError: true })
+    }
+    dispatch(queueOfflineEvent(Events.vama_offline_action()))
   }
 }

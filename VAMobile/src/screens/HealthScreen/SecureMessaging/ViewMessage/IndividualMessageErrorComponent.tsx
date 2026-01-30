@@ -27,6 +27,7 @@ function IndividualMessageErrorComponent() {
           <Box>
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
+              accessible
               variant="MobileBody"
               my={standardMarginBetween}
               accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>

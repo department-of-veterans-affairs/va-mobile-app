@@ -4,23 +4,11 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
-import { logout } from 'store/slices/authSlice'
+import { AppThunk } from 'store'
+import * as AuthSlice from 'store/slices/authSlice'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { waitFor } from 'testUtils'
-import { devConfig, setDebugConfig } from 'utils/remoteConfig'
-
-jest.mock('store/slices/authSlice', () => {
-  const actual = jest.requireActual('store/slices/authSlice')
-  return {
-    ...actual,
-    logout: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+import { FeatureToggleDescriptions, devConfig, setDebugConfig } from 'utils/remoteConfig'
 
 const mockOverrides = {
   ...devConfig,
@@ -45,7 +33,10 @@ context('RemoteConfigScreen', () => {
     expect(screen.getByRole('header', { name: t('remoteConfig.title') })).toBeTruthy()
 
     for (const [key, value] of Object.entries(mockOverrides)) {
-      expect(screen.getByRole('switch', { name: key }).props.accessibilityState.checked).toBe(value)
+      expect(
+        screen.getByRole('switch', { name: `${key} ${FeatureToggleDescriptions[key] || ''}` }).props.accessibilityState
+          .checked,
+      ).toBe(value)
     }
   })
 
@@ -60,6 +51,7 @@ context('RemoteConfigScreen', () => {
   })
 
   it('logs out after overriding remote config', () => {
+    const logoutSpy = jest.spyOn(AuthSlice, 'logout').mockImplementationOnce((): AppThunk => async () => {})
     initializeTestInstance()
 
     // Toggle an item to enable override button
@@ -69,6 +61,6 @@ context('RemoteConfigScreen', () => {
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 
-    expect(logout).toHaveBeenCalled()
+    expect(logoutSpy).toHaveBeenCalled()
   })
 })

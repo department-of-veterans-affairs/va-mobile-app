@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, Ref, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps, View } from 'react-native'
+import { Pressable, PressableProps, View, ViewStyle } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
@@ -48,6 +48,12 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const theme = useTheme()
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
+  /** Styles for the header touchable that meets accessibility requirements for a minimum touch target size */
+  const headerTouchableStyle: ViewStyle = {
+    minHeight: theme.dimensions.touchableMinHeight,
+    justifyContent: 'center',
+  }
+
   const onPress = (): void => {
     if (customOnPress) {
       customOnPress(!expanded)
@@ -84,7 +90,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
       : {}
 
     return (
-      <Pressable {...pressableProps} {...labelProps} ref={headerRef}>
+      <Pressable {...pressableProps} {...labelProps} ref={headerRef} style={headerTouchableStyle}>
         {data}
       </Pressable>
     )

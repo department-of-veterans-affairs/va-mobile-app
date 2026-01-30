@@ -292,3 +292,28 @@ export function isDisabilityCompensationClaim(claimTypeCode: string) {
 export function isValidDisabilityRating(rating: number | undefined) {
   return rating === 0 || !!rating
 }
+
+/**
+ * Logic pulled from vets-website
+ * @param itemDisplayName - display name of file request
+ */
+export const isStandard5103Notice = (itemDisplayName: string) => {
+  return itemDisplayName === '5103 Notice Response' || itemDisplayName === 'Review evidence list (5103 notice)'
+}
+
+/**
+ * Logic pulled from vets-website
+ * @param itemDisplayName - display name of file request
+ */
+export const isAutomated5103Notice = (itemDisplayName: string) => {
+  return itemDisplayName === 'Automated 5103 Notice Response'
+}
+
+/**
+ * Determines if a file request is a 5103 request
+ * Logic pulled from vets-website
+ * @param itemDisplayName - display name of file request
+ */
+export const is5103Notice = (itemDisplayName: string) => {
+  return isAutomated5103Notice(itemDisplayName) || isStandard5103Notice(itemDisplayName)
+}

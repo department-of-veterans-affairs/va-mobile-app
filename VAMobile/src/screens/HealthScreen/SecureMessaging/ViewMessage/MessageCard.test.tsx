@@ -69,4 +69,56 @@ context('MessageCard', () => {
     expect(screen.getByText(t('secureMessaging.viewMessage.opened'))).toBeTruthy()
     expect(mockNavigationSpy).toHaveBeenCalled()
   })
+
+  it('should allow user to reply when in triage team and message is not expired', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={false}
+      />,
+    )
+    expect(screen.getByText('Reply')).toBeTruthy()
+    expect(screen.queryByText(t('secureMessaging.startNewMessage'))).toBeFalsy()
+  })
+
+  it('should not allow user to reply when not in triage team', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={false}
+        replyExpired={false}
+      />,
+    )
+    expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
+    expect(screen.queryByText('Reply')).toBeFalsy()
+  })
+
+  it('should not allow user to reply when message is expired even if in triage team', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={true}
+      />,
+    )
+    expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
+    expect(screen.queryByText('Reply')).toBeFalsy()
+  })
+
+  it('should not allow user to reply when not in triage team and message is expired', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={false}
+        replyExpired={true}
+      />,
+    )
+    expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
+    expect(screen.queryByText('Reply')).toBeFalsy()
+  })
 })

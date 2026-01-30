@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Icon, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDownloadCopayStatement, useMedicalCopays } from 'api/medicalCopays'
 import {
@@ -21,10 +20,10 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getCopayInfo } from 'screens/PaymentsScreen/Copays/CopayCard/CopayCard'
-import PreviousPDFStatements from 'screens/PaymentsScreen/Copays/CopayDetails/PreviousPDFStatements'
+import PDFStatements from 'screens/PaymentsScreen/Copays/CopayDetails/PDFStatements'
 import RecentStatementCharges from 'screens/PaymentsScreen/Copays/CopayDetails/RecentStatementCharges'
 import StatementAddresses from 'screens/PaymentsScreen/Copays/CopayDetails/StatementAddresses'
-import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
+import ResolveCopayButton from 'screens/PaymentsScreen/Copays/ResolveCopay/ResolveCopayButton'
 import NoticeOfRightsButton from 'screens/PaymentsScreen/NoticeOfRights/NoticeOfRightsButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -52,8 +51,6 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
   const facilityCopays = statements.filter(({ pSFacilityNum }) => pSFacilityNum === copay?.pSFacilityNum)
   const sortedFacilityCopays = useMemo(() => sortStatementsByDate(facilityCopays), [facilityCopays])
 
-  const previousSortedFacilityCopays = sortedFacilityCopays.filter((statement) => statement.id !== copay.id)
-
   const { error: downloadStatementError, refetch: refetchStatement } = useDownloadCopayStatement(statementID, {
     enabled: statementID.length > 0,
   })
@@ -79,9 +76,9 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
 
   const handleResolveClick = () => {
     const options = [
-      t('copays.resolveBill.payBill'),
-      t('copays.resolveBill.requestHelp'),
-      t('copays.resolveBill.disputeCopay'),
+      t('copays.resolveCopay.payBill'),
+      t('copays.resolveCopay.requestHelp'),
+      t('copays.resolveCopay.disputeCopay'),
       t('cancel'),
     ]
     const routeNames = ['PayBill', 'CopayRequestHelp', 'DisputeCopay']
@@ -89,8 +86,8 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
     showActionSheet(
       {
         options,
-        title: t('copays.resolveBill'),
-        message: t('copays.resolveBill.how'),
+        title: t('copays.resolveCopay'),
+        message: t('copays.resolveCopay.how'),
         cancelButtonIndex: 3,
       },
       (buttonIndex) => {
@@ -135,6 +132,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
             text={t('copays.help.askVA')}
             a11yLabel={a11yLabelVA(t('copays.help.askVA'))}
             a11yHint={t('copays.help.askVAA11yHint')}
+            testID="copayDetailsAskVA"
           />
         </Box>
       </TextArea>
@@ -153,32 +151,12 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
       <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
         {formattedDate}
       </TextView>
-      <ResolveBillButton />
-      <Pressable onPress={() => downloadStatement(copay.id)} accessibilityRole="link" accessible={true}>
-        <Box
-          display={'flex'}
-          flexDirection={'row'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          minHeight={theme.dimensions.touchableMinHeight}
-          pt={5}>
-          <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
-            {t('copays.goToStatement')}
-          </TextView>
-          <Icon
-            name={'ChevronRight'}
-            fill={theme.colors.icon.chevronListItem}
-            width={theme.dimensions.chevronListItemWidth}
-            height={theme.dimensions.chevronListItemHeight}
-          />
-        </Box>
-      </Pressable>
+      <ResolveCopayButton copay={copay} />
     </>
   )
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('copays.title')}
       backLabelOnPress={navigation.goBack}
       title={t('copays.details.title')}
       testID="copayDetailsTestID"
@@ -193,11 +171,12 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
                 variant="warning"
                 header={t('copays.balanceOverdue')}
                 primaryButton={{
-                  label: t('copays.resolveBill'),
+                  label: t('copays.resolveCopay'),
                   onPress: handleResolveClick,
                 }}
-                expandable>
-                <TextView variant="MobileBody">
+                expandable
+                initializeExpanded={false}>
+                <TextView accessible variant="MobileBody">
                   <Trans
                     i18nKey="copays.balanceOverdue.description"
                     components={{ b: <TextView variant="MobileBodyBold" /> }}
@@ -214,7 +193,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
             <MultiTouchCard mainContent={mainContent} />
           </Box>
           <RecentStatementCharges copay={copay} />
-          <PreviousPDFStatements statements={previousSortedFacilityCopays} downloadStatement={downloadStatement} />
+          <PDFStatements statements={sortedFacilityCopays} downloadStatement={downloadStatement} />
           <StatementAddresses copay={copay} facilityName={copayInfo.facilityName} />
           <NoticeOfRightsButton />
           {renderHelpContent()}

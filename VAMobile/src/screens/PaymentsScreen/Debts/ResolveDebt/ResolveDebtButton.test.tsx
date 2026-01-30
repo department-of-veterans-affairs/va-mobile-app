@@ -35,22 +35,22 @@ context('ResolveDebtButton', () => {
 
   it('renders button with correct label', () => {
     initializeTestInstance()
-    expect(screen.getByRole('button', { name: t('debts.resolveDebt') })).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('debts.resolveOverpayment') })).toBeTruthy()
   })
 
   it('calls showActionSheet with correct options when pressed', () => {
     initializeTestInstance()
-    fireEvent.press(screen.getByRole('button', { name: t('debts.resolveDebt') }))
+    fireEvent.press(screen.getByRole('button', { name: t('debts.resolveOverpayment') }))
     expect(mockShowActionSheetWithOptions).toHaveBeenCalledWith(
       expect.objectContaining({
         options: [
-          t('debts.resolveDebt.payDebt'),
-          t('debts.resolveDebt.requestHelp'),
-          t('debts.resolveDebt.disputeDebt'),
+          t('debts.resolveOverpayment.payDebt'),
+          t('debts.resolveOverpayment.requestHelp'),
+          t('debts.resolveOverpayment.disputeDebt'),
           t('cancel'),
         ],
-        title: t('debts.resolveDebt'),
-        message: t('debts.resolveDebt.how'),
+        title: t('debts.resolveOverpayment'),
+        message: t('debts.resolveOverpayment.how'),
         cancelButtonIndex: 3,
       }),
       expect.any(Function),

@@ -44,12 +44,21 @@ export type WhatsNewConfigItem = {
 
 export const WhatsNewConfig: WhatsNewConfigItem[] = [
   {
+    featureName: 'PretransitionedOHInfoAlert',
+    featureFlag: 'showCernerWhatsNew',
+    authorizedService: 'isUserAtPretransitionedOhFacility',
+  },
+  {
     featureName: 'COE',
     featureFlag: 'COEAvailable',
   },
   {
     featureName: 'TravelListAndStatus',
-    featureFlag: 'travelPayStatusList'
+    featureFlag: 'travelPayStatusList',
+  },
+  {
+    featureName: 'DecisionLetter',
+    authorizedService: 'benefitsPushNotification',
   },
 ]
 

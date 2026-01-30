@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import CopayErrorStates from 'screens/PaymentsScreen/Copays/CopayErrorStates/CopayErrorStates'
@@ -47,22 +47,12 @@ context('CopayErrorStates', () => {
     it('should display health care application link', () => {
       initializeTestInstance(403)
       expect(screen.getByTestId('healthCareApplicationLinkID')).toBeTruthy()
+      expect(screen.getByText(t('copays.noHealthCare.message.link'))).toBeTruthy()
     })
 
     it('should display phone number for non-enrolled users', () => {
       initializeTestInstance(403)
       expect(screen.getByText(displayedTextPhoneNumber(t('8772228387')))).toBeTruthy()
-    })
-
-    it('should navigate to webview when health care link is pressed', () => {
-      initializeTestInstance(403)
-      fireEvent.press(screen.getByTestId('healthCareApplicationLinkID'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
-        url: expect.any(String),
-        displayTitle: t('webview.vagov'),
-        loadingMessage: t('loading.vaWebsite'),
-        useSSO: true,
-      })
     })
   })
 

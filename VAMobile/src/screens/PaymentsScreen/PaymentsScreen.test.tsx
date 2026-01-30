@@ -43,7 +43,11 @@ jest.mock('utils/hooks', () => {
 context('PaymentsScreen', () => {
   const initializeTestInstance = (authorized = true): void => {
     when(featureEnabled as jest.Mock)
-      .calledWith('overpayCopay')
+      .calledWith('overpayments')
+      .mockReturnValue(true)
+
+    when(featureEnabled as jest.Mock)
+      .calledWith('copayments')
       .mockReturnValue(true)
 
     render(<PaymentsScreen />, {
@@ -118,11 +122,11 @@ context('PaymentsScreen', () => {
       const copaysTitle = t('copays.title')
       const debtsTitle = t('debts.title')
 
-      const copaysSub = t('copays.activityButton.subText', {
+      const copaysSub = t('copays.amountDueForBills', {
         amount: numberToUSDollars(396.93),
         count: 6,
       })
-      const debtsSub = t('debts.activityButton.subText', {
+      const debtsSub = t('payments.overpaymentsTile.subText', {
         amount: numberToUSDollars(347.5),
         count: 2,
       })
@@ -154,7 +158,7 @@ context('PaymentsScreen', () => {
       expect(screen.getByRole('link', { name: copaysTitle })).toBeTruthy()
       expect(screen.getByRole('link', { name: debtsTitle })).toBeTruthy()
 
-      expect(screen.queryByText(t('copays.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
+      expect(screen.queryByText(t('copays.amountDueForBills', { amount: 0, count: 0 }))).toBeNull()
       expect(screen.queryByText(t('debts.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
     })
   })
@@ -163,7 +167,7 @@ context('PaymentsScreen', () => {
     it('is not displayed if feature toggle is disabled', () => {
       initializeTestInstance()
 
-      expect(screen.queryByTestId('toTravelPayClaimsLinkID')).toBeFalsy()
+      expect(screen.queryByTestId('toTravelPayClaimsLinkIDPaymentsScreen')).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -173,7 +177,7 @@ context('PaymentsScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.getByTestId('toTravelPayClaimsLinkID')).toBeTruthy()
+      expect(screen.getByTestId('toTravelPayClaimsLinkIDPaymentsScreen')).toBeTruthy()
     })
 
     it('navigates to Travel Claims screen when pressed', () => {
@@ -183,7 +187,7 @@ context('PaymentsScreen', () => {
 
       initializeTestInstance()
 
-      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkID'))
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkIDPaymentsScreen'))
 
       expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
     })

@@ -5,7 +5,9 @@ import Clipboard from '@react-native-clipboard/clipboard'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { InlineCopyLink } from 'screens/PaymentsScreen/Debts/PayDebt/InlineCopyLink'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 type InfoRowProps = {
@@ -22,6 +24,7 @@ export function InfoRow({ label, value, copyable = false, testID }: InfoRowProps
 
   const handleCopy = () => {
     if (!value) return
+    logAnalyticsEvent(Events.vama_overpay_copy_clk(label))
     Clipboard.setString(value)
     snackbar.show(`${label} ${'copied'}`, {
       offset: theme.dimensions.snackBarBottomOffset,
