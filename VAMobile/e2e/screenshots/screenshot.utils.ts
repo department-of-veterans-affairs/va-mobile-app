@@ -16,6 +16,7 @@ import {
   openProfile,
   openSettings,
   openVAPaymentHistory,
+  scrollToIDThenTap,
 } from '../tests/utils'
 
 export const claimsId = {
@@ -76,7 +77,10 @@ const utils = {
     }
     await element(by.text('Demo Mode Users')).tap()
     await element(by.text('John Monroe')).tap()
-    await element(by.text('Save and Logout')).tap()
+    await scrollToIDThenTap(
+      CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
+      CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,
+    )
     await loginToDemoMode()
   },
 
