@@ -4,25 +4,59 @@ title: Mobile Incident Response Plays
 
 # Mobile Incident Response Plays
 
-As a team, we must anticipate and prepare for major issues and common outages. And as we tackle issues and gain firefighting experience as team, we will undoubtably encounter common themes or repeats of similar issues. This section is an attempt to document plays containg steps or tips to fix those major issues, common outages, or recurring issues.
+As a team, we must anticipate and prepare for major issues and common outages. And as we tackle issues and gain firefighting experience as a team, we will undoubtably encounter common themes or repeats of similar issues. This section is an attempt to document plays containg steps or tips to fix those major problems, common outages, or recurring issues.
 
 Having an existing play does not abdicate you of your responsibility to follow the playbook and alert the proper people. But it should serve as a guide to help you more quickly resolve problems.
 
-## Overall Tips
+## Moves
 
-There are a few overarching tips that are applicable across issues. Use your best judgement on when to apply each.
+- [Feature Flags](#feature-flags)
+- [Availability Framework](#availability-framework)
 
-- When possible, work in the open.
-- When finished, contribute back to this list of plays.
-- It's often preferable to create a temporary Slack channel – instead of a direct message group – to address issues and maintain a historical record. Use your best judgement on when to create a channel; when in doubt, work in the open.
-- Check to see if the issue is impacting mobile, vets-api, or the wider VA. If it's more than mobile, find the right people and inform them of the issue; never assume someone else will do the job.
-- Don't be afraid to escalate an issue.
-- Involve the Product Owner when working across teams, when the issue impacts a large number of Veterans, or when there is a security or information breach.
-- Be a champion for our issues; squeaky wheels get fixed.
+### Feature Flags
+
+Remote config feature flags are the mobile app's feature flipper option and can partially or completely enable/disable various paths in code being gated behind a 'featureEnabled' function check. This is the best course of action when an entire **new** process is malfunctioning critically as it will have all of it's components gated with the feature flag.
+
+**Disabling a feature flag will do NOTHING to inform the user of the issue or explain the sudden loss of functionality. After disabling you should strongly consider availability framework as a way to announce the issue and next steps for users.**
+
+To disable a feature via remote config feature flag:
+* Go to the [firebase console](https://console.firebase.google.com/u/2/project/va-mobile-app/config/env/firebase?hl=en_US)
+* Find the relevant feature flag to disable and hit the edit pencil button. (Picture 1)
+* Flip the value to false and hit save. (Picture 2)
+* Press the publish changes button. (Picture 3)
+![FeatureFlagEditButton](../../../static/img/incidentResponse/featureFlagEditButton.png)
+![FeatureFlagEditScreen](../../../static/img/incidentResponse/featureFlagEditScreen.png)
+![FeatureFlagPublishChanges](../../../static/img/incidentResponse/featureFlagPublishChanges.png)
+
+
+### Availability Framework
+
+Availability framework is just a *fancier* feature flag --- instead of a Boolean type, they are a JSON structure, and are tied directly to they waygateWrapper component which wraps every individual screen in the VA:HB Mobile App. There are three specific use cases for the level of interference we need to implement. You can read more about the [use cases here](../../../gettingStarted/AppFeatures/Availability%20Framework).
+
+**JSON DISCLAIMER**
+In order to get availability framework banners working in production, we need to put JSON into firebase. We've added some guardrails, but malformed JSON (ex: trailing commas) will cause crashes in the app. As a best practice, copy-paste from the known-to-work JSON below, and immediately double-check the functionality in the app, when setting this for a screen that's in production.
+
+| Use Case | JSON Sample - See Disclaimer Above | 
+|------- | ------- | 
+| Use Case 1 (deny access) |  \{"enabled": false, "errorMsgTitle": "The app isn't working right now", "errorMsgBody": "While we fix the problem, you can still get your VA health and benefits information on VA.gov.", "type": "DenyAccess"\}|
+|Use Case 2 (deny content), not yet fixed: |  \{"enabled": false, "errorMsgTitle": "We found a problem", "errorMsgBody": "We're sorry. We're fixing a problem we found [with/in this thing]. If you need help now with [the thing], call us.", "type": "DenyContent", "appUpdateButton": false\}  | 
+|Use Case 2 (deny content), with fix released: |  \{"enabled": false, "errorMsgTitle": "You need to update the app", "errorMsgBody": "We fixed a problem [with/in this thing]. But to use this tool again, you need to update the app. If you need help now with [the thing], call us.", "type": "DenyContent", "appUpdateButton": true\}  | 
+|Use Case 3 (allow content and function), not yet fixed: |  \{"enabled": false, "errorMsgTitle": "You may have trouble with [explain the thing]", "errorMsgBody": "We're fixing a problem [with/in this thing] that's affecting some Veterans. If you can't use [the thing] and need help now, call us.", "type": "AllowFunction", "appUpdateButton": false\}  | 
+|Use Case 3 (allow content and function), with fix released: | 	  \{"enabled": false, "errorMsgTitle": "You may need to update the app", "errorMsgBody": "We've fixed a problem some Veterans were having [with/in this thing]. If you're still having trouble using this tool, you may need to update the app. If you need help now with [the thing], call us.", "type": "AllowFunction", "appUpdateButton": true\}  |
+
+
+To implement an availability framework alert:
+* Go to the [firebase console](https://console.firebase.google.com/u/2/project/va-mobile-app/config/env/firebase?hl=en_US)
+* Most likely you'll need to create a new remote config parameter. (Picture 1)
+* The name of the parameter needs to be WG_NameOfScreen, and you'll want to confirm the screen name via the relevant stack.(Picture 2)
+* Consider isolating the framework to only the OS/Versions that are applicable to minimize exposure if possible.(Picture 3)
+* Use the above table as a default then update the content accordingly for the situation. (Picture 3)
+
+![featureFlagNewParameter](../../../static/img/incidentResponse/featureFlagNewParameter.png)
+![ScreenNameCodeSnippet](../../../static/img/incidentResponse/ScreenNameCodeSnippet.png)
+![featureFlagParameterCondition](../../../static/img/incidentResponse/featureFlagParameterCondition.png)
 
 ## Plays
-
-**Jump to plays**
 
 - [App Crash](#app-crash)
 - [General Identity](#general-identity)
