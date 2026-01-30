@@ -14,8 +14,6 @@ import { context, render, when } from 'testUtils'
 import { FeatureToggleType } from 'utils/remoteConfig'
 import { APP_FEATURES_WHATS_NEW_SKIPPED_VAL } from 'utils/whatsNew'
 
-import { displayedTextPhoneNumber } from '../utils/formattingUtils'
-
 jest.mock('api/authorizedServices/getAuthorizedServices')
 
 jest.mock('react-i18next', () => {
