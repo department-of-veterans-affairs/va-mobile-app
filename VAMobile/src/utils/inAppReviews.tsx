@@ -23,9 +23,9 @@ export const useReviewEvent = (screenView?: boolean, feedbackScreen?: string): (
   const inAppFeedback = useGiveFeedback()
 
   const reviewEvent = async () => {
-    if (!featureEnabled('inAppReview') && !featureEnabled('inAppFeedback')) return
+    if (!featureEnabled('inAppReview')) return
     //Checked for feedbackScreen triggers first.
-    if (featureEnabled('inAppFeedback') && feedbackScreen) {
+    if (feedbackScreen) {
       const feedbackKey = STORAGE_FEEDBACK_EVENT_KEY.concat(feedbackScreen)
       const feedbackCount = await AsyncStorage.getItem(STORAGE_FEEDBACK_EVENT_KEY.concat(feedbackScreen))
       const totalFeedback = feedbackCount ? parseInt(feedbackCount, 10) + 1 : 1
