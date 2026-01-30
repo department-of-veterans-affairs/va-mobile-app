@@ -840,6 +840,9 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
   )
   waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
   await element(by.id(testIdOfDesiredUser)).tap()
-  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
+  await scrollToIDThenTap(
+    CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
+    CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,
+  )
   await loginToDemoMode()
 }
