@@ -23,12 +23,12 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
-  const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
+  const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, sortedDispensedDate } = prescription
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(
     t,
-    refillDate,
+    sortedDispensedDate,
     t('prescription.details.fillDateNotAvailable'),
   )
 

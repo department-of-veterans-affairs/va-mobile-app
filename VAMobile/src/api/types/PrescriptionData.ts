@@ -97,6 +97,7 @@ export type PrescriptionAttributeDataBase = {
   prescriptionName: string
   instructions: string | null
   dispensedDate: string | null
+  sortedDispensedDate: string | null
   stationNumber: string
 }
 
