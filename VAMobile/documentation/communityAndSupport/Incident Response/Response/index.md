@@ -1,5 +1,5 @@
 ---
-title: Incident response
+title: Incident Response
 ---
 **If you are not a member of the Mobile Platform team and need to report a mobile incident:**  
 post a message in the va-mobile app channel, tagging @mobile-incident-response. 
