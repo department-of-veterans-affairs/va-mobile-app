@@ -71,7 +71,7 @@ context('DebtsScreen', () => {
   describe('Initializes correctly', () => {
     it('should show the debts and review details link', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/debts')
+        .calledWith('/v0/debts', {})
         .mockResolvedValue(debtsDataMock)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: t('debts.title') })).toBeTruthy())
@@ -85,10 +85,10 @@ context('DebtsScreen', () => {
 
     it('should show only one resolve debt button and action sheet when pressed', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/debts')
+        .calledWith('/v0/debts', {})
         .mockResolvedValue(debtsDataMock)
       initializeTestInstance()
-      const allButtons = await screen.findAllByRole('button', { name: t('debts.resolveDebt') })
+      const allButtons = await screen.findAllByRole('button', { name: t('debts.resolveOverpayment') })
       expect(allButtons).toHaveLength(1)
       const resolveDebtButton = allButtons[0]
       expect(resolveDebtButton).toBeTruthy()
@@ -98,7 +98,7 @@ context('DebtsScreen', () => {
 
     it('should navigate to DebtHelp when help button is pressed', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/debts')
+        .calledWith('/v0/debts', {})
         .mockResolvedValue(debtsDataMock)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: t('debts.title') })).toBeTruthy())
@@ -108,7 +108,7 @@ context('DebtsScreen', () => {
 
     it('should navigate to DebtDetails when review details is pressed', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/debts')
+        .calledWith('/v0/debts', {})
         .mockResolvedValue(debtsDataMock)
       initializeTestInstance()
       await waitFor(() => expect(screen.getAllByText(t('debts.reviewDetails'))[0]).toBeTruthy())
@@ -119,7 +119,7 @@ context('DebtsScreen', () => {
     describe('When there are no debts', () => {
       it('should display the no debts message and phone number', async () => {
         when(api.get as jest.Mock)
-          .calledWith('/v0/debts')
+          .calledWith('/v0/debts', {})
           .mockResolvedValue(emptyDebtsMock)
         initializeTestInstance()
         await waitFor(() => expect(screen.getByText(t('debts.empty.title'))).toBeTruthy())
@@ -131,7 +131,7 @@ context('DebtsScreen', () => {
     describe('When there is a service error', () => {
       it('should display the error alert and phone number', async () => {
         when(api.get as jest.Mock)
-          .calledWith('/v0/debts')
+          .calledWith('/v0/debts', {})
           .mockRejectedValue(new Error('Service error'))
         initializeTestInstance()
         await waitFor(() => expect(screen.getByText(t('debts.error.header'))).toBeTruthy())

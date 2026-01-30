@@ -81,7 +81,7 @@ context('DebtDetailsScreen', () => {
     const whyDebtLink = await screen.findByTestId('debtsHelpWhyLinkID')
     expect(whyDebtLink).toBeTruthy()
     fireEvent.press(whyDebtLink)
-    expect(mockNavigationSpy).toHaveBeenCalledWith('DebtHelp', { helpType: 'whyEducationDebt' })
+    expect(mockNavigationSpy).toHaveBeenCalledWith('DebtHelp', { helpType: 'whyEducationDebt', titleKey: t('help') })
   })
 
   it('renders the debt card header, current balance, original amound and due date', async () => {

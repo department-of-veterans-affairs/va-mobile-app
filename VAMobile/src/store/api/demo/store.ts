@@ -21,6 +21,7 @@ import { MedicalCopaysDemoReturnTypes, MedicalCopaysDemoStore, getMedicalCopays 
 import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
 import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
 import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
+import importKimberlyForOHMigrationData from 'store/api/demo/mocks/kimberlyForOHMigration'
 import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
@@ -50,6 +51,7 @@ import {
 import {
   TravelPayDemoReturnTypes,
   TravelPayDemoStore,
+  getTravelPayClaimDetails,
   getTravelPayClaims,
   submitAppointmentClaim,
 } from 'store/api/demo/travelPay'
@@ -168,6 +170,9 @@ export const initDemoStore = async (demoUser: string | null = 'kimberlyWashingto
     case 'dennisMadison':
       userData = importDennisMadisonData()
       break
+    case 'kimberlyForOHMigration':
+      userData = importKimberlyForOHMigrationData()
+      break
     case 'kimberlyWashington':
     default:
       userData = importKimberlyWashingtonData()
@@ -222,6 +227,16 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
 
   if (endpoint.startsWith('/v0/push/prefs/')) {
     return store['/v0/push/prefs'] as DemoApiReturns
+  }
+
+  // Handle dynamic travel pay claims details endpoint
+  if (endpoint.startsWith('/v0/travel-pay/claims/')) {
+    // Check if it's a specific claim ID that has its own endpoint
+    if (store[endpoint as keyof DemoStore]) {
+      return store[endpoint as keyof DemoStore] as DemoApiReturns
+    }
+    // Fall back to generic claim details
+    return getTravelPayClaimDetails(store)
   }
 
   switch (endpoint) {

@@ -31,6 +31,9 @@ export type BenefitsStackParamList = {
     letterType: LetterTypes
     screenID: ScreenIDTypes
     descriptionA11yLabel?: string
+    displayAlert?: boolean
+    coeStatus?: string
+    referenceNum?: string
   }
   Claims: undefined
   ClaimDetailsScreen: {
@@ -38,6 +41,7 @@ export type BenefitsStackParamList = {
     claimType: ClaimType
   }
   ClaimsHistoryScreen: undefined
+  TravelPayClaims: undefined
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: {

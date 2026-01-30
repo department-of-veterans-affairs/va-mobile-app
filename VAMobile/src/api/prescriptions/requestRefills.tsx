@@ -70,6 +70,7 @@ export const useRequestRefills = () => {
   const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
 
   const registerReviewEvent = useReviewEvent(false, 'refillRequest')
+  const API_VERSION = medicationsOracleHealthEnabled ? 'v1' : 'v0'
 
   const queryClient = useQueryClient()
   return useMutation({
@@ -80,7 +81,7 @@ export const useRequestRefills = () => {
     onSuccess(data, variables) {
       const prescriptionIds = variables.map((prescription) => prescription.id)
       logAnalyticsEvent(Events.vama_rx_refill_success(prescriptionIds))
-      queryClient.invalidateQueries({ queryKey: prescriptionKeys.prescriptions })
+      queryClient.invalidateQueries({ queryKey: [...prescriptionKeys.prescriptions, API_VERSION] })
       registerReviewEvent()
     },
     onError: (error, variables) => {

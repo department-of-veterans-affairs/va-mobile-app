@@ -95,11 +95,11 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('claims.title')}
       backLabelOnPress={navigation.goBack}
       title={t('appealDetails.title')}
       testID="appealsDetailsTestID"
-      backLabelTestID="appealsBackID">
+      backLabelTestID="appealsBackID"
+      screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID}>
       {loadingAppeal ? (
         <LoadingComponent text={t('appealDetails.loading')} />
       ) : appealError ? (

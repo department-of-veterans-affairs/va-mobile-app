@@ -12,6 +12,24 @@ import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
 
 const mockShowActionSheetWithOptions = jest.fn()
+
+jest.mock('api/queryClient', () => {
+  const original = jest.requireActual('@tanstack/react-query')
+
+  return {
+    useQuery: original.useQuery,
+  }
+})
+
+jest.mock('utils/hooks/offline', () => {
+  const original = jest.requireActual('utils/hooks/offline')
+
+  return {
+    ...original,
+    useOfflineEventQueue: () => jest.fn(),
+  }
+})
+
 jest.mock('@expo/react-native-action-sheet', () => {
   const original = jest.requireActual('@expo/react-native-action-sheet')
   return {
@@ -31,6 +49,11 @@ jest.mock('utils/analytics', () => {
     logNonFatalErrorToFirebase: mockLogNonFatalErrorToFirebase,
   }
 })
+
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: jest.fn(),
+}))
 
 let defaultAppointments: AppointmentsList = []
 

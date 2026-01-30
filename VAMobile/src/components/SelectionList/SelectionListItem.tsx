@@ -49,7 +49,11 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
 
   return (
     <Box {...boxProps}>
-      <Pressable onPress={setSelectedFn} accessibilityState={{ checked: isSelected }} accessibilityRole={'checkbox'}>
+      <Pressable
+        testID={'selectionListItemButtonId'}
+        onPress={setSelectedFn}
+        accessibilityState={{ checked: isSelected }}
+        accessibilityRole={'checkbox'}>
         <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems="center">
           <Box flex={1}>{content}</Box>
           {getIcon()}

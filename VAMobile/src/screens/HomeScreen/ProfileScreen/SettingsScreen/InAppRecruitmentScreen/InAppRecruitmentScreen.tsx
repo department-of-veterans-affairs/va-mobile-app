@@ -14,6 +14,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type InAppRecruitmentScreenProps = StackScreenProps<HomeStackParamList, 'InAppRecruitment'>
 
@@ -42,7 +43,7 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
     logAnalyticsEvent(Events.vama_givefb_open('launch'))
     navigateTo('Webview', {
       url: LINK_URL_IN_APP_RECRUITMENT,
-      displayTitle: t('webview.vagov'),
+      displayTitle: vaGovWebviewTitle(t),
       loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading'),
     })
     setIsWebviewOpen(true)

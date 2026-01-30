@@ -33,6 +33,7 @@ import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'ut
 import { useTheme } from 'utils/hooks'
 import { useRouteNavigation } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_ASK_VA_GOV } = getEnv()
 
@@ -247,7 +248,6 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       testID="BenefitSummaryServiceVerificationTestID"
@@ -323,7 +323,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
                 logAnalyticsEvent(Events.vama_webview(LINK_URL_ASK_VA_GOV))
                 navigateTo('Webview', {
                   url: LINK_URL_ASK_VA_GOV,
-                  displayTitle: t('webview.vagov'),
+                  displayTitle: vaGovWebviewTitle(t),
                   loadingMessage: t('loading.vaWebsite'),
                   useSSO: true,
                   backButtonTestID: 'webviewBack',

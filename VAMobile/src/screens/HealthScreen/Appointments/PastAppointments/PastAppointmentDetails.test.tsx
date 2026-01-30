@@ -24,7 +24,29 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
+jest.mock('api/queryClient', () => {
+  const original = jest.requireActual('@tanstack/react-query')
+
+  return {
+    useQuery: original.useQuery,
+  }
+})
+
+jest.mock('utils/hooks/offline', () => {
+  const original = jest.requireActual('utils/hooks/offline')
+
+  return {
+    ...original,
+    useOfflineEventQueue: () => jest.fn(),
+  }
+})
+
 jest.mock('utils/remoteConfig')
+
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: jest.fn(),
+}))
 
 const tests = [
   {

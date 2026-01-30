@@ -13,3 +13,15 @@ export const notificationsEnabled = async (): Promise<boolean> => {
     return await RNNotificationPrefs.notificationsOn()
   }
 }
+
+/**
+ * Trims the id that follows the main url path
+ * @param notificationUrl - url string of the format: vamobile://[path]/[id]
+ *
+ * ex. 'vamobile://messages/1234' into 'vamobile://messages/'
+ */
+export const trimNotificationUrl = (notificationUrl: string) => {
+  const urlPattern = /vamobile:\/\/([a-z]+)\/(.+)/g
+  const replacementTemplate = 'vamobile://$1/'
+  return notificationUrl.replace(urlPattern, replacementTemplate)
+}

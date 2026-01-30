@@ -7,6 +7,7 @@ import { TFunction } from 'i18next'
 
 import { Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import {
   AppointmentDetailsScreenType,
@@ -15,7 +16,9 @@ import {
   AppointmentDetailsTypeConstants,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { RouteNavigationFunction, useRouteNavigation, useTheme } from 'utils/hooks'
+import { RouteNavigationFunction, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const {
   WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
@@ -23,22 +26,30 @@ const {
   WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS,
 } = getEnv()
 
-const webViewLinkHelper = (
+const WebViewLinkHelper = (
   url: string,
   text: string,
   navigateTo: RouteNavigationFunction<ParamListBase>,
   t: TFunction,
   testID?: string,
 ) => {
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
+
   return (
     <LinkWithAnalytics
       type="custom"
       icon={{ name: 'Launch', fill: 'default' }}
       testID={testID}
       onPress={() => {
+        if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+          showOfflineSnackbar()
+          return
+        }
+
         navigateTo('Webview', {
           url,
-          displayTitle: t('webview.vagov'),
+          displayTitle: vaGovWebviewTitle(t),
           loadingMessage: t('loading.vaWebsite'),
         })
       }}
@@ -62,7 +73,7 @@ const getWebViewLink = (
     testID = 'claimExamLinkTestID'
   }
 
-  return webViewLinkHelper(url, text, navigateTo, t, testID)
+  return WebViewLinkHelper(url, text, navigateTo, t, testID)
 }
 
 // This function generates a webview link specifically for video appointments
@@ -81,7 +92,7 @@ const getVideoWebviewLink = (
     ].includes(type)
   ) {
     const text = t('appointmentsTab.medicationWording.howToSetUpDeviceLink')
-    return webViewLinkHelper(WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS, text, navigateTo, t, 'prepareForVideoVisitTestID')
+    return WebViewLinkHelper(WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS, text, navigateTo, t, 'prepareForVideoVisitTestID')
   }
 
   return null

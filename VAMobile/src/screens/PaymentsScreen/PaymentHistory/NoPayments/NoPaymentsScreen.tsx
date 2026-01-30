@@ -21,6 +21,7 @@ function NoPaymentsScreen() {
         descriptionA11yLabel={a11yLabelVA(t('payments.noPayments.body.1'))}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
+          accessible
           variant="MobileBody"
           paragraphSpacing={true}
           accessibilityLabel={a11yLabelVA(t('payments.missingOrNoPayments.body.1'))}
