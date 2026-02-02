@@ -11,6 +11,9 @@ projects: ['department-of-veterans-affairs/1616']
 <!-- Which feature is ready for design approval? -->
 As a VAHB Mobile App Experience Team Designer, I believe my feature [Feature Name], is ready for mobile app platform design approval.
 
+## Design Critique Attended?
+<!-- Include date of meeting or N/A -->
+
 ## Design description
 <!-- Please briefly describe the feature design. -->
 
