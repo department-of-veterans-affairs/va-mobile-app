@@ -22,8 +22,6 @@ export const FeatureConstants: {
  */
 export const getVersionSkipped = async (feature: number): Promise<string> => {
   switch (feature) {
-    case FeatureConstants.WHATSNEW:
-      return (await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)) || '0.0'
     case FeatureConstants.ENCOURAGEUPDATE:
       return (await AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)) || '0.0'
   }
@@ -35,9 +33,6 @@ export const getVersionSkipped = async (feature: number): Promise<string> => {
  */
 export const setVersionSkipped = async (feature: number, versionSkipped: string): Promise<void> => {
   switch (feature) {
-    case FeatureConstants.WHATSNEW:
-      await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL, versionSkipped)
-      break
     case FeatureConstants.ENCOURAGEUPDATE:
       await AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)
       break
@@ -49,13 +44,6 @@ export const setVersionSkipped = async (feature: number, versionSkipped: string)
  */
 export const overrideLocalVersion = async (feature: number, overrideVersion: string | undefined): Promise<void> => {
   switch (feature) {
-    case FeatureConstants.WHATSNEW:
-      if (overrideVersion) {
-        await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL, overrideVersion)
-      } else {
-        await AsyncStorage.removeItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
-      }
-      break
     case FeatureConstants.ENCOURAGEUPDATE:
       if (overrideVersion) {
         await AsyncStorage.setItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL, overrideVersion)
@@ -72,19 +60,14 @@ export const overrideLocalVersion = async (feature: number, overrideVersion: str
  * This is due to how the app store returns the version vs the google play store api
  */
 export const getLocalVersion = async (feature: number, demoMode: boolean): Promise<string> => {
-  const whatsNewOverride = await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
   const encourageUpdateOverride = await AsyncStorage.getItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)
   switch (feature) {
     case FeatureConstants.WHATSNEW:
-      if (demoMode && whatsNewOverride) {
-        return whatsNewOverride
-      } else {
-        const version = await getVersionName()
-        return version
-          .replace(/[^0-9.]/g, '')
-          .replace(/[.]$/, '')
-          .slice(0, -2)
-      }
+      const whatsNewVersion = await getVersionName()
+      return whatsNewVersion
+        .replace(/[^0-9.]/g, '')
+        .replace(/[.]$/, '')
+        .slice(0, -2)
     case FeatureConstants.ENCOURAGEUPDATE:
       if (demoMode && encourageUpdateOverride) {
         return encourageUpdateOverride
