@@ -95,8 +95,6 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: 26.2
-      - name: Download iOS 26
-        run: xcodebuild -downloadPlatform iOS -buildVersion 26
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
