@@ -5,24 +5,28 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { DebtRecord } from 'api/types/DebtData'
 import { Box } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type ResolveDebtButtonProps = {
   debt: DebtRecord
+  location?: 'DebtsScreen' | 'DebtDetailsScreen'
 }
 
-function ResolveDebtButton({ debt }: ResolveDebtButtonProps) {
+function ResolveDebtButton({ debt, location }: ResolveDebtButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheet = useShowActionSheet()
 
   function onButtonPress() {
+    location && logAnalyticsEvent(Events.vama_resolve_overpay_clk(location))
     const options = [
-      t('debts.resolveDebt.payDebt'),
-      t('debts.resolveDebt.requestHelp'),
-      t('debts.resolveDebt.disputeDebt'),
+      t('debts.resolveOverpayment.payDebt'),
+      t('debts.resolveOverpayment.requestHelp'),
+      t('debts.resolveOverpayment.disputeDebt'),
       t('cancel'),
     ]
     const routeNames = ['PayDebt', 'DebtRequestHelp', 'DisputeDebt']
@@ -30,8 +34,8 @@ function ResolveDebtButton({ debt }: ResolveDebtButtonProps) {
     showActionSheet(
       {
         options,
-        title: t('debts.resolveDebt'),
-        message: t('debts.resolveDebt.how'),
+        title: t('debts.resolveOverpayment'),
+        message: t('debts.resolveOverpayment.how'),
         cancelButtonIndex: 3,
       },
       (buttonIndex) => {
@@ -44,7 +48,7 @@ function ResolveDebtButton({ debt }: ResolveDebtButtonProps) {
 
   return (
     <Box my={theme.dimensions.buttonPadding}>
-      <Button label={t('debts.resolveDebt')} onPress={onButtonPress} />
+      <Button label={t('debts.resolveOverpayment')} onPress={onButtonPress} />
     </Box>
   )
 }

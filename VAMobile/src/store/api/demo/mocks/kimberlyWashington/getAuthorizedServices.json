@@ -23,9 +23,15 @@
           "scheduleAppointments": true,
           "secureMessaging": true,
           "secureMessagingOracleHealthEnabled": true,
-          "userProfileUpdate": true
+          "userProfileUpdate": true,
+          "benefitsPushNotification": true
         }
       }
+    },
+    "meta": {
+      "isUserAtPretransitionedOhFacility": true,
+      "isUserFacilityReadyForInfoAlert": false,
+      "migratingFacilitiesList": []
     }
   }
 }

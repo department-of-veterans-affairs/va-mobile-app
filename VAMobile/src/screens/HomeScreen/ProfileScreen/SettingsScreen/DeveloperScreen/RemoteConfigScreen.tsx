@@ -22,7 +22,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { logout } from 'store/slices/authSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
+import { FeatureToggleDescriptions, FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
 import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
 
 type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
@@ -47,7 +47,8 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
   function toggleList() {
     const toggleItems = Object.keys(toggles).map((key): SimpleListItemObj => {
       return {
-        text: `${key}`,
+        text: `${key} ${FeatureToggleDescriptions[key] || ''}`,
+        detoxTestID: key,
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
           on: toggles[key as FeatureToggleType],
@@ -74,6 +75,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
       const { enabled, type, errorMsgTitle, errorMsgBody, appUpdateButton, errorMsgBodyV2, errorPhoneNumber } = wg
       toggleItems.push(
         <AccordionCollapsible
+          key={index}
           header={
             <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
               <Button onPress={() => navigateTo('WaygateEdit', { waygateName: index, waygate: wg })} label={index} />
@@ -117,7 +119,6 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('debug.title')}
       backLabelOnPress={navigation.goBack}
       title={t('remoteConfig.title')}
       testID="remoteConfigTestID">

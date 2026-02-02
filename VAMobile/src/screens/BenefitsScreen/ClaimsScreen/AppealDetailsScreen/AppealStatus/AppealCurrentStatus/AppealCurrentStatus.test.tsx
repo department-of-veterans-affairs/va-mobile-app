@@ -46,7 +46,7 @@ context('AppealStatus', () => {
 
   it('should initialize', () => {
     expect(screen.getByRole('header', { name: t('appealDetails.currentStatus') })).toBeTruthy()
-    expect(screen.getByRole('header', { name: t('appealDetails.scheduledHearingTitle') })).toBeTruthy()
+    expect(screen.getByText(t('appealDetails.scheduledHearingTitle'))).toBeTruthy()
     expect(screen.getByText('Your  hearing is scheduled for  at .')).toBeTruthy()
   })
 
@@ -70,7 +70,7 @@ context('AppealStatus', () => {
 
     it('should display the pending_hearing_scheduling data', () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.pendingHearingSchedulingTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.pendingHearingSchedulingTitle'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.pendingHearingSchedulingDescription1', { hearingType: '' })),
       ).toBeTruthy()
@@ -79,7 +79,7 @@ context('AppealStatus', () => {
     describe('when the appealType is appeal', () => {
       it('should display the note text', () => {
         initializeTestInstance(status, 'vba', 'appeal', '', 'compensation')
-        expect(screen.getByRole('header', { name: t('appealDetails.pendingHearingSchedulingTitle') })).toBeTruthy()
+        expect(screen.getByText(t('appealDetails.pendingHearingSchedulingTitle'))).toBeTruthy()
         expect(
           screen.getByText(t('appealDetails.pendingHearingSchedulingDescription1', { hearingType: '' })),
         ).toBeTruthy()
@@ -106,7 +106,7 @@ context('AppealStatus', () => {
     describe('when the appealType is appeal', () => {
       it('should display the note text', () => {
         initializeTestInstance(status, 'vba', 'appeal', '', 'compensation')
-        expect(screen.getByRole('header', { name: t('appealDetails.onDocketTitle') })).toBeTruthy()
+        expect(screen.getByText(t('appealDetails.onDocketTitle'))).toBeTruthy()
         expect(screen.getByText(t('appealDetails.onDocketDescription1'))).toBeTruthy()
         expect(
           screen.getByText(t('appealDetails.hlrReceivedDescription2') + t('appealDetails.onDocketDescription2')),
@@ -119,7 +119,7 @@ context('AppealStatus', () => {
     it('should display the pending_certification_ssoc data', () => {
       status.type = 'pending_certification_ssoc'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.pendingCertSsocTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.pendingCertSsocTitle'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.pendingCertSsocDescription1', { aojDesc: t('appealDetails.vba'), date: '' })),
       ).toBeTruthy()
@@ -143,7 +143,7 @@ context('AppealStatus', () => {
     it('should display the pending_form9 data', () => {
       status.type = 'pending_form9'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.pendingForm9Title') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.pendingForm9Title'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.pendingForm9Description1', { aojDesc: t('appealDetails.vba'), date: '' })),
       ).toBeTruthy()
@@ -160,7 +160,7 @@ context('AppealStatus', () => {
 
     it('should display the pending_soc data', () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.pendingSocTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.pendingSocTitle'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.pendingSocDescription', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
@@ -169,7 +169,7 @@ context('AppealStatus', () => {
     describe('when aoj is other', () => {
       it('should display the aoj description as Agency of Original Jurisdiction', () => {
         initializeTestInstance(status, 'other', 'higherLevelReview', '', 'compensation')
-        expect(screen.getByRole('header', { name: t('appealDetails.pendingSocTitle') })).toBeTruthy()
+        expect(screen.getByText(t('appealDetails.pendingSocTitle'))).toBeTruthy()
         expect(
           screen.getByText(
             t('appealDetails.pendingSocDescription', { aojDesc: t('appealDetails.agencyJurisdiction') }),
@@ -183,7 +183,7 @@ context('AppealStatus', () => {
     it('should display the stayed data', () => {
       status.type = 'stayed'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.stayedTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.stayedTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.stayedDescription'))).toBeTruthy()
     })
   })
@@ -192,7 +192,7 @@ context('AppealStatus', () => {
     it('should display the at_vso data', () => {
       status.type = 'at_vso'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.atVsoTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.atVsoTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.atVsoDescription', { vsoName: '' }))).toBeTruthy()
     })
   })
@@ -201,7 +201,7 @@ context('AppealStatus', () => {
     it('should display the bva_development data', () => {
       status.type = 'bva_development'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.bvaDevTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.bvaDevTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.bvaDevDescription'))).toBeTruthy()
     })
   })
@@ -213,14 +213,14 @@ context('AppealStatus', () => {
 
     it('should display the decision_in_progress data', () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.decisionInProgressTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.decisionInProgressTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.decisionInProgressDescription1'))).toBeTruthy()
     })
 
     describe('when the appeal type is legacyAppeal', () => {
       it('should display the if you submit evidence text', () => {
         initializeTestInstance(status, 'vba', 'legacyAppeal', '', 'compensation')
-        expect(screen.getByRole('header', { name: t('appealDetails.decisionInProgressTitle') })).toBeTruthy()
+        expect(screen.getByText(t('appealDetails.decisionInProgressTitle'))).toBeTruthy()
         expect(screen.getByText(t('appealDetails.decisionInProgressDescription1'))).toBeTruthy()
         expect(screen.getByText(t('appealDetails.decisionInProgressDescription2'))).toBeTruthy()
       })
@@ -231,7 +231,7 @@ context('AppealStatus', () => {
     it('should display the remand data', () => {
       status.type = 'remand'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.bvaDecisionAndRemandTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.bvaDecisionAndRemandTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.bvaDecisionAndRemandDescription'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.pleaseSeeYourDecision'))).toBeTruthy()
     })
@@ -241,7 +241,7 @@ context('AppealStatus', () => {
     it('should display the bva_decision data', () => {
       status.type = 'bva_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.bvaDecisionAndRemandTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.bvaDecisionAndRemandTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.bvaDecisionAndRemandDescription'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.pleaseSeeYourDecision'))).toBeTruthy()
     })
@@ -252,9 +252,7 @@ context('AppealStatus', () => {
       status.type = 'field_grant'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
       expect(
-        screen.getByRole('header', {
-          name: t('appealDetails.fieldGrantStatusTitle', { aojDesc: t('appealDetails.vba') }),
-        }),
+        screen.getByText(t('appealDetails.fieldGrantStatusTitle', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.fieldGrantStatusDescription', { aojDesc: t('appealDetails.vba') })),
@@ -266,7 +264,7 @@ context('AppealStatus', () => {
     it('should display the withdrawn data', () => {
       status.type = 'withdrawn'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.withdrawn') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.withdrawn'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.withdrawnDescription'))).toBeTruthy()
     })
   })
@@ -275,7 +273,7 @@ context('AppealStatus', () => {
     it('should display the ftr data', () => {
       status.type = 'ftr'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.ftrTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.ftrTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.ftrDescription'))).toBeTruthy()
     })
   })
@@ -284,7 +282,7 @@ context('AppealStatus', () => {
     it('should display the ramp data', () => {
       status.type = 'ramp'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.rampStatusTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.rampStatusTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.rampStatusDescription'))).toBeTruthy()
     })
   })
@@ -293,7 +291,7 @@ context('AppealStatus', () => {
     it('should display the death data', () => {
       status.type = 'death'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.death') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.death'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.deathDescription', { name: '' }))).toBeTruthy()
     })
   })
@@ -302,7 +300,7 @@ context('AppealStatus', () => {
     it('should display the reconsideration data', () => {
       status.type = 'reconsideration'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.reconsideration') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.reconsideration'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.reconsiderationDescription'))).toBeTruthy()
     })
   })
@@ -311,7 +309,7 @@ context('AppealStatus', () => {
     it('should display the other_close data', () => {
       status.type = 'other_close'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.ftrTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.ftrTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.otherCloseDescription'))).toBeTruthy()
     })
   })
@@ -320,7 +318,7 @@ context('AppealStatus', () => {
     it('should display the remand_ssoc data', () => {
       status.type = 'remand_ssoc'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.remandSsocTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.remandSsocTitle'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.remandSsocDescription', { aojDesc: t('appealDetails.vba'), date: '' })),
       ).toBeTruthy()
@@ -334,7 +332,7 @@ context('AppealStatus', () => {
     })
 
     it('should display the merged data', () => {
-      expect(screen.getByRole('header', { name: t('appealDetails.mergedTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.mergedTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.mergedDescription1'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.mergedDescription2'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.mergedDescription3'))).toBeTruthy()
@@ -353,7 +351,7 @@ context('AppealStatus', () => {
     it('should display the statutory_opt_in data', () => {
       status.type = 'statutory_opt_in'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.statutoryOptIn') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptIn'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.statutoryOptInDescription1'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.statutoryOptInDescription2'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.statutoryOptInDescription3'))).toBeTruthy()
@@ -368,7 +366,7 @@ context('AppealStatus', () => {
     it('should display the evidentiary_period data', () => {
       status.type = 'evidentiary_period'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.evidentiaryPeriodTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.evidentiaryPeriodTitle'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.evidentiaryPeriodDescription1', { docketName: 'Direct Review' })),
       ).toBeTruthy()
@@ -384,9 +382,7 @@ context('AppealStatus', () => {
       status.type = 'post_bva_dta_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
       expect(
-        screen.getByRole('header', {
-          name: t('appealDetails.postBvaDtaDecisionTitle', { aojDesc: t('appealDetails.vba') }),
-        }),
+        screen.getByText(t('appealDetails.postBvaDtaDecisionTitle', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
       expect(
         screen.getByText(
@@ -409,9 +405,7 @@ context('AppealStatus', () => {
       status.type = 'bva_decision_effectuation'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
       expect(
-        screen.getByRole('header', {
-          name: t('appealDetails.bvaDecisionEffectuationTitle', { aojDesc: t('appealDetails.vba') }),
-        }),
+        screen.getByText(t('appealDetails.bvaDecisionEffectuationTitle', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
       expect(
         screen.getByText(
@@ -451,7 +445,7 @@ context('AppealStatus', () => {
     it('should display the sc_received data', () => {
       status.type = 'sc_received'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'education')
-      expect(screen.getByRole('header', { name: t('appealDetails.scReceivedTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.scReceivedTitle'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.scReceivedDescription1', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
@@ -464,9 +458,7 @@ context('AppealStatus', () => {
     it('should display the sc_decision data', () => {
       status.type = 'sc_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(
-        screen.getByRole('header', { name: t('appealDetails.scDecisionTitle', { aojDesc: t('appealDetails.vba') }) }),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.scDecisionTitle', { aojDesc: t('appealDetails.vba') }))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.scDecisionDescription', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
@@ -478,7 +470,7 @@ context('AppealStatus', () => {
     it('should display the sc_closed data', () => {
       status.type = 'sc_closed'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.scClosedTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.scClosedTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.scClosedDescription'))).toBeTruthy()
     })
   })
@@ -487,7 +479,7 @@ context('AppealStatus', () => {
     it('should display the hlr_received data', () => {
       status.type = 'hlr_received'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.hlrReceivedTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.hlrReceivedTitle'))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.hlrReceivedDescription1', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
@@ -500,9 +492,7 @@ context('AppealStatus', () => {
     it('should display the hlr_decision data', () => {
       status.type = 'hlr_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(
-        screen.getByRole('header', { name: t('appealDetails.hlrDecisionTitle', { aojDesc: t('appealDetails.vba') }) }),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.hlrDecisionTitle', { aojDesc: t('appealDetails.vba') }))).toBeTruthy()
       expect(
         screen.getByText(t('appealDetails.hlrDecisionDescription', { aojDesc: t('appealDetails.vba') })),
       ).toBeTruthy()
@@ -514,9 +504,7 @@ context('AppealStatus', () => {
     it('should display the hlr_dta_error data', () => {
       status.type = 'hlr_dta_error'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(
-        screen.getByRole('header', { name: t('appealDetails.hlrDtaErrorTitle', { aojDesc: t('appealDetails.vba') }) }),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.hlrDtaErrorTitle', { aojDesc: t('appealDetails.vba') }))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.hlrDtaErrorDescription'))).toBeTruthy()
     })
   })
@@ -525,7 +513,7 @@ context('AppealStatus', () => {
     it('should display the hlr_closed data', () => {
       status.type = 'hlr_closed'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.hlrClosedTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.hlrClosedTitle'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.hlrClosedDescription'))).toBeTruthy()
     })
   })
@@ -534,7 +522,7 @@ context('AppealStatus', () => {
     it('should display the remand_return data', () => {
       status.type = 'remand_return'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.remandReturn') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.remandReturn'))).toBeTruthy()
       expect(screen.getByText(t('appealDetails.remandDescription'))).toBeTruthy()
     })
   })

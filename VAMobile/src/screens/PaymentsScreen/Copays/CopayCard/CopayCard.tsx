@@ -7,7 +7,7 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { MedicalCopayRecord } from 'api/types/MedicalCopayData'
 import { Box, MultiTouchCard, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
+import ResolveCopayButton from 'screens/PaymentsScreen/Copays/ResolveCopay/ResolveCopayButton'
 import { DUE_DATE_DAYS, calcDueDate, formatDate, getMedicalCenterNameByID, verifyCurrentBalance } from 'utils/copays'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -94,7 +94,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
         />
       </TextView>
       {/* Summary with icon */}
-      <Box flexDirection="row" alignItems="center">
+      <Box flexDirection="row">
         <Icon name="Warning" fill={theme.colors.icon.warning} />
         <Box ml={theme.dimensions.condensedMarginBetween} flexShrink={1}>
           <TextView variant="HelperText">{renderSummary()}</TextView>
@@ -108,7 +108,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
           justifyContent={'space-between'}
           alignItems={'center'}
           minHeight={theme.dimensions.touchableMinHeight}
-          pt={5}>
+          py={theme.dimensions.buttonPadding}>
           <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
             {t('copays.reviewDetails')}
           </TextView>
@@ -120,8 +120,8 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
           />
         </Box>
       </Pressable>
-      {/* Resolve bill button */}
-      <ResolveBillButton copay={copay} />
+      {/* Resolve copay button */}
+      <ResolveCopayButton copay={copay} />
     </>
   )
 

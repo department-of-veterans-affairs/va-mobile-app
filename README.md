@@ -13,5 +13,3 @@ This repository hosts the source code for the VA: Health and Benefits mobile app
 ## Background
 
 See the [team folder](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app) for all the background, discovery, planning, and decisions that preceded application development.
-
-[View the mobile team organizational chart](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams#va-health-and-benefits-mobile-app-core-team)

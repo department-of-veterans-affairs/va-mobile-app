@@ -1,0 +1,99 @@
+name: '[Admin] Notify Slack of DevOps issues'
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  set_project_status:
+    name: Set project status to Ready to work
+    if: contains(github.event.issue.labels.*.name, 'devops')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+      - name: Get project data
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          ORGANIZATION: department-of-veterans-affairs
+          PROJECT_NUMBER: 1616
+        run: |
+          gh api graphql -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectV2(number: $number) {
+                  id
+                  fields(first:20) {
+                    nodes {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+
+          echo 'PROJECT_ID='$(jq -r '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
+          echo 'STATUS_FIELD_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'READY_TO_WORK_OPTION_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Ready to Work") | .id' project_data.json) >> $GITHUB_ENV
+      - name: Add issue to project
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          ISSUE_ID: ${{ github.event.issue.node_id }}
+        run: |
+          item_id="$(gh api graphql -f query='
+            mutation($project:ID!, $issue:ID!) {
+              addProjectV2ItemById(input: {projectId: $project, contentId: $issue}) {
+                item {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f issue=$ISSUE_ID --jq '.data.addProjectV2ItemById.item.id')"
+
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+
+      - name: Set status to Ready to work
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          gh api graphql -f query='
+            mutation($project:ID!, $item:ID!, $status_field:ID!, $status_value:String!) {
+              updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: {
+                  singleSelectOptionId: $status_value
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=$READY_TO_WORK_OPTION_ID
+
+  notify_slack:
+    name: Send Slack notification for DevOps issue
+    needs: set_project_status
+    if: contains(github.event.issue.labels.*.name, 'devops')
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-devops
+      message: '🔧 New DevOps issue: *${{ github.event.issue.title }}* | <${{ github.event.issue.html_url }}|View Issue>'

@@ -2,12 +2,16 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Box, LinkWithAnalytics, TextView } from 'components'
+import ContentUnavailableCard from 'components/ContentUnavailableCard'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
 
@@ -23,6 +27,18 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+
+  if (connectionStatus === CONNECTION_STATUS.DISCONNECTED || appointmentsInDowntime) {
+    const unavailableKey = appointmentsInDowntime ? 'contentUnavailable.maintenance' : 'contentUnavailable'
+    return (
+      <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+        <ContentUnavailableCard textId={unavailableKey} />
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -48,6 +64,11 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+                showOfflineSnackbar()
+                return
+              }
+
               logAnalyticsEvent(Events.vama_webview(LINK_URL_SCHEDULE_APPOINTMENTS))
               navigateTo('Webview', {
                 url: LINK_URL_SCHEDULE_APPOINTMENTS,

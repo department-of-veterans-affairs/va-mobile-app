@@ -21,20 +21,58 @@ jobs:
           echo "Current week number: $WEEK_NUM"
           # Map week number to reviewer and backup (weeks 40-52)
           case $WEEK_NUM in
-            40) REVIEWER="matthew-df"; BACKUP="dftony";;
-            41) REVIEWER="AdryienH"; BACKUP="matthew-df";;
-            42) REVIEWER="dumathane"; BACKUP="AdryienH";;
-            43) REVIEWER="jmarchi"; BACKUP="dumathane";;
-            44) REVIEWER="keli13"; BACKUP="jmarchi";;
-            45) REVIEWER="dftony"; BACKUP="keli13";;
-            46) REVIEWER="matthew-df"; BACKUP="dftony";;
-            47) REVIEWER="AdryienH"; BACKUP="matthew-df";;
-            48) REVIEWER="dumathane"; BACKUP="AdryienH";;
-            49) REVIEWER="jmarchi"; BACKUP="dumathane";;
-            50) REVIEWER="keli13"; BACKUP="jmarchi";;
-            51) REVIEWER="dftony"; BACKUP="keli13";;
-            52) REVIEWER="matthew-df"; BACKUP="dftony";;
-            *) REVIEWER="AdryienH"; BACKUP="matthew-df";;
+            02) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            03) REVIEWER="jmarchi"; BACKUP="narin";;
+            04) REVIEWER="narin"; BACKUP="matthew-df";;
+            05) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            06) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            07) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            08) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            09) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            10) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            11) REVIEWER="jmarchi"; BACKUP="narin";;
+            12) REVIEWER="jmarchi"; BACKUP="narin";;
+            13) REVIEWER="narin"; BACKUP="matthew-df";;
+            14) REVIEWER="narin"; BACKUP="matthew-df";;
+            15) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            16) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            17) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            18) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            19) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            20) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            21) REVIEWER="jmarchi"; BACKUP="narin";;
+            22) REVIEWER="jmarchi"; BACKUP="narin";;
+            23) REVIEWER="narin"; BACKUP="matthew-df";;
+            24) REVIEWER="narin"; BACKUP="matthew-df";;
+            25) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            26) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            27) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            28) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            29) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            30) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            31) REVIEWER="jmarchi"; BACKUP="narin";;
+            32) REVIEWER="jmarchi"; BACKUP="narin";;
+            33) REVIEWER="narin"; BACKUP="matthew-df";;
+            34) REVIEWER="narin"; BACKUP="matthew-df";;
+            35) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            36) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            37) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            38) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            39) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            40) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            41) REVIEWER="jmarchi"; BACKUP="narin";;
+            42) REVIEWER="jmarchi"; BACKUP="narin";;
+            43) REVIEWER="narin"; BACKUP="matthew-df";;
+            44) REVIEWER="narin"; BACKUP="matthew-df";;
+            45) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            46) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            47) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            48) REVIEWER="AdryienH"; BACKUP="dumathane";;
+            49) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            50) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            51) REVIEWER="jmarchi"; BACKUP="narin";;
+            52) REVIEWER="jmarchi"; BACKUP="narin";;
+            *) REVIEWER="jmarchi"; BACKUP="narin";;
           esac
           declare -A GITHUB_TO_SLACK=(
             ["AdryienH"]="U08N85KC05Q"
@@ -43,6 +81,7 @@ jobs:
             ["keli13"]="U01ATFT0XBP"
             ["dftony"]="U08HW41SBUG"
             ["matthew-df"]="U08UWE4S3GW"
+            ["narin"]="U0A7E2P2FC7"
           )
           SLACK_MENTION="<@${GITHUB_TO_SLACK[$REVIEWER]}>"
           BACKUP_SLACK_MENTION="<@${GITHUB_TO_SLACK[$BACKUP]}>"

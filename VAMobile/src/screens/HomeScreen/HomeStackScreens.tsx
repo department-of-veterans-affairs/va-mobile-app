@@ -51,6 +51,7 @@ export type HomeStackParamList = WebviewStackParams & {
   WhatToKnow: undefined
   DemoModeUsers: undefined
   RemoteConfigTestScreen: undefined
+  MaintenanceWindows: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()

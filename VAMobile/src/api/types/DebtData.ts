@@ -4,6 +4,27 @@ export type DebtHistory = {
   description: string
 }
 
+export type DebtTransaction = {
+  debtId: number
+  transactionDate: string
+  transactionTotalAmount?: number
+  transactionPrincipalAmount?: number
+  debtIncreaseAmount?: number
+  offsetAmount?: number
+  transactionDescription?: string
+  transactionExplanation?: string
+  hinesCode?: string
+  offsetType?: string
+  paymentType?: string
+  transactionAdminAmount?: number
+  transactionCourtAmount?: number
+  transactionFiscalCode?: string
+  transactionFiscalSource?: string
+  transactionFiscalYear?: string
+  transactionInterestAmount?: number
+  transactionMarshallAmount?: number
+}
+
 export type DebtRecord = {
   id: string
   type: string
@@ -22,10 +43,12 @@ export type DebtRecord = {
     currentAr: number
 
     debtHistory?: DebtHistory[]
+    fiscalTransactionData?: DebtTransaction[]
   }
 }
 
 export type DebtsPayload = {
-  data: DebtRecord[]
-  status: number
+  data?: DebtRecord[] // Present when countOnly=false is passed to /v0/debts
+  debtsCount?: number // Present when countOnly=true is passed to /v0/debts
+  status?: number
 }

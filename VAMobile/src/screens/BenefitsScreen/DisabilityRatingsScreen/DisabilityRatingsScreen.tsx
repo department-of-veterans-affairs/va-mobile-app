@@ -215,10 +215,10 @@ function DisabilityRatingsScreen() {
 
   return (
     <ChildTemplate
-      backLabel={t('benefits.title')}
       backLabelOnPress={navigation.goBack}
       title={t('disabilityRatingDetails.title')}
-      testID="disabilityRatingTestID">
+      testID="disabilityRatingTestID"
+      screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID}>
       {loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
       ) : useDisabilityRatingError || !drNotInDowntime ? (

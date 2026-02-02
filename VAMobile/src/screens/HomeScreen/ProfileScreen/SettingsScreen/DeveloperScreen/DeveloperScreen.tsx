@@ -6,12 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
+import queryClient from 'api/queryClient'
 import {
   Box,
   ButtonDecoratorType,
@@ -25,7 +25,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { AnalyticsState } from 'store/slices'
+import { AnalyticsState, OfflineState, setOfflineDebugEnabled } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
@@ -49,7 +49,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
   const tokenInfo =
     (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
@@ -59,9 +58,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const resetAsyncStorageAlert = useAlert()
   const inAppFeedback = useGiveFeedback()
   const [localVersionName, setVersionName] = useState<string>()
-  const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
-  const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const [reviewCount, setReviewCount] = useState<string>()
   const componentMounted = useRef(true)
@@ -73,25 +70,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     }
   }
 
-  async function checkWhatsNewLocalVersion() {
-    const version = await getLocalVersion(FeatureConstants.WHATSNEW, true)
-    if (componentMounted.current) {
-      setWhatsNewVersion(version)
-    }
-  }
-
   useEffect(() => {
     async function checkSkippedVersion() {
       const version = await getVersionSkipped(FeatureConstants.ENCOURAGEUPDATE)
       if (componentMounted.current) {
         setSkippedVersionHomeScreen(version)
-      }
-    }
-
-    async function checkWhatsNewSkippedVersion() {
-      const version = await getVersionSkipped(FeatureConstants.WHATSNEW)
-      if (componentMounted.current) {
-        setWhatsNewSkippedVersionHomeScreen(version)
       }
     }
 
@@ -104,9 +87,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
     checkStoreVersion()
     checkSkippedVersion()
-    checkWhatsNewSkippedVersion()
     checkEncourageUpdateLocalVersion()
-    checkWhatsNewLocalVersion()
     return () => {
       componentMounted.current = false
     }
@@ -135,6 +116,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   // push data
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { offlineDebugEnabled } = useSelector<RootState, OfflineState>((state) => state.offline)
   const [hideWarnings, setHideWarnings] = useState<boolean>(true)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   const [deviceToken, setDeviceToken] = useState<string>('')
@@ -183,6 +165,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           },
         },
       ],
+    })
+  }
+
+  const onResetOfflineStorage = async (): Promise<void> => {
+    await queryClient.resetQueries({
+      predicate: (query) => {
+        return `${query.queryKey}` !== `${authorizedServicesKeys.authorizedServices}`
+      },
     })
   }
 
@@ -236,6 +226,18 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       },
     },
   ]
+  const offlineModeList: Array<SimpleListItemObj> = [
+    {
+      text: 'Offline Debug',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: offlineDebugEnabled,
+      },
+      onPress: async () => {
+        dispatch(setOfflineDebugEnabled(!offlineDebugEnabled))
+      },
+    },
+  ]
 
   const onFeedback = () => {
     inAppFeedback('Developer')
@@ -243,7 +245,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">
@@ -262,6 +263,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box>
         <TextArea>
           <Button onPress={onResetAsyncStorage} label={'Reset async storage'} />
+        </TextArea>
+      </Box>
+      <Box>
+        <TextArea>
+          <Button onPress={onResetOfflineStorage} label={'Reset offline storage'} />
         </TextArea>
       </Box>
       <Box>
@@ -295,6 +301,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           Console Warnings
         </TextView>
         {<SimpleList items={consoleWarningsList} />}
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Offline Mode
+        </TextView>
+        <SimpleList items={offlineModeList} />
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
@@ -304,6 +318,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
           <Button onPress={onRemoteConfigTest} label={'Remote Config Test'} />
+        </TextArea>
+      </Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <Button onPress={() => navigateTo('MaintenanceWindows')} label={'Override Maintenance Windows'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -324,27 +343,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           </Box>
         )
       })}
-      <Box mt={theme.dimensions.condensedMarginBetween}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            Authorized Services
-          </TextView>
-        </TextArea>
-      </Box>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {userAuthorizedServices
-          ? Object.entries(userAuthorizedServices).map((key) => {
-              return (
-                <Box key={key[0]} mt={theme.dimensions.condensedMarginBetween}>
-                  <TextArea>
-                    <TextView variant="MobileBodyBold">{key}</TextView>
-                    <TextView selectable={true}>{key[1].toString()}</TextView>
-                  </TextArea>
-                </Box>
-              )
-            })
-          : undefined}
-      </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -372,14 +370,10 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           </TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
           <TextView testID="encourageUpdateVersionTestID">{localVersionName}</TextView>
-          <TextView variant="MobileBodyBold">What's New Local Version</TextView>
-          <TextView testID="whatsNewVersionTestID">{whatsNewLocalVersion}</TextView>
           <TextView variant="MobileBodyBold">Store Version</TextView>
           <TextView testID="storeVersionTestID">{storeVersion}</TextView>
           <TextView variant="MobileBodyBold">Encourage Update Skipped Version</TextView>
           <TextView testID="encourageUpdateSkippedTestID">{skippedVersion}</TextView>
-          <TextView variant="MobileBodyBold">Whats New Skipped Version</TextView>
-          <TextView testID="whatsNewSkippedTestID">{whatsNewSkippedVersion}</TextView>
           <TextView variant="MobileBodyBold">Override Encourage Update Local Version</TextView>
           <VATextInput
             inputType={'none'}
@@ -394,31 +388,13 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
             }}
             testID="overrideEncourageUpdateTestID"
           />
-          <TextView variant="MobileBodyBold">Override What's New Local Version</TextView>
-          <VATextInput
-            inputType={'none'}
-            onChange={(val) => {
-              if (val.length >= 1) {
-                overrideLocalVersion(FeatureConstants.WHATSNEW, val)
-                setWhatsNewVersion(val)
-              } else {
-                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
-                checkWhatsNewLocalVersion()
-              }
-            }}
-            testID="overrideWhatsNewTestID"
-          />
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <Button
               onPress={() => {
                 setSkippedVersionHomeScreen('0.0')
-                setWhatsNewSkippedVersionHomeScreen('0.0')
                 setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, '0.0')
-                setVersionSkipped(FeatureConstants.WHATSNEW, '0.0')
-                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
                 overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
                 checkEncourageUpdateLocalVersion()
-                checkWhatsNewLocalVersion()
               }}
               label={'Reset Versions'}
             />

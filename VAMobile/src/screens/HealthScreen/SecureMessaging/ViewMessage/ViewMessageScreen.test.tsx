@@ -101,6 +101,9 @@ context('ViewMessageScreen', () => {
       },
     },
     included: [],
+    meta: {
+      userInTriageTeam: true,
+    },
   }
 
   const message: SecureMessagingMessageGetData = {
@@ -124,6 +127,9 @@ context('ViewMessageScreen', () => {
       },
     },
     included: [],
+    meta: {
+      userInTriageTeam: true,
+    },
   }
 
   const listOfFolders: SecureMessagingFoldersGetData = {
@@ -310,6 +316,170 @@ context('ViewMessageScreen', () => {
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
       await waitFor(() => expect(screen.queryByText('mock sender 45')).toBeFalsy())
       await waitFor(() => expect(screen.getByText('Reply')).toBeTruthy())
+    })
+  })
+
+  describe('when user is in triage team', () => {
+    it('should show "too old for replies" alert when message is older than 45 days', async () => {
+      const messageWithTriageTeam: SecureMessagingMessageGetData = {
+        data: {
+          id: 45,
+          type: '3',
+          attributes: {
+            messageId: 45,
+            category: CategoryTypeFields.other,
+            subject: 'Old message subject',
+            body: 'test',
+            hasAttachments: false,
+            attachment: false,
+            sentDate: '2013-06-06T04:00:00.000+00:00',
+            senderId: 2,
+            senderName: 'mock sender 45',
+            recipientId: 3,
+            recipientName: 'mock recipient name',
+            readReceipt: 'mock read receipt',
+            isOhMessage: false,
+          },
+        },
+        included: [],
+        meta: {
+          userInTriageTeam: true,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(oldThread)
+        .calledWith(`/v0/messaging/health/messages/${45}`)
+        .mockResolvedValue(messageWithTriageTeam)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('secureMessagingOlderThan45DaysAlertID')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByTestId('secureMessagingYouCanNoLongerAlertID')).toBeFalsy())
+    })
+
+    it('should not show any alert when message is not expired', async () => {
+      const recentMessageWithTriageTeam: SecureMessagingMessageGetData = {
+        ...message,
+        meta: {
+          userInTriageTeam: true,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(thread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(recentMessageWithTriageTeam)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByTestId('secureMessagingYouCanNoLongerAlertID')).toBeFalsy())
+    })
+  })
+
+  describe('when user is not in triage team', () => {
+    it('should show "you can no longer" alert with facility link', async () => {
+      const messageWithoutTriageTeam: SecureMessagingMessageGetData = {
+        ...message,
+        meta: {
+          userInTriageTeam: false,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(thread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(messageWithoutTriageTeam)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+    })
+
+    it('should show "you can no longer" alert even when message is expired (takes precedence over expired alert)', async () => {
+      const oldMessageWithoutTriageTeam: SecureMessagingMessageGetData = {
+        data: {
+          id: 45,
+          type: '3',
+          attributes: {
+            messageId: 45,
+            category: CategoryTypeFields.other,
+            subject: 'Old message subject',
+            body: 'test',
+            hasAttachments: false,
+            attachment: false,
+            sentDate: '2013-06-06T04:00:00.000+00:00',
+            senderId: 2,
+            senderName: 'mock sender 45',
+            recipientId: 3,
+            recipientName: 'mock recipient name',
+            readReceipt: 'mock read receipt',
+            isOhMessage: false,
+          },
+        },
+        included: [],
+        meta: {
+          userInTriageTeam: false,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(oldThread)
+        .calledWith(`/v0/messaging/health/messages/${45}`)
+        .mockResolvedValue(oldMessageWithoutTriageTeam)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
     })
   })
 })
