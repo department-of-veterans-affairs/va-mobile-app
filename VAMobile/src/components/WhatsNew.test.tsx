@@ -1,4 +1,5 @@
 import React from 'react'
+import { Linking } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -74,6 +75,13 @@ const featureConfigs: Record<string, WhatsNewConfigItem[]> = {
     {
       featureName: 'testFeatureWithAuthService',
       authorizedService: 'isUserAtPretransitionedOhFacility',
+    },
+  ],
+  featureWithLinkAndBullets: [
+    {
+      featureName: 'testFeatureWithLinksAndBullets',
+      bullets: 2,
+      hasLink: true,
     },
   ],
 }
@@ -179,6 +187,24 @@ context('WhatsNew', () => {
     initializeTestInstance('oneFeatureWithAuthorizedService')
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureWithAuthService')).toBeTruthy()
+    })
+  })
+
+  it('should render bullets', async () => {
+    initializeTestInstance('featureWithLinkAndBullets')
+    await waitFor(async () => {
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureWithLinksAndBullets.bullet.1')).toBeTruthy()
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureWithLinksAndBullets.bullet.2')).toBeTruthy()
+    })
+  })
+
+  it('should render a link', async () => {
+    initializeTestInstance('featureWithLinkAndBullets')
+    await waitFor(async () => {
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureWithLinksAndBullets.link.text')).toBeTruthy()
+
+      fireEvent.press(screen.getByRole('link', { name: 'whatsNew.bodyCopy.testFeatureWithLinksAndBullets.link.text' }))
+      expect(Linking.openURL).toBeCalledWith('whatsNew.bodyCopy.testFeatureWithLinksAndBullets.link.url')
     })
   })
 })
