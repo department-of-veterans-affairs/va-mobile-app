@@ -9,14 +9,14 @@ on:
 jobs:
   get_slack_id_user1:
     name: Get Slack ID for User1
-    uses: ./.github/workflows/get-slack-user-id.yml@chore.11148.update.onboarding.process
+    uses: ./.github/workflows/get-slack-user-id.yml
     secrets: inherit
     with:
       git_handle: dumathane
 
   get_slack_id_user2:
     name: Get Slack ID for User2
-    uses: ./.github/workflows/get-slack-user-id.yml@chore.11148.update.onboarding.process
+    uses: ./.github/workflows/get-slack-user-id.yml
     secrets: inherit
     with:
       git_handle: kellylein
