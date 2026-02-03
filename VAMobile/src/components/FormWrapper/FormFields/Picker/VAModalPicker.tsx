@@ -1,31 +1,21 @@
-import React, { FC, ReactElement, useCallback, useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import {
-  AccessibilityProps,
-  Modal,
-  Pressable,
-  PressableProps,
-  TouchableWithoutFeedback,
-  TouchableWithoutFeedbackProps,
-  View,
-} from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import React, { FC, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AccessibilityProps, Modal, Pressable, PressableProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
-import PickerList, { PickerListItemObj } from 'components/FormWrapper/FormFields/Picker/PickerList'
-import {
-  generateA11yValue,
-  generateInputA11yLabel,
-  getInputWrapperProps,
-  removeInputErrorMessage,
-  renderInputError,
-  renderInputLabelSection,
-} from 'components/FormWrapper/FormFields/formFieldUtils'
-import { a11yHintProp, a11yValueProp, setAccessibilityFocus } from 'utils/accessibility'
-import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+
+import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library';
+
+
+
+import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components';
+import PickerList, { PickerListItemObj } from 'components/FormWrapper/FormFields/Picker/PickerList';
+import { generateA11yValue, generateInputA11yLabel, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from 'components/FormWrapper/FormFields/formFieldUtils';
+import { a11yHintProp, a11yValueProp, setAccessibilityFocus } from 'utils/accessibility';
+import { getTranslation } from 'utils/formattingUtils';
+import { useShowScrollView, useTheme } from 'utils/hooks';
+
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -103,6 +93,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 }) => {
   const snackbar = useSnackbar()
   const [modalVisible, setModalVisible] = useState(false)
+  const showScrollView = useShowScrollView(modalVisible)
   const theme = useTheme()
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
@@ -303,9 +294,11 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                 <TextView {...commonButtonProps}>{confirmLabel}</TextView>
               </Pressable>
             </Box>
-            <VAScrollView bounces={false}>
-              <PickerList items={pickerListItems} />
-            </VAScrollView>
+            {showScrollView && (
+              <VAScrollView bounces={false}>
+                <PickerList items={pickerListItems} />
+              </VAScrollView>
+            )}
           </Box>
         </Box>
       </Modal>

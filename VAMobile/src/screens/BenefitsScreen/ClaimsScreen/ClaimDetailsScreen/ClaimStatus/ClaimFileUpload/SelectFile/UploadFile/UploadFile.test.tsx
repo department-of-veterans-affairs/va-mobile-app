@@ -1,7 +1,7 @@
 import React from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
@@ -73,9 +73,11 @@ context('UploadFile', () => {
   })
 
   describe('on click of the upload button', () => {
-    it('should display an error if the checkbox is not checked', () => {
+    it('should display an error if the checkbox is not checked', async () => {
       fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
-      fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
+      await waitFor(() => {
+        fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
+      })
       fireEvent.press(screen.getByRole('button', { name: t('done') }))
       fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') }))
       const checkbox = screen.getByRole('checkbox')
@@ -83,9 +85,11 @@ context('UploadFile', () => {
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
-    it('should bring up confirmation requirements are met', () => {
+    it('should bring up confirmation requirements are met', async () => {
       fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
-      fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
+      await waitFor(() => {
+        fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
+      })
       fireEvent.press(screen.getByRole('button', { name: t('done') }))
       fireEvent.press(screen.getByLabelText(t('fileUpload.evidenceOnly')))
       fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') }))
