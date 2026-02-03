@@ -59,4 +59,24 @@ published 4 months ago by testing-library-bot <testinglibraryoss@gmail.com>
 
 ### Guarddog Scan
 
-After the `npm info` check we run a python package called `guarddog`. `guarddog` is maintained my DataDog and it checks for malicions packages. [GitHub Link](https://github.com/DataDog/guarddog). To make this easy I have installed `uv` which is a pyton package and project manager. Instead of installing python packages, I leverage `uvx` which runs the package on-demand.
+After the `npm info` check we run a python package called `guarddog`. `guarddog` is maintained my DataDog and it checks for malicious packages. [GitHub Link](https://github.com/DataDog/guarddog). To make this easy I have installed `uv` which is a pyton package and project manager. Instead of installing python packages, I leverage `uvx` which runs the package on-demand. I have created an alias called `check` that will run the package scan and output the results.
+
+```bash
+check is an alias for uvx guarddog npm scan
+
+check @testing-library/jest-dom
+Installed 79 packages in 166ms
+
+Found 0 potentially malicious indicators scanning @testing-library/jest-dom
+
+```
+
+### Results
+
+Once you have the results, locate the job that is waiting for the approval. You can find this on the [Actions](https://github.com/department-of-veterans-affairs/va-mobile-app/actions) page of the repo.
+
+![MobileRepoActions](../../static/img/devops/mobActionsMain.png)
+
+Click on the `Status` option and type in `waiting`.
+
+![MobileRepoActions](../../static/img/devops/mobActionWaiting.png)
