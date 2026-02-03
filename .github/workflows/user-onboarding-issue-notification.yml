@@ -29,4 +29,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: '📱 New Onboarding request for <@${{ needs.get_slack_id_user1.outputs.slackId }}> <@${{ needs.get_slack_id_user2.outputs.slackId }}> : *${{ github.event.issue.title }}* | <${{ github.event.issue.html_url }}|View Issue>'
+      message: '📱 New Onboarding request for: *${{ github.event.issue.title }}* <@${{ needs.get_slack_id_user1.outputs.slackId }}> <@${{ needs.get_slack_id_user2.outputs.slackId }}> | <${{ github.event.issue.html_url }}|View Issue>'
