@@ -107,7 +107,7 @@ jobs:
       - name: Run iOS (iPhone) Emulator
         uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 16 Pro Max'
+          model: 'iPhone 17 Pro Max'
           shutdown_after_job: true
 
       - name: Run Detox iOS (iPhone) steps
@@ -178,7 +178,7 @@ jobs:
       - name: Run iPad Emulator
         uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPad Pro 11-inch (M4)'
+          model: 'iPad Pro 11-inch (M5)'
           shutdown_after_job: true
 
       - name: Run Detox iPad steps
