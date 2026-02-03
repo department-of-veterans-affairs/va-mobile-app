@@ -34,6 +34,8 @@ jobs:
     steps:
       - name: Determine and Validate Target Email
         id: determine_and_validate_email
+        env:
+          MAP_SOURCE_CONTENT: ${{ vars.EMAIL_MAP }}
         run: |
           GIT_HANDLE="${{ github.event.inputs.git_handle }}"
           EMAIL_INPUT="${{ github.event.inputs.va_email }}"
@@ -44,18 +46,9 @@ jobs:
             exit 1
           fi
 
-          MAP_SOURCE=""
-          # Use GitHub substitution to set a plain string environment variable instead
-          # We'll read MAP_SOURCE from the env at runtime to avoid embedding JSON into the shell conditional
-          if [[ -n "${{ vars.EMAIL_MAP }}" ]]; then
-            echo "Using vars.EMAIL_MAP from GitHub context."
-            echo "MAP_SOURCE_CONTENT='${{ vars.EMAIL_MAP }}'" >> $GITHUB_ENV
-          else
-            echo "Warning: vars.EMAIL_MAP is not populated. Git handle lookup will not work."
-          fi
-
           # Now read the value from the environment safely
           MAP_SOURCE="$MAP_SOURCE_CONTENT"
+
 
           # Attempt to get email from git_handle using the determined map source
           if [[ -n "$GIT_HANDLE" && -n "$MAP_SOURCE" ]]; then
