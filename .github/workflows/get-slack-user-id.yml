@@ -37,8 +37,8 @@ jobs:
         env:
           MAP_SOURCE_CONTENT: ${{ vars.EMAIL_MAP }}
         run: |
-          GIT_HANDLE="${{ github.event.inputs.git_handle }}"
-          EMAIL_INPUT="${{ github.event.inputs.va_email }}"
+          GIT_HANDLE="${{ inputs.git_handle }}"
+          EMAIL_INPUT="${{ inputs.va_email }}"
           TARGET_EMAIL=""
 
           if [[ -z "$GIT_HANDLE" && -z "$EMAIL_INPUT" ]]; then
