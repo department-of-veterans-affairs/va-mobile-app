@@ -1,10 +1,9 @@
 name: '[Admin] Notify Slack of new Onboarding requests'
 
 on:
-  push:
-  # issues:
-  #   types:
-  #     - opened
+  issues:
+    types:
+      - opened
 
 jobs:
   get_slack_id_user1:
@@ -23,10 +22,10 @@ jobs:
 
   notify_slack:
     name: Notify Both Slack Users
-    # if: contains(github.event.issue.labels.*.name, 'user-onboarding')
+    if: contains(github.event.issue.labels.*.name, 'user-onboarding')
     needs: [get_slack_id_user1, get_slack_id_user2]
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app
       message: '📱 New Onboarding request for: *${{ github.event.issue.title }}* <@${{ needs.get_slack_id_user1.outputs.slackId }}> <@${{ needs.get_slack_id_user2.outputs.slackId }}> | <${{ github.event.issue.html_url }}|View Issue>'
