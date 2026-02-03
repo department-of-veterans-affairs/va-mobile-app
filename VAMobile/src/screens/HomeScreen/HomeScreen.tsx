@@ -17,7 +17,7 @@ import { DateTime } from 'luxon'
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { useDebts } from 'api/debts'
+import { useDebtsCount } from 'api/debts'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useMedicalCopays } from 'api/medicalCopays'
@@ -72,7 +72,7 @@ import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logLoadTimeEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
@@ -138,10 +138,10 @@ export function HomeScreen({}: HomeScreenProps) {
   const personalInformationQuery = usePersonalInformation()
 
   const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
-  const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
+  const { data: debtsCount, isLoading: debtsLoading, error: debtsError } = useDebtsCount()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0
+  const showDebts = !debtsLoading && !debtsError && debtsCount !== undefined && debtsCount > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -151,25 +151,25 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
-      logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_appts_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [appointmentsQuery.data, appointmentsQuery.isFetched, loginTimestamp])
 
   useEffect(() => {
     if (foldersQuery.isFetched && foldersQuery.data) {
-      logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_sm_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (prescriptionsQuery.isFetched && prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable) {
-      logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_rx_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [prescriptionsQuery.isFetched, prescriptionsQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (claimsAndAppealsQuery.isFetched && claimsAndAppealsQuery.data?.meta.activeClaimsCount) {
-      logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_claims_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [claimsAndAppealsQuery.isFetched, claimsAndAppealsQuery.data, loginTimestamp])
 
@@ -180,7 +180,7 @@ export function HomeScreen({}: HomeScreenProps) {
       prescriptionsQuery.isFetched &&
       foldersQuery.isFetched
     ) {
-      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logLoadTimeEvent('vama_hs_load_time', DateTime.now().toMillis() - loginTimestamp)
     }
   }, [
     appointmentsQuery.isFetched,
@@ -466,7 +466,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
-                    count: debtsSummary.count,
+                    count: debtsCount,
                   })}
                   deepLink={'debts'}
                 />

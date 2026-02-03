@@ -114,7 +114,7 @@ export const defaults: FeatureToggleValues = {
   travelPayStatusList: true,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
-  show5103Flow: false,
+  show5103Flow: true,
   showCernerWarningAlert: true,
   showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,

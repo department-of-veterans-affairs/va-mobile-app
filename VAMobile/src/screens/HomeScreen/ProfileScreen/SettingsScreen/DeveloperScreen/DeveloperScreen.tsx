@@ -9,7 +9,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
 import queryClient from 'api/queryClient'
@@ -50,7 +49,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
   const tokenInfo =
     (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
@@ -265,7 +263,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">
@@ -364,27 +361,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           </Box>
         )
       })}
-      <Box mt={theme.dimensions.condensedMarginBetween}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            Authorized Services
-          </TextView>
-        </TextArea>
-      </Box>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {userAuthorizedServices
-          ? Object.entries(userAuthorizedServices).map((key) => {
-              return (
-                <Box key={key[0]} mt={theme.dimensions.condensedMarginBetween}>
-                  <TextArea>
-                    <TextView variant="MobileBodyBold">{key}</TextView>
-                    <TextView selectable={true}>{key[1].toString()}</TextView>
-                  </TextArea>
-                </Box>
-              )
-            })
-          : undefined}
-      </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

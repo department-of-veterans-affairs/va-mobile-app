@@ -1,4 +1,9 @@
-export type DemoUserIds = 'kimberlyWashington' | 'benjaminAdams' | 'claraJefferson' | 'dennisMadison'
+export type DemoUserIds =
+  | 'kimberlyWashington'
+  | 'kimberlyForOHMigration'
+  | 'benjaminAdams'
+  | 'claraJefferson'
+  | 'dennisMadison'
 type DemoUsersT = Record<
   DemoUserIds,
   {
@@ -11,6 +16,10 @@ const DemoUsers: DemoUsersT = {
   kimberlyWashington: {
     name: 'Kimberly Washington',
     notes: 'US Coast Guard. Default demo user. All OH authorized services enabled.',
+  },
+  kimberlyForOHMigration: {
+    name: 'Kimberly For OH Migration',
+    notes: 'US Coast Guard. Default demo user. All OH authorized services enabled. Used for OH migration testing.',
   },
   benjaminAdams: {
     name: 'Benjamin Adams',
