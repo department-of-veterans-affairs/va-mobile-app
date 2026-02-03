@@ -48,10 +48,10 @@ jobs:
 
           MAP_SOURCE=""
           if [[ -n "${{ vars.EMAIL_MAP }}" ]]; then
-            MAP_SOURCE="${{ vars.EMAIL_MAP }}"
+            MAP_SOURCE='${{ vars.EMAIL_MAP }}'
             echo "Using vars.EMAIL_MAP from GitHub context."
           elif [[ -n "${{ env.EMAIL_MAP_ACT }}" ]]; then
-            MAP_SOURCE="${{ env.EMAIL_MAP_ACT }}"
+            MAP_SOURCE='${{ env.EMAIL_MAP_ACT }}'
             echo "Using env.EMAIL_MAP_ACT from environment variable (for act)."
           else
             echo "Warning: Neither vars.EMAIL_MAP nor env.EMAIL_MAP_ACT is populated. Git handle lookup will not work."
