@@ -9,7 +9,6 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigationSpy = jest.fn()
 
@@ -292,7 +291,6 @@ const emptyMock: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
-  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = () => {
     render(<PrescriptionHistory {...mockNavProps()} />)
   }
@@ -347,9 +345,8 @@ context('PrescriptionHistory', () => {
     })
   })
 
-  describe('When nonVAMedsLink feature toggle is true and user has non-VA meds', () => {
+  describe('When user has non-VA meds', () => {
     it('should display the alert for non-VA medications', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -381,7 +378,6 @@ context('PrescriptionHistory', () => {
     })
 
     it('should open a webview that navigates to va.gov when link is clicked', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -410,7 +406,6 @@ context('PrescriptionHistory', () => {
     })
 
     it('should hide the alert when the dismiss button is clicked', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -436,9 +431,8 @@ context('PrescriptionHistory', () => {
     })
   })
 
-  describe('When nonVAMedsLink feature toggle is true and user does not have non-VA meds', () => {
+  describe('When user does not have non-VA meds', () => {
     it('should not display the alert for non-VA medications', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
