@@ -4,6 +4,7 @@ self-hosted-runner:
   labels:
     - ubuntu-16-cores-latest
     - ubuntu-4-cores-latest
+    - macos-26-xlarge
 
 paths:
   .github/workflows/**/*.{yml,yaml}:
