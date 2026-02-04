@@ -7,7 +7,15 @@ There may be some times that we need to scan packages that are being added to th
 
 ## package.json
 
+> **⚠️ IMPORTANT: ⚠️**
+
+> **You will need to be a member of the `bypass-package-lock` protection group to complete this next step.**
+
 Currently any changes that are made to any `package.json` files are reviewed before a merge is to happen. Upon approval, the rest of the scanning will complete. If the security-scan workflow detects a `package.json` change, it will pass the workflow to the bypass-packag-check environent check. When this happens, a team is alerted that a package needs to be reviewed.
+
+As of now, we look at the PR and check for `package.json` updates. Below you can see this is a script update that triggered the approval.
+
+![MobilePackageUpdate](../../static/img/devops/mobPackageUpdate.png)
 
 ### npm review
 
@@ -59,7 +67,7 @@ published 4 months ago by testing-library-bot <testinglibraryoss@gmail.com>
 
 ### Guarddog Scan
 
-After the `npm info` check we run a python package called `guarddog`. `guarddog` is maintained my DataDog and it checks for malicious packages. [GitHub Link](https://github.com/DataDog/guarddog). To make this easy I have installed `uv` which is a pyton package and project manager. Instead of installing python packages, I leverage `uvx` which runs the package on-demand. I have created an alias called `check` that will run the package scan and output the results.
+After the `npm info` check we run a python package called `guarddog`. `guarddog` is maintained my DataDog and it checks for malicious packages. [GitHub Link](https://github.com/DataDog/guarddog). To make this easy I have installed `uv` which is a pyton package and project manager. Instead of installing python packages, I leverage `uvx` which runs the package on-demand. I have created an alias called `check` that will run the package scan and output the results. Installation Documentation for `uv` can be found [here](https://docs.astral.sh/uv/getting-started/installation/)
 
 ```bash
 check is an alias for uvx guarddog npm scan
@@ -79,4 +87,20 @@ Once you have the results, locate the job that is waiting for the approval. You 
 
 Click on the `Status` option and type in `waiting`.
 
-![MobileRepoActions](../../static/img/devops/mobActionWaiting.png)
+![MobileActionsWaiting](../../static/img/devops/mobActionWaiting.png)
+
+Locate the run in question (In this case we will use screenshot update) and click on it.
+
+![MobileActionWaiting](../../static/img/devops/mobWaitingList.png)
+
+On the Review Deployments window you will see the job waiting. Click on `Review deployments`.
+
+![MobileReviewDeployment](../../static/img/devops/mobReviewDeployment.png)
+
+In the Review Deployent Modal, make sure you are in the group, check the `bypass-package-lock` box and enter the resoning for deployment. If it is approved, click `Approve and Deploy`. If it is denied, click `reject`
+
+![MobileDeployModal](../../static/img/devops/mobModalFinal.png)
+
+For documentation purposes, add a comment to the PR that shows the scan status also so it is documented.
+
+![MobileCommentStatus](../../static/img/devops/mobCommentStatus.png)
