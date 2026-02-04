@@ -23,16 +23,6 @@ export const pkceAuthorizeParams = async (): Promise<PKCEParameters> => {
 }
 
 /**
- * Generates state param for PKCE token exchange request
- * Omitting this for now as OAuth spec doesn't describe using the state parameter on token requests
- */
-// export const pkceTokenParams = async (): Promise<{ stateParam: string }> => {
-//   return {
-//     stateParam: urlEncode(await generateBase64(32) || '')
-//   }
-// }
-
-/**
  * Makes input (expected to be base64 encoded) into URL-safe version by replacing plus and slash
  * characters and removing padding.
  */

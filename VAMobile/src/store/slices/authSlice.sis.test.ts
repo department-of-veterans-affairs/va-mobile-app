@@ -18,7 +18,6 @@ import {
   setBiometricsPreference,
   setDisplayBiometricsPreferenceScreen,
   startBiometricsLogin,
-  startWebLogin,
 } from 'store/slices/authSlice'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import getEnv from 'utils/env'
@@ -124,26 +123,6 @@ context('authAction SIS', () => {
           },
         },
       })
-  })
-
-  describe('startWebLogin', () => {
-    it('should set authUrl to be launched', async () => {
-      const store = realStore()
-      expect(store.getState().auth.webLoginUrl).toBeFalsy()
-      await store.dispatch(startWebLogin())
-      expect(store.getState().auth.webLoginUrl).toBeTruthy()
-    })
-  })
-
-  describe('cancelWebLogin', () => {
-    it('should clear webLoginUrl', async () => {
-      const store = realStore()
-      expect(store.getState().auth.webLoginUrl).toBeFalsy()
-      await store.dispatch(startWebLogin())
-      expect(store.getState().auth.webLoginUrl).toBeTruthy()
-      await store.dispatch(cancelWebLogin())
-      expect(store.getState().auth.webLoginUrl).toBeFalsy()
-    })
   })
 
   describe('logout', () => {

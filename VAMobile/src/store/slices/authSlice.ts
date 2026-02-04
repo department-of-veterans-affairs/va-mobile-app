@@ -458,8 +458,6 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     }
     const authResponse = (await response.json())?.data as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
-    // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
-    // state is not uniformly supported on the token exchange request so may not be necessary
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
@@ -796,22 +794,6 @@ export const sendLoginStartAnalytics =
   async () => {
     await logAnalyticsEvent(Events.vama_login_start(true, biometric))
   }
-
-export const startWebLogin = (): AppThunk => async (dispatch) => {
-  await clearCookies()
-  // TODO: modify code challenge and state based on
-  // what will be used in LoginSuccess.js for the token exchange.
-  // The code challenge is a SHA256 hash of the code verifier string.
-  const params = new URLSearchParams({
-    code_challenge_method: 'S256',
-    code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
-    application: 'vamobile',
-    oauth: 'true',
-  }).toString()
-
-  const url = `${AUTH_SIS_ENDPOINT}?${params}`
-  dispatch(dispatchShowWebLogin(url))
-}
 
 export const logInDemoMode = (): AppThunk => async (dispatch) => {
   dispatch(dispatchDemoLogin())
