@@ -114,7 +114,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const vscCard = vscPayload?.type === 'veteran_status_card' ? vscPayload : undefined
   const vscAlert = vscPayload?.type === 'veteran_status_alert' ? vscPayload : undefined
 
-
   const isNewLoading = newEnabled && isVeteranStatusCardLoading
 
   const showNewError = newEnabled && !isNewLoading && (isVeteranStatusCardError || !!vscAlert || !vscCard)
@@ -220,9 +219,9 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           headerA11yLabel={a11yLabelVA(t('veteranStatus.error.notTitle38.title'))}
           description={t('veteranStatus.error.notTitle38.body1')}
           descriptionA11yLabel={a11yLabelVA(t('veteranStatus.error.notTitle38.body1'))}>
-          <TextView 
-            accessible 
-            accessibilityLabel={t('veteranStatus.error.notTitle38.body2')} 
+          <TextView
+            accessible
+            accessibilityLabel={t('veteranStatus.error.notTitle38.body2')}
             accessibilityHint={t('veteranStatus.error.notTitle38.body2')}>
             {t('veteranStatus.error.notTitle38.body2')}
           </TextView>

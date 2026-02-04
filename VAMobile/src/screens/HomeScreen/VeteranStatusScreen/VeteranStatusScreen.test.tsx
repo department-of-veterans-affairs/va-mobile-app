@@ -5,9 +5,9 @@ import { t } from 'i18next'
 
 import { disabilityRatingKeys } from 'api/disabilityRating'
 import { militaryServiceHistoryKeys } from 'api/militaryService'
-import { veteranStatusCardKeys } from 'api/veteranStatusCard'
 import { BranchesOfServiceConstants } from 'api/types'
 import { veteranStatusKeys } from 'api/veteranStatus'
+import { veteranStatusCardKeys } from 'api/veteranStatusCard'
 import VeteranStatusScreen from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusScreen'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -28,11 +28,11 @@ context('VeteranStatusScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-      // Default: legacy path (existing tests depend on this)
-      ; (featureEnabled as jest.Mock).mockImplementation((key: string) => {
-        if (key === 'veteranStatusCardUpdate') return false
-        return false
-      })
+    // Default: legacy path (existing tests depend on this)
+    ;(featureEnabled as jest.Mock).mockImplementation((key: string) => {
+      if (key === 'veteranStatusCardUpdate') return false
+      return false
+    })
   })
 
   // -----------------------------
@@ -338,7 +338,7 @@ context('VeteranStatusScreen', () => {
   // ---------------------------------------------------------
   describe('New VSC logic (veteranStatusCardUpdate feature flag ON)', () => {
     beforeEach(() => {
-      ; (featureEnabled as jest.Mock).mockImplementation((key: string) => {
+      ;(featureEnabled as jest.Mock).mockImplementation((key: string) => {
         if (key === 'veteranStatusCardUpdate') return true
         return false
       })
