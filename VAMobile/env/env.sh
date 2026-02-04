@@ -41,9 +41,7 @@ then
   echo "AUTH_SIS_REVOKE_URL=${LOCAL_BASE_URL}/v0/sign_in/revoke" >> .env
 
   # Get all staging vars
-  while read p; do
-    echo "$p" >> .env
-  done<staging.env
+  awk 1 staging.env >> .env
 elif [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
@@ -58,9 +56,7 @@ then
   echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 
   # Get all staging vars
-  while read p; do
-    echo "$p" >> .env
-  done<staging.env
+  awk 1 staging.env >> .env
 else
   echo "Setting up Production environment"
   API_PREFIX="api."
@@ -74,9 +70,7 @@ else
   echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 
   # Get all production vars
-  while read p; do
-    echo "$p" >> .env
-  done<prod.env
+  awk 1 prod.env >> .env
 fi
 
 if [[ $showDebug == 'true' ]]
@@ -105,6 +99,4 @@ fi
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 
 # Get all vars that are the same across environments
-while read p; do
-  echo "$p" >> .env
-done<constant.env
+awk 1 constant.env >> .env
