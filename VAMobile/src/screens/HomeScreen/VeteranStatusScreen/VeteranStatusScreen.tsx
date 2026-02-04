@@ -35,12 +35,16 @@ const LANDSCAPE_PADDING = 44
 const PORTRAIT_PADDING = 18
 const MAX_WIDTH = 672
 
+type VSCAlertBodyRow =
+  | { type: 'text'; value: string }
+  | { type: 'phone'; value: string; tty?: boolean }
+  | { type: 'link'; value: string; url: string }
+
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
 function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const isCardAllowedByWaygate = screenContentAllowed('WG_VeteranStatusCard')
 
-  // Feature flag = choose legacy vs new API logic.
   const isNewVSCCardAllowed = featureEnabled('veteranStatusCardUpdate')
 
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -49,19 +53,27 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const containerStyle = !isPortrait ? { alignSelf: 'center' as const, maxWidth: MAX_WIDTH } : {}
   const registerReviewEvent = useReviewEvent(true)
 
+  // Only enable ONE path to avoid unnecessary calls.
   const legacyEnabled = isCardAllowedByWaygate && !isNewVSCCardAllowed
+  const newEnabled = isCardAllowedByWaygate && isNewVSCCardAllowed
 
+  // -------------------------------
+  // Legacy logic leveraging serviceHistory, disabilityRating, personalInformation and vet verification status.
+  // Will be removed in the future.
+  // -------------------------------
   const { data: militaryServiceHistoryAttributes, isLoading: isServiceHistoryLoading } = useServiceHistory({
     enabled: legacyEnabled,
-  } as any)
+  })
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
+
   const { data: ratingData, isLoading: isDisabilityRatingLoading } = useDisabilityRating({
     enabled: legacyEnabled,
-  } as any)
+  })
+
   const { data: personalInfo, isLoading: isPersonalInfoLoading } = usePersonalInformation({
     enabled: legacyEnabled,
-  } as any)
+  })
 
   const {
     data: veteranStatus,
@@ -86,8 +98,9 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     : undefined
   const branchLegacy = mostRecentBranch || ('' as BranchOfService)
 
-  const newEnabled = isCardAllowedByWaygate && isNewVSCCardAllowed
-
+  // -------------------------------
+  // New (single endpoint logic)
+  // -------------------------------
   const {
     data: veteranStatusCardData,
     isError: isVeteranStatusCardError,
@@ -96,13 +109,15 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     enabled: newEnabled,
   })
 
-  const vscData = veteranStatusCardData?.data
-  const vscCard = vscData?.type === 'veteran_status_card' ? vscData : undefined // add constants for these
-  const vscAlert = vscData?.type === 'veteran_status_alert' ? vscData : undefined
+  const vscPayload = veteranStatusCardData
+
+  const vscCard = vscPayload?.type === 'veteran_status_card' ? vscPayload : undefined
+  const vscAlert = vscPayload?.type === 'veteran_status_alert' ? vscPayload : undefined
+
 
   const isNewLoading = newEnabled && isVeteranStatusCardLoading
 
-  const showNewError = newEnabled && !isNewLoading && (!!vscAlert || isVeteranStatusCardError || !vscCard)
+  const showNewError = newEnabled && !isNewLoading && (isVeteranStatusCardError || !!vscAlert || !vscCard)
 
   const ratingPercentNew = vscCard?.attributes?.disabilityRating ?? undefined
   const ratingIsDefinedNew = isValidDisabilityRating(ratingPercentNew)
@@ -111,38 +126,16 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     : undefined
   const branchNew = vscCard?.attributes?.latestService?.branch ?? ''
 
+  // -------------------------------
+  // Unified render decisions
+  // -------------------------------
   const isLoading = isNewVSCCardAllowed ? isNewLoading : isLegacyLoading
   const showError = isNewVSCCardAllowed ? showNewError : showLegacyError
   const shouldShowCard =
     isCardAllowedByWaygate && !showError && (isNewVSCCardAllowed ? !!vscCard : veteranStatusConfirmed)
-  const shouldShowFixAnErrorSection = shouldShowCard // AC: hide “Need to fix an error?” when user does not see VSC
 
-  //*
-  // test on user 127
-  // use constants
-  // Test the ff and log out put
-  // test analytics
-  // When ff is on make sure we don't make unnecessary calls to legacy endpoint
-  // Update tests and mock data
-  //*
-
-  useEffect(() => {
-    console.log({
-      isCardAllowedByWaygate,
-      isNewVSCCardAllowed,
-      newEnabled,
-      isVeteranStatusCardLoading,
-      isVeteranStatusCardError,
-      vscType: vscData?.type,
-    })
-  }, [
-    isCardAllowedByWaygate,
-    isNewVSCCardAllowed,
-    newEnabled,
-    isVeteranStatusCardLoading,
-    isVeteranStatusCardError,
-    vscData,
-  ])
+  // For hiding “Need to fix an error?” when user does not see VSC
+  const shouldShowFixAnErrorSection = shouldShowCard
 
   useBeforeNavBackListener(navigation, () => {
     registerReviewEvent()
@@ -159,7 +152,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     if (!showError) return
 
     if (isNewVSCCardAllowed) {
-      const reason = veteranStatusCardData?.data?.notConfirmedReason
+      const reason = vscPayload?.attributes.notConfirmedReason
       const message = reason ?? 'UNKNOWN'
       logAnalyticsEvent(Events.vama_vsc_error_shown(message))
       return
@@ -168,7 +161,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     const notConfirmedReasonLegacy = veteranStatus?.data?.attributes?.notConfirmedReason
     const message = notConfirmedReasonLegacy ?? 'MISSING_SERVICE_HISTORY'
     logAnalyticsEvent(Events.vama_vsc_error_shown(message))
-  }, [showError, isNewVSCCardAllowed, veteranStatusCardData, veteranStatus])
+  }, [showError, isNewVSCCardAllowed, vscPayload, veteranStatus])
 
   const getLatestPeriodOfServiceLegacy = (): React.ReactNode => {
     if (!serviceHistory || serviceHistory.length === 0) return null
@@ -195,7 +188,8 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             variant="MobileBody"
             color="primaryContrast"
             testID="veteranStatusMilitaryServiceTestID"
-            accessibilityLabel={a11yLabel}>
+            accessibilityLabel={a11yLabel}
+            accessibilityHint={a11yLabel}>
             {visibleText}
           </TextView>
         )
@@ -226,7 +220,10 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           headerA11yLabel={a11yLabelVA(t('veteranStatus.error.notTitle38.title'))}
           description={t('veteranStatus.error.notTitle38.body1')}
           descriptionA11yLabel={a11yLabelVA(t('veteranStatus.error.notTitle38.body1'))}>
-          <TextView accessible accessibilityLabel={t('veteranStatus.error.notTitle38.body2')}>
+          <TextView 
+            accessible 
+            accessibilityLabel={t('veteranStatus.error.notTitle38.body2')} 
+            accessibilityHint={t('veteranStatus.error.notTitle38.body2')}>
             {t('veteranStatus.error.notTitle38.body2')}
           </TextView>
           <ClickToCallPhoneNumber
@@ -279,15 +276,14 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         variant="MobileBody"
         color="primaryContrast"
         testID="veteranStatusMilitaryServiceTestID"
-        accessibilityLabel={a11yLabel}>
+        accessibilityLabel={a11yLabel}
+        accessibilityHint={a11yLabel}>
         {visibleText}
       </TextView>
     )
   }
 
   const getErrorNew = () => {
-    // If we don't have an alert payload (or the call silently returned nothing),
-    // show a safe generic error instead of rendering nothing.
     if (!vscAlert) {
       return (
         <AlertWithHaptics
@@ -305,7 +301,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
 
     return (
       <AlertWithHaptics variant={variant} header={header} headerA11yLabel={a11yLabelVA(header)}>
-        {body?.map((row, idx) => {
+        {body?.map((row: VSCAlertBodyRow, idx: number) => {
           if (row.type === 'text') {
             return (
               <TextView key={idx} variant="MobileBody">
@@ -325,7 +321,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             )
           }
 
-          // link (placeholder until you wire up navigation/openURL)
           return (
             <TextView key={idx} variant="MobileBody" color="link">
               {row.value}

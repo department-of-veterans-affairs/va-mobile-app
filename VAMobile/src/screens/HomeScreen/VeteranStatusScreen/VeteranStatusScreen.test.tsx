@@ -5,12 +5,39 @@ import { t } from 'i18next'
 
 import { disabilityRatingKeys } from 'api/disabilityRating'
 import { militaryServiceHistoryKeys } from 'api/militaryService'
+import { veteranStatusCardKeys } from 'api/veteranStatusCard'
 import { BranchesOfServiceConstants } from 'api/types'
 import { veteranStatusKeys } from 'api/veteranStatus'
 import VeteranStatusScreen from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusScreen'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig', () => ({
+  featureEnabled: jest.fn(() => false),
+}))
 
 context('VeteranStatusScreen', () => {
+  beforeAll(() => {
+    jest.useFakeTimers()
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+
+      // Default: legacy path (existing tests depend on this)
+      ; (featureEnabled as jest.Mock).mockImplementation((key: string) => {
+        if (key === 'veteranStatusCardUpdate') return false
+        return false
+      })
+  })
+
+  // -----------------------------
+  // Legacy mock payloads
+  // -----------------------------
   const confirmedData = {
     data: {
       id: '',
@@ -108,7 +135,87 @@ context('VeteranStatusScreen', () => {
     ],
   }
 
-  const renderWithOptions = (queriesData?: QueriesData) => {
+  // -----------------------------
+  // NEW VSC endpoint mock payloads
+  // -----------------------------
+  const vscCardConfirmedNoRating = {
+    type: 'veteran_status_card',
+    attributes: {
+      fullName: 'Irma Stephanie Phillips',
+      edipi: '1100377582',
+      disabilityRating: null,
+      latestService: {
+        branch: 'United States Army',
+        beginDate: '2010-01-01',
+        endDate: '2014-12-31',
+      },
+      veteranStatus: 'confirmed',
+      serviceHistoryStatus: 'found',
+      serviceSummaryCode: 'A1',
+      // notConfirmedReason omitted when confirmed
+    },
+  }
+
+  const vscCardConfirmedSixty = {
+    ...vscCardConfirmedNoRating,
+    attributes: {
+      ...vscCardConfirmedNoRating.attributes,
+      disabilityRating: 60,
+    },
+  }
+
+  const vscAlertNotTitle38 = {
+    type: 'veteran_status_alert',
+    attributes: {
+      alertType: 'warning',
+      header: 'You don’t have Title 38 veteran status',
+      body: [{ type: 'text', value: 'Call us so we can help.' }],
+      veteranStatus: 'not confirmed',
+      notConfirmedReason: 'NOT_TITLE_38',
+      serviceHistoryStatus: 'found',
+      serviceSummaryCode: 'A1',
+    },
+  }
+
+  const vscAlertError = {
+    type: 'veteran_status_alert',
+    attributes: {
+      alertType: 'error',
+      header: t('errors.somethingWentWrong'),
+      body: [{ type: 'text', value: t('veteranStatus.error.generic') }],
+      veteranStatus: 'not confirmed',
+      notConfirmedReason: 'ERROR',
+      serviceHistoryStatus: '500',
+      serviceSummaryCode: 'A1',
+    },
+  }
+
+  const vscAlertCatchAll = {
+    type: 'veteran_status_alert',
+    attributes: {
+      alertType: 'warning',
+      header: t('veteranStatus.error.catchAll.title'),
+      body: [{ type: 'text', value: t('veteranStatus.error.catchAll.body') }],
+      veteranStatus: 'not confirmed',
+      notConfirmedReason: 'MORE_RESEARCH_REQUIRED',
+      serviceHistoryStatus: 'found',
+      serviceSummaryCode: 'A1',
+    },
+  }
+
+  const vscAlertNoServiceHistory = {
+    type: 'veteran_status_alert',
+    attributes: {
+      alertType: 'warning',
+      header: t('veteranStatus.error.catchAll.title'),
+      body: [{ type: 'text', value: t('veteranStatus.error.catchAll.body') }],
+      veteranStatus: 'confirmed',
+      serviceHistoryStatus: 'empty',
+      serviceSummaryCode: 'A1',
+    },
+  }
+
+  const baseRender = (queriesData?: QueriesData) => {
     const props = mockNavProps(
       {},
       {
@@ -121,100 +228,57 @@ context('VeteranStatusScreen', () => {
   }
 
   describe('Errors', () => {
-    const notConfirmedData = (notConfirmedReason: string) => {
-      return {
-        data: {
-          id: '',
-          type: 'veteran_status_confirmations',
-          attributes: {
-            veteranStatus: 'not confirmed',
-            notConfirmedReason,
-          },
+    const notConfirmedData = (notConfirmedReason: string) => ({
+      data: {
+        id: '',
+        type: 'veteran_status_confirmations',
+        attributes: {
+          veteranStatus: 'not confirmed',
+          notConfirmedReason,
         },
-      }
-    }
+      },
+    })
+
     const noTitle38Data = notConfirmedData('NOT_TITLE_38')
     const errorData = notConfirmedData('ERROR')
-    const moreResearchNeededData = notConfirmedData('MORE_RESEARCH_NEEDED')
+    const moreResearchRequiredData = notConfirmedData('MORE_RESEARCH_REQUIRED')
     const personNotFoundData = notConfirmedData('PERSON_NOT_FOUND')
 
     it('shows the NOT_TITLE_38 warning when users not-confirmed reason is NOT_TITLE_38', async () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: noTitle38Data,
-        },
-      ])
-
-      expect(screen.findByText(t('veteranStatus.error.notTitle38.title'))).toBeTruthy()
+      baseRender([{ queryKey: veteranStatusKeys.verification, data: noTitle38Data }])
+      expect(await screen.findByText(t('veteranStatus.error.notTitle38.title'))).toBeTruthy()
     })
 
     it('shows the ERROR warning when users not-confirmed reason is ERROR', async () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: errorData,
-        },
-      ])
-
-      expect(screen.findByText(t('errors.somethingWentWrong'))).toBeTruthy()
+      baseRender([{ queryKey: veteranStatusKeys.verification, data: errorData }])
+      expect(await screen.findByText(t('errors.somethingWentWrong'))).toBeTruthy()
     })
 
-    it('shows the catch-all warning when users not-confirmed reason is MORE_RESEARCH_NEEDED', async () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: moreResearchNeededData,
-        },
-      ])
-
-      expect(screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+    it('shows the catch-all warning when users not-confirmed reason is MORE_RESEARCH_REQUIRED', async () => {
+      baseRender([{ queryKey: veteranStatusKeys.verification, data: moreResearchRequiredData }])
+      expect(await screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
     })
 
     it('shows the catch-all warning when users not-confirmed reason is PERSON_NOT_FOUND', async () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: personNotFoundData,
-        },
-      ])
-
-      expect(screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+      baseRender([{ queryKey: veteranStatusKeys.verification, data: personNotFoundData }])
+      expect(await screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
     })
 
     it('shows the catch-all warning when user is confirmed, but has no military history', async () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: confirmedData,
-        },
-        {
-          queryKey: militaryServiceHistoryKeys.serviceHistory,
-          data: {
-            serviceHistory: [],
-          },
-        },
+      baseRender([
+        { queryKey: veteranStatusKeys.verification, data: confirmedData },
+        { queryKey: militaryServiceHistoryKeys.serviceHistory, data: { serviceHistory: [] } },
       ])
-
-      expect(screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+      expect(await screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
     })
   })
 
   describe('Veteran Status Card', () => {
-    it('does NOT show the disability rating if combined disability rating does not exist', async () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: confirmedData,
-        },
-        {
-          queryKey: militaryServiceHistoryKeys.serviceHistory,
-          data: serviceHistoryWithOnePeriod,
-        },
-        {
-          queryKey: disabilityRatingKeys.disabilityRating,
-          data: noPercentRating,
-        },
+    it('does NOT show the disability rating if combined disability rating does not exist', () => {
+      baseRender([
+        { queryKey: veteranStatusKeys.verification, data: confirmedData },
+        { queryKey: militaryServiceHistoryKeys.serviceHistory, data: serviceHistoryWithOnePeriod },
+        { queryKey: disabilityRatingKeys.disabilityRating, data: noPercentRating },
       ])
 
       const zeroPercentText = t('disabilityRating.percent', { combinedPercent: 0 })
@@ -222,47 +286,28 @@ context('VeteranStatusScreen', () => {
     })
 
     it('shows the disability rating if combined disability rating is 60', async () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: confirmedData,
-        },
-        {
-          queryKey: militaryServiceHistoryKeys.serviceHistory,
-          data: serviceHistoryWithOnePeriod,
-        },
-        {
-          queryKey: disabilityRatingKeys.disabilityRating,
-          data: sixtyPercentRating,
-        },
+      baseRender([
+        { queryKey: veteranStatusKeys.verification, data: confirmedData },
+        { queryKey: militaryServiceHistoryKeys.serviceHistory, data: serviceHistoryWithOnePeriod },
+        { queryKey: disabilityRatingKeys.disabilityRating, data: sixtyPercentRating },
       ])
 
       const sixtyPercentText = t('disabilityRating.percent', { combinedPercent: 60 })
-      expect(screen.getByText(sixtyPercentText)).toBeTruthy()
+      expect(await screen.findByText(sixtyPercentText)).toBeTruthy()
     })
 
-    it('displays the second-most-recent completed service if the most recent has no end date', () => {
-      renderWithOptions([
-        {
-          queryKey: veteranStatusKeys.verification,
-          data: confirmedData,
-        },
-        {
-          queryKey: militaryServiceHistoryKeys.serviceHistory,
-          data: multiPeriodServiceHistory,
-        },
-        {
-          queryKey: disabilityRatingKeys.disabilityRating,
-          data: noPercentRating,
-        },
+    it('displays the second-most-recent completed service if the most recent has no end date', async () => {
+      baseRender([
+        { queryKey: veteranStatusKeys.verification, data: confirmedData },
+        { queryKey: militaryServiceHistoryKeys.serviceHistory, data: multiPeriodServiceHistory },
+        { queryKey: disabilityRatingKeys.disabilityRating, data: noPercentRating },
       ])
 
-      const secondPeriodText = 'United States Army • 2010–2017'
-      expect(screen.getByText(secondPeriodText)).toBeTruthy()
+      expect(await screen.findByText('United States Army • 2010–2017')).toBeTruthy()
     })
 
     for (const branch of Object.values(BranchesOfServiceConstants)) {
-      it(`displays the correct branch of service text for ${branch}`, () => {
+      it(`displays the correct branch of service text for ${branch}`, async () => {
         const serviceHistory = {
           serviceHistory: [
             {
@@ -276,22 +321,108 @@ context('VeteranStatusScreen', () => {
             },
           ],
         }
-        renderWithOptions([
-          {
-            queryKey: veteranStatusKeys.verification,
-            data: confirmedData,
-          },
-          {
-            queryKey: militaryServiceHistoryKeys.serviceHistory,
-            data: serviceHistory,
-          },
-          {
-            queryKey: disabilityRatingKeys.disabilityRating,
-            data: noPercentRating,
-          },
+
+        baseRender([
+          { queryKey: veteranStatusKeys.verification, data: confirmedData },
+          { queryKey: militaryServiceHistoryKeys.serviceHistory, data: serviceHistory },
+          { queryKey: disabilityRatingKeys.disabilityRating, data: noPercentRating },
         ])
-        expect(screen.getByText(`${branch} • 2010–2014`)).toBeTruthy()
+
+        expect(await screen.findByText(`${branch} • 2010–2014`)).toBeTruthy()
       })
     }
+  })
+
+  // ---------------------------------------------------------
+  // New VSC tests (feature flag ON)
+  // ---------------------------------------------------------
+  describe('New VSC logic (veteranStatusCardUpdate feature flag ON)', () => {
+    beforeEach(() => {
+      ; (featureEnabled as jest.Mock).mockImplementation((key: string) => {
+        if (key === 'veteranStatusCardUpdate') return true
+        return false
+      })
+    })
+
+    const renderWithNewVsc = (queriesData?: QueriesData) => {
+      const props = mockNavProps(
+        {},
+        {
+          navigate: jest.fn(),
+          addListener: jest.fn(),
+        },
+      )
+      render(<VeteranStatusScreen {...props} />, { queriesData })
+      jest.advanceTimersByTime(50)
+    }
+
+    describe('Errors', () => {
+      it('renders backend alert content for NOT_TITLE_38', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscAlertNotTitle38 }])
+
+        expect(await screen.findByText(vscAlertNotTitle38.attributes.header)).toBeTruthy()
+        expect(await screen.findByText('Call us so we can help.')).toBeTruthy()
+      })
+
+      it('renders backend alert content for ERROR', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscAlertError }])
+
+        expect(await screen.findByText(t('errors.somethingWentWrong'))).toBeTruthy()
+        expect(await screen.findByText(t('veteranStatus.error.generic'))).toBeTruthy()
+      })
+
+      it('renders catch-all warning when backend returns catch-all alert', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscAlertCatchAll }])
+
+        expect(await screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+      })
+
+      it('renders catch-all warning when confirmed but service history is empty (backend-driven)', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscAlertNoServiceHistory }])
+
+        expect(await screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+      })
+    })
+
+    describe('Veteran Status Card', () => {
+      it('does NOT show disability rating when disabilityRating is null', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscCardConfirmedNoRating }])
+
+        const zeroPercentText = t('disabilityRating.percent', { combinedPercent: 0 })
+        expect(screen.queryByText(zeroPercentText)).toBeNull()
+      })
+
+      it('shows disability rating when disabilityRating is 60', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscCardConfirmedSixty }])
+
+        const sixtyPercentText = t('disabilityRating.percent', { combinedPercent: 60 })
+        expect(await screen.findByText(sixtyPercentText)).toBeTruthy()
+      })
+
+      it('shows latest service period from latestService', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscCardConfirmedNoRating }])
+
+        expect(await screen.findByText('United States Army • 2010–2014')).toBeTruthy()
+      })
+
+      for (const branch of Object.values(BranchesOfServiceConstants)) {
+        it(`displays the correct branch of service text for ${branch}`, async () => {
+          renderWithNewVsc([
+            {
+              queryKey: veteranStatusCardKeys.card,
+              data: {
+                ...vscCardConfirmedNoRating,
+                attributes: {
+                  ...vscCardConfirmedNoRating.attributes,
+                  latestService: { branch, beginDate: '2010-01-01', endDate: '2014-12-31' },
+                },
+              },
+            },
+          ])
+
+          expect(await screen.findByText(`${branch} • 2010–2014`)).toBeTruthy()
+        })
+      }
+    })
   })
 })

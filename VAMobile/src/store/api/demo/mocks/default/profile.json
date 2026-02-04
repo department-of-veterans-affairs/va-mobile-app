@@ -95,5 +95,21 @@
         "veteranStatus": "confirmed"
       }
     }
+  },
+  "/v0/veteran_status_card": {
+    "type": "veteran_status_card",
+    "attributes": {
+      "fullName": "Demo Veteran",
+      "edipi": "1100377582",
+      "disabilityRating": 70,
+      "latestService": {
+        "branch": "United States Army",
+        "beginDate": "1970-07-13",
+        "endDate": "1998-08-31"
+      },
+      "veteranStatus": "confirmed",
+      "serviceHistoryStatus": "found",
+      "serviceSummaryCode": "A1"
+    }
   }
 }
