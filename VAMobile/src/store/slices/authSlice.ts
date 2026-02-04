@@ -34,14 +34,7 @@ import { pkceAuthorizeParams } from 'utils/oauth'
 import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
 
-const {
-  AUTH_SIS_ENDPOINT,
-  AUTH_SIS_REVOKE_URL,
-  AUTH_SIS_TOKEN_EXCHANGE_URL,
-  AUTH_SIS_TOKEN_REFRESH_URL,
-  ENVIRONMENT,
-  IS_TEST,
-} = getEnv()
+const { AUTH_SIS_REVOKE_URL, AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_SIS_TOKEN_REFRESH_URL, ENVIRONMENT, IS_TEST } = getEnv()
 
 let inMemoryRefreshToken: string | undefined
 
