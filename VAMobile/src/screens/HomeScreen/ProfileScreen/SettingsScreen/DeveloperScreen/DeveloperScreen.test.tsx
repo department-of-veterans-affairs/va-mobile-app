@@ -188,33 +188,16 @@ context('DeveloperScreen', () => {
     })
   })
 
-  describe('Override Whats New Local Version section', () => {
-    it('should call overrideLocalVersion when the user enters a version', async () => {
-      initializeTestInstance()
-      const encourageUpdateInput = screen.getByTestId('overrideWhatsNewTestID')
-      fireEvent.changeText(encourageUpdateInput, '2.0')
-      await waitFor(() => expect(overrideLocalVersion).toHaveBeenCalledWith(FeatureConstants.WHATSNEW, '2.0'))
-    })
-    it('should call overrideLocalVersion with undefined when the field is cleared', async () => {
-      initializeTestInstance()
-      const encourageUpdateInput = screen.getByTestId('overrideWhatsNewTestID')
-      fireEvent.changeText(encourageUpdateInput, '')
-      await waitFor(() => expect(overrideLocalVersion).toHaveBeenCalledWith(FeatureConstants.WHATSNEW, undefined))
-    })
-  })
-
   describe('when "Reset Versions" button is pressed', () => {
-    it('should reset the Whats New and Encourage Update versions', async () => {
+    it('should reset the Encourage Update versions', async () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('button', { name: 'Reset Versions' }))
 
       // Verify setSkippedVersion was called
       expect(setVersionSkipped).toHaveBeenCalledWith(FeatureConstants.ENCOURAGEUPDATE, '0.0')
-      expect(setVersionSkipped).toHaveBeenCalledWith(FeatureConstants.WHATSNEW, '0.0')
 
       // Verify that overrideLocalVersion was called
       expect(overrideLocalVersion).toHaveBeenCalledWith(FeatureConstants.ENCOURAGEUPDATE, undefined)
-      expect(overrideLocalVersion).toHaveBeenCalledWith(FeatureConstants.WHATSNEW, undefined)
     })
   })
 })
