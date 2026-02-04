@@ -67,7 +67,7 @@ published 4 months ago by testing-library-bot <testinglibraryoss@gmail.com>
 
 ### Guarddog Scan
 
-After the `npm info` check we run a python package called `guarddog`. `guarddog` is maintained my DataDog and it checks for malicious packages. [GitHub Link](https://github.com/DataDog/guarddog). To make this easy I have installed `uv` which is a pyton package and project manager. Instead of installing python packages, I leverage `uvx` which runs the package on-demand. I have created an alias called `check` that will run the package scan and output the results. Installation Documentation for `uv` can be found [here](https://docs.astral.sh/uv/getting-started/installation/)
+After the `npm info` check we run a python package called `guarddog`. `guarddog` is maintained by DataDog and it checks for malicious packages. [GitHub Link](https://github.com/DataDog/guarddog). To make this easy I have installed `uv` which is a python package and project manager. Instead of installing python packages, I leverage `uvx` which runs the package on-demand. I have created an alias called `check` that will run the package scan and output the results. Installation Documentation for `uv` can be found [here](https://docs.astral.sh/uv/getting-started/installation/)
 
 ```bash
 check is an alias for uvx guarddog npm scan
@@ -97,7 +97,7 @@ On the Review Deployments window you will see the job waiting. Click on `Review 
 
 ![MobileReviewDeployment](../../static/img/devops/mobReviewDeployment.png)
 
-In the Review Deployent Modal, make sure you are in the group, check the `bypass-package-lock` box and enter the resoning for deployment. If it is approved, click `Approve and Deploy`. If it is denied, click `reject`
+In the Review Deployment Modal, make sure you are in the group, check the `bypass-package-lock` box and enter the reasoning for deployment. If it is approved, click `Approve and Deploy`. If it is denied, click `reject`
 
 ![MobileDeployModal](../../static/img/devops/mobModalFinal.png)
 
