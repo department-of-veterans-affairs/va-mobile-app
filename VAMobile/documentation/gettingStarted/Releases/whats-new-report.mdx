@@ -2,13 +2,34 @@
 title: App Feature History
 ---
 
-import WhatsNewReport from './../../src/components/WhatsNewReport';
+import WhatsNewHistory from './../../src/components/WhatsNewHistory';
+import ReleaseNotesHistory from './../../src/components/ReleaseNotesHistory';
 
 # App Feature History
 
-This page provides a historical log of "What's New" content as seen in the VA 
+This page provides a historical log of Feature Flags, "What's New" content as seen in the VA 
 Mobile App and significant Release Notes going back to v1.0.0 of the app. This 
 helps us track when features were added to the app and what content was 
 displayed to veterans. Generic release notes are not included in this log.
 
-<WhatsNewReport />
+- [Feature Flags](#feature-flags)
+- [What's New](#whats-new)
+- [Release Notes](#release-notes)
+
+## Feature Flags
+
+| Release Version | Release Date | Feature Description  | Feature Flag | Veteran Facing |
+| --- | --- | --- | --- | --- |
+| v2.65.0 | 2025-12-17 | Travel Pay Status List | travelPayStatusList | Yes |
+
+## What's New
+
+Specific feature highlights as displayed in the app's "What's New" screen.
+
+<WhatsNewHistory />
+
+## Release Notes
+
+A historical log of the raw release notes submitted to the App Store and Google Play.
+
+<ReleaseNotesHistory />
