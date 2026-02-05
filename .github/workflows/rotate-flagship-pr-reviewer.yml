@@ -165,24 +165,33 @@ jobs:
           SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
           TOPIC="Primary channel for Mobile App & Platform Team and any comms related to mobile app features. PR Reviewer: $SLACK_MENTION"
           echo "Updating topic for va-mobile-app ($CHANNEL_ID) to: $TOPIC"
-          curl -X POST \
-            -H "Authorization: Bearer $SLACK_API_TOKEN" \
-            -H "Content-type: application/json" \
-            -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC\"}" \
-            https://slack.com/api/conversations.setTopic
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping conversations.setTopic: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC\"}" \
+              https://slack.com/api/conversations.setTopic
+          fi
 
       - name: Update topic in #va-mobile-app-engineering
         if: steps.select-reviewer.outputs.reviewer_person != ''
         run: |
-          CHANNEL_ID="${{ steps.get-channel-va-mobile-app-engineering.outputs.channel_id }}"
+          # Route engineering topic updates to the sandbox while testing
+          CHANNEL_ID="${{ steps.get-channel-va-mobile-sandbox.outputs.channel_id }}"
           SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
           TOPIC="Channel for Mobile App engineering comms and questions. PR Reviewer: $SLACK_MENTION"
           echo "Updating topic for va-mobile-app-engineering ($CHANNEL_ID) to: $TOPIC"
-          curl -X POST \
-            -H "Authorization: Bearer $SLACK_API_TOKEN" \
-            -H "Content-type: application/json" \
-            -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC\"}" \
-            https://slack.com/api/conversations.setTopic
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping conversations.setTopic: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC\"}" \
+              https://slack.com/api/conversations.setTopic
+          fi
           # Removed stray duplicated loop that caused undefined function errors
 
       - name: Send Slack notification to #va-mobile-app
@@ -195,11 +204,15 @@ jobs:
           URL="https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#pull-request-review"
           MESSAGE=" *Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\n<$URL>"
           echo "Sending Slack notification to #va-mobile-app..."
-          curl -X POST \
-            -H "Authorization: Bearer $SLACK_API_TOKEN" \
-            -H "Content-type: application/json" \
-            -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
-            https://slack.com/api/chat.postMessage
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping chat.postMessage to #va-mobile-app: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
+              https://slack.com/api/chat.postMessage
+          fi
 
       - name: Send Slack notification to #va-mobile-app-engineering
         if: steps.select-reviewer.outputs.reviewer_person != ''
@@ -212,8 +225,12 @@ jobs:
           URL="https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#pull-request-review"
           MESSAGE=" *Channel for Mobile App engineering comms and questions. PR Reviewer: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\n<$URL>"
           echo "Sending Slack notification to #va-mobile-app-engineering..."
-          curl -X POST \
-            -H "Authorization: Bearer $SLACK_API_TOKEN" \
-            -H "Content-type: application/json" \
-            -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
-            https://slack.com/api/chat.postMessage
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping chat.postMessage to #va-mobile-app-engineering: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
+              https://slack.com/api/chat.postMessage
+          fi
