@@ -3,7 +3,7 @@ name: Design Approval Template
 about: Template for final approval of a feature design
 title: Design Approval Request - [Feature Name]
 labels: front-end, design, product, qa
-assignees: dumathane, BeccaTupaj, b-rocha, rtwell, JonathanPostMO
+assignees: dumathane, kellylein, b-rocha, rtwell, mmiddaugh, JonathanPostMO, eli-oat
 projects: ['department-of-veterans-affairs/1616']
 ---
 
