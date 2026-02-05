@@ -22,7 +22,6 @@ import {
   AuthParamsLoadingStateTypes,
   AuthSetAuthorizeRequestParamsPayload,
   LOGIN_PROMPT_TYPE,
-  LoginServiceTypeConstants,
 } from 'store/api/types'
 import { dispatchSetAnalyticsLogin } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
@@ -359,7 +358,6 @@ const storeRefreshToken = async (
     Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
     AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-    AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
   ])
     .then(async () => {
       await logAnalyticsEvent(Events.vama_login_token_store(true))
@@ -462,26 +460,10 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
   }
 }
 
-/**
- * Checks the SIS feature flag and compares it against the type of refresh token stored
- * @returns if the login service we're using matches the the type of token we have stored
- */
-export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
-  const tokenType = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
-  return tokenType === LoginServiceTypeConstants.SIS
-}
-
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
     await clearCookies()
-
-    // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
-    const tokenMatchesService = await refreshTokenMatchesLoginService()
-    if (!tokenMatchesService) {
-      console.debug('refreshAccessToken: Token/service mismatch. Logging out.')
-      return false
-    }
 
     const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
@@ -532,11 +514,6 @@ export const attemptIntializeAuthWithRefreshToken = async (
 ): Promise<void> => {
   try {
     await clearCookies()
-    const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
-
-    if (!refreshTokenMatchesLoginType) {
-      throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
-    }
 
     const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
@@ -598,28 +575,23 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     }
 
     await clearCookies()
-    const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
-    if (tokenMatchesServiceType) {
-      const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, {})
-      const queryString = new URLSearchParams({
-        refresh_token: refreshToken ?? '',
-        device_secret: deviceSecret ? deviceSecret.password : '',
-      }).toString()
+    const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, {})
+    const queryString = new URLSearchParams({
+      refresh_token: refreshToken ?? '',
+      device_secret: deviceSecret ? deviceSecret.password : '',
+    }).toString()
 
-      const response = await fetch(AUTH_REVOKE_URL, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: queryString,
-      })
-      console.debug('logout:', response.status)
-      console.debug('logout:', await response.text())
-    } else {
-      console.debug('logout: login service changed. clearing creds only.')
-    }
+    const response = await fetch(AUTH_REVOKE_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: queryString,
+    })
+    console.debug('logout:', response.status)
+    console.debug('logout:', await response.text())
   } catch (err) {
     logNonFatalErrorToFirebase(err, `logout: ${authNonFatalErrorString}`)
   } finally {
