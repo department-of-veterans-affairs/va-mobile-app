@@ -1930,6 +1930,8 @@
   "secureMessaging.sendError.ifTheAppStill.a11y": "If the app still doesn't work, call the My Healthy Vet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. Eastern Time.",
   "secureMessaging.sendError.title": "Message failed to send",
   "secureMessaging.startNewMessage": "Start new message",
+  "secureMessaging.startNewMessage.nameChangeAlert.title": "Your recipient names may have changed",
+  "secureMessaging.startNewMessage.nameChangeAlert.body": "We updated the names of some of your care team members to match VA records. Please review the recipient names before sending your message.",
   "secureMessaging.startNewMessage.nonurgent.title": "Only use messages for non-urgent needs",
   "secureMessaging.startNewMessage.nonurgent.careTeam": "Your care team may take up to ",
   "secureMessaging.startNewMessage.nonurgent.threeDays": "3 business days",
