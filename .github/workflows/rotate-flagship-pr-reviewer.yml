@@ -126,39 +126,42 @@ jobs:
           done
           echo "channel_id=$id" >> $GITHUB_OUTPUT
 
-      - name: Get #va-mobile-app-engineering channel ID
-        id: get-channel-va-mobile-app-engineering
-        run: |
-          CHANNEL_NAME="va-mobile-app-engineering"
-          fetch_page() {
-            last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/x-www-form-urlencoded' \
-            https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
-          }
-          get_id() {
-            id=$(jq -r '.channels[] | select(.name == "'$CHANNEL_NAME'") | .id' <<< $last_response)
-          }
-          get_cursor() {
-            cursor=$(jq -r '.response_metadata.next_cursor' <<< $last_response)
-          }
-          id=""
-          cursor=""
-          last_response=""
-          fetch_page
-          get_id
-          while [[ -z "$id" && "$cursor" != "null" && "$cursor" != "" ]]
-          do
-            get_cursor
-            if [[ "$cursor" != "null" && "$cursor" != "" ]]; then
-              fetch_page
-              get_id
-            fi
-          done
-          echo "channel_id=$id" >> $GITHUB_OUTPUT
+      # The following step fetches the real #va-mobile-app-engineering channel ID.
+      # It's currently commented out for testing (we route everything to sandbox).
+      # - name: Get #va-mobile-app-engineering channel ID
+      #   id: get-channel-va-mobile-app-engineering
+      #   run: |
+      #     CHANNEL_NAME="va-mobile-app-engineering"
+      #     fetch_page() {
+      #       last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+      #       -H 'Content-type: application/x-www-form-urlencoded' \
+      #       https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
+      #     }
+      #     get_id() {
+      #       id=$(jq -r '.channels[] | select(.name == "'$CHANNEL_NAME'") | .id' <<< $last_response)
+      #     }
+      #     get_cursor() {
+      #       cursor=$(jq -r '.response_metadata.next_cursor' <<< $last_response)
+      #     }
+      #     id=""
+      #     cursor=""
+      #     last_response=""
+      #     fetch_page
+      #     get_id
+      #     while [[ -z "$id" && "$cursor" != "null" && "$cursor" != "" ]]
+      #     do
+      #       get_cursor
+      #       if [[ "$cursor" != "null" && "$cursor" != "" ]]; then
+      #         fetch_page
+      #         get_id
+      #       fi
+      #     done
+      #     echo "channel_id=$id" >> $GITHUB_OUTPUT
       - name: Update topic in #va-mobile-app
         if: steps.select-reviewer.outputs.reviewer_person != ''
         run: |
-          CHANNEL_ID="${{ steps.get-channels.outputs.channel_id_va_mobile_app }}"
+          # Using the sandbox channel ID for testing; change to the real channel step if you add it
+          CHANNEL_ID="${{ steps.get-channel-va-mobile-sandbox.outputs.channel_id }}"
           SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
           TOPIC="Primary channel for Mobile App & Platform Team and any comms related to mobile app features. PR Reviewer: $SLACK_MENTION"
           echo "Updating topic for va-mobile-app ($CHANNEL_ID) to: $TOPIC"
@@ -171,7 +174,7 @@ jobs:
       - name: Update topic in #va-mobile-app-engineering
         if: steps.select-reviewer.outputs.reviewer_person != ''
         run: |
-          CHANNEL_ID="${{ steps.get-channels.outputs.channel_id_va_mobile_app_engineering }}"
+          CHANNEL_ID="${{ steps.get-channel-va-mobile-app-engineering.outputs.channel_id }}"
           SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
           TOPIC="Channel for Mobile App engineering comms and questions. PR Reviewer: $SLACK_MENTION"
           echo "Updating topic for va-mobile-app-engineering ($CHANNEL_ID) to: $TOPIC"
@@ -180,12 +183,7 @@ jobs:
             -H "Content-type: application/json" \
             -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC\"}" \
             https://slack.com/api/conversations.setTopic
-
-            get_cursor
-            fetch_page
-            get_id
-          done
-          echo "channel_id=${id}" >> $GITHUB_OUTPUT
+          # Removed stray duplicated loop that caused undefined function errors
 
       - name: Send Slack notification to #va-mobile-app
         if: steps.select-reviewer.outputs.reviewer_person != ''
