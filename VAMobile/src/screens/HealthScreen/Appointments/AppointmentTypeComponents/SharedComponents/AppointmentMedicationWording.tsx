@@ -51,6 +51,7 @@ const WebViewLinkHelper = (
           url,
           displayTitle: vaGovWebviewTitle(t),
           loadingMessage: t('loading.vaWebsite'),
+          backButtonTestID: 'webviewBack',
         })
       }}
       text={text}

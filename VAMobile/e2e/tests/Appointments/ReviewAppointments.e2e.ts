@@ -38,37 +38,31 @@ describe('Review Upcoming Appointments', () => {
       // Add appointment to Calendar
       await device.disableSynchronization()
       await element(by.id(CommonE2eIdConstants.ADD_TO_CALENDAR_ID)).atIndex(0).tap()
-      await device.takeScreenshot('appointmentCalendar')
       await device.launchApp({ newInstance: false })
 
       // Get directions
       await element(by.id(CommonE2eIdConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
       await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-      await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })
 
+      await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
+
       // Get info about what to bring to appointment
-      await element(by.text(Appointmentse2eConstants.WHAT_TO_BRING)).tap()
+      await element(by.id('whatToBringLinkTestID')).tap()
       await setTimeout(2000)
-      await device.takeScreenshot('whatToBringVAWebpage')
       await element(by.id(Appointmentse2eConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
 
       // Call VA phone numbers
       await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
       await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
 
-      await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
-
       await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1).tap()
-      await device.takeScreenshot('appointmentCancelPhoneNumber')
       await device.launchApp({ newInstance: false })
 
       await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1).tap()
-      await device.takeScreenshot('appointmentCancelTTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
-    // TODO: IOS version (or not, can't test phone links)
   })
 })
 
@@ -107,6 +101,7 @@ describe('Review Past Appointments', () => {
       .scroll(200, 'down')
     await element(by.text('Sami Alsahhar - Onsite - Confirmed')).tap()
 
+    // Verify Appoinment details
     await expect(element(by.text('Past video appointment at VA location'))).toExist()
     await expect(element(by.text('This appointment happened in the past.'))).toExist()
 
@@ -147,7 +142,6 @@ describe('Review Past Appointments', () => {
     await device.disableSynchronization()
     await element(by.id(CommonE2eIdConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await device.takeScreenshot('appointmentGetDirections')
     await device.launchApp({ newInstance: false })
 
     // Call VA phone numbers
@@ -155,11 +149,9 @@ describe('Review Past Appointments', () => {
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
 
     await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1).tap()
-    await device.takeScreenshot('appointmentCancelPhoneNumber')
     await device.launchApp({ newInstance: false })
 
     await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1).tap()
-    await device.takeScreenshot('appointmentCancelTTY')
     await device.launchApp({ newInstance: false })
     await device.enableSynchronization()
   })
