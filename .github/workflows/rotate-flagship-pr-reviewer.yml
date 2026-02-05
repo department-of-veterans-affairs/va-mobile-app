@@ -20,10 +20,11 @@ jobs:
         run: |
           WEEK_NUM=$(date +%U)
           echo "Current week number: $WEEK_NUM"
-          if [ "$WEEK_NUM" -lt 7 ] || [ $(( WEEK_NUM % 2 )) -ne 1 ]; then
-            echo "Not a biweekly reviewer assignment week. Exiting..."
-            exit 0
-          fi
+          # Removed week-based gating logic for testing so notifications always send
+          # if [ "$WEEK_NUM" -lt 7 ] || [ $(( WEEK_NUM % 2 )) -ne 1 ]; then
+          #   echo "Not a biweekly reviewer assignment week. Exiting..."
+          #   exit 0
+          # fi
           # Map week number to reviewer and backup (weeks 2-52)
           case $WEEK_NUM in
             02) REVIEWER="dumathane"; BACKUP="jmarchi";;
