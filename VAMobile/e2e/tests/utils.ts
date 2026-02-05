@@ -262,6 +262,11 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
   }
 
+  const whatsNewBtnExist = await checkIfElementIsPresent('Dismiss this message', true)
+  if (whatsNewBtnExist) {
+    await element(by.text('Dismiss this message')).tap()
+  }
+
   const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
   if (confirmEmailBtnExist) {
     await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
