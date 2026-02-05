@@ -35,10 +35,10 @@ then
 
   # Use local vets-api for authentication (Mocked Authentication)
   # For local, we use the API authorize endpoint directly, not the frontend route
-  echo "AUTH_SIS_ENDPOINT=${LOCAL_BASE_URL}/v0/sign_in/authorize" >> .env
-  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=${LOCAL_BASE_URL}/v0/sign_in/token" >> .env
-  echo "AUTH_SIS_TOKEN_REFRESH_URL=${LOCAL_BASE_URL}/v0/sign_in/refresh" >> .env
-  echo "AUTH_SIS_REVOKE_URL=${LOCAL_BASE_URL}/v0/sign_in/revoke" >> .env
+  echo "AUTH_ENDPOINT=${LOCAL_BASE_URL}/v0/sign_in/authorize" >> .env
+  echo "AUTH_TOKEN_EXCHANGE_URL=${LOCAL_BASE_URL}/v0/sign_in/token" >> .env
+  echo "AUTH_TOKEN_REFRESH_URL=${LOCAL_BASE_URL}/v0/sign_in/refresh" >> .env
+  echo "AUTH_REVOKE_URL=${LOCAL_BASE_URL}/v0/sign_in/revoke" >> .env
 
   # Get all staging vars
   awk 1 staging.env >> .env
@@ -49,11 +49,11 @@ then
   echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
   # set SIS vars
-  AUTH_SIS_ROOT="https://staging.va.gov"
-  echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
-  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
-  echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
-  echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
+  AUTH_ROOT="https://staging.va.gov"
+  echo "AUTH_ENDPOINT=${AUTH_ROOT}/sign-in" >> .env
+  echo "AUTH_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+  echo "AUTH_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+  echo "AUTH_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 
   # Get all staging vars
   awk 1 staging.env >> .env
@@ -63,11 +63,11 @@ else
   echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
   # set SIS vars
-  AUTH_SIS_ROOT="https://www.va.gov"
-  echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
-  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
-  echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
-  echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
+  AUTH_ROOT="https://www.va.gov"
+  echo "AUTH_ENDPOINT=${AUTH_ROOT}/sign-in" >> .env
+  echo "AUTH_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+  echo "AUTH_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+  echo "AUTH_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 
   # Get all production vars
   awk 1 prod.env >> .env

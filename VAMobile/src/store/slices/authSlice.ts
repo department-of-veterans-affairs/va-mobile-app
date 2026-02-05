@@ -34,14 +34,8 @@ import { pkceAuthorizeParams } from 'utils/oauth'
 import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
 
-const {
-  AUTH_SIS_ENDPOINT,
-  AUTH_SIS_REVOKE_URL,
-  AUTH_SIS_TOKEN_EXCHANGE_URL,
-  AUTH_SIS_TOKEN_REFRESH_URL,
-  ENVIRONMENT,
-  IS_TEST,
-} = getEnv()
+const { AUTH_ENDPOINT, AUTH_REVOKE_URL, AUTH_TOKEN_EXCHANGE_URL, AUTH_TOKEN_REFRESH_URL, ENVIRONMENT, IS_TEST } =
+  getEnv()
 
 let inMemoryRefreshToken: string | undefined
 
@@ -489,7 +483,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
       return false
     }
 
-    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
+    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -544,7 +538,7 @@ export const attemptIntializeAuthWithRefreshToken = async (
       throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
     }
 
-    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
+    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -613,7 +607,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
         device_secret: deviceSecret ? deviceSecret.password : '',
       }).toString()
 
-      const response = await fetch(AUTH_SIS_REVOKE_URL, {
+      const response = await fetch(AUTH_REVOKE_URL, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -722,9 +716,9 @@ export const handleTokenCallbackUrl =
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
-      console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
+      console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL)
       await clearCookies()
-      const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
+      const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -778,7 +772,7 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
     oauth: 'true',
   }).toString()
 
-  const url = `${AUTH_SIS_ENDPOINT}?${params}`
+  const url = `${AUTH_ENDPOINT}?${params}`
   dispatch(dispatchShowWebLogin(url))
 }
 

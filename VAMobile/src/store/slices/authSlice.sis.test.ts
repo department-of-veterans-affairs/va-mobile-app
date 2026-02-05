@@ -50,10 +50,10 @@ jest.mock('../../utils/rnAuthSesson', () => ({
 
 jest.mock('../../utils/env', () =>
   jest.fn(() => ({
-    AUTH_SIS_ENDPOINT: 'https://test.gov/sign-in',
-    AUTH_SIS_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
-    AUTH_SIS_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
-    AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
+    AUTH_ENDPOINT: 'https://test.gov/sign-in',
+    AUTH_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
+    AUTH_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
+    AUTH_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
   })),
 )
 
@@ -72,10 +72,10 @@ jest.mock('@react-native-firebase/perf', () => {
 })
 
 const defaultEnvParams = {
-  AUTH_SIS_ENDPOINT: 'https://test.gov/sign-in',
-  AUTH_SIS_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
-  AUTH_SIS_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
-  AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
+  AUTH_ENDPOINT: 'https://test.gov/sign-in',
+  AUTH_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
+  AUTH_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
+  AUTH_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
 }
 
 const sampleIdToken = 'TEST_TOKEN'
