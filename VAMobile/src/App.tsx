@@ -72,6 +72,7 @@ import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from 'utils/accessibility'
+import { logScreenViewOnNavChange } from 'utils/analytics'
 import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale, useOnResumeForeground } from 'utils/hooks'
@@ -166,14 +167,13 @@ function MainApp() {
    */
   const onNavStateChange = async (): Promise<void> => {
     const previousRouteName = routeNameRef.current
-    const currentRouteName = navigationRef.current?.getCurrentRoute()?.name
+    const currentRoute = navigationRef.current?.getCurrentRoute()
+    const currentRouteName = currentRoute?.name
 
-    if (previousRouteName !== currentRouteName && currentRouteName !== undefined) {
-      await analytics().logScreenView({
-        screen_name: currentRouteName,
-        screen_class: currentRouteName,
-      })
-    }
+    const params = currentRoute?.params as { ignoreScreenView?: boolean } | undefined
+    const ignoreScreenView = params?.ignoreScreenView
+
+    await logScreenViewOnNavChange(previousRouteName, currentRouteName, ignoreScreenView)
 
     // Save the current route name for later comparison
     routeNameRef.current = currentRouteName || ''

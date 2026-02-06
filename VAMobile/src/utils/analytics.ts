@@ -145,3 +145,22 @@ export const logLoadTimeEvent = (eventName: string, loadTimeMs: number) => {
     logAnalyticsEvent(Events.vama_load_time_outlier(eventName, loadTimeMs))
   }
 }
+
+/**
+ * Logs a screen view event to Firebase Analytics when navigation state changes
+ * @param previousRouteName - The name of the previous route
+ * @param currentRouteName - The name of the current route
+ * @param ignoreScreenView - Whether to skip logging this screen view
+ */
+export const logScreenViewOnNavChange = async (
+  previousRouteName: string,
+  currentRouteName?: string,
+  ignoreScreenView?: boolean,
+): Promise<void> => {
+  if (!ignoreScreenView && previousRouteName !== currentRouteName && currentRouteName !== undefined) {
+    await analytics().logScreenView({
+      screen_name: currentRouteName,
+      screen_class: currentRouteName,
+    })
+  }
+}

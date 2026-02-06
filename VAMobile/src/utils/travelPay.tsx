@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 
+import analytics from '@react-native-firebase/analytics'
 import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
@@ -340,8 +341,20 @@ export const isIndeterminate = (value: string, options: Array<CheckboxOption>, s
  * @param navigateTo - The navigation function to navigate between screens
  */
 export const navigateToTravelClaims = (navigateTo: RouteNavigationFunction<ParamListBase>) => {
+  // #12898
+  // There are multiple entry points to the Travel Pay Claims screen across different tabs.
+  // Navigating this way is necessary to ensure the tab stack is properly initialized.
+  // However it also causes onNavStateChange in App.tsx to trigger twice and log duplicate
+  // screen views. To mitigate this, we pass a param to skip the screen view event logging,
+  // and then manually log the screen view here.
   navigateTo('BenefitsTab', {
     screen: 'TravelPayClaims',
     initial: false,
+    params: { ignoreScreenView: true },
+  })
+
+  analytics().logScreenView({
+    screen_name: 'TravelPayClaims',
+    screen_class: 'TravelPayClaims',
   })
 }

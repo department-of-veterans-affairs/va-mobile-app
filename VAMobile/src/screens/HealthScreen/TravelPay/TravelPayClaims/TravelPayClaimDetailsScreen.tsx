@@ -30,12 +30,12 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { createTravelPayDocumentListItem } from 'utils/travelPay'
+import { createTravelPayDocumentListItem, navigateToTravelClaims } from 'utils/travelPay'
 
 const { LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT } = getEnv()
 type TravelPayClaimDetailsScreenProps = StackScreenProps<HealthStackParamList, 'TravelPayClaimDetailsScreen'>
 
-function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetailsScreenProps) {
+function TravelPayClaimDetailsScreen({ route }: TravelPayClaimDetailsScreenProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -149,7 +149,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
 
   return (
     <FeatureLandingTemplate
-      backLabelOnPress={navigation.goBack}
+      backLabelOnPress={() => navigateToTravelClaims(navigateTo)}
       backLabelTestID="travelClaimDetailBackButtonID"
       title={t('travelPay.claimDetails.title')}
       testID="TravelPayClaimDetailsScreen"

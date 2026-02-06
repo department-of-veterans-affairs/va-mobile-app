@@ -9,9 +9,18 @@ import {
   filteredClaims,
   isChecked,
   isIndeterminate,
+  navigateToTravelClaims,
   sortedClaims,
   useFilterToggle,
 } from 'utils/travelPay'
+
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  return {
+    ...jest.requireActual<typeof import('utils/hooks')>('utils/hooks'),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 const CHECKBOX_OPTIONS: CheckboxOption[] = [
   {
@@ -166,6 +175,16 @@ describe('useFilterToggle hook', () => {
       expect(updatedFilter.has('opt_b')).toBe(true)
       expect(updatedFilter.has('opt_c')).toBe(true)
       expect(updatedFilter.size).toBe(3)
+    })
+  })
+
+  it('should make the appropriate navigation calls to the travel claims screen', async () => {
+    navigateToTravelClaims(mockNavigationSpy)
+
+    expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', {
+      initial: false,
+      params: { ignoreScreenView: true },
+      screen: 'TravelPayClaims',
     })
   })
 })
