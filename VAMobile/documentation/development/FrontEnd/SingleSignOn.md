@@ -36,6 +36,14 @@ navigateTo('Webview', {
 })
 ```
 
+This will open the WebView screen with an SSO session, allowing the user to access features on the website that require authentication.
+
+
+## API documentation
+
+For more information on API usage for SSO, view the [Device SSO Token Exchange](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/identity/Products/Sign-In%20Service/Engineering%20Docs/Authentication%20Types/Client%20Auth%20(User)/auth_flows/device_sso_token_exchange.md) documentation.
+
+
 ## Analytics and Error Logging
 
 ### Analytics Event Dictionary
@@ -86,11 +94,3 @@ For engineers, these are logged to Firebase Crashlytics to monitor stability wit
 | `processAuthResponse` ([iOS](https://console.firebase.google.com/u/1/project/va-mobile-app/crashlytics/app/ios:gov.va.vamobileapp/issues/29274b46efe6d5c8bc0ad89acffa014b?time=7d&types=error&sessionEventKey=5ccb4a99c1174646aa54a42f18514f5c_2181556965848438930) / [Android](https://console.firebase.google.com/u/1/project/va-mobile-app/crashlytics/app/android:gov.va.mobileapp/issues/8e24270311813b2f0930d3fc2e073c7b?time=7d&types=error&sessionEventKey=69828DDF02A600011429F448B83A9F0F_2181240766511718372)) | `vama_login_token_fetch` / `_refresh` | **High.** API returned unexpected data format. |
 | `saveRefreshTokenWithBiometrics` (No errors logged) | `vama_login_token_store` | **Low.** Keychain storage issue (hardware/permissions). |
 | `logout` ([iOS](https://console.firebase.google.com/u/1/project/va-mobile-app/crashlytics/app/ios:gov.va.vamobileapp/issues/2c225f79f828f80c94ba9aa20428e9cc?time=7d&types=error&sessionEventKey=5b78febd5b644b2185a2ba570c0766f4_2181549372354610396) / [Android](https://console.firebase.google.com/u/1/project/va-mobile-app/crashlytics/app/android:gov.va.mobileapp/issues/c1bb601ec142644b996c5e6151743f65?time=7d&types=error&sessionEventKey=69822FC901A000013695B1F2C1FBACA6_2181146138173953190)) | N/A | **Low.** Error clearing tokens from the phone. |
-
-
-
-This will open the WebView screen with an SSO session, allowing the user to access features on the website that require authentication.
-
-## API documentation
-
-For more information on API usage for SSO, view the [Device SSO Token Exchange](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/identity/Products/Sign-In%20Service/Engineering%20Docs/Authentication%20Types/Client%20Auth%20(User)/auth_flows/device_sso_token_exchange.md) documentation.
