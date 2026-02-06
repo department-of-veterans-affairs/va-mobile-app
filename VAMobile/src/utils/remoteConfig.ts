@@ -49,6 +49,7 @@ export type FeatureToggleType =
   | 'overpayments'
   | 'offlineMode'
   | 'remoteConfigRefreshTest'
+  | 'veteranStatusCardUpdate'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -85,6 +86,7 @@ type FeatureToggleValues = {
   overpayments: boolean
   offlineMode: boolean
   remoteConfigRefreshTest: boolean
+  veteranStatusCardUpdate: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -122,6 +124,7 @@ export const defaults: FeatureToggleValues = {
   overpayments: false,
   remoteConfigRefreshTest: false,
   offlineMode: false,
+  veteranStatusCardUpdate: false,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {
   offlineMode: '(Restart required)',
