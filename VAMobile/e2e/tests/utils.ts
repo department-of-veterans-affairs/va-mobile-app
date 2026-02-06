@@ -149,6 +149,7 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
+  DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
   IN_APP_FEEDBACK_TOGGLE_TEXT: 'inAppFeedback',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
@@ -264,6 +265,10 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
 
   const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
   if (confirmEmailBtnExist) {
+    await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .scroll(200, 'down')
     await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
     await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
@@ -604,7 +609,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
  * @param AFUseCaseName: Name of the AF type.
  * @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
  * */
-export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
+export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName, skipAppInstall) {
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
@@ -634,8 +639,10 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
     await expect(element(by.text(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT))).not.toExist()
     await expect(element(by.text(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT))).not.toExist()
   }
-  await device.uninstallApp()
-  await device.installApp()
+  if (!skipAppInstall) {
+    await device.uninstallApp()
+    await device.installApp()
+  }
 }
 
 /** Function that allows the AF script to navigate to a certain feature
@@ -767,7 +774,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 
   if (AFUseCase !== 'AllowFunction') {
     if (AFUseCase === 'DenyContent' && AFUseCaseUpgrade) {
-      await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
+      await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase, undefined)
     }
   }
 }
@@ -833,6 +840,9 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
   )
   waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
   await element(by.id(testIdOfDesiredUser)).tap()
-  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
+  await scrollToIDThenTap(
+    CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
+    CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,
+  )
   await loginToDemoMode()
 }

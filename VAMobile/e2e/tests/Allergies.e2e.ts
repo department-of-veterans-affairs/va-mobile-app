@@ -24,7 +24,7 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_6_ID: 'Latex allergy August 20, 2020',
   ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 5',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 6',
 }
 
 beforeAll(async () => {
