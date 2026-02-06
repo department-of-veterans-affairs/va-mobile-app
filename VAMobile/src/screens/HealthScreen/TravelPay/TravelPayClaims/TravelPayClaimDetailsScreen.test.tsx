@@ -18,7 +18,6 @@ jest.mock('api/travelPay', () => ({
 
 // Mock navigation
 const mockNavigationSpy = jest.fn()
-const mockGoBack = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
@@ -141,7 +140,6 @@ context('TravelPayClaimDetailsScreen', () => {
       {
         setOptions: jest.fn(),
         navigate: mockNavigationSpy,
-        goBack: mockGoBack,
       },
       {
         params: {
@@ -269,7 +267,11 @@ context('TravelPayClaimDetailsScreen', () => {
 
       const backButton = screen.getByText(t('back'))
       fireEvent.press(backButton)
-      expect(mockGoBack).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', {
+        screen: 'TravelPayClaims',
+        initial: false,
+        params: { ignoreScreenView: true },
+      })
     })
   })
 
@@ -667,10 +669,10 @@ context('TravelPayClaimDetailsScreen', () => {
 
       const backButton = screen.getByText(t('back'))
       fireEvent.press(backButton)
-      expect(mockGoBack).toHaveBeenCalledTimes(1)
+      expect(mockNavigationSpy).toHaveBeenCalledTimes(1)
 
-      // Test back navigation in error state
-      mockGoBack.mockClear()
+      // Test mockNavigationSpy navigation in error state
+      mockNavigationSpy.mockClear()
       mockUseTravelPayClaimDetails.mockReturnValue({
         data: undefined,
         error: new Error('Test error'),
@@ -682,7 +684,7 @@ context('TravelPayClaimDetailsScreen', () => {
 
       const backButton2 = screen.getByText(t('back'))
       fireEvent.press(backButton2)
-      expect(mockGoBack).toHaveBeenCalledTimes(1)
+      expect(mockNavigationSpy).toHaveBeenCalledTimes(1)
     })
   })
 })

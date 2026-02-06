@@ -70,7 +70,11 @@ context('ClaimsScreen', () => {
 
       fireEvent.press(screen.getByTestId('toTravelPayClaimsButtonID'))
 
-      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', {
+        screen: 'TravelPayClaims',
+        initial: false,
+        params: { ignoreScreenView: true },
+      })
     })
   })
 })

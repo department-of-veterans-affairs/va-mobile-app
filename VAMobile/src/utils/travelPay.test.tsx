@@ -181,10 +181,10 @@ describe('useFilterToggle hook', () => {
   it('should make the appropriate navigation calls to the travel claims screen', async () => {
     navigateToTravelClaims(mockNavigationSpy)
 
-    // Wait for because the second call takes a short time to fire
-    await waitFor(() => {
-      expect(mockNavigationSpy).toHaveBeenNthCalledWith(1, 'BenefitsTab')
-      expect(mockNavigationSpy).toHaveBeenNthCalledWith(2, 'TravelPayClaims')
+    expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', {
+      initial: false,
+      params: { ignoreScreenView: true },
+      screen: 'TravelPayClaims',
     })
   })
 })
