@@ -120,7 +120,6 @@ export const logNonFatalErrorToFirebase = async (error: any, errorName?: string)
 }
 
 /**
-<<<<<<< HEAD
  * Logs a load time event by mapping the given load time (in milliseconds) to a predefined range.
  * If the load time falls within one of the defined ranges, the corresponding range label is logged.
  * If the load time does not match any range, an "outlier" event is logged instead.
