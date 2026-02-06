@@ -146,11 +146,7 @@ export function HomeScreen({}: HomeScreenProps) {
     error: copaysError,
   } = useMedicalCopays({ enabled: copaymentsEnabled })
 
-  const {
-    data: debtsCount,
-    isLoading: debtsLoading,
-    error: debtsError,
-  } = useDebtsCount({ enabled: overpaymentsEnabled })
+  const { data: debtsCount, isLoading: debtsLoading, error: debtsError } = useDebtsCount()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
   const showDebts = !debtsLoading && !debtsError && debtsCount !== undefined && debtsCount > 0
