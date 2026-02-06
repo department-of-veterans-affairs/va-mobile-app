@@ -188,3 +188,5 @@ buck-out/
 # Documentation
 /VAMobile/documentation/.env
 /VAMobile/documentation/static/data/github-milestones.json
+/VAMobile/documentation/static/data/whats-new-history.json
+

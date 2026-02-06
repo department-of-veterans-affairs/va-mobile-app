@@ -1,0 +1,84 @@
+---
+title: App Feature History
+---
+
+import WhatsNewHistory from './../../src/components/WhatsNewHistory';
+import ReleaseNotesHistory from './../../src/components/ReleaseNotesHistory';
+
+# App Feature History
+
+This page provides a historical log of Feature Flags, "What's New" content as seen in the VA 
+Mobile App and significant Release Notes going back to v1.0.0 of the app. This 
+helps us track when features were added to the app and what content was 
+displayed to veterans. Generic release notes are not included in this log.
+
+- [Disabled Features by Flag](#disabled-features-by-flag)
+- [Enabled Features by Flag](#enabled-features-by-flag)
+- [Removed Feature Flags](#removed-features-by-flag)
+- [What's New](#whats-new)
+- [Release Notes](#release-notes)
+
+## Disabled Features by Flag
+| Version  | Date | Feature Flag | Veteran Facing |
+| --- | --- | --- | --- |
+| v2.66.0 | | copayments | No |
+| v2.66.0 | | showCernerWhatsNew | No |
+| v2.66.0 | | overpayments | No |
+| v2.66.0 | | offlineMode | No |
+| v2.59.0 | | COEAvailable | No |
+| v2.56.0 | | internationalPhoneNumber | No |
+| v2.53.0 | | startScheduling | No |
+
+## Enabled Features by Flag
+
+| Version  | Date | Feature Flag | Veteran Facing |
+| --- | --- | --- | --- |
+| v2.68.0 | 2026-02-10 | show5103Flow | Yes |
+| v2.66.0 | 2026-01-20 | mrHide36HrHoldTimes | Yes |
+| v2.66.0 | 2026-01-06 | showCernerWarningAlert | Yes |
+| v2.65.0 | 2025-12-17 | datePickerUpdate | Yes |
+| v2.65.0 | 2025-12-17 | showEmailConfirmationAlert | Yes |
+| v2.65.0 | 2025-12-17 | travelPayClaimDetails | Yes |
+| v2.65.0 | 2025-12-17 | travelPayStatusList | Yes |
+| v2.64.0 | 2025-11-25 | labsAndTests | Yes |
+| v2.64.0 | 2025-11-25 | showTimezoneMessage | Yes |
+| v2.60.0 | 2025-09-30 | nonVAMedsLink | Yes |
+| v2.57.0 | 2025-03-06 | inAppFeedback | Yes |
+| v2.57.0 | 2025-08-12 | shareMyHealthDataLink | Yes |
+| v2.57.0 | 2025-07-10 | travelPaySMOC | Yes |
+| v2.54.0 | 2025-07-08 | rescheduleLink | Yes |
+| v2.50.0 | 2025-05-13 | submitEvidenceExpansion | Yes |
+| v2.49.0 | 2025-04-29 | sso | Yes |
+| v2.43.0 | 2024-12-10 | useOldLinkComponent | Yes |
+| v2.36.0 | 2024-09-03 | inAppReview | Yes |
+
+## Removed Feature Flags
+
+| Version Removed | Date Removed | Version Enabled | Date Enabled | Feature Flag | Veteran Facing |
+| --- | --- | --- | --- | --- | --- |
+| v2.66.0 | 2026-01-06 | v2.58.0 | 2025-09-02 | showCernerAlertSM | |
+| v2.66.0 | 2026-01-06 | | | overpayCopay | |
+| v2.65.0 | 2025-12-17 | | | travelPayClaimsFullHistory | |
+| v2.58.0 | 2025-09-02 | v2.19.0 | 2024-01-09 | prescriptions | |
+| v2.58.0 | 2025-09-02 | v2.19.0 | 2024-01-09 | inAppUpdates | |
+| v2.58.0 | 2025-09-02 | v2.19.0 | 2024-01-09 | preferredNameGenderWaygate | |
+| v2.58.0 | 2025-09-02 | v2.19.0 | 2024-01-09 | whatsNewUI | |
+| v2.58.0 | 2025-09-02 | | | patientCheckIn | |
+| v2.58.0 | 2025-09-02 | v2.19.0 | 2024-01-09 | patientCheckInWaygate | |
+| v2.58.0 | 2025-09-02 | v2.22.0 | 2024-02-21 | homeScreenPrefetch | |
+| v2.58.0 | 2025-09-02 | v2.46.0 | 2025-03-18 | allergies | |
+| v2.58.0 | 2025-09-02 | v2.49.0 | 2025-04-29 | veteranStatusCardRedesign | |
+| v2.58.0 | 2025-09-02 | v2.54.0 | 2025-07-08 | logDowntimeAnalytics | |
+| v2.39.0 | 2024-10-15 | v2.35.0 | 2024-08-21 | claimPhaseExpansion | |
+
+## What's New
+
+Specific feature highlights as displayed in the app's "What's New" screen.
+
+<WhatsNewHistory />
+
+## Release Notes
+
+A historical log of the raw release notes submitted to the App Store and Google Play.
+
+<ReleaseNotesHistory />

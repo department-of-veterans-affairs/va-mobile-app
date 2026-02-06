@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "node utils/fetchGitHubData.js",
+    "prebuild": "node utils/fetchGitHubData.js && node utils/fetchWhatsNewData.js",
+    "fetch-whats-new": "node utils/fetchWhatsNewData.js",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
