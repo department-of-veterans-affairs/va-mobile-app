@@ -5,8 +5,7 @@ import { t } from 'i18next'
 
 import { Vaccine } from 'api/types'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
-import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 
 context('VaccineDetailsScreen', () => {
   const defaultVaccine = {
@@ -50,12 +49,29 @@ context('VaccineDetailsScreen', () => {
       doseNumber: null,
       doseSeries: null,
       groupName: 'COVID-19',
+      location: 'facility 1',
       manufacturer: null,
       note: null,
       shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
     },
     relationships: {
       location: location,
+    },
+  }
+
+  const nullLocationVaccine = {
+    id: 'NULLLOCATION',
+    type: 'immunization',
+    attributes: {
+      cvxCode: 207,
+      date: '2020-12-18T12:24:55Z',
+      doseNumber: null,
+      doseSeries: null,
+      groupName: 'COVID-19',
+      location: null,
+      manufacturer: null,
+      note: null,
+      shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
     },
   }
 
@@ -68,12 +84,10 @@ context('VaccineDetailsScreen', () => {
       doseNumber: null,
       doseSeries: null,
       groupName: null,
+      location: 'facility 1',
       manufacturer: null,
       note: null,
       shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
-    },
-    relationships: {
-      location: location,
     },
   }
 
@@ -100,37 +114,31 @@ context('VaccineDetailsScreen', () => {
     ).toBeTruthy()
     expect(screen.getByText(t('health.details.weBaseThis'))).toBeTruthy()
     expect(screen.queryByText('facility 1')).toBeFalsy()
-    expect(screen.queryByText('123 abc street')).toBeFalsy()
-    expect(screen.queryByText('Tiburon, CA 94920')).toBeFalsy()
   })
 
-  it('initializes correctly for has location vaccine', async () => {
-    when(api.get as jest.Mock)
-      .calledWith(`/v0/health/locations/location1`)
-      .mockResolvedValue({ ...location })
+  it('initializes correctly for has location vaccine', () => {
     initializeTestInstance(hasLocationVaccine)
-    await waitFor(() => expect(screen.getByText('facility 1')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('123 abc street')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Tiburon, CA 94920')).toBeTruthy())
+    expect(screen.getByText('facility 1')).toBeTruthy()
   })
 
-  it('should show alert that vaccine has missing information', async () => {
-    when(api.get as jest.Mock)
-      .calledWith(`/v0/health/locations/location1`)
-      .mockResolvedValue({ ...location })
-    initializeTestInstance(missingDataVaccine)
-
-    await waitFor(() => expect(screen.getByText(t('vaccines.missingDetails.header'))).toBeTruthy())
-    await waitFor(() => expect(screen.getByText(t('vaccines.missingDetails.description'))).toBeTruthy())
+  it('should not display location when location is null', () => {
+    initializeTestInstance(nullLocationVaccine)
+    expect(screen.getByRole('header', { name: 'COVID-19 vaccine' })).toBeTruthy()
+    expect(screen.getByText('Provider')).toBeTruthy()
+    expect(screen.queryByText('facility 1')).toBeFalsy()
   })
 
-  it('should show vaccine with missing name and date', async () => {
-    when(api.get as jest.Mock)
-      .calledWith(`/v0/health/locations/location1`)
-      .mockResolvedValue({ ...location })
+  it('should show alert that vaccine has missing information', () => {
     initializeTestInstance(missingDataVaccine)
 
-    await waitFor(() => expect(screen.getByText(t('vaccine'))).toBeTruthy())
-    await waitFor(() => expect(screen.getByText(t('vaccines.noDate'))).toBeTruthy())
+    expect(screen.getByText(t('vaccines.missingDetails.header'))).toBeTruthy()
+    expect(screen.getByText(t('vaccines.missingDetails.description'))).toBeTruthy()
+  })
+
+  it('should show vaccine with missing name and date', () => {
+    initializeTestInstance(missingDataVaccine)
+
+    expect(screen.getByText(t('vaccine'))).toBeTruthy()
+    expect(screen.getByText(t('vaccines.noDate'))).toBeTruthy()
   })
 })
