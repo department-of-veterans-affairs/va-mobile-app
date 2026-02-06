@@ -1,14 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
-import { DateTime } from 'luxon'
-import { setTimeout } from 'timers/promises'
 
 import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from '../utils'
-
-const todaysDate = DateTime.local()
-const dateFieldFormat = 'MMMM dd, yyyy'
-
-const threeMonthsEarlierFieldText = todaysDate.minus({ months: 3 }).toFormat(dateFieldFormat)
-const todaysDateFieldText = todaysDate.toFormat(dateFieldFormat)
 
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION:
@@ -49,7 +41,6 @@ describe('Review Upcoming Appointments', () => {
 
       // Get info about what to bring to appointment
       await element(by.id('whatToBringLinkTestID')).tap()
-      await setTimeout(2000)
       await element(by.id(Appointmentse2eConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
 
       // Call VA phone numbers

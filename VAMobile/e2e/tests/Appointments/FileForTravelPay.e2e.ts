@@ -1,5 +1,4 @@
-import { by, device, element, expect, waitFor } from 'detox'
-import { setTimeout } from 'timers/promises'
+import { by, element, expect, waitFor } from 'detox'
 
 import {
   CommonE2eIdConstants,
@@ -311,7 +310,6 @@ describe('File for Travel Pay', () => {
     // Accept travel agreement and submit
     await element(by.id(TravelPayE2eIdConstants.CHECK_BOX_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID)).tap()
-    await setTimeout(4000)
 
     // Verify Submit Success screen
     await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID))).toExist()
