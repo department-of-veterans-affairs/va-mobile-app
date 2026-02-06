@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DateTime } from 'luxon'
 
 import { Events } from 'constants/analytics'
+import { useCallback } from 'react'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getVersionName } from 'utils/deviceData'
 import { useGiveFeedback } from 'utils/hooks'
@@ -22,7 +23,7 @@ export const IN_APP_FEEDBACK_ACTIONS_THRESHOLD = 3
 export const useReviewEvent = (screenView?: boolean, feedbackScreen?: string): (() => Promise<void>) => {
   const inAppFeedback = useGiveFeedback()
 
-  const reviewEvent = async () => {
+  return useCallback(async () => {
     if (!featureEnabled('inAppReview') && !featureEnabled('inAppFeedback')) return
     //Checked for feedbackScreen triggers first.
     if (featureEnabled('inAppFeedback') && feedbackScreen) {
@@ -66,9 +67,7 @@ export const useReviewEvent = (screenView?: boolean, feedbackScreen?: string): (
         }
       }
     }
-  }
-
-  return reviewEvent
+  }, [feedbackScreen, inAppFeedback, screenView])
 }
 
 const callReviewAPI = async (versionName: string): Promise<void> => {
