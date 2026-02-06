@@ -405,6 +405,96 @@ export async function checkImages(screenshotPath) {
 }
 
 /**
+ * Fills in the home address fields in the Edit Address screen
+ */
+export const fillHomeAddressFields = async ({
+  streetAddressLine1,
+  streetAddressLine2,
+  city,
+  state,
+  country,
+  zipCode,
+}: {
+  streetAddressLine1: string
+  streetAddressLine2: string
+  city: string
+  state: string
+  country: string // Only supports the first countries in the list
+  zipCode: string
+}) => {
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText(streetAddressLine2)
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)).tap()
+  await expect(element(by.text(country))).toExist()
+  await element(by.text(country)).tap()
+  await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText(city)
+  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
+    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
+  await element(by.text(state)).tap()
+  await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
+  await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText(streetAddressLine1)
+  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
+    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText(zipCode)
+  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+}
+
+/**
+ * Executes the flow to update the entered address as save it to demo mode
+ */
+export async function updateAddress() {
+  // Save the address by using the suggested address
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+  await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
+
+  // Dismiss the address suggestion modal
+  try {
+    await setTimeout(2000)
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  } catch (ex) {}
+}
+
+export const openAppointmentInList = async (text: string) => {
+  try {
+    await waitFor(element(by.text(text)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+      .scroll(250, 'down')
+  } catch (ex) {
+    await waitFor(element(by.text(text)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+      .scroll(250, 'up')
+  }
+  await element(by.text(text)).tap()
+}
+
+/**
  * Single-source collection for 'open this screen' functions
  * Having multiple functions repeats the line of code, but
  * Have a single file to update if the matchers change (here, vs scattered throughout tests files)
