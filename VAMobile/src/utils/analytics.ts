@@ -163,6 +163,5 @@ export const logScreenViewOnNavChange = async (
       screen_name: currentRouteName,
       screen_class: currentRouteName,
     })
->>>>>>> 40608e2257 (ignoring screen view events param, manually logging them in travel claims)
   }
 }
