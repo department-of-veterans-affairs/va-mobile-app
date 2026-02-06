@@ -19,7 +19,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
 import NoMatchInRecords from 'screens/HealthScreen/Appointments/NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
-import PastAppointmentsOld from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointmentsOld'
 import UpcomingAppointments from 'screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -197,27 +196,16 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           {serviceErrorAlert()}
           <OHAlertManager parentScreen={OHParentScreens.Appointments} authorizedServices={userAuthorizedServices} />
           <Box>
-            {selectedTab === 1 &&
-              (featureEnabled('datePickerUpdate') ? (
-                <PastAppointments
-                  appointmentsData={apptsData}
-                  dateRange={dateRange}
-                  loading={loadingAppointments || fetchingAuthServices}
-                  setDateRange={setDateRange}
-                  setTimeFrame={setTimeFrame}
-                  scrollViewRef={scrollViewRef}
-                />
-              ) : (
-                <PastAppointmentsOld
-                  appointmentsData={apptsData}
-                  page={page}
-                  setPage={setPage}
-                  loading={loadingAppointments || fetchingAuthServices}
-                  setDateRange={setDateRange}
-                  setTimeFrame={setTimeFrame}
-                  scrollViewRef={scrollViewRef}
-                />
-              ))}
+            {selectedTab === 1 && (
+              <PastAppointments
+                appointmentsData={apptsData}
+                dateRange={dateRange}
+                loading={loadingAppointments || fetchingAuthServices}
+                setDateRange={setDateRange}
+                setTimeFrame={setTimeFrame}
+                scrollViewRef={scrollViewRef}
+              />
+            )}
             {selectedTab === 0 && (
               <UpcomingAppointments
                 appointmentsData={apptsData}

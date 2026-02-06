@@ -12,7 +12,6 @@ import { FeatureToggleDescriptions, devConfig, setDebugConfig } from 'utils/remo
 
 const mockOverrides = {
   ...devConfig,
-  haptics: false,
 }
 
 context('RemoteConfigScreen', () => {

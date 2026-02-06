@@ -6,9 +6,8 @@ import { t } from 'i18next'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import MedicalRecordsScreen from 'screens/HealthScreen/MedicalRecordsScreen'
-import { context, fireEvent, mockNavProps, render, when } from 'testUtils'
+import { context, fireEvent, mockNavProps, render } from 'testUtils'
 import getEnv from 'utils/env'
-import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigationSpy = jest.fn()
 const mockExternalLinkSpy = jest.fn()
@@ -26,10 +25,7 @@ jest.mock('utils/platform', () => ({
 jest.mock('utils/remoteConfig')
 
 context('MedicalRecordsScreen', () => {
-  // TODO: update tests to cover flag disabled
-  const initializeTestInstance = (flagEnabled = true, labsEnabled = true) => {
-    when(featureEnabled).calledWith('labsAndTests').mockReturnValue(flagEnabled)
-    when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
+  const initializeTestInstance = (labsEnabled = true) => {
     render(<MedicalRecordsScreen {...mockNavProps()} />, {
       queriesData: [
         {
@@ -85,13 +81,8 @@ context('MedicalRecordsScreen', () => {
     expect(mockNavigationSpy).toHaveBeenCalledWith('LabsAndTestsList')
   })
 
-  it('should not display the LabsList button if remote config flag disabled', () => {
-    initializeTestInstance(false)
-    expect(screen.queryByTestId('toLabsAndTestListID')).toBeNull()
-  })
-
   it('should not display the LabsList button if authorized services flag disabled', () => {
-    initializeTestInstance(true, false)
+    initializeTestInstance(false)
     expect(screen.queryByTestId('toLabsAndTestListID')).toBeNull()
   })
 })

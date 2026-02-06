@@ -331,3 +331,9 @@ jest.mock('@react-native-clipboard/clipboard', () => ({
     hasString: jest.fn().mockResolvedValue(false),
   },
 }))
+
+jest.mock('utils/haptics', () => {
+  return {
+    triggerHaptic: jest.fn(),
+  }
+})

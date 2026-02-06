@@ -7,13 +7,7 @@ import { t } from 'i18next'
 
 import SettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/SettingsScreen'
 import { InitialState } from 'store/slices'
-import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled as jest.Mock)
-  .calledWith('inAppRecruitment')
-  .mockReturnValue(true)
+import { context, mockNavProps, render } from 'testUtils'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
