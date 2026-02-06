@@ -48,7 +48,7 @@ then
   API_PREFIX="staging-api."
   echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
-  # set SIS vars
+  # set auth vars
   AUTH_ROOT="https://staging.va.gov"
   echo "AUTH_ENDPOINT=${AUTH_ROOT}/sign-in" >> .env
   echo "AUTH_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
@@ -62,7 +62,7 @@ else
   API_PREFIX="api."
   echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
-  # set SIS vars
+  # set auth vars
   AUTH_ROOT="https://www.va.gov"
   echo "AUTH_ENDPOINT=${AUTH_ROOT}/sign-in" >> .env
   echo "AUTH_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
