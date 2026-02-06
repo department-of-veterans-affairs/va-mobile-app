@@ -802,12 +802,12 @@ export const Events = {
       params,
     }
   },
-  vama_login_closed: (isSIS = false): Event => {
+  vama_login_closed: (): Event => {
     return {
       name: 'vama_login_closed',
     }
   },
-  vama_login_fail: (error: Error, isSIS = false): Event => {
+  vama_login_fail: (error: Error): Event => {
     return {
       name: 'vama_login_fail',
       params: {
@@ -815,7 +815,7 @@ export const Events = {
       },
     }
   },
-  vama_login_start: (isSIS = true, isBiometric = false): Event => {
+  vama_login_start: (isBiometric = false): Event => {
     return {
       name: 'vama_login_start',
       params: {
@@ -823,7 +823,7 @@ export const Events = {
       },
     }
   },
-  vama_login_success: (isSIS = false): Event => {
+  vama_login_success: (): Event => {
     return {
       name: 'vama_login_success',
     }

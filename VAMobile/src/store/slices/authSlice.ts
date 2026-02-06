@@ -102,7 +102,7 @@ Call postLoggedIn to finish login setup on the BE, Success is empty and we don't
 
 const postLoggedIn = async () => {
   try {
-    await logAnalyticsEvent(Events.vama_login_success(true))
+    await logAnalyticsEvent(Events.vama_login_success())
     await api.post('/v0/user/logged-in')
   } catch (error) {
     if (isErrorObject(error)) {
@@ -716,20 +716,20 @@ export const handleTokenCallbackUrl =
   }
 
 export const cancelWebLogin = (): AppThunk => async (dispatch) => {
-  await logAnalyticsEvent(Events.vama_login_closed(true))
+  await logAnalyticsEvent(Events.vama_login_closed())
   dispatch(dispatchShowWebLogin())
 }
 
 export const sendLoginFailedAnalytics =
   (error: Error): AppThunk =>
   async () => {
-    await logAnalyticsEvent(Events.vama_login_fail(error, true))
+    await logAnalyticsEvent(Events.vama_login_fail(error))
   }
 
 export const sendLoginStartAnalytics =
   (biometric: boolean): AppThunk =>
   async () => {
-    await logAnalyticsEvent(Events.vama_login_start(true, biometric))
+    await logAnalyticsEvent(Events.vama_login_start(biometric))
   }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
