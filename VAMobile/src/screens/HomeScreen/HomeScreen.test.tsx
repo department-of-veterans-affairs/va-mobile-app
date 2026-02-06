@@ -273,7 +273,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/facilities-info')
         .mockResolvedValue(getFacilitiesPayload(false))
       initializeTestInstance()
-      await waitFor(() => expect(get).toBeCalledWith('/v0/facilities-info'))
+      await waitFor(() => expect(get).toHaveBeenCalledWith('/v0/facilities-info'))
       await waitFor(() => expect(screen.queryByText(t('activity.informationNotIncluded'))).toBeFalsy())
     })
   })
@@ -303,7 +303,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getAppointmentsPayload(3, 0))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('upcomingAppointments') })))
-      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://appointments'))
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://appointments'))
     })
 
     it('is not displayed when there are no upcoming appointments', async () => {
@@ -369,7 +369,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getAppointmentsPayload(0, 5))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('pastAppointments') })))
-      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://pastAppointments'))
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://pastAppointments'))
     })
 
     it('is not displayed when there are no upcoming appointments', async () => {
@@ -435,7 +435,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getClaimsAndAppealsPayload(2))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('claims.title') })))
-      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://claims'))
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://claims'))
     })
 
     it('is not displayed when there are no active claims', async () => {
@@ -514,7 +514,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getFoldersPayload(3))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('messages') })))
-      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://messages'))
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://messages'))
     })
 
     it('is not displayed when there are no unread messages', async () => {
@@ -643,7 +643,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getPrescriptionsPayload(3))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('prescription.title') })))
-      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions'))
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://prescriptions'))
     })
 
     it('is not displayed when there are no active prescriptions', async () => {
@@ -820,17 +820,35 @@ context('HomeScreen', () => {
     it('navigates to the "Contact VA" screen when the "Contact us" link is pressed', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('link', { name: t('contactUs') }))
-      expect(mockNavigationSpy).toBeCalledWith('ContactVA')
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ContactVA')
     })
 
     it('launches WebView when the "Find a VA location" link is pressed', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('link', { name: t('findLocation.title') }))
-      expect(mockNavigationSpy).toBeCalledWith('Webview', {
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
         displayTitle: t('webview.vagov'),
         url: 'https://www.va.gov/find-locations/',
         loadingMessage: t('webview.valocation.loading'),
       })
+    })
+  })
+
+  describe('Labs and Tests prefetch', () => {
+    it('calls the labs and tests API when loadLabsAndTestsOnHomeScreen feature flag is enabled', async () => {
+      when(mockFeatureEnabled).calledWith('loadLabsAndTestsOnHomeScreen').mockReturnValue(true)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(get).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.objectContaining({ useCache: 'false' })),
+      )
+    })
+
+    it('does not call the labs and tests API when loadLabsAndTestsOnHomeScreen feature flag is disabled', async () => {
+      when(mockFeatureEnabled).calledWith('loadLabsAndTestsOnHomeScreen').mockReturnValue(false)
+      ;(get as jest.Mock).mockClear()
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      expect(get).not.toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
     })
   })
 })
