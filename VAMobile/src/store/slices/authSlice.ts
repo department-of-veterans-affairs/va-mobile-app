@@ -22,7 +22,6 @@ import {
   AuthParamsLoadingStateTypes,
   AuthSetAuthorizeRequestParamsPayload,
   LOGIN_PROMPT_TYPE,
-  LoginServiceTypeConstants,
 } from 'store/api/types'
 import { dispatchSetAnalyticsLogin } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
@@ -34,14 +33,8 @@ import { pkceAuthorizeParams } from 'utils/oauth'
 import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
 
-const {
-  AUTH_SIS_ENDPOINT,
-  AUTH_SIS_REVOKE_URL,
-  AUTH_SIS_TOKEN_EXCHANGE_URL,
-  AUTH_SIS_TOKEN_REFRESH_URL,
-  ENVIRONMENT,
-  IS_TEST,
-} = getEnv()
+const { AUTH_ENDPOINT, AUTH_REVOKE_URL, AUTH_TOKEN_EXCHANGE_URL, AUTH_TOKEN_REFRESH_URL, ENVIRONMENT, IS_TEST } =
+  getEnv()
 
 let inMemoryRefreshToken: string | undefined
 
@@ -55,7 +48,6 @@ const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
-const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const authNonFatalErrorString = 'Auth Service Error'
 
 export type AuthState = {
@@ -109,7 +101,7 @@ Call postLoggedIn to finish login setup on the BE, Success is empty and we don't
 
 const postLoggedIn = async () => {
   try {
-    await logAnalyticsEvent(Events.vama_login_success(true))
+    await logAnalyticsEvent(Events.vama_login_success())
     await api.post('/v0/user/logged-in')
   } catch (error) {
     if (isErrorObject(error)) {
@@ -168,7 +160,6 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials({ server: KEYCHAIN_STORAGE_KEY })
   await Keychain.resetInternetCredentials({ server: KEYCHAIN_DEVICE_SECRET_KEY })
-  await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
   inMemoryRefreshToken = undefined
 }
 
@@ -365,7 +356,6 @@ const storeRefreshToken = async (
     Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
     AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-    AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
   ])
     .then(async () => {
       await logAnalyticsEvent(Events.vama_login_token_store(true))
@@ -468,28 +458,12 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
   }
 }
 
-/**
- * Checks the SIS feature flag and compares it against the type of refresh token stored
- * @returns if the login service we're using matches the the type of token we have stored
- */
-export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
-  const tokenType = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
-  return tokenType === LoginServiceTypeConstants.SIS
-}
-
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
     await clearCookies()
 
-    // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
-    const tokenMatchesService = await refreshTokenMatchesLoginService()
-    if (!tokenMatchesService) {
-      console.debug('refreshAccessToken: Token/service mismatch. Logging out.')
-      return false
-    }
-
-    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
+    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -538,13 +512,8 @@ export const attemptIntializeAuthWithRefreshToken = async (
 ): Promise<void> => {
   try {
     await clearCookies()
-    const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
 
-    if (!refreshTokenMatchesLoginType) {
-      throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
-    }
-
-    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
+    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -604,28 +573,23 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     }
 
     await clearCookies()
-    const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
-    if (tokenMatchesServiceType) {
-      const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, {})
-      const queryString = new URLSearchParams({
-        refresh_token: refreshToken ?? '',
-        device_secret: deviceSecret ? deviceSecret.password : '',
-      }).toString()
+    const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, {})
+    const queryString = new URLSearchParams({
+      refresh_token: refreshToken ?? '',
+      device_secret: deviceSecret ? deviceSecret.password : '',
+    }).toString()
 
-      const response = await fetch(AUTH_SIS_REVOKE_URL, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: queryString,
-      })
-      console.debug('logout:', response.status)
-      console.debug('logout:', await response.text())
-    } else {
-      console.debug('logout: login service changed. clearing creds only.')
-    }
+    const response = await fetch(AUTH_REVOKE_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: queryString,
+    })
+    console.debug('logout:', response.status)
+    console.debug('logout:', await response.text())
   } catch (err) {
     logNonFatalErrorToFirebase(err, `logout: ${authNonFatalErrorString}`)
   } finally {
@@ -722,9 +686,9 @@ export const handleTokenCallbackUrl =
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
-      console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
+      console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL)
       await clearCookies()
-      const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
+      const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -750,20 +714,20 @@ export const handleTokenCallbackUrl =
   }
 
 export const cancelWebLogin = (): AppThunk => async (dispatch) => {
-  await logAnalyticsEvent(Events.vama_login_closed(true))
+  await logAnalyticsEvent(Events.vama_login_closed())
   dispatch(dispatchShowWebLogin())
 }
 
 export const sendLoginFailedAnalytics =
   (error: Error): AppThunk =>
   async () => {
-    await logAnalyticsEvent(Events.vama_login_fail(error, true))
+    await logAnalyticsEvent(Events.vama_login_fail(error))
   }
 
 export const sendLoginStartAnalytics =
   (biometric: boolean): AppThunk =>
   async () => {
-    await logAnalyticsEvent(Events.vama_login_start(true, biometric))
+    await logAnalyticsEvent(Events.vama_login_start(biometric))
   }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
@@ -778,7 +742,7 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
     oauth: 'true',
   }).toString()
 
-  const url = `${AUTH_SIS_ENDPOINT}?${params}`
+  const url = `${AUTH_ENDPOINT}?${params}`
   dispatch(dispatchShowWebLogin(url))
 }
 
