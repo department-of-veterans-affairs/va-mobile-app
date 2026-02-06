@@ -132,6 +132,125 @@ context('ViewMessageScreen', () => {
     },
   }
 
+  const disabledRepliesThread: SecureMessagingThreadGetData = {
+    data: [
+      {
+        id: 1,
+        type: '1',
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'mock subject 1: The initial message sets the overall thread subject header',
+          body: 'message 1 body text',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1',
+          senderId: 2,
+          senderName: 'mock sender 1',
+          recipientId: 3,
+          recipientName: 'mock recipient name 1',
+          readReceipt: 'mock read receipt 1',
+          isOhMessage: false,
+        },
+      },
+      {
+        id: 2,
+        type: '1',
+        attributes: {
+          messageId: 2,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'test 2',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '2',
+          senderId: 2,
+          senderName: 'mock sender 2',
+          recipientId: 3,
+          recipientName: 'mock recipient name 2',
+          readReceipt: 'mock read receipt 2',
+          isOhMessage: false,
+        },
+      },
+      {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '3',
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+          canReply: false,
+        },
+      },
+    ],
+  }
+  const oldCannotReplyThread: SecureMessagingThreadGetData = {
+    data: [],
+  }
+  const oldCannotReplyMessage: SecureMessagingMessageGetData = {
+    data: {
+      id: 45,
+      type: '3',
+      attributes: {
+        messageId: 45,
+        category: CategoryTypeFields.other,
+        subject: 'This message should not display because it has different thread ID',
+        body: 'test',
+        hasAttachments: false,
+        attachment: false,
+        sentDate: '2013-06-06T04:00:00.000+00:00',
+        senderId: 2,
+        senderName: 'mock sender 45',
+        recipientId: 3,
+        recipientName: 'mock recipient name',
+        readReceipt: 'mock read receipt',
+        isOhMessage: false,
+        canReply: false,
+      },
+    },
+    included: [],
+    meta: {
+      userInTriageTeam: true,
+    },
+  }
+
+  const cannotReplyMessage: SecureMessagingMessageGetData = {
+    data: {
+      id: 3,
+      type: '3',
+      attributes: {
+        messageId: 3,
+        category: CategoryTypeFields.other,
+        subject: '',
+        body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
+        hasAttachments: false,
+        attachment: false,
+        sentDate: '3',
+        senderId: 2,
+        senderName: 'mock sender 3',
+        recipientId: 3,
+        recipientName: 'mock recipient name 3',
+        readReceipt: 'mock read receipt',
+        isOhMessage: false,
+        canReply: false,
+      },
+    },
+    included: [],
+    meta: {
+      userInTriageTeam: true,
+    },
+  }
+
   const listOfFolders: SecureMessagingFoldersGetData = {
     data: [
       {
@@ -287,6 +406,56 @@ context('ViewMessageScreen', () => {
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('This conversation is too old for new replies')).toBeTruthy())
+    })
+  })
+
+  describe('when provider disbles replies on latest message', () => {
+    it('should have the Start new message button', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(disabledRepliesThread)
+        .calledWith(`/v0/messaging/health/messages/${45}`)
+        .mockResolvedValue(cannotReplyMessage)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('You can’t reply to this message')).toBeTruthy())
+
+    })
+  })
+
+  describe('when latest message is older than 45 days and provider disbles replies', () => {
+    it('should have the Start new message button', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(oldCannotReplyThread)
+        .calledWith(`/v0/messaging/health/messages/${45}`)
+        .mockResolvedValue(oldCannotReplyMessage)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('This conversation is too old for new replies')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('You can’t reply to this message')).toBeTruthy())
     })
   })
 
