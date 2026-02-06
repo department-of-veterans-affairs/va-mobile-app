@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import _ from 'underscore'
 
 import * as api from 'store/api'
-import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE, LoginServiceTypeConstants } from 'store/api/types'
+import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/api/types'
 import {
   cancelWebLogin,
   checkFirstTimeLogin,
@@ -109,7 +109,6 @@ context('authAction SIS', () => {
     }
     const envMock = getEnv as jest.Mock
     envMock.mockReturnValue(defaultEnvParams)
-    when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
     when(getItemMock).calledWith('@store_refresh_token_encrypted_component').mockResolvedValue(encryptedComponent)
 
     const isAndroidMock = isAndroid as jest.Mock

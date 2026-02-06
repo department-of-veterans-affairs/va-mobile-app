@@ -48,7 +48,6 @@ const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
-const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const authNonFatalErrorString = 'Auth Service Error'
 
 export type AuthState = {
@@ -161,7 +160,6 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials({ server: KEYCHAIN_STORAGE_KEY })
   await Keychain.resetInternetCredentials({ server: KEYCHAIN_DEVICE_SECRET_KEY })
-  await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
   inMemoryRefreshToken = undefined
 }
 
