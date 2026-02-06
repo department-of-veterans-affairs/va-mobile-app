@@ -13,7 +13,7 @@ import {
   SecureMessagingFormData,
   Vaccine,
 } from 'api/types'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import SessionNotStarted from 'screens/HealthScreen/Appointments/UpcomingAppointments/SessionNotStarted'
@@ -29,7 +29,6 @@ import Attachments from 'screens/HealthScreen/SecureMessaging/StartNewMessage/At
 import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
 import SubmitMileageTravelPayScreen from 'screens/HealthScreen/TravelPay'
 import TravelClaimHelpScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelpScreen'
-import TravelPayClaimDetailsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimDetailsScreen'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
@@ -231,12 +230,6 @@ export const getHealthScreens = () => {
       name="SubmitTravelPayClaimScreen"
       component={SubmitMileageTravelPayScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
-    />,
-    <HealthStack.Screen
-      key={'TravelPayClaimDetailsScreen'}
-      name="TravelPayClaimDetailsScreen"
-      component={TravelPayClaimDetailsScreen}
-      options={FEATURE_LANDING_TEMPLATE_OPTIONS}
     />,
     <HealthStack.Screen
       key={'TravelClaimHelpScreen'}
