@@ -20,6 +20,7 @@ import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDebtsCount } from 'api/debts'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useLabsAndTests } from 'api/labsAndTests/getLabsAndTests'
 import { useMedicalCopays } from 'api/medicalCopays'
 import { useServiceHistory } from 'api/militaryService'
 import { usePayments } from 'api/payments'
@@ -136,6 +137,22 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryQuery = useServiceHistory()
   const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
+
+  const now = DateTime.now()
+  const labsStartDate = now.minus({ months: 3 }).toFormat('yyyy-MM-dd')
+  const labsEndDate = now.toFormat('yyyy-MM-dd')
+  const labsTimeFrame = `${now.minus({ months: 3 }).toFormat('MMM d, yyyy')} - ${now.toFormat('MMM d, yyyy')}`
+
+  useLabsAndTests(
+    {
+      dateRange: {
+        start: labsStartDate,
+        end: labsEndDate,
+      },
+      timeFrame: labsTimeFrame,
+    },
+    { enabled: featureEnabled('loadLabsAndTestsOnHomeScreen') },
+  )
 
   const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
   const { data: debtsCount, isLoading: debtsLoading, error: debtsError } = useDebtsCount()

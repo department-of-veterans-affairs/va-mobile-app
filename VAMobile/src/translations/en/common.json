@@ -2347,6 +2347,7 @@
   "whatsNew.bodyCopy.PretransitionedOHInfoAlert.link.text": "Go to My VA Health",
   "whatsNew.bodyCopy.DecisionLetter": "We can now notify you when a decision letter is available.",
   "whatsNew.bodyCopy.DecisionLetter.bullet.1": "Manage this setting in your profile under Settings > Notifications > Decision letters: benefits claims and decision reviews",
+  "whatsNew.bodyCopy.LabsAndTests": "You can now view your lab and test results in the health section.",
   "whatsNew.dismissMessage": "Dismiss this message",
   "whatsNew.title": "What's new",
   "yes": "Yes"
