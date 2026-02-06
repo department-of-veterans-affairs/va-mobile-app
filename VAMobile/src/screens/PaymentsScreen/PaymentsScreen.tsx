@@ -43,7 +43,14 @@ function PaymentsScreen({}: PaymentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays()
+  const copaymentsEnabled = featureEnabled('copayments')
+  const overpaymentsEnabled = featureEnabled('overpayments')
+
+  const {
+    summary: copaysSummary,
+    isLoading: copaysLoading,
+    error: copaysError,
+  } = useMedicalCopays({ enabled: copaymentsEnabled })
 
   const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
 
@@ -77,7 +84,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
   return (
     <CategoryLanding title={t('payments.title')} testID="paymentsID">
       <>
-        {featureEnabled('copayments') && (
+        {copaymentsEnabled && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
@@ -85,7 +92,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
             showLoading={copaysLoading}
           />
         )}
-        {featureEnabled('overpayments') && (
+        {overpaymentsEnabled && (
           <LargeNavButton
             title={t('debts.title')}
             onPress={() => navigateTo('Debts')}
