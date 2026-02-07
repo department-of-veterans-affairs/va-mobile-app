@@ -2,9 +2,9 @@ import { linking } from './linking'
 
 describe('linking', () => {
   describe('getStateFromPath', () => {
-    describe('track-claims/your-claim-letters', () => {
-      it('should navigate to ClaimLettersScreen when path is track-claims/your-claim-letters', () => {
-        const path = '/track-claims/your-claim-letters'
+    describe('track-claims/your-claim-letters/link', () => {
+      it('should navigate to ClaimLettersScreen when path is track-claims/your-claim-letters/link', () => {
+        const path = '/track-claims/your-claim-letters/link'
         const state = linking.getStateFromPath?.(path, linking.config as any)
 
         expect(state).toEqual({
@@ -27,7 +27,7 @@ describe('linking', () => {
       })
 
       it('should navigate to ClaimLettersScreen without leading slash', () => {
-        const path = 'track-claims/your-claim-letters'
+        const path = 'track-claims/your-claim-letters/link'
         const state = linking.getStateFromPath?.(path, linking.config as any)
 
         expect(state).toEqual({
@@ -58,6 +58,13 @@ describe('linking', () => {
 
       it('should not match partial path', () => {
         const path = '/track-claims/your-claim'
+        const state = linking.getStateFromPath?.(path, linking.config as any)
+
+        expect(state).toBeUndefined()
+      })
+
+      it('should not match without /link suffix', () => {
+        const path = '/track-claims/your-claim-letters'
         const state = linking.getStateFromPath?.(path, linking.config as any)
 
         expect(state).toBeUndefined()

@@ -134,7 +134,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="staging.va.gov" />
-                <data android:path="/track-claims/your-claim-letters" />
+                <data android:path="/track-claims/your-claim-letters/link" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -144,7 +144,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="www.va.gov" />
-                <data android:path="/track-claims/your-claim-letters" />
+                <data android:path="/track-claims/your-claim-letters/link" />
             </intent-filter>
         </activity>
     </application>

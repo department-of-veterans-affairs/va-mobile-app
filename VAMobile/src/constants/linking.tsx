@@ -173,7 +173,7 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
-    } else if (pathParts[0] === 'track-claims' && pathParts[1] === 'your-claim-letters') {
+    } else if (pathParts[0] === 'track-claims' && pathParts[1] === 'your-claim-letters' && pathParts[2] === 'link') {
       return {
         routes: [
           {
