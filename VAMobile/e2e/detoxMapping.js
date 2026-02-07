@@ -86,8 +86,8 @@ const appointmentsArray = [
   'AppointmentsExpanded',
   'AppointmentsTestTime',
   'TravelPay',
-  'Appointments/FileForTravelPay',
-  'Appointments/ReviewAppointments',
+  'FileForTravelPay',
+  'ReviewAppointments',
 ]
 const notificationsArray = ['SettingsScreen', 'PushNotifications']
 // TODO: The rest of the Overpay/Copay screens still need to be added to project

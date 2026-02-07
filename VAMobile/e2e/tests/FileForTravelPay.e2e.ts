@@ -10,7 +10,7 @@ import {
   openHealth,
   toggleRemoteConfigFlag,
   updateAddress,
-} from '../utils'
+} from './utils'
 
 const TravelPayE2eIdConstants = {
   ADDRESS_CITY_TEXT: 'Flagstaff',

@@ -1,6 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from '../utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 
 export const Appointmentse2eConstants = {
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
