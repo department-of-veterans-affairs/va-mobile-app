@@ -81,7 +81,14 @@ const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims']
 const contactInfoArray = ['ContactInformation', 'VALetters']
 const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
 const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
-const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime', 'TravelPay']
+const appointmentsArray = [
+  'Appointments',
+  'AppointmentsExpanded',
+  'AppointmentsTestTime',
+  'TravelPay',
+  'FileForTravelPay',
+  'ReviewAppointments',
+]
 const notificationsArray = ['SettingsScreen', 'PushNotifications']
 // TODO: The rest of the Overpay/Copay screens still need to be added to project
 const medicalCopaysArray = ['Payments']
