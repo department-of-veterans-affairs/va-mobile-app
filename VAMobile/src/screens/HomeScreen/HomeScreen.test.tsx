@@ -273,7 +273,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/facilities-info')
         .mockResolvedValue(getFacilitiesPayload(false))
       initializeTestInstance()
-      await waitFor(() => expect(get).toHaveBeenCalledWith('/v0/facilities-info'))
+      await waitFor(() => expect(get).toBeCalledWith('/v0/facilities-info'))
       await waitFor(() => expect(screen.queryByText(t('activity.informationNotIncluded'))).toBeFalsy())
     })
   })
@@ -303,7 +303,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getAppointmentsPayload(3, 0))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('upcomingAppointments') })))
-      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://appointments'))
+      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://appointments'))
     })
 
     it('is not displayed when there are no upcoming appointments', async () => {
@@ -369,7 +369,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getAppointmentsPayload(0, 5))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('pastAppointments') })))
-      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://pastAppointments'))
+      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://pastAppointments'))
     })
 
     it('is not displayed when there are no upcoming appointments', async () => {
@@ -435,7 +435,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getClaimsAndAppealsPayload(2))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('claims.title') })))
-      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://claims'))
+      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://claims'))
     })
 
     it('is not displayed when there are no active claims', async () => {
@@ -514,7 +514,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getFoldersPayload(3))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('messages') })))
-      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://messages'))
+      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://messages'))
     })
 
     it('is not displayed when there are no unread messages', async () => {
@@ -643,7 +643,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getPrescriptionsPayload(3))
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('prescription.title') })))
-      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith('vamobile://prescriptions'))
+      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions'))
     })
 
     it('is not displayed when there are no active prescriptions', async () => {
@@ -820,13 +820,13 @@ context('HomeScreen', () => {
     it('navigates to the "Contact VA" screen when the "Contact us" link is pressed', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('link', { name: t('contactUs') }))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ContactVA')
+      expect(mockNavigationSpy).toBeCalledWith('ContactVA')
     })
 
     it('launches WebView when the "Find a VA location" link is pressed', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('link', { name: t('findLocation.title') }))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+      expect(mockNavigationSpy).toBeCalledWith('Webview', {
         displayTitle: t('webview.vagov'),
         url: 'https://www.va.gov/find-locations/',
         loadingMessage: t('webview.valocation.loading'),
