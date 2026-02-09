@@ -35,18 +35,20 @@ This phase centers on having a defined problem statement and success criteria, t
 
 
 **During this step feature teams are responsible for:**
+* Creating a [Project Kickoff Template ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=Project-Kickoff-Approval-Template.md)
+
+On this ticket:
 * Clearly articulating the problem statement and success criteria
 * Identifying a rough sense of scope (what’s in/out) and how the feature should behave
 * Discussing technical dependencies/constraints, testing needs, and a high-level timeline
 
 **During this step the Mobile App Platform team will be responsible for:**
+* **Scheduling the kickoff meeting to discuss the project work**
 * Ensuring feature teams have access to appropriate process documentation
 * Identifying any potential hindrances in the development process and future proofing against them
 * Setting a Go Live goal and cross modality requirements
 * Warning about any potential code or delivery collisions with other teams
 * Creating Mobile App Platform team work tied to any homescreen integrations
-
-Please post in the **#va-mobile-app** channel to request a Project Definition Kickoff Meeting and we'll work with you to schedule ASAP.
 
 -----------  
 ## Design Cycle
@@ -60,7 +62,7 @@ This step is meant to be collaborative. It gives the Mobile App Platform team an
 
 **During this step feature teams are responsible for:**
 * Scheduling a design critique meeting [when applicable](../../../design/About/designers#when-to-attend)
-* Getting officially approved signoff on UI and design from the Mobile App Platform team
+* Getting officially approved signoff on UI and design from the Mobile App Platform team via a [Design Approval ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=UX-Approval-Template.md)
 
 **During this step the Mobile App Platform team will be responsible for:**
 * Helping iterate on proposed designs
@@ -162,4 +164,5 @@ This phase is about shifting from “we shipped it” to “it’s working in th
 -----------  
 To create features successfully on the Mobile App Platform, these are the checkpoints every feature team should be moving towards and through:  
 
-![Mandatory Steps](../../../static/img/featureWorkflow/MandatorySteps.png)
+![Mandatory Steps](../../../static/img/featureWorkflow/MandatorySteps.png)  
+\----------[Project Kickoff](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=Project-Kickoff-Approval-Template.md)--------------------[Design Approval](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=UX-Approval-Template.md)-------------------[Eng/QA Merge Approval](https://github.com/department-of-veterans-affairs/va-mobile-app/compare)---------------[Go-Live Template](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=Go-Live-Approval-Template.md)----------
