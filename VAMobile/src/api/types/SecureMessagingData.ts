@@ -97,6 +97,7 @@ export type SecureMessagingFormData = {
   body: string
   subject?: string
   draft_id?: number
+  station_number?: string
 }
 
 /**
