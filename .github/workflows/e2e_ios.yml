@@ -180,8 +180,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: npm Cache
+        id: npm-cache
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -216,6 +223,7 @@ jobs:
             ${{ runner.os }}-detox-ios-build-
 
       - name: Install npm dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
       - name: Build Detox framework
@@ -281,8 +289,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: npm Cache
+        id: npm-cache
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
 
       - name: Install macOS dependencies
         run: |
@@ -293,6 +308,7 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Install npm dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
       - name: Download built iOS app
