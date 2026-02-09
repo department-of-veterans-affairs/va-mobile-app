@@ -33,7 +33,10 @@ type VeteranStatusCardProps = {
   percentText?: string
 
   /** Function to get the "latest period of service" JSX */
-  getLatestPeriodOfService: () => React.ReactNode
+  getLatestPeriodOfService?: () => React.ReactNode
+
+  /** Hide the "Latest period of service" section (new VSC behavior) */
+  showLatestPeriodOfService?: boolean
 }
 
 /**
@@ -41,7 +44,13 @@ type VeteranStatusCardProps = {
  * Orientation- and platform-specific constants are defined within this file,
  * so you only need to pass the core data.
  */
-export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPeriodOfService }: VeteranStatusCardProps) {
+export function VeteranStatusCard({
+  fullName,
+  edipi,
+  percentText,
+  getLatestPeriodOfService,
+  showLatestPeriodOfService = true,
+}: VeteranStatusCardProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -143,12 +152,14 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           </TextView>
         </Box>
 
-        <Box>
-          <TextView color="primaryContrast" variant={headerVariant} mt={8}>
-            {t('veteranStatus.latestPeriodOfService')}
-          </TextView>
-          {getLatestPeriodOfService()}
-        </Box>
+        {getLatestPeriodOfService && showLatestPeriodOfService && (
+          <Box>
+            <TextView color="primaryContrast" variant={headerVariant} mt={8}>
+              {t('veteranStatus.latestPeriodOfService')}
+            </TextView>
+            {getLatestPeriodOfService()}
+          </Box>
+        )}
 
         <Box flexDirection={isLandscape ? 'row' : 'column'}>
           <Box flex={isLandscape ? 1 : undefined}>

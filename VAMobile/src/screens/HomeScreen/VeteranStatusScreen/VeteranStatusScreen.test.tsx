@@ -398,31 +398,6 @@ context('VeteranStatusScreen', () => {
         const sixtyPercentText = t('disabilityRating.percent', { combinedPercent: 60 })
         expect(await screen.findByText(sixtyPercentText)).toBeTruthy()
       })
-
-      it('shows latest service period from latestService', async () => {
-        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscCardConfirmedNoRating }])
-
-        expect(await screen.findByText('United States Army • 2010–2014')).toBeTruthy()
-      })
-
-      for (const branch of Object.values(BranchesOfServiceConstants)) {
-        it(`displays the correct branch of service text for ${branch}`, async () => {
-          renderWithNewVsc([
-            {
-              queryKey: veteranStatusCardKeys.card,
-              data: {
-                ...vscCardConfirmedNoRating,
-                attributes: {
-                  ...vscCardConfirmedNoRating.attributes,
-                  latestService: { branch, beginDate: '2010-01-01', endDate: '2014-12-31' },
-                },
-              },
-            },
-          ])
-
-          expect(await screen.findByText(`${branch} • 2010–2014`)).toBeTruthy()
-        })
-      }
     })
   })
 })

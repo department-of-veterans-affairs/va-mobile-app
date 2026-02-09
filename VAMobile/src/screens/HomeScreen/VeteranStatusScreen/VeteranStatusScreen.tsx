@@ -249,39 +249,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     )
   }
 
-  const getLatestPeriodOfServiceNew = (): React.ReactNode => {
-    if (!vscCard) return null
-
-    const latestService = vscCard.attributes.latestService
-    if (!latestService?.beginDate || !latestService?.endDate || !latestService?.branch) return null
-
-    const beginYear = latestService.beginDate.slice(0, 4)
-    const endYear = latestService.endDate.slice(0, 4)
-
-    const visibleText = t('militaryInformation.combined.history', {
-      branch: latestService.branch,
-      begin: beginYear,
-      end: endYear,
-    })
-
-    const a11yLabel = t('militaryInformation.combined.historyA11yLabel', {
-      branch: latestService.branch,
-      begin: beginYear,
-      end: endYear,
-    })
-
-    return (
-      <TextView
-        variant="MobileBody"
-        color="primaryContrast"
-        testID="veteranStatusMilitaryServiceTestID"
-        accessibilityLabel={a11yLabel}
-        accessibilityHint={a11yLabel}>
-        {visibleText}
-      </TextView>
-    )
-  }
-
   const getErrorNew = () => {
     if (!vscAlert) {
       return (
@@ -385,9 +352,8 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             edipi={isNewVSCCardAllowed ? vscCard?.attributes.edipi : personalInfo?.edipi}
             branch={isNewVSCCardAllowed ? branchNew : branchLegacy}
             percentText={isNewVSCCardAllowed ? percentTextNew : percentTextLegacy}
-            getLatestPeriodOfService={
-              isNewVSCCardAllowed ? getLatestPeriodOfServiceNew : getLatestPeriodOfServiceLegacy
-            }
+            getLatestPeriodOfService={isNewVSCCardAllowed ? undefined : getLatestPeriodOfServiceLegacy}
+            showLatestPeriodOfService={!isNewVSCCardAllowed}
           />
         </WaygateWrapper>
       )}
