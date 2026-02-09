@@ -224,7 +224,11 @@ jobs:
 
       - name: Install npm dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Apply patches
+        if: steps.npm-cache.outputs.cache-hit == 'true'
+        run: yarn patch-package
 
       - name: Build Detox framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
@@ -234,12 +238,7 @@ jobs:
 
       - name: Install pods
         working-directory: VAMobile/ios
-        run: |
-          if [ ! -d "Pods" ]; then
-            pod install
-          else
-            echo "Using cached Pods"
-          fi
+        run: pod install
 
       - name: Bundle iOS app
         if: steps.build-cache.outputs.cache-hit != 'true'
@@ -309,7 +308,11 @@ jobs:
 
       - name: Install npm dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Apply patches
+        if: steps.npm-cache.outputs.cache-hit == 'true'
+        run: yarn patch-package
 
       - name: Download built iOS app
         uses: actions/download-artifact@v4
