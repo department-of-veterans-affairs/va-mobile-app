@@ -14,6 +14,7 @@ on:
       - opened
     paths:
       - 'VAMobile/src/**'
+      - 'VAMobile/e2e/**'
       - 'VAMobile/package.json'
       - '.github/workflows/e2e_android.yml'
       - '.github/workflows/e2e_ios.yml'
@@ -372,12 +373,7 @@ jobs:
 
   update-test-names:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs:
-      [
-        matrix-e2e-ios,
-        output_detox_tests_to_run,
-        matrix_send_test_results_to_testrail,
-      ]
+    needs: [matrix-e2e-ios, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
     runs-on: ubuntu-latest
     continue-on-error: false
     steps:
