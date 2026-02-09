@@ -4,7 +4,6 @@ import { View } from 'react-native'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { BranchOfService } from 'api/types'
 import { BackgroundVariant, Box, TextView } from 'components'
 import VASeal from 'components/VAIcon/svgs/VASeal.svg'
 import { NAMESPACE } from 'constants/namespaces'
