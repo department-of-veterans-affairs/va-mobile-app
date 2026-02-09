@@ -12,9 +12,10 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  pull_request:
-    paths:
-      - 'VAMobile/e2e/screenshots/screenshot_data.ts'
+# Disabling pull_request event for now which prevents pull request checks from running properly. This action can still be triggered manually.
+#  pull_request:
+#    paths:
+#      - 'VAMobile/e2e/screenshots/screenshot_data.ts'
   workflow_dispatch:
 
 defaults:
