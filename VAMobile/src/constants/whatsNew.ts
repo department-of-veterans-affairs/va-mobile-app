@@ -73,6 +73,7 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
   },
   {
     featureName: 'LabsAndTests',
+    featureFlag: 'labsAndTests',
     authorizedService: 'labsAndTestsEnabled',
   },
 ]
