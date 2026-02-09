@@ -100,10 +100,6 @@ describe('Labs And Test Screen - Date Picker', () => {
 
     await waitFor(element(by.text(`Jan 1, ${lastYear} - Dec 31, ${lastYear}`))).toExist()
 
-    // Go to the next page to verify last year's records
-    await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-
     // Verify last year's records are now visible
     await expect(element(by.text('Blood Work - Last Year'))).toExist()
     await expect(element(by.text('X-Ray - Last Year'))).toExist()
