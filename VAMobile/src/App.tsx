@@ -77,7 +77,7 @@ import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale, useOnResumeForeground } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import { useNetworkConnectionListener, useOfflineAnnounce, useOfflineNavEvents } from 'utils/hooks/offline'
-import i18n from 'utils/i18n'
+import i18n, { geti18n } from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 import { fetchAndActivate } from 'utils/remoteConfig'
 
@@ -154,6 +154,15 @@ function MainApp() {
 
   const currentTheme = getTheme()
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const getLanguage = async (setStateFun: (val: any) => void) => {
+    const asyncVal = await geti18n()
+    setStateFun(asyncVal)
+  }
+
+  const [configuredI18n, setConfiguredI18n] = useState()
+  getLanguage(setConfiguredI18n)
+
   /**
    * Used by the navigation container to initialize the first route.
    */
@@ -184,7 +193,7 @@ function MainApp() {
       <QueryClientProvider client={queryClient}>
         <ActionSheetProvider>
           <ThemeProvider theme={currentTheme}>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={configuredI18n || i18n}>
               <NavigationContainer
                 ref={navigationRef}
                 linking={linking}

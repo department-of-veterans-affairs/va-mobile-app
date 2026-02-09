@@ -39,6 +39,7 @@ import {
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
 import { useAlert, useAppDispatch, useGiveFeedback, useRouteNavigation, useTheme } from 'utils/hooks'
+import { LANGUAGE_PREF } from 'utils/i18n'
 import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
@@ -243,11 +244,31 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     inAppFeedback('Developer')
   }
 
+  /**
+   * temporary translation zone
+   */
+  const [translationKey, setTranslationKey] = useState<string>('')
+  getAsyncStoredData(LANGUAGE_PREF, setTranslationKey)
+
+  const toggleTranslation = async () => {
+    const toggledTranslation = translationKey === 'en' ? 'es' : 'en'
+    console.log('setting translation to ' + toggledTranslation)
+    await AsyncStorage.setItem(LANGUAGE_PREF, toggledTranslation)
+  }
+
   return (
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">
+      <Box>
+        <TextArea>
+          <Button
+            onPress={toggleTranslation}
+            label={`Toggle ${translationKey === 'en' ? 'Spanish' : 'English'} translation`}
+          />
+        </TextArea>
+      </Box>
       <TextView
         variant={'MobileBodyBold'}
         accessibilityRole={'header'}
