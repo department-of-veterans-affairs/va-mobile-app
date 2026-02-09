@@ -102,13 +102,9 @@
       "fullName": "Demo Veteran",
       "edipi": "1100377582",
       "disabilityRating": 70,
-      "latestService": {
-        "branch": "United States Army",
-        "beginDate": "1970-07-13",
-        "endDate": "1998-08-31"
-      },
       "veteranStatus": "confirmed",
-      "serviceHistoryStatus": "found",
+      "notConfirmedReason": null,
+      "confirmationStatus": "NO_SSC_CHECK",
       "serviceSummaryCode": "A1"
     }
   }

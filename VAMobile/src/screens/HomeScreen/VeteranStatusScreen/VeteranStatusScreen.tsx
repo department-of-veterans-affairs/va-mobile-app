@@ -65,7 +65,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     enabled: legacyEnabled,
   })
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
-  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
 
   const { data: ratingData, isLoading: isDisabilityRatingLoading } = useDisabilityRating({
     enabled: legacyEnabled,
@@ -96,7 +95,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const percentTextLegacy = ratingIsDefinedLegacy
     ? t('disabilityRating.percent', { combinedPercent: ratingPercentLegacy })
     : undefined
-  const branchLegacy = mostRecentBranch || ('' as BranchOfService)
 
   // -------------------------------
   // New (single endpoint logic)
@@ -123,7 +121,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const percentTextNew = ratingIsDefinedNew
     ? t('disabilityRating.percent', { combinedPercent: ratingPercentNew })
     : undefined
-  const branchNew = vscCard?.attributes?.latestService?.branch ?? ''
 
   // -------------------------------
   // Unified render decisions
@@ -350,7 +347,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           <VeteranStatusCard
             fullName={isNewVSCCardAllowed ? vscCard?.attributes.fullName : personalInfo?.fullName}
             edipi={isNewVSCCardAllowed ? vscCard?.attributes.edipi : personalInfo?.edipi}
-            branch={isNewVSCCardAllowed ? branchNew : branchLegacy}
             percentText={isNewVSCCardAllowed ? percentTextNew : percentTextLegacy}
             getLatestPeriodOfService={isNewVSCCardAllowed ? undefined : getLatestPeriodOfServiceLegacy}
             showLatestPeriodOfService={!isNewVSCCardAllowed}

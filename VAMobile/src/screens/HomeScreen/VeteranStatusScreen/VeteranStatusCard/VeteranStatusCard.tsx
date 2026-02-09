@@ -26,9 +26,6 @@ type VeteranStatusCardProps = {
   /** DOD ID number (EDIPI) */
   edipi?: string | null | undefined
 
-  /** The user’s most recent branch (e.g., "Army") */
-  branch: BranchOfService | string
-
   /** Optional combined rating text (e.g. “50%”) */
   percentText?: string
 
