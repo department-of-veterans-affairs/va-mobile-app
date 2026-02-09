@@ -247,6 +247,40 @@ context('ReplyMessage', () => {
           ),
         )
       })
+
+      it('should send reply without station_number when recipients are not available', async () => {
+        when(api.get as jest.Mock)
+          .calledWith(`/v1/messaging/health/messages/3/thread?excludeProvidedMessage=${false}`, {
+            useCache: 'false',
+          })
+          .mockResolvedValue(thread)
+          .calledWith(`/v0/messaging/health/messages/3`)
+          .mockResolvedValue(message)
+          .calledWith('/v0/messaging/health/allrecipients')
+          .mockRejectedValue({ networkError: true } as api.APIError)
+        ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+        const props = mockNavProps(
+          undefined,
+          {
+            addListener: mockUseComposeCancelConfirmationSpy,
+            goBack: jest.fn(),
+            navigate: jest.fn(),
+            setOptions: () => {},
+          },
+          { params: { messageID: 3, attachmentFileToAdd: {} } },
+        )
+        render(<ReplyMessage {...props} />)
+        await waitFor(() => expect(screen.getByTestId('reply field')).toBeTruthy())
+        fireEvent.changeText(screen.getByTestId('reply field'), 'test reply')
+        fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send')))
+        await waitFor(() =>
+          expect(api.post).toHaveBeenCalledWith(
+            '/v0/messaging/health/messages/3/reply',
+            expect.not.objectContaining({ station_number: expect.anything() }),
+            undefined,
+          ),
+        )
+      })
     })
   })
 
