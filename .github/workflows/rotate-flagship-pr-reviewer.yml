@@ -105,7 +105,7 @@ jobs:
           last_response=""
           # Loop through pages until we find the channel or there are no more pages
           while :; do
-            url="https://slack.com/api/conversations.list?limit=1000&types=public_channel,private_channel"
+            url="https://slack.com/api/conversations.list?limit=1000&types=public_channel"
             if [[ -n "$cursor" ]]; then
               url="$url&cursor=$cursor"
             fi
