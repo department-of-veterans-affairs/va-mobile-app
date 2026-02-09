@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -28,31 +28,6 @@ export const WhatsNew = () => {
     retrieveSkippedFeatures()
   }, [])
 
-  // TODO: refactor this to not use a while loop
-  const getBullets = useCallback(
-    (featureStringBase: string) => {
-      const bullets: VABulletListText[] = []
-
-      while (1) {
-        const bulletKey = `${featureStringBase}.bullet.${bullets.length + 1}`
-        //@ts-ignore
-        const text = t(bulletKey)
-        //@ts-ignore
-        const a11yLabel = t(`${bulletKey}.a11yLabel`)
-
-        if (text.startsWith(featureStringBase) || !text || bullets.length > 20) {
-          return bullets
-        } else {
-          bullets.push({
-            text,
-            a11yLabel: a11yLabel.startsWith(featureStringBase) ? undefined : a11yLabel,
-          })
-        }
-      }
-    },
-    [t],
-  )
-
   const { whatsNewDisplay, featuresDisplayed } = useMemo(() => {
     const display: React.ReactNode[] = []
     const features: string[] = []
@@ -77,7 +52,6 @@ export const WhatsNew = () => {
         // The base string of the feature will be the key for the main description text.
         const featureStringBase = `whatsNew.bodyCopy.${newFeature.featureName}`
         // Attempt to translate the base string
-        //@ts-ignore
         const labelValue = t(`${featureStringBase}.a11yLabel`)
         /**
          * If there is no translation string found, translation will return the key used. Match this to know if there
@@ -85,17 +59,44 @@ export const WhatsNew = () => {
          */
         const bodyA11yLabel = labelValue.startsWith(featureStringBase) ? undefined : labelValue
 
-        //@ts-ignore
         const body = t(featureStringBase)
-        const bullets = getBullets(featureStringBase) || []
+        const bullets: VABulletListText[] = []
 
-        // get URL if it exists
-        const linkKey = `${featureStringBase}.link.url`
-        const linkUrl = t(linkKey)
-        const linkTextKey = `${featureStringBase}.link.text`
-        const linkText = t(linkTextKey)
+        if (newFeature.bullets) {
+          for (let i = 1; i <= newFeature.bullets; i++) {
+            const bulletKey = `${featureStringBase}.bullet.${i}`
+            const text = t(bulletKey)
+            const a11yLabel = t(`${bulletKey}.a11yLabel`)
+
+            bullets.push({
+              text,
+              a11yLabel: a11yLabel.startsWith(featureStringBase) ? undefined : a11yLabel,
+            })
+          }
+        }
+
         // Check if we have a link to show
-        const showLink = !linkUrl.startsWith(featureStringBase)
+        const showLink = newFeature.hasLink
+
+        const getLink = () => {
+          if (showLink) {
+            const linkKey = `${featureStringBase}.link.url`
+            const linkUrl = t(linkKey)
+            const linkTextKey = `${featureStringBase}.link.text`
+            const linkText = t(linkTextKey)
+
+            return (
+              <LinkWithAnalytics
+                type="url"
+                url={linkUrl}
+                text={linkText}
+                a11yHint={`${linkText} ${t('mobileBodyLink.a11yHint')}`}
+              />
+            )
+          } else {
+            return null
+          }
+        }
 
         const topPadding = firstItemAdded ? 0 : theme.dimensions.standardMarginBetween
         firstItemAdded = false
@@ -107,14 +108,7 @@ export const WhatsNew = () => {
               {body}
             </TextView>
             {bullets.length ? <VABulletList listOfText={bullets} /> : undefined}
-            {showLink ? (
-              <LinkWithAnalytics
-                type="url"
-                url={linkUrl}
-                text={linkText}
-                a11yHint={`${linkText} ${t('mobileBodyLink.a11yHint')}`}
-              />
-            ) : undefined}
+            {getLink()}
           </Box>,
         )
       })
@@ -125,7 +119,6 @@ export const WhatsNew = () => {
       featuresDisplayed: features,
     }
   }, [
-    getBullets,
     skippedFeatures,
     t,
     theme.dimensions.standardMarginBetween,

@@ -4,7 +4,7 @@ title: What's new
 
 ## Feature Summary
 
-What's new displays to the veteran what is new in the version that they upgraded to. This alert is only shown if the version of the app the user is on is the most recent in the store and if there is asignificant change to announce with the provided notes to display to the user. The user can dismiss this alert from reappearing for the current version.
+What's new displays to the veteran what is new in the version that they upgraded to. This alert is only shown if the version of the app the user is on is the most recent in the store and if there is a significant change to announce with the provided notes to display to the user. The user can dismiss this alert from reappearing for the current version.
 
 ## Use Cases
 
@@ -23,6 +23,10 @@ What's new is displayed based on the WhatsNewConfig, which contains an array of 
 * `featureName` will be mapped to the translation file by convention to display body content, bullet points, and links 
 * `featureFlag` will prevent this feature from being displayed unless that flag is on for the user
 * `authorizedService` will prevent this feature from being displayed the user has that authorized service
+* `bullets` optional value for the number of bullets to show with this entry. Maps to \<featureName\>.bullet.\<number\> 
+  translation keys for content
+* `hasLink` Whether there is a link to display at the bottom of the entry. Maps to \<featureName\>.link.url and 
+  \<featureName\>.link.text
 
 If the user dismisses the What's New alert and a flag or service later enables that feature, it will appear again with that feature's content.
 

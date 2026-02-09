@@ -58,9 +58,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const resetAsyncStorageAlert = useAlert()
   const inAppFeedback = useGiveFeedback()
   const [localVersionName, setVersionName] = useState<string>()
-  const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
-  const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const [reviewCount, setReviewCount] = useState<string>()
   const componentMounted = useRef(true)
@@ -72,25 +70,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     }
   }
 
-  async function checkWhatsNewLocalVersion() {
-    const version = await getLocalVersion(FeatureConstants.WHATSNEW, true)
-    if (componentMounted.current) {
-      setWhatsNewVersion(version)
-    }
-  }
-
   useEffect(() => {
     async function checkSkippedVersion() {
       const version = await getVersionSkipped(FeatureConstants.ENCOURAGEUPDATE)
       if (componentMounted.current) {
         setSkippedVersionHomeScreen(version)
-      }
-    }
-
-    async function checkWhatsNewSkippedVersion() {
-      const version = await getVersionSkipped(FeatureConstants.WHATSNEW)
-      if (componentMounted.current) {
-        setWhatsNewSkippedVersionHomeScreen(version)
       }
     }
 
@@ -103,9 +87,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
     checkStoreVersion()
     checkSkippedVersion()
-    checkWhatsNewSkippedVersion()
     checkEncourageUpdateLocalVersion()
-    checkWhatsNewLocalVersion()
     return () => {
       componentMounted.current = false
     }
@@ -388,14 +370,10 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           </TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
           <TextView testID="encourageUpdateVersionTestID">{localVersionName}</TextView>
-          <TextView variant="MobileBodyBold">What's New Local Version</TextView>
-          <TextView testID="whatsNewVersionTestID">{whatsNewLocalVersion}</TextView>
           <TextView variant="MobileBodyBold">Store Version</TextView>
           <TextView testID="storeVersionTestID">{storeVersion}</TextView>
           <TextView variant="MobileBodyBold">Encourage Update Skipped Version</TextView>
           <TextView testID="encourageUpdateSkippedTestID">{skippedVersion}</TextView>
-          <TextView variant="MobileBodyBold">Whats New Skipped Version</TextView>
-          <TextView testID="whatsNewSkippedTestID">{whatsNewSkippedVersion}</TextView>
           <TextView variant="MobileBodyBold">Override Encourage Update Local Version</TextView>
           <VATextInput
             inputType={'none'}
@@ -410,31 +388,13 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
             }}
             testID="overrideEncourageUpdateTestID"
           />
-          <TextView variant="MobileBodyBold">Override What's New Local Version</TextView>
-          <VATextInput
-            inputType={'none'}
-            onChange={(val) => {
-              if (val.length >= 1) {
-                overrideLocalVersion(FeatureConstants.WHATSNEW, val)
-                setWhatsNewVersion(val)
-              } else {
-                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
-                checkWhatsNewLocalVersion()
-              }
-            }}
-            testID="overrideWhatsNewTestID"
-          />
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <Button
               onPress={() => {
                 setSkippedVersionHomeScreen('0.0')
-                setWhatsNewSkippedVersionHomeScreen('0.0')
                 setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, '0.0')
-                setVersionSkipped(FeatureConstants.WHATSNEW, '0.0')
-                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
                 overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
                 checkEncourageUpdateLocalVersion()
-                checkWhatsNewLocalVersion()
               }}
               label={'Reset Versions'}
             />
