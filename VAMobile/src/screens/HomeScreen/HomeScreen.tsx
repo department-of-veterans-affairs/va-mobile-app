@@ -154,7 +154,15 @@ export function HomeScreen({}: HomeScreenProps) {
     { enabled: featureEnabled('loadLabsAndTestsOnHomeScreen') },
   )
 
-  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
+  const copaymentsEnabled = featureEnabled('copayments')
+  const overpaymentsEnabled = featureEnabled('overpayments')
+
+  const {
+    summary: copaysSummary,
+    isLoading: copaysLoading,
+    error: copaysError,
+  } = useMedicalCopays({ enabled: copaymentsEnabled })
+
   const { data: debtsCount, isLoading: debtsLoading, error: debtsError } = useDebtsCount()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
@@ -469,7 +477,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'messages'}
                 />
               )}
-              {featureEnabled('copayments') && showCopays && (
+              {copaymentsEnabled && showCopays && (
                 <ActivityButton
                   title={t('copays.title')}
                   subText={t('copays.activityButton.subText', {
@@ -479,7 +487,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'copays'}
                 />
               )}
-              {featureEnabled('overpayments') && showDebts && (
+              {overpaymentsEnabled && showDebts && (
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {

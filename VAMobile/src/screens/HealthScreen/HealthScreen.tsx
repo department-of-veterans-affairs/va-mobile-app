@@ -107,7 +107,13 @@ export function HealthScreen({}: HealthScreenProps) {
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
-  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
+  const copaymentsEnabled = featureEnabled('copayments')
+
+  const {
+    summary: copaysSummary,
+    isLoading: copaysLoading,
+    error: copaysError,
+  } = useMedicalCopays({ enabled: copaymentsEnabled })
 
   const copaysSubText =
     !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
@@ -160,7 +166,7 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
-        {featureEnabled('copayments') && (
+        {copaymentsEnabled && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
