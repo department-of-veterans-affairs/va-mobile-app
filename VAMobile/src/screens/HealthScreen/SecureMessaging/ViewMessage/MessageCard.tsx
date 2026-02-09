@@ -58,7 +58,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
     fileToGet.size = file.size
     refetchFile()
   }
-  const providerAllowsReply = message?.canReply ?? true
+  const providerAllowsReply = !message?.replyDisabled
 
   function getHeader() {
     return (

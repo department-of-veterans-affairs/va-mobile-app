@@ -262,7 +262,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     return filteredFolder
   }
 
-  const providerAllowsReply = message?.canReply ?? true
+  const providerAllowsReply = !message?.replyDisabled
   const replyExpired =
     demoMode && (message?.messageId === 2092809 || message?.messageId === 2092803)
       ? false
