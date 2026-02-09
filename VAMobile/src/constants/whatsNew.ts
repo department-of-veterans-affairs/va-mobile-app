@@ -13,7 +13,10 @@ import { FeatureToggleType } from 'utils/remoteConfig'
  * if it's shown or not
  * authorizedService: optional authorizedService the feature is tied to. This will
  * determine if it's shown or not
- *
+ * bullets: optional value for the number of bullets to show with this entry. Maps to
+ * <featureName>.bullet.<number> translation keys for content
+ * hasLink: Whether there is a link to display at the bottom of the entry. Maps to
+ * <featureName>.link.url and <featureName>.link.text
  */
 
 /**
@@ -40,6 +43,11 @@ export type WhatsNewConfigItem = {
   featureFlag?: FeatureToggleType
   // If controlled by an authorized service, will not show to the user unless authorized
   authorizedService?: keyof UserAuthorizedServicesData
+  // number of bullets included for this item. Found by <featureName>.bullet.<number>
+  bullets?: number
+  // Whether there is a link included in the what's new copy. Found by <featureName>.link.url
+  // and <featureName>.link.text
+  hasLink?: boolean
 }
 
 export const WhatsNewConfig: WhatsNewConfigItem[] = [
@@ -47,6 +55,7 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureName: 'PretransitionedOHInfoAlert',
     featureFlag: 'showCernerWhatsNew',
     authorizedService: 'isUserAtPretransitionedOhFacility',
+    hasLink: true,
   },
   {
     featureName: 'COE',
@@ -55,10 +64,12 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
   {
     featureName: 'TravelListAndStatus',
     featureFlag: 'travelPayStatusList',
+    bullets: 3,
   },
   {
     featureName: 'DecisionLetter',
     authorizedService: 'benefitsPushNotification',
+    bullets: 1,
   },
 ]
 

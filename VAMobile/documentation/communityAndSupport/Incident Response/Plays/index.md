@@ -12,6 +12,7 @@ Having an existing play does not abdicate you of your responsibility to follow t
 
 - [Feature Flags](#feature-flags)
 - [Availability Framework](#availability-framework)
+- [Halting Release](#halting-release)
 
 ### Feature Flags
 
@@ -56,12 +57,48 @@ To implement an availability framework alert:
 ![ScreenNameCodeSnippet](../../../static/img/incidentResponse/ScreenNameCodeSnippet.png)
 ![featureFlagParameterCondition](../../../static/img/incidentResponse/featureFlagParameterCondition.png)
 
+### Halting Release
+
+There may be times where we need to halt the release to the app stores. In order to do this, we will need to go to the respective app stores to stop the release.
+
+#### Stopping Android release
+
+> **⚠️ IMPORTANT: ⚠️**
+
+> **You will need to be an admin to complete this next step. You will also need access to the Google Play Console.**
+
+**1.1** Once logged into the google play console, navigate to the app. VA: Health and Benefits. Click on `Test and Release`.
+![testAndRelease](../../../static/img/incidentResponse/gTestRelease.png)
+
+**1.2** Next, click on `Production`.
+
+![prodClick](../../../static/img/incidentResponse/gProdClick.png)
+
+**1.3** Click on the `Releases` tab.
+
+![releases](../../../static/img/incidentResponse/gReleases.png)
+
+**1.4** On the most current release, click `Manage Release`.
+
+![manageRelease](../../../static/img/incidentResponse/gManageRelease.png)
+
+**1.5** On the release page, click `Halt rollout`.
+
+![haltRollout](../../../static/img/incidentResponse/gHaltRollout.png)
+
+**1.6** The current Android release will now be stopped. If `2.67.0` is the current release in question, it will be removed from the store and it will revert to the previous release (in this case `2.66.0`) Now would be a good time to trigger [Availability Framework](#availability-framework) to target the install base for the release in question (`2.67.0`) and tell the users to uninstall and reinstall.
+
+#### Stopping iOS release
+
+**2.1** Currently we are unable to halt the iOS release like we can with the Android release. The ios app is released at 100% as soon as the go-live workflow runs. The only way to stop this release is to push out another release to supersede it.
+
 ## Plays
 
 - [App Crash](#app-crash)
 - [General Identity](#general-identity)
 - [SSOe OAuth](#ssoe-oauth)
 - [DNS](#dns)
+- [App Store Admin Tasks](#app-store-admin-tasks)
 
 ### App Crash
 
@@ -167,3 +204,14 @@ Check the Slack to see if there are widespread or known issues. If so, alert the
 - It is also important to note the lack of automation in Gateway Ops. So often issues are intermittent or regionalized.
 - At the point you've collected enough data, contact Gateway Ops. They are on a rotational schedule, so if you contact one of them directly they'll tell you to use the generic email address. That is, VANSOCOperationsGateWay@va.gov. When you create a ServiceNow ticket with them, it'll need to get routed to: IO.NETWORK.NOC.TICGATEWAY.
 - You _MUST_ be proactive and continue to push DNS or other Gateway Issues forward. They will not get resolved on their own.
+
+### App Store Admin Tasks
+
+There will be times where the App Store Admin (ios) will need to complete certain tasks. These tasks include but are not limited to:
+
+- Accepting agreements
+- Accepting disclosures
+
+If any of these are pending, our app will not build. If you see any messages like the below, you will need to reach out to an App Store Connect Admin. We will not have to do this with Android builds.
+
+![disclosureUpdate](../../../static/img/incidentResponse/disclosureUpdate.png)
