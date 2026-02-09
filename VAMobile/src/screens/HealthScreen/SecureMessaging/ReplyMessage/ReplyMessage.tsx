@@ -93,14 +93,10 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const [isDiscarded, replyCancelConfirmation] = useComposeCancelConfirmation()
   const { data: threadData } = useThread(messageID, false)
   const { data: messageReplyData, isLoading: loadingMessage } = useMessage(messageID)
-  // Fetch recipients to get station_number for the reply. This is optional - we track loading state
-  // to prevent race conditions, but don't check for errors since station_number is an optional field.
-  // If recipients fail to load, the reply can still be sent without station_number.
-  const {
-    data: recipientsResponse,
-    isFetched: hasLoadedRecipients,
-    isFetching: refetchingRecipients,
-  } = useAllMessageRecipients()
+  // Fetch recipients to get station_number for the reply. This is optional and fetched opportunistically -
+  // if available when the user sends, we include it. If not (still loading or failed), we send without it.
+  // We don't block the UI or check for errors since station_number is an optional field.
+  const { data: recipientsResponse } = useAllMessageRecipients()
   const recipients = recipientsResponse?.data
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageReplyData?.data.attributes || ({} as SecureMessagingMessageAttributes)
@@ -383,14 +379,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     )
   }
 
-  const isLoading =
-    loadingMessage ||
-    savingDraft ||
-    !signatureFetched ||
-    isDiscarded ||
-    sendingMessage ||
-    !hasLoadedRecipients ||
-    refetchingRecipients
+  const isLoading = loadingMessage || savingDraft || !signatureFetched || isDiscarded || sendingMessage
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
     : isDiscarded
