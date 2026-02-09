@@ -145,7 +145,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const hasRecentMessages = thread.some(
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
-  const providerAllowsReply = !thread.some( (msg) => msg.attributes?.canReply == false)
+  const providerAllowsReply = !thread.some( (msg) => msg.attributes?.canReply === false)
   const replyIsStale = isReplyDraft && !hasRecentMessages
   const replyDisabled = isReplyDraft && (!hasRecentMessages || !providerAllowsReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
