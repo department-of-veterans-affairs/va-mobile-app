@@ -1,8 +1,11 @@
 name: Onboarding Request (Engineering)
-description: Fill out this form to request initiation of engineering onboarding for 
-title: "Onboarding: [name]"
+description: Fill out this form to request initiation of engineering onboarding for va-mobile-app
+title: 'Onboarding: [name]'
+projects: ['department-of-veterans-affairs/1616']
 labels: [user-onboarding]
-assignees: beccatupaj
+assignees:
+  - kellylein
+  - dumathane
 body:
 - type: markdown
   attributes:
@@ -50,7 +53,7 @@ body:
 - type: input
   id: vaoctopo
   attributes:
-    label: Who is the OCTO Product Owner for this person's team? 
+    label: Who is the OCTO Product Owner for this person's team?
     description: Add a PO helps us triage requests, and know who the main point of contact is.
   validations:
     required: true

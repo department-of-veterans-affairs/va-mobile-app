@@ -3,7 +3,7 @@ name: Project Kickoff Approval Template
 about: Template for Notifying MAP team 
 title: Project Kickoff Approval Request - [Insert Feature Name]
 labels: front-end, product, back-end, qa
-assignees: dumathane, BeccaTupaj, b-rocha, rtwell, kellylein, mmiddaugh
+assignees: dumathane, kellylein, b-rocha, rtwell, mmiddaugh, eli-oat
 ---
 ## Project Overview
 **Please only fill out this ticket template if your team is ready to begin the work**
