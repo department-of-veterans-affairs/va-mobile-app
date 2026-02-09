@@ -308,9 +308,21 @@ jobs:
 
       - name: Create Detox simulator
         run: |
-          RUNTIME_ID=$(xcrun simctl list runtimes --json | jq -r '.runtimes | sort_by(.version) | last | .identifier')
-          echo "Using Runtime ID: $RUNTIME_ID"
-          xcrun simctl create "iPhone 16 Pro Max" "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max" "$RUNTIME_ID" || true
+          echo "Listing all available runtimes:"
+          xcrun simctl list runtimes
+
+          # Find the latest available iOS runtime ID
+          RUNTIME_ID=$(xcrun simctl list runtimes --json | jq -r '.runtimes[] | select(.identifier | contains("SimRuntime.iOS")) | .identifier' | tail -1)
+
+          if [ -z "$RUNTIME_ID" ]; then
+            echo "Error: No iOS runtime found. Listing runtimes for debugging:"
+            xcrun simctl list runtimes
+            exit 1
+          fi
+
+          echo "Selected iOS Runtime ID: $RUNTIME_ID"
+          echo "Creating 'iPhone 17 Pro Max' simulator..."
+          xcrun simctl create "iPhone 17 Pro Max" "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max" "$RUNTIME_ID" || echo "Simulator might already exist or failed to create."
 
       - name: Install npm dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
