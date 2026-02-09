@@ -134,11 +134,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const scrollViewRef = useRef<ScrollView>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
+  const selectedRecipient = recipients?.find((recipient) => recipient.id === to?.value)
   const messageData = {
     recipient_id: parseInt(to?.value || '', 10),
     category: category as CategoryTypes,
     body: message,
     subject,
+    station_number: selectedRecipient?.attributes.stationNumber,
   } as SecureMessagingFormData
   // Ref for use in snackbar callbacks to ensure we have the latest messageData
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)
@@ -549,8 +551,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       {...rightButtonProps}
       showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
-      leftButtonTestID="startNewMessageCancelTestID"
-      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}>
+      leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

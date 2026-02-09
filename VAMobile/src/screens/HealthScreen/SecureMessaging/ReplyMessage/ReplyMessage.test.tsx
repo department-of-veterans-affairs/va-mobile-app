@@ -3,7 +3,12 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { CategoryTypeFields, SecureMessagingMessageGetData, SecureMessagingThreadGetData } from 'api/types'
+import {
+  CategoryTypeFields,
+  SecureMessagingMessageGetData,
+  SecureMessagingRecipients,
+  SecureMessagingThreadGetData,
+} from 'api/types'
 import ReplyMessage from 'screens/HealthScreen/SecureMessaging/ReplyMessage/ReplyMessage'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -123,6 +128,37 @@ const message: SecureMessagingMessageGetData = {
   },
 }
 
+const recipients: SecureMessagingRecipients = {
+  data: [
+    {
+      id: 'id',
+      type: 'type',
+      attributes: {
+        triageTeamId: 2,
+        name: 'mock sender 3',
+        relationType: 'PATIENT',
+        preferredTeam: true,
+        stationNumber: '989',
+        locationName: 'test_location',
+        suggestedNameDisplay: 'test_suggested_name',
+        healthCareSystemName: 'test_healthcare_system_name',
+        ohTriageGroup: false,
+      },
+    },
+  ],
+  meta: {
+    sort: {
+      name: 'ASC',
+    },
+    careSystems: [
+      {
+        healthCareSystemName: 'SM STAGING CARE SYSTEM',
+        stationNumber: '989',
+      },
+    ],
+  },
+}
+
 context('ReplyMessage', () => {
   const isIOSMock = isIOS as jest.Mock
 
@@ -147,6 +183,8 @@ context('ReplyMessage', () => {
       .mockResolvedValue(thread)
       .calledWith(`/v0/messaging/health/messages/3`)
       .mockResolvedValue(message)
+      .calledWith('/v0/messaging/health/allrecipients')
+      .mockResolvedValue(recipients)
     render(<ReplyMessage {...props} />)
   }
 
@@ -192,6 +230,22 @@ context('ReplyMessage', () => {
         )
         expect(screen.getAllByText(t('secureMessaging.formMessage.weNeedMoreInfo'))).toBeTruthy()
         expect(screen.getAllByText(t('secureMessaging.formMessage.sendMessage.validation.text'))).toBeTruthy()
+      })
+    })
+
+    describe('when the message is filled and sent', () => {
+      it('should include station_number in the reply payload', async () => {
+        ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+        await waitFor(() => expect(screen.getByTestId('reply field')).toBeTruthy())
+        fireEvent.changeText(screen.getByTestId('reply field'), 'test reply')
+        fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send')))
+        await waitFor(() =>
+          expect(api.post).toHaveBeenCalledWith(
+            '/v0/messaging/health/messages/3/reply',
+            expect.objectContaining({ station_number: '989' }),
+            undefined,
+          ),
+        )
       })
     })
   })

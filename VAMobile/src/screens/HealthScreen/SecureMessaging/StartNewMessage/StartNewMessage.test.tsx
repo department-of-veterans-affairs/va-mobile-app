@@ -305,6 +305,36 @@ context('StartNewMessage', () => {
         expect(screen.getByText(t('secureMessaging.formMessage.sendMessage.validation.text'))).toBeTruthy()
       })
     })
+
+    describe('when the form is filled and sent', () => {
+      it('should include station_number in the send message payload', async () => {
+        initializeApiCalls(true)
+        ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+        initializeTestInstance()
+        // Wait for form to load
+        await waitFor(() => expect(screen.getByTestId('to field')).toBeTruthy())
+        // Select recipient from ComboBox
+        fireEvent.press(screen.getByTestId('to field'))
+        fireEvent.press(screen.getByText('Doctor 1'))
+        // Select category
+        fireEvent.press(screen.getByTestId('picker'))
+        fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+        fireEvent.press(screen.getByLabelText(t('done')))
+        // Fill subject (required for General category)
+        fireEvent.changeText(screen.getByTestId('startNewMessageSubjectTestID'), 'test subject')
+        // Fill message
+        fireEvent.changeText(screen.getByTestId('message field'), 'test message')
+        // Press send
+        fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send')))
+        await waitFor(() =>
+          expect(api.post).toHaveBeenCalledWith(
+            '/v0/messaging/health/messages',
+            expect.objectContaining({ station_number: '357' }),
+            undefined,
+          ),
+        )
+      })
+    })
   })
 
   describe('on click of add files button', () => {
