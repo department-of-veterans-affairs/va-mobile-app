@@ -193,7 +193,7 @@ jobs:
             else
               echo "Downloading and exporting iOS 18.2 Runtime..."
               sudo mkdir -p /Users/runner/ios_runtime_dmg_cache
-              sudo xcodebuild -downloadPlatform iOS -version 18.2 -exportPath /Users/runner/ios_runtime_dmg_cache
+              sudo xcodebuild -downloadPlatform iOS -buildVersion 18.2 -exportPath /Users/runner/ios_runtime_dmg_cache
             fi
             sudo xcrun simctl runtime add /Users/runner/ios_runtime_dmg_cache/*.dmg
           fi
@@ -323,7 +323,7 @@ jobs:
             else
               echo "Downloading and exporting iOS 18.2 Runtime..."
               sudo mkdir -p /Users/runner/ios_runtime_dmg_cache
-              sudo xcodebuild -downloadPlatform iOS -version 18.2 -exportPath /Users/runner/ios_runtime_dmg_cache
+              sudo xcodebuild -downloadPlatform iOS -buildVersion 18.2 -exportPath /Users/runner/ios_runtime_dmg_cache
             fi
             sudo xcrun simctl runtime add /Users/runner/ios_runtime_dmg_cache/*.dmg
           fi
