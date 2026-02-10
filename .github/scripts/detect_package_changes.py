@@ -10,6 +10,9 @@ Output format (tab-separated):
     TYPE    KEY                     NAME    OLD_VERSION    NEW_VERSION    FILE    LINE_NUMBER    LINE_TEXT
 
 Types: added, removed, changed
+
+Author: VA Mobile App Team
+Last Modified: 2026-02-09
 """
 
 import json
@@ -56,7 +59,7 @@ def find_line_number(sha: str, filepath: str, search_key: str) -> Tuple[Optional
 def detect_changes(base_sha: str, head_sha: str, filepath: str) -> List[Dict]:
     """
     Detect dependency changes in a package.json file.
-    
+
     Returns a list of changes, each containing:
     - type: 'added', 'removed', or 'changed'
     - key: the full path to the change (e.g., 'dependencies.react')
@@ -69,30 +72,28 @@ def detect_changes(base_sha: str, head_sha: str, filepath: str) -> List[Dict]:
     """
     base_content = get_file_content(base_sha, filepath)
     head_content = get_file_content(head_sha, filepath)
-    
-    # Keys we care about
+
+    # Keys we care about - only actual package dependencies
     interesting_keys = [
         'dependencies',
         'devDependencies',
         'peerDependencies',
-        'optionalDependencies',
-        'name',
-        'version'
+        'optionalDependencies'
     ]
-    
+
     changes = []
-    
+
     for key in interesting_keys:
         base_val = base_content.get(key, {})
         head_val = head_content.get(key, {})
-        
+
         # Handle scalar values (name, version)
         if isinstance(base_val, str) or isinstance(head_val, str):
             if base_val != head_val:
                 # For scalar changes, find the line in head (or base if removed)
                 src_sha = head_sha if head_val else base_sha
                 line_num, line_text = find_line_number(src_sha, filepath, key)
-                
+
                 changes.append({
                     'type': 'changed',
                     'key': key,
@@ -104,13 +105,13 @@ def detect_changes(base_sha: str, head_sha: str, filepath: str) -> List[Dict]:
                     'text': line_text or ''
                 })
             continue
-        
+
         # Handle dictionary values (dependencies)
         if not isinstance(base_val, dict):
             base_val = {}
         if not isinstance(head_val, dict):
             head_val = {}
-        
+
         # Added dependencies
         for dep in sorted(set(head_val.keys()) - set(base_val.keys())):
             line_num, line_text = find_line_number(head_sha, filepath, dep)
@@ -124,7 +125,7 @@ def detect_changes(base_sha: str, head_sha: str, filepath: str) -> List[Dict]:
                 'line': line_num,
                 'text': line_text or ''
             })
-        
+
         # Removed dependencies
         for dep in sorted(set(base_val.keys()) - set(head_val.keys())):
             line_num, line_text = find_line_number(base_sha, filepath, dep)
@@ -138,7 +139,7 @@ def detect_changes(base_sha: str, head_sha: str, filepath: str) -> List[Dict]:
                 'line': line_num,
                 'text': line_text or ''
             })
-        
+
         # Changed dependencies
         for dep in sorted(set(base_val.keys()) & set(head_val.keys())):
             if base_val[dep] != head_val[dep]:
@@ -153,7 +154,7 @@ def detect_changes(base_sha: str, head_sha: str, filepath: str) -> List[Dict]:
                     'line': line_num,
                     'text': line_text or ''
                 })
-    
+
     return changes
 
 
@@ -166,7 +167,7 @@ def format_alert_line(change: Dict) -> str:
     key = change['key']
     old = change['old']
     new = change['new']
-    
+
     if line:
         return f"{file}:{line}: {text} -> {type_} {key} {old} -> {new}"
     else:
@@ -177,25 +178,25 @@ def main():
     if len(sys.argv) != 3:
         print("Usage: detect_package_changes.py <base_sha> <head_sha>", file=sys.stderr)
         sys.exit(1)
-    
+
     base_sha = sys.argv[1]
     head_sha = sys.argv[2]
-    
+
     # Find changed package.json files
     cmd = ["git", "diff", "--name-only", base_sha, head_sha]
     changed_files = run_git_command(cmd).split('\n')
     package_files = [f for f in changed_files if f.endswith('package.json')]
-    
+
     all_changes = []
     all_alert_lines = []
     has_dependency_changes = False
-    
+
     for filepath in package_files:
         if not filepath:  # Skip empty strings
             continue
-            
+
         changes = detect_changes(base_sha, head_sha, filepath)
-        
+
         if changes:
             has_dependency_changes = True
             all_changes.extend(changes)
@@ -208,7 +209,7 @@ def main():
             diff_lines = [line for line in diff_output.split('\n') if line.startswith(('+', '-'))]
             all_alert_lines.append(f"Non-package changes in {filepath}:")
             all_alert_lines.extend(diff_lines)
-    
+
     # Output results
     if has_dependency_changes:
         print("any_changed=true")
@@ -219,7 +220,7 @@ def main():
             print("❌ No package dependency changes detected (only scripts/other fields changed)")
         else:
             print("❌ No package.json changes detected")
-    
+
     # Output alert lines (one per line for easy parsing)
     if all_alert_lines:
         print("\n=== ALERT_LINES ===")

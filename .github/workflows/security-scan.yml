@@ -11,7 +11,7 @@ on:
   push:
     branches:
       - main
-      - master
+      - develop
     paths:
       - 'package.json'
       - 'package-lock.json'
@@ -27,10 +27,19 @@ jobs:
       any_changed: ${{ steps.changed-files.outputs.any_changed }}
       has_node: ${{ steps.detect-node.outputs.has_node }}
       alert_lines: ${{ steps.changed-files.outputs.alert_lines }}
+      app_token: ${{ steps.generate_token.outputs.token }}
     steps:
+      - name: Generate GitHub App token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Check for package.json changes
         id: changed-files
@@ -340,61 +349,94 @@ jobs:
           print('has_approval_label=true' if 'package-scan-complete' in labels else 'has_approval_label=false')
           PY
 
+  remove_stale_approval_label:
+    name: Remove stale approval label
+    runs-on: ubuntu-latest
+    needs: [check_for_locked_file_changes, check_approval_label]
+    # Remove label if new package changes detected on a PR that was previously approved
+    if: github.event_name == 'pull_request' && needs.check_for_locked_file_changes.outputs.any_changed == 'true' && needs.check_approval_label.outputs.has_approval_label == 'true'
+    steps:
+      - name: Remove package-scan-complete label due to new changes
+        env:
+          GITHUB_TOKEN: ${{ needs.check_for_locked_file_changes.outputs.app_token }}
+        run: |
+          set -euo pipefail
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          echo "⚠️ New package changes detected on previously approved PR #$PR_NUMBER"
+          echo "Removing 'package-scan-complete' label to require re-approval"
+          curl -s -X DELETE \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels/package-scan-complete" || true
+
   request_bypass_approval:
     name: Request bypass approval
     runs-on: ubuntu-latest
-    needs: [check_for_locked_file_changes, check_approval_label]
-    # Only run approval job when package changes detected AND node present AND no existing approval label
-    if: needs.check_for_locked_file_changes.outputs.any_changed == 'true' && needs.check_for_locked_file_changes.outputs.has_node == 'true' && needs.check_approval_label.outputs.has_approval_label == 'false'
+    needs: [check_for_locked_file_changes, check_approval_label, remove_stale_approval_label]
+    # Run approval when:
+    # 1. Package changes detected AND node present AND (no label exists OR label was just removed)
+    if: |
+      always() &&
+      needs.check_for_locked_file_changes.outputs.any_changed == 'true' &&
+      needs.check_for_locked_file_changes.outputs.has_node == 'true' &&
+      (needs.check_approval_label.outputs.has_approval_label == 'false' || needs.remove_stale_approval_label.result == 'success')
     # PRODUCTION: Environment protection enabled - requires approval from authorized reviewers
     environment: bypass-package-lock
     steps:
       - run: echo "Approval required for package dependency changes. An admin from the required group must approve this step."
-      - name: Add package-scan-complete label to PR so future pushes don't require repeated approval
-        if: ${{ github.event_name == 'pull_request' }}
+
+      - name: Add package-scan-complete label after approval
+        if: github.event_name == 'pull_request'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ needs.check_for_locked_file_changes.outputs.app_token }}
         run: |
           set -euo pipefail
           PR_NUMBER=${{ github.event.pull_request.number }}
-          echo "Adding label 'package-scan-complete' to PR #$PR_NUMBER"
-          curl -s -X POST \
+
+          echo "✅ Approval granted - adding 'package-scan-complete' label to PR #$PR_NUMBER"
+
+          # Attempt to add the label
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
             -H "Authorization: token ${GITHUB_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels" \
-            -d '{"labels":["package-scan-complete"]}' || true
+            -d '{"labels":["package-scan-complete"]}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | head -n-1)
+
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ Label successfully added"
+            exit 0
+          else
+            echo "❌ Failed to add label (HTTP $HTTP_CODE)"
+            echo "Response: $BODY"
+
+            # Cleanup: Remove the label if it somehow exists
+            echo "🧹 Attempting cleanup - removing any existing label"
+            curl -s -X DELETE \
+              -H "Authorization: token ${GITHUB_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels/package-scan-complete" || true
+
+            echo "❌ Label addition failed. Please re-run the workflow."
+            exit 1
+          fi
 
   notify_package_change:
     name: Notify package.json change
     needs: check_for_locked_file_changes
     if: needs.check_for_locked_file_changes.outputs.any_changed == 'true' && needs.check_for_locked_file_changes.outputs.has_node == 'true'
-    # TEST: Slack notification disabled for testing - uncomment if you want to test with Slack
-    # uses: ./.github/workflows/start_slack_thread.yml
-    # secrets: inherit
-    # with:
-    #   channel_name: va-mobile-build-alerts
-    #   message: |
-    #     :information_source: package.json package-related changes detected
-    #     *Repository*: ${{ github.repository }}
-    #     *Ref*: ${{ github.ref }}
-    #     *Run*: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run>
-    #     *Changes detected:*
-    #     ```
-    #     ${{ needs.check_for_locked_file_changes.outputs.alert_lines }}
-    #     ```
-    runs-on: ubuntu-latest
-    steps:
-      - name: Mock Slack Notification
-        run: |
-          echo "📢 TEST MODE: Slack notification would be sent here"
-          echo "Message content:"
-          echo "---"
-          echo "package.json package-related changes detected"
-          echo "Repository: ${{ github.repository }}"
-          echo "Ref: ${{ github.ref }}"
-          echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          echo "Changes detected:"
-          echo "${{ needs.check_for_locked_file_changes.outputs.alert_lines }}"
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-app-alerts
+      message: |
+        :package: *Package changes detected*
+        ```
+        ${{ needs.check_for_locked_file_changes.outputs.alert_lines }}
+        ```
+        <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View security scan results>
 
   security-check:
     name: security-check
