@@ -305,6 +305,10 @@ jobs:
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "**If all checks pass:** Approve the 'Request bypass approval' job below" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 🔗 Quick Links" >> $GITHUB_STEP_SUMMARY
+            echo "- [Approve Deployment (bypass-package-lock)](${{ github.server_url }}/${{ github.repository }}/deployments/activity_log?environment=bypass-package-lock)" >> $GITHUB_STEP_SUMMARY
+            echo "- [View This Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
             echo "**If uncertain:** Click the review links above to research the package, or consult your security team" >> $GITHUB_STEP_SUMMARY
           else
             echo "## ✅ No Dependency Changes" >> $GITHUB_STEP_SUMMARY
@@ -436,7 +440,7 @@ jobs:
         ```
         ${{ needs.check_for_locked_file_changes.outputs.alert_lines }}
         ```
-        <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View security scan results>
+        <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View security scan results> | <${{ github.server_url }}/${{ github.repository }}/deployments/activity_log?environment=bypass-package-lock|Approve deployment>
 
   security-check:
     name: security-check
