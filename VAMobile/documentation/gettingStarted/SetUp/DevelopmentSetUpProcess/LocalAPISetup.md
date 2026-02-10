@@ -64,7 +64,7 @@ Then tap "Sign in" in the app and select a test user from the dropdown.
 
 The `yarn env:local` command sets:
 - `API_ROOT=http://localhost:3000/mobile`
-- `AUTH_SIS_ENDPOINT=http://localhost:3000/v0/sign_in/authorize`
+- `AUTH_ENDPOINT=http://localhost:3000/v0/sign_in/authorize`
 - All other auth endpoints point to localhost
 
 ### Custom URL
