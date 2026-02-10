@@ -256,8 +256,9 @@
           "id": "I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000111",
           "type": "diagnostic_report",
           "attributes": {
-            "display": "Surgical Pathology - latest",
+            "display": "Bone Marrow Biopsy Panel",
             "testCode": "SP",
+            "testCodeDisplay": "Surgical Pathology",
             "dateCompleted": "{{now - 1 days}}",
             "encodedData": "dGhpcyBpcyBhIHRlc3Q=",
             "location": "VA TEST LAB",
@@ -269,8 +270,9 @@
           "id": "e9513940-bf84-4120-ac9c-718f537b00e0",
           "type": "DiagnosticReport",
           "attributes": {
-            "display": "CH - latest",
+            "display": "Complete Blood Count (CBC)",
             "testCode": "CH",
+            "testCodeDisplay": "Chemistry and hematology",
             "dateCompleted": "{{now - 2 days}}",
             "encodedData": "",
             "location": "CHYSHR TEST LAB",
@@ -371,6 +373,7 @@
           "attributes": {
             "display": "Surgical Pathology - timeless now-2",
             "testCode": "SP",
+            "testCodeDisplay": "Surgical Pathology",
             "dateCompleted": "{{now - 2 days}}",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
             "location": "VA TEST LAB",
