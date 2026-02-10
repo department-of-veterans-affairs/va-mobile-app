@@ -25,7 +25,7 @@ import {
 } from 'components/FormWrapper/FormFields/formFieldUtils'
 import { a11yHintProp, a11yValueProp, setAccessibilityFocus } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useShowScrollView, useTheme } from 'utils/hooks'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -103,6 +103,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 }) => {
   const snackbar = useSnackbar()
   const [modalVisible, setModalVisible] = useState(false)
+  const showScrollView = useShowScrollView(modalVisible)
   const theme = useTheme()
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
@@ -303,9 +304,11 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                 <TextView {...commonButtonProps}>{confirmLabel}</TextView>
               </Pressable>
             </Box>
-            <VAScrollView bounces={false}>
-              <PickerList items={pickerListItems} />
-            </VAScrollView>
+            {showScrollView && (
+              <VAScrollView bounces={false}>
+                <PickerList items={pickerListItems} />
+              </VAScrollView>
+            )}
           </Box>
         </Box>
       </Modal>

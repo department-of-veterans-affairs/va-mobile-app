@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import _ from 'underscore'
 
 import * as api from 'store/api'
-import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE, LoginServiceTypeConstants } from 'store/api/types'
+import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/api/types'
 import {
   cancelWebLogin,
   checkFirstTimeLogin,
@@ -50,10 +50,10 @@ jest.mock('../../utils/rnAuthSesson', () => ({
 
 jest.mock('../../utils/env', () =>
   jest.fn(() => ({
-    AUTH_SIS_ENDPOINT: 'https://test.gov/sign-in',
-    AUTH_SIS_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
-    AUTH_SIS_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
-    AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
+    AUTH_ENDPOINT: 'https://test.gov/sign-in',
+    AUTH_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
+    AUTH_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
+    AUTH_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
   })),
 )
 
@@ -72,10 +72,10 @@ jest.mock('@react-native-firebase/perf', () => {
 })
 
 const defaultEnvParams = {
-  AUTH_SIS_ENDPOINT: 'https://test.gov/sign-in',
-  AUTH_SIS_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
-  AUTH_SIS_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
-  AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
+  AUTH_ENDPOINT: 'https://test.gov/sign-in',
+  AUTH_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
+  AUTH_TOKEN_EXCHANGE_URL: 'https://test.gov/v0/sign_in/token',
+  AUTH_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
 }
 
 const sampleIdToken = 'TEST_TOKEN'
@@ -109,7 +109,6 @@ context('authAction SIS', () => {
     }
     const envMock = getEnv as jest.Mock
     envMock.mockReturnValue(defaultEnvParams)
-    when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
     when(getItemMock).calledWith('@store_refresh_token_encrypted_component').mockResolvedValue(encryptedComponent)
 
     const isAndroidMock = isAndroid as jest.Mock
