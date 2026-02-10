@@ -147,7 +147,7 @@ jobs:
 
   build-e2e-ios:
     if: needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-26-xlarge
+    runs-on: macos-15-xlarge
     needs: output_detox_tests_to_run
     env:
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -174,7 +174,31 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 26.2
+          xcode-version: 16.2
+
+      - name: Cache iOS 18.2 Runtime
+        id: cache-ios-runtime
+        uses: actions/cache@v3
+        with:
+          path: ~/ios_runtime_cache
+          key: ${{ runner.os }}-ios-runtime-18.2
+
+      - name: Install iOS 18.2 Runtime
+        run: |
+          RUNTIME_PATH="/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 18.2.simruntime"
+          if [ -d "$RUNTIME_PATH" ]; then
+            echo "iOS 18.2 Runtime already installed in system."
+          elif [ -d "~/ios_runtime_cache/iOS 18.2.simruntime" ]; then
+            echo "Restoring iOS 18.2 Runtime from cache..."
+            sudo mkdir -p "/Library/Developer/CoreSimulator/Profiles/Runtimes"
+            sudo cp -R ~/ios_runtime_cache/"iOS 18.2.simruntime" "$RUNTIME_PATH"
+          else
+            echo "Downloading iOS 18.2 Runtime..."
+            sudo xcodebuild -downloadPlatform iOS -version 18.2
+            echo "Backing up iOS 18.2 Runtime to cache..."
+            mkdir -p ~/ios_runtime_cache
+            cp -R "$RUNTIME_PATH" ~/ios_runtime_cache/
+          fi
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
@@ -253,7 +277,7 @@ jobs:
 
   matrix-e2e-ios:
     if: (!cancelled()) && needs.build-e2e-ios.result == 'success' && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-26-xlarge
+    runs-on: macos-15-xlarge
     needs: [start_slack_thread, output_detox_tests_to_run, build-e2e-ios]
     env:
       # Path to write secret key to. Also used by fastlane
@@ -282,7 +306,31 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 26.2
+          xcode-version: 16.2
+
+      - name: Cache iOS 18.2 Runtime
+        id: cache-ios-runtime
+        uses: actions/cache@v3
+        with:
+          path: ~/ios_runtime_cache
+          key: ${{ runner.os }}-ios-runtime-18.2
+
+      - name: Install iOS 18.2 Runtime
+        run: |
+          RUNTIME_PATH="/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 18.2.simruntime"
+          if [ -d "$RUNTIME_PATH" ]; then
+            echo "iOS 18.2 Runtime already installed in system."
+          elif [ -d "~/ios_runtime_cache/iOS 18.2.simruntime" ]; then
+            echo "Restoring iOS 18.2 Runtime from cache..."
+            sudo mkdir -p "/Library/Developer/CoreSimulator/Profiles/Runtimes"
+            sudo cp -R ~/ios_runtime_cache/"iOS 18.2.simruntime" "$RUNTIME_PATH"
+          else
+            echo "Downloading iOS 18.2 Runtime..."
+            sudo xcodebuild -downloadPlatform iOS -version 18.2
+            echo "Backing up iOS 18.2 Runtime to cache..."
+            mkdir -p ~/ios_runtime_cache
+            cp -R "$RUNTIME_PATH" ~/ios_runtime_cache/
+          fi
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
@@ -305,25 +353,6 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
-
-      - name: Create Detox simulator
-        run: |
-          echo "Listing all available runtimes:"
-          xcrun simctl list runtimes
-
-          # Find the latest available iOS runtime ID
-          RUNTIME_ID=$(xcrun simctl list runtimes --json | jq -r '.runtimes[] | select(.identifier | contains("SimRuntime.iOS")) | .identifier' | tail -1)
-
-          if [ -z "$RUNTIME_ID" ]; then
-            echo "Error: No iOS runtime found. Listing runtimes for debugging:"
-            xcrun simctl list runtimes
-            exit 1
-          fi
-
-          echo "Selected iOS Runtime ID: $RUNTIME_ID"
-          echo "Creating 'iPhone 17 Pro Max' simulator..."
-          xcrun simctl create "iPhone 17 Pro Max" "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max" "$RUNTIME_ID" || echo "Simulator might already exist or failed to create."
-
       - name: Install npm dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --non-interactive
