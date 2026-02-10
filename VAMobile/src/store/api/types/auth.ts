@@ -8,14 +8,6 @@ export enum AUTH_STORAGE_TYPE {
   NONE = 'NONE',
 }
 
-export type LoginServiceTypes = 'SIS'
-
-export const LoginServiceTypeConstants: {
-  SIS: LoginServiceTypes
-} = {
-  SIS: 'SIS',
-}
-
 export type AuthParamsLoadingStateTypes = 'init' | 'loading' | 'ready'
 
 export const AuthParamsLoadingStateTypeConstants: {
