@@ -477,6 +477,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
               variant="warning"
               expandable={true}
               initializeExpanded={true}
+              focusOnError={false}
               header={t('secureMessaging.startNewMessage.nameChangeAlert.title')}>
               <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.nameChangeAlert.body')}</TextView>
             </AlertWithHaptics>
