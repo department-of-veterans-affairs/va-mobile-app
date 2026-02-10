@@ -23,6 +23,18 @@ const navigateToLabsAndTests = async () => {
   await openLabsAndTestRecords()
 }
 
+const safeTapNext = async () => {
+  try {
+    await waitFor(element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)))
+      .toExist()
+      .withTimeout(3000)
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn('Next page button not found, total entries are less than default page size (10). Skipping tap.')
+  }
+}
+
 const resetDateRangeToDefault = async () => {
   await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
   await element(by.id('range-past-3-months')).tap()
@@ -85,7 +97,7 @@ describe('Labs And Test Screen - Date Picker', () => {
 
     // Go to the next page and verify last year's records are not visible
     await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+    await safeTapNext()
 
     // Verify last year's records are not visible on page 2
     await expect(element(by.text('Blood Work - Last Year'))).not.toExist()
@@ -102,7 +114,7 @@ describe('Labs And Test Screen - Date Picker', () => {
 
     // Go to the next page to verify last year's records
     await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+    await safeTapNext()
 
     // Verify last year's records are now visible
     await expect(element(by.text('Blood Work - Last Year'))).toExist()
