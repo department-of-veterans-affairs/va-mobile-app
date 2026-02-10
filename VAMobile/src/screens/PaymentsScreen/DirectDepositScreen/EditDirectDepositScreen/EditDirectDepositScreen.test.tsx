@@ -42,9 +42,11 @@ context('EditDirectDepositScreen', () => {
   })
 
   describe('when user selects an account type', () => {
-    it('should update the value of the accountType', () => {
+    it('should update the value of the accountType', async () => {
       fireEvent.press(screen.getByTestId('accountType'))
-      fireEvent.press(screen.getByText(t('accountType.checking')))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText(t('accountType.checking')))
+      })
       fireEvent.press(screen.getByText(t('done')))
       expect(screen.getByText(t('accountType.checking'))).toBeTruthy()
     })
@@ -61,7 +63,9 @@ context('EditDirectDepositScreen', () => {
       fireEvent.changeText(screen.getByTestId('routingNumber'), '053100300')
       fireEvent.changeText(screen.getByTestId('accountNumber'), '12345678901234567')
       fireEvent.press(screen.getByTestId('accountType'))
-      fireEvent.press(screen.getByText(t('accountType.checking')))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText(t('accountType.checking')))
+      })
       fireEvent.press(screen.getByText(t('done')))
       fireEvent.press(screen.getByTestId('checkBox'))
       fireEvent.press(screen.getByText(t('save')))
@@ -96,7 +100,9 @@ context('EditDirectDepositScreen', () => {
       fireEvent.changeText(screen.getByTestId('routingNumber'), '053100300')
       fireEvent.changeText(screen.getByTestId('accountNumber'), '12345678901234567')
       fireEvent.press(screen.getByTestId('accountType'))
-      fireEvent.press(screen.getByText(t('accountType.checking')))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText(t('accountType.checking')))
+      })
       fireEvent.press(screen.getByText(t('done')))
       fireEvent.press(screen.getByTestId('checkBox'))
       fireEvent.press(screen.getByText(t('save')))
