@@ -833,4 +833,22 @@ context('HomeScreen', () => {
       })
     })
   })
+
+  describe('Labs and Tests prefetch', () => {
+    it('calls the labs and tests API when loadLabsAndTestsOnHomeScreen feature flag is enabled', async () => {
+      when(mockFeatureEnabled).calledWith('loadLabsAndTestsOnHomeScreen').mockReturnValue(true)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(get).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.objectContaining({ useCache: 'false' })),
+      )
+    })
+
+    it('does not call the labs and tests API when loadLabsAndTestsOnHomeScreen feature flag is disabled', async () => {
+      when(mockFeatureEnabled).calledWith('loadLabsAndTestsOnHomeScreen').mockReturnValue(false)
+      ;(get as jest.Mock).mockClear()
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      expect(get).not.toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
+    })
+  })
 })

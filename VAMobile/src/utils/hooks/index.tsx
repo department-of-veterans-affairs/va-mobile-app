@@ -652,3 +652,20 @@ export const useOfflineSnackbar = () => {
     dispatch(queueOfflineEvent(Events.vama_offline_action()))
   }
 }
+
+// Workaround to fix issue with ScrollView nested inside a Modal - affects Android
+// https://github.com/facebook/react-native/issues/48822
+export const useShowScrollView = (modalVisible: boolean) => {
+  const [showScrollView, setShowScrollView] = useState(false)
+
+  useEffect(() => {
+    if (modalVisible) {
+      const timeout = setTimeout(() => setShowScrollView(true), 50)
+      return () => clearTimeout(timeout)
+    } else {
+      setShowScrollView(false)
+    }
+  }, [modalVisible])
+
+  return showScrollView
+}
