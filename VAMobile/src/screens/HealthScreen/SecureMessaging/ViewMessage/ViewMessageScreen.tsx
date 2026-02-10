@@ -9,10 +9,12 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
-import _ from 'underscore'
+import _, { get } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
+  useAllMessageRecipients,
   useFolderMessages,
   useFolders,
   useMessage,
@@ -42,6 +44,7 @@ import {
   TextView,
   VAModalPicker,
 } from 'components'
+import { OHParentScreens } from 'components/OHAlertManager'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
@@ -57,6 +60,7 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { anyFacilitiesInMigrationErrorState } from 'utils/ohMigration'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -114,6 +118,12 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const isScreenContentAllowed = screenContentAllowed('WG_ViewMessage')
   const { mutate: moveMessage, isPending: loadingMoveMessage } = useMoveMessage()
   const {
+    data: userAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
+    isFetching: fetchingAuthServices,
+  } = useAuthorizedServices()
+  const {
     data: messageData,
     error: messageError,
     isFetching: loadingMessage,
@@ -149,6 +159,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
 
+  const {
+    data: recipientsResponse,
+    isFetched: hasLoadedRecipients,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
+  } = useAllMessageRecipients()
+
+  const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
@@ -164,7 +183,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const userInTriageTeam = messageData?.meta?.userInTriageTeam
-
+  const noRecipientsReceived = !recipients || recipients.length === 0
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
@@ -342,8 +362,16 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 
   // If error is caused by an individual message, we want the error alert to be
   // contained to that message, not to take over the entire screen
-  const hasError = folderMessagesError || foldersError || messageError || threadError || !smNotInDowntime
-  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage || loadingFolderMessages
+  const hasError =
+    folderMessagesError || foldersError || messageError || threadError || !smNotInDowntime || recipientsError
+  const isLoading =
+    loadingFolder ||
+    loadingThread ||
+    loadingMessage ||
+    loadingMoveMessage ||
+    loadingFolderMessages ||
+    refetchingRecipients ||
+    fetchingAuthServices
   const isEmpty = !message || !thread
   const loadingText = loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')
 
@@ -373,7 +401,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={screenID}
-          error={folderMessagesError || foldersError || messageError || threadError}
+          error={
+            folderMessagesError ||
+            foldersError ||
+            messageError ||
+            threadError ||
+            recipientsError ||
+            getUserAuthorizedServicesError
+          }
           onTryAgain={
             folderMessagesError
               ? refetchFolderMessages
@@ -383,7 +418,11 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                   ? refetchMessage
                   : threadError
                     ? refetchThread
-                    : undefined
+                    : recipientsError
+                      ? refetchRecipients
+                      : getUserAuthorizedServicesError
+                        ? refetchAuthServices
+                        : undefined
           }
         />
       ) : isEmpty ? (
@@ -417,7 +456,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          {!userInTriageTeam && (
+          {!userInTriageTeam && !noProviderError && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -441,11 +480,40 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               </AlertWithHaptics>
             </Box>
           )}
+          {noProviderError &&
+            anyFacilitiesInMigrationErrorState(
+              userAuthorizedServices?.migratingFacilitiesList || [],
+              OHParentScreens.SecureMessaging,
+            ) && (
+              <Box my={theme.dimensions.standardMarginBetween}>
+                <AlertWithHaptics
+                  variant="error"
+                  header={t('secureMessaging.reply.youCanNoLonger')}
+                  description={t('secureMessaging.reply.youCanNoLonger.description')}
+                  descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
+                  testID="secureMessagingYouCanNoLongerAlertID">
+                  {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+                  <TextView
+                    accessible
+                    variant="MobileBody"
+                    paragraphSpacing={true}
+                    accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
+                    {t('secureMessaging.reply.error.ifYouThink')}
+                  </TextView>
+                  <LinkWithAnalytics
+                    type="custom"
+                    text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                    onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+                  />
+                </AlertWithHaptics>
+              </Box>
+            )}
           <MessageCard
             message={message}
             folderId={currentFolderIdParam}
             userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
+            noProviderError={noProviderError}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>

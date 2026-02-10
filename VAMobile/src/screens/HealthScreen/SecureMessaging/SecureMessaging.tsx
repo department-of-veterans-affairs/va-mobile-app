@@ -9,7 +9,7 @@ import { Button, SegmentedControl, useSnackbar } from '@department-of-veterans-a
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useFolderMessages, useFolders } from 'api/secureMessaging'
+import { useAllMessageRecipients, useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
@@ -75,6 +75,14 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       userAuthorizedServices?.secureMessaging &&
       smNotInDowntime,
   })
+  const {
+    data: recipientsResponse,
+    isFetched: hasLoadedRecipients,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
+  } = useAllMessageRecipients()
+  const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), '']
@@ -84,6 +92,8 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
   const controlIDs = ['inboxID', 'foldersID']
   const [scrollPage, setScrollPage] = useState(1)
+  const noRecipientsReceived = !recipients || recipients.length === 0
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -125,6 +135,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   }
 
   const handleRefresh = () => {
+    if (recipientsError) return refetchRecipients
     if (inboxError) {
       refetchInbox()
     } else if (foldersError) {
@@ -136,8 +147,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     scrollViewRef: scrollViewRef,
   }
 
-  const otherError = (foldersError || (inboxError && !termsAndConditionError)) && !refetchingFolders && !refetchingInbox
-
+  const otherError =
+    (foldersError || (inboxError && !termsAndConditionError) || recipientsError) &&
+    !refetchingFolders &&
+    !refetchingInbox &&
+    !refetchingRecipients
   return (
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
@@ -159,13 +173,15 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         <TermsAndConditions />
       ) : (
         <>
-          <Box mx={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('secureMessaging.startNewMessage')}
-              onPress={onPress}
-              testID={'startNewMessageButtonTestID'}
-            />
-          </Box>
+          {!noProviderError && (
+            <Box mx={theme.dimensions.buttonPadding}>
+              <Button
+                label={t('secureMessaging.startNewMessage')}
+                onPress={onPress}
+                testID={'startNewMessageButtonTestID'}
+              />
+            </Box>
+          )}
           <Box flex={1} justifyContent="flex-start">
             <Box
               mb={theme.dimensions.standardMarginBetween}

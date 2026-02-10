@@ -35,9 +35,10 @@ export type MessageCardProps = {
   folderId: number
   userInTriageTeam?: boolean
   replyExpired?: boolean
+  noProviderError?: boolean
 }
 
-function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: MessageCardProps) {
+function MessageCard({ message, folderId, userInTriageTeam, replyExpired, noProviderError }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -158,6 +159,9 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
     navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   function getReplyOrStartNewMessageButton() {
+    if (noProviderError) {
+      return <></>
+    }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         {!replyExpired && userInTriageTeam ? (

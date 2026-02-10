@@ -24,32 +24,41 @@ type OHAlertManagerProps = {
   authorizedServices: UserAuthorizedServicesData
 }
 
+export const parentScreenToPhaseMap = {
+  appointments: {
+    warning: ['p0', 'p1'],
+    error: ['p2', 'p3', 'p4', 'p5', 'p6'],
+    endDate: 'p7',
+  },
+  secureMessaging: {
+    warning: ['p1', 'p2'],
+    error: ['p3', 'p4', 'p5'],
+    endDate: 'p6',
+  },
+  medicalRecords: {
+    warning: ['p1', 'p2', 'p3', 'p4'],
+    error: ['p5'],
+    endDate: 'p6',
+  },
+  medications: {
+    warning: ['p1', 'p2', 'p3'],
+    error: ['p4', 'p5'],
+    endDate: 'p6',
+  },
+}
+
+export const getAlertState = (phase: string, parentScreen: OHParentScreens) => {
+  if (parentScreenToPhaseMap[parentScreen].error.includes(phase)) {
+    return 'error'
+  } else if (parentScreenToPhaseMap[parentScreen].warning.includes(phase)) {
+    return 'warning'
+  }
+  return ''
+}
+
 export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertManagerProps) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-
-  const parentScreenToPhaseMap = {
-    appointments: {
-      warning: ['p0', 'p1'],
-      error: ['p2', 'p3', 'p4', 'p5', 'p6'],
-      endDate: 'p7',
-    },
-    secureMessaging: {
-      warning: ['p1', 'p2'],
-      error: ['p3', 'p4', 'p5'],
-      endDate: 'p6',
-    },
-    medicalRecords: {
-      warning: ['p1', 'p2', 'p3', 'p4'],
-      error: ['p5'],
-      endDate: 'p6',
-    },
-    medications: {
-      warning: ['p1', 'p2', 'p3'],
-      error: ['p4', 'p5'],
-      endDate: 'p6',
-    },
-  }
 
   const linkProps: LinkProps = {
     type: 'url',
@@ -60,17 +69,8 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
     variant: 'base',
   }
 
-  const getAlertState = (phase: string) => {
-    if (parentScreenToPhaseMap[parentScreen].error.includes(phase)) {
-      return 'error'
-    } else if (parentScreenToPhaseMap[parentScreen].warning.includes(phase)) {
-      return 'warning'
-    }
-    return ''
-  }
-
   const alertsForScreen = (migration: MigratingFacility) => {
-    const alertState = getAlertState(migration.phases.current)
+    const alertState = getAlertState(migration.phases.current, parentScreen)
     const dates = migration.phases
     const facilityNames = migration.facilities.map((facility: FacilityInfo) => facility.facilityName) || []
     const startPhase = parentScreenToPhaseMap[parentScreen].error[0]
