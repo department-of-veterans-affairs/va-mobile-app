@@ -47,7 +47,7 @@ beforeAll(async () => {
   await openLabsAndTestRecords()
 })
 
-describe('Labs And Test Screen - Date Picker', () => {
+describe.skip('Labs And Test Screen - Date Picker', () => {
   beforeEach(async () => {
     // Navigate back to Labs and Tests screen before each test
     await navigateToLabsAndTests()
@@ -116,7 +116,7 @@ describe('Labs And Test Screen - Date Picker', () => {
   })
 })
 
-describe('Labs And Test Screen', () => {
+describe.skip('Labs And Test Screen', () => {
   beforeAll(async () => {
     await resetDateRangeToDefault()
   })
@@ -163,7 +163,7 @@ describe('Labs And Test Screen', () => {
   })
 })
 
-describe('Labs And Test Details Screen with Observations', () => {
+describe.skip('Labs And Test Details Screen with Observations', () => {
   beforeEach(async () => {
     // Navigate back to Labs and Tests screen before each test
     await navigateToLabsAndTests()

@@ -24,6 +24,7 @@ const mockOverrides = {
   decisionLettersWaygate: false,
   hsScrollAnalytics: false,
   inAppReview: true,
+  loadLabsAndTestsOnHomeScreen: false,
   mrHide36HrHoldTimes: false,
   rescheduleLink: true,
   submitEvidenceExpansion: true,

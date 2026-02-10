@@ -5,7 +5,7 @@ import { isIOS } from 'utils/platform'
 
 const RnAuthSession = NativeModules.RNAuthSession
 const CustomTabs = NativeModules.CustomTabsIntentModule
-const { AUTH_SIS_ENDPOINT } = getEnv()
+const { AUTH_ENDPOINT } = getEnv()
 
 /**
  * This function fires the native iOS ASWebAuthenticationSession and Custom Tabs
@@ -15,9 +15,9 @@ const { AUTH_SIS_ENDPOINT } = getEnv()
  */
 export const startAuthSession = async (codeChallenge: string): Promise<string> => {
   if (isIOS()) {
-    return await RnAuthSession.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge)
+    return await RnAuthSession.beginAuthSession(AUTH_ENDPOINT, codeChallenge)
   } else {
-    return await CustomTabs.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge)
+    return await CustomTabs.beginAuthSession(AUTH_ENDPOINT, codeChallenge)
   }
 }
 

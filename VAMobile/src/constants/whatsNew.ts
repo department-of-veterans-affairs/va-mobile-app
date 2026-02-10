@@ -73,6 +73,11 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     authorizedService: 'benefitsPushNotification',
     bullets: 1,
   },
+  {
+    featureName: 'LabsAndTests',
+    featureFlag: 'loadLabsAndTestsOnHomeScreen',
+    authorizedService: 'labsAndTestsEnabled',
+  },
 ]
 
 export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
