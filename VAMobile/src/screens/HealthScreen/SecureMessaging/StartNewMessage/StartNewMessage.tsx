@@ -146,7 +146,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   messageDataRef.current = messageData
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
-
+  console.log('cernerFacilities', cernerFacilities)
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
