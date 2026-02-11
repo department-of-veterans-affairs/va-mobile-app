@@ -131,6 +131,48 @@ context('FileRequest', () => {
     })
   })
 
+  describe('friendlyName / displayName fallback', () => {
+    const createRequest = (overrides: Partial<ClaimEventData> = {}): ClaimEventData => ({
+      type: 'still_need_from_you_list',
+      date: '2020-07-16',
+      status: 'NEEDED',
+      uploaded: false,
+      uploadsAllowed: true,
+      displayName: 'Request 1',
+      ...overrides,
+    })
+
+    const requestWithFriendlyName = [
+      createRequest({
+        friendlyName: 'Authorization to disclose information',
+      }),
+    ]
+
+    it('should display friendlyName when available', async () => {
+      renderWithData(requestWithFriendlyName)
+      await waitFor(() => expect(screen.getByText('Authorization to disclose information')).toBeTruthy())
+
+      expect(screen.queryByText('Request 1')).toBeFalsy()
+    })
+
+    it('should use friendlyName in accessibility label when available', async () => {
+      renderWithData(requestWithFriendlyName)
+      await waitFor(() =>
+        expect(screen.getByRole('link', { name: /Authorization to disclose information/ })).toBeTruthy(),
+      )
+    })
+
+    it('should fall back to displayName when friendlyName is not present', async () => {
+      renderWithData([createRequest()])
+      await waitFor(() => expect(screen.getByText('Request 1')).toBeTruthy())
+    })
+
+    it('should fall back to displayName when friendlyName is null', async () => {
+      renderWithData([createRequest({ friendlyName: null })])
+      await waitFor(() => expect(screen.getByText('Request 1')).toBeTruthy())
+    })
+  })
+
   describe('request timeline', () => {
     describe('when a request type is received_from_you_list', () => {
       it('should set fileUploaded to true for FileRequestNumberIndicator', async () => {

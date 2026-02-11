@@ -77,25 +77,26 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       }
     }
 
-    const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
-      const nameContainsRequestNumber = displayName && /Request \d/.test(displayName)
+    const getA11yLabel = (requestIndex: number, requestName?: string, uploaded?: boolean) => {
+      const nameContainsRequestNumber = requestName && /Request \d/.test(requestName)
       const status = uploaded ? t('uploaded') : t('needed')
 
-      if (!displayName) {
+      if (!requestName) {
         return `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}`
       }
 
       return nameContainsRequestNumber
-        ? `${displayName} ${t('fileRequest.buttonA11y.totalCount', { totalCount: requests.length })} ${status}`
-        : `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}. ${displayName}`
+        ? `${requestName} ${t('fileRequest.buttonA11y.totalCount', { totalCount: requests.length })} ${status}`
+        : `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}. ${requestName}`
     }
 
     return map(requests, (request, index) => {
-      const { displayName } = request
+      const { friendlyName, displayName } = request
+      const requestName = friendlyName || displayName
       const hasUploaded = hasUploadedOrReceived(request)
       const item: SimpleListItemObj = {
-        text: displayName || '',
-        testId: getA11yLabel(index + 1, displayName, hasUploaded),
+        text: requestName || '',
+        testId: getA11yLabel(index + 1, requestName, hasUploaded),
         onPress: () => {
           onDetailsPress(request)
         },
