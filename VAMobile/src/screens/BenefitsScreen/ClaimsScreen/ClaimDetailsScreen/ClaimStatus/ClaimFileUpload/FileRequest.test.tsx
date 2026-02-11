@@ -148,14 +148,31 @@ context('FileRequest', () => {
       }),
     ]
 
+    const mockApiResponse = (requests: ClaimEventData[]) => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {})
+        .mockResolvedValue({
+          data: {
+            ...Claim,
+            id: '600156928',
+            attributes: {
+              ...Claim.attributes,
+              waiverSubmitted: false,
+              eventsTimeline: requests,
+            },
+          },
+        })
+    }
+
     it('should display friendlyName when available', async () => {
+      mockApiResponse(requestWithFriendlyName)
       renderWithData(requestWithFriendlyName)
       await waitFor(() => expect(screen.getByText('Authorization to disclose information')).toBeTruthy())
-
       expect(screen.queryByText('Request 1')).toBeFalsy()
     })
 
     it('should use friendlyName in accessibility label when available', async () => {
+      mockApiResponse(requestWithFriendlyName)
       renderWithData(requestWithFriendlyName)
       await waitFor(() =>
         expect(screen.getByRole('link', { name: /Authorization to disclose information/ })).toBeTruthy(),
@@ -163,12 +180,16 @@ context('FileRequest', () => {
     })
 
     it('should fall back to displayName when friendlyName is not present', async () => {
-      renderWithData([createRequest()])
+      const requests = [createRequest()]
+      mockApiResponse(requests)
+      renderWithData(requests)
       await waitFor(() => expect(screen.getByText('Request 1')).toBeTruthy())
     })
 
     it('should fall back to displayName when friendlyName is null', async () => {
-      renderWithData([createRequest({ friendlyName: null })])
+      const requests = [createRequest({ friendlyName: null })]
+      mockApiResponse(requests)
+      renderWithData(requests)
       await waitFor(() => expect(screen.getByText('Request 1')).toBeTruthy())
     })
   })
