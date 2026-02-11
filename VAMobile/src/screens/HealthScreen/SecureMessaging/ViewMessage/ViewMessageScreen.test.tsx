@@ -2,6 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   CategoryTypeFields,
   SecureMessagingFolderMessagesGetData,
@@ -14,6 +15,8 @@ import { LARGE_PAGE_SIZE } from 'constants/common'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
+jest.mock('api/authorizedServices/getAuthorizedServices')
 
 context('ViewMessageScreen', () => {
   const thread: SecureMessagingThreadGetData = {
@@ -250,6 +253,14 @@ context('ViewMessageScreen', () => {
     },
   }
 
+  beforeEach(() => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {
+        migratingFacilitiesList: [],
+      },
+    })
+  })
+
   const initializeTestInstance = (messageID: number = 3) => {
     render(
       <ViewMessageScreen
@@ -480,6 +491,201 @@ context('ViewMessageScreen', () => {
       await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
       await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
       await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+    })
+  })
+
+  describe('when message has OH migration phase blocking replies', () => {
+    const migrationMessage: SecureMessagingMessageGetData = {
+      data: {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: 'Migration test',
+          body: 'test body',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '3',
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+          ohMigrationPhase: 'p3',
+        },
+      },
+      included: [],
+      meta: {
+        userInTriageTeam: true,
+      },
+    }
+
+    it('should show Start new message button instead of Reply when migration blocks replies', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: {
+                current: 'p3',
+                p0: 'March 1, 2026',
+                p1: 'March 15, 2026',
+                p2: 'April 1, 2026',
+                p3: 'April 24, 2026',
+                p4: 'April 27, 2026',
+                p5: 'May 1, 2026',
+                p6: 'May 3, 2026',
+                p7: 'May 8, 2026',
+              },
+            },
+          ],
+        },
+      })
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(thread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(migrationMessage)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Reply')).toBeFalsy())
+    })
+
+    it('should hide "too old" and "not in triage team" alerts during migration blocking phase', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: {
+                current: 'p4',
+                p0: 'March 1, 2026',
+                p1: 'March 15, 2026',
+                p2: 'April 1, 2026',
+                p3: 'April 24, 2026',
+                p4: 'April 27, 2026',
+                p5: 'May 1, 2026',
+                p6: 'May 3, 2026',
+                p7: 'May 8, 2026',
+              },
+            },
+          ],
+        },
+      })
+
+      const migrationOldMessage: SecureMessagingMessageGetData = {
+        data: {
+          id: 45,
+          type: '3',
+          attributes: {
+            messageId: 45,
+            category: CategoryTypeFields.other,
+            subject: 'Old migration message',
+            body: 'test',
+            hasAttachments: false,
+            attachment: false,
+            sentDate: '2013-06-06T04:00:00.000+00:00',
+            senderId: 2,
+            senderName: 'mock sender 45',
+            recipientId: 3,
+            recipientName: 'mock recipient name',
+            readReceipt: 'mock read receipt',
+            isOhMessage: false,
+            ohMigrationPhase: 'p4',
+          },
+        },
+        included: [],
+        meta: {
+          userInTriageTeam: true,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(oldThread)
+        .calledWith(`/v0/messaging/health/messages/${45}`)
+        .mockResolvedValue(migrationOldMessage)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByTestId('secureMessagingYouCanNoLongerAlertID')).toBeFalsy())
+    })
+
+    it('should not block replies for non-blocking migration phases', async () => {
+      const nonBlockingMigrationMessage: SecureMessagingMessageGetData = {
+        data: {
+          id: 3,
+          type: '3',
+          attributes: {
+            messageId: 3,
+            category: CategoryTypeFields.other,
+            subject: 'Non-blocking migration',
+            body: 'test body',
+            hasAttachments: false,
+            attachment: false,
+            sentDate: '3',
+            senderId: 2,
+            senderName: 'mock sender 3',
+            recipientId: 3,
+            recipientName: 'mock recipient name 3',
+            readReceipt: 'mock read receipt',
+            isOhMessage: false,
+            ohMigrationPhase: 'p1',
+          },
+        },
+        included: [],
+        meta: {
+          userInTriageTeam: true,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(thread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(nonBlockingMigrationMessage)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Reply')).toBeTruthy())
     })
   })
 })

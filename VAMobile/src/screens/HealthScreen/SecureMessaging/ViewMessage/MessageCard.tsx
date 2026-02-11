@@ -35,9 +35,10 @@ export type MessageCardProps = {
   folderId: number
   userInTriageTeam?: boolean
   replyExpired?: boolean
+  migrationBlocksReply?: boolean
 }
 
-function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: MessageCardProps) {
+function MessageCard({ message, folderId, userInTriageTeam, replyExpired, migrationBlocksReply }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -158,17 +159,23 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
     navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   function getReplyOrStartNewMessageButton() {
+    if (!replyExpired && userInTriageTeam && !migrationBlocksReply) {
+      return (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
+        </Box>
+      )
+    }
+    if (migrationBlocksReply) {
+      return null
+    }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {!replyExpired && userInTriageTeam ? (
-          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
-        ) : (
-          <Button
-            label={t('secureMessaging.startNewMessage')}
-            onPress={onStartMessagePress}
-            testID={'startNewMessageButtonTestID'}
-          />
-        )}
+        <Button
+          label={t('secureMessaging.startNewMessage')}
+          onPress={onStartMessagePress}
+          testID={'startNewMessageButtonTestID'}
+        />
       </Box>
     )
   }
@@ -179,7 +186,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
         {getHeader()}
         {getContent()}
         {(hasAttachments || attachment) && getAttachment()}
-        {getMessageHelp()}
+        {!migrationBlocksReply && getMessageHelp()}
         {getReplyOrStartNewMessageButton()}
       </Box>
     </Box>
