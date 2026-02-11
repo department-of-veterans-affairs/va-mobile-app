@@ -377,36 +377,6 @@ jobs:
           echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
 
-  check_approval_label:
-    name: Check PR for existing approval label
-    runs-on: ubuntu-latest
-    outputs:
-      has_approval_label: ${{ steps.check.outputs.has_approval_label }}
-    steps:
-      - name: Check for package-scan-complete label
-        id: check
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-        run: |
-          set -euo pipefail
-          # Default to false for non-PR events
-          if [ "${GITHUB_EVENT_NAME}" != "pull_request" ]; then
-            echo "has_approval_label=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          RESP=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}")
-          if [ -z "$RESP" ]; then
-            echo "has_approval_label=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          echo "$RESP" | python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import json,sys
-          resp=json.load(sys.stdin)
-          labels=[l.get('name','') for l in resp.get('labels',[])]
-          print('has_approval_label=true' if 'package-scan-complete' in labels else 'has_approval_label=false')
-          PY
 
   remove_stale_approval_label:
     name: Remove stale approval label
