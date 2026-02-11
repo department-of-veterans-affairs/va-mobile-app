@@ -134,7 +134,7 @@ jobs:
               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
                 if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name | sub(".e2e.ts$"; "")]')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
@@ -251,7 +251,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
-          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
+          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}}.e2e --updateSnapshot
         continue-on-error: true
 
       - name: Run e2e tests for Android - Full Test - Retry
@@ -426,12 +426,7 @@ jobs:
 
   update-test-names:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs:
-      [
-        matrix-e2e-android,
-        output_detox_tests_to_run,
-        matrix_send_test_results_to_testrail,
-      ]
+    needs: [matrix-e2e-android, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
     continue-on-error: false
     runs-on: ubuntu-latest
     steps:

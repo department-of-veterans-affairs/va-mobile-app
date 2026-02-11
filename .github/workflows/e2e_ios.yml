@@ -124,7 +124,7 @@ jobs:
               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
                 if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name | sub(".e2e.ts$"; "")]')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
@@ -222,7 +222,7 @@ jobs:
         id: run_e2e_tests
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
             echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
           else
             echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
@@ -238,7 +238,7 @@ jobs:
           if [[ "${{ steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN}}" != "" ]]; then
             yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
           else
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
           fi
 
       - name: Upload e2e-junit
@@ -369,12 +369,7 @@ jobs:
 
   update-test-names:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs:
-      [
-        matrix-e2e-ios,
-        output_detox_tests_to_run,
-        matrix_send_test_results_to_testrail,
-      ]
+    needs: [matrix-e2e-ios, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
     runs-on: ubuntu-latest
     continue-on-error: false
     steps:
