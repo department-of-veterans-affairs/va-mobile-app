@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
   useAllMessageRecipients,
@@ -47,6 +48,7 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
+import { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -63,6 +65,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useAttachments, useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { getMigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -131,6 +134,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   } = useThread(messageID, false, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
+  const {
+    data: userAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    isFetched: hasLoadedUserAuthorizedServices,
+    refetch: refetchAuthServices,
+    isFetching: refetchingAuthServices,
+  } = useAuthorizedServices()
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageDraftData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
@@ -674,6 +684,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       )
     }
 
+    const soonestErrorMigration = getMigrationsInErrorState(
+      userAuthorizedServices?.migratingFacilitiesList || [],
+      OHParentScreens.SecureMessaging,
+    )[0]
+
     return (
       <Box>
         <MessageAlert
@@ -684,6 +699,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           errorList={errorList}
           replyTriageError={replyTriageError}
         />
+        {soonestErrorMigration &&
+          getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging, theme, t)}
         <TextArea>
           {message && isReplyDraft && (
             <>
@@ -756,7 +773,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     )
   }
 
-  const hasError = recipientsError || threadError || messageError || folderMessagesError
+  const hasError =
+    recipientsError || threadError || messageError || folderMessagesError || getUserAuthorizedServicesError
   const isLoading =
     (!isReplyDraft && !hasLoadedRecipients) ||
     loadingMessage ||
@@ -767,7 +785,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     refetchingRecipients ||
     refetchingThread ||
     !hasLoadedFolderMessages ||
-    refetchingFolderMessages
+    refetchingFolderMessages ||
+    !hasLoadedUserAuthorizedServices ||
+    refetchingAuthServices
 
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -807,7 +827,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
                   ? refetchMessage
                   : folderMessagesError
                     ? refetchFolderMessages
-                    : undefined
+                    : getUserAuthorizedServicesError
+                      ? refetchAuthServices
+                      : undefined
           }
         />
       ) : (

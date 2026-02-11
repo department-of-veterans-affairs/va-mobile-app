@@ -484,7 +484,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           </AlertWithHaptics>
         </Box>
         {soonestErrorMigration &&
-          userAuthorizedServices &&
           getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging, theme, t)}
         <MessageAlert
           hasValidationError={formContainsError}
