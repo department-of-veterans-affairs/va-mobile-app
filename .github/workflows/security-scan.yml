@@ -22,6 +22,7 @@ on:
 jobs:
   check_for_locked_file_changes:
     name: Check for package-lock changes
+    needs: check_approval_label
     runs-on: ubuntu-latest
     outputs:
       any_changed: ${{ steps.changed-files.outputs.any_changed }}
@@ -346,7 +347,11 @@ jobs:
           fi
           PR_NUMBER=${{ github.event.pull_request.number }}
           RESP=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}")
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          if [ -z "$RESP" ]; then
+            echo "has_approval_label=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "$RESP" | python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json,sys
           resp=json.load(sys.stdin)
           labels=[l.get('name','') for l in resp.get('labels',[])]
