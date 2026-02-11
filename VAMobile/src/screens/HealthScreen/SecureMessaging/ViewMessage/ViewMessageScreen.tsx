@@ -62,7 +62,7 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { anyFacilitiesInMigrationErrorState, getMigrationEndDate, getMigrationsInErrorState } from 'utils/ohMigration'
+import { getMigrationEndDate, getMigrationsInErrorState } from 'utils/ohMigration'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -403,7 +403,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     userAuthorizedServices?.migratingFacilitiesList || [],
     OHParentScreens.SecureMessaging,
   )[0]
-  const migratingFacilitiesInErrorNames = soonestErrorMigration.facilities.map(
+  const migratingFacilitiesInErrorNames = soonestErrorMigration?.facilities.map(
     (facility: FacilityInfo) => facility.facilityName,
   )
 
@@ -475,7 +475,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          {!userInTriageTeam && !noProviderError && (
+          {!userInTriageTeam && !noProviderError && !soonestErrorMigration && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -499,7 +499,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               </AlertWithHaptics>
             </Box>
           )}
-          {noProviderError && soonestErrorMigration && (
+          {soonestErrorMigration && (!userInTriageTeam || noProviderError) && (
             <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 expandable={true}

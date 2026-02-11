@@ -1,17 +1,10 @@
 import React from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
-import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
-
-import { FacilityInfo, MigratingFacility, UserAuthorizedServicesData } from 'api/types'
-import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
+import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelVA } from 'utils/a11yLabel/va'
-import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
-import { getMigrationEndDate, parentScreenToPhaseMap } from 'utils/ohMigration'
-
-const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+import { getMigrationErrorMessage, getMigrationWarningMessage, parentScreenToPhaseMap } from 'utils/ohMigration'
 
 export enum OHParentScreens {
   Appointments = 'appointments',
@@ -35,92 +28,14 @@ export const getAlertState = (phase: string, parentScreen: OHParentScreens) => {
 }
 
 export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertManagerProps) => {
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-
-  const linkProps: LinkProps = {
-    type: 'url',
-    url: WEBVIEW_URL_FACILITY_LOCATOR,
-    text: t('ohAlert.error.linkText'),
-    a11yLabel: a11yLabelVA(t('ohAlert.error.linkText')),
-    testID: 'goToFindLocationInfoTestID',
-    variant: 'base',
-  }
-
   const alertsForScreen = (migration: MigratingFacility) => {
     const alertState = getAlertState(migration.phases.current, parentScreen)
-    const dates = migration.phases
-    const facilityNames = migration.facilities.map((facility: FacilityInfo) => facility.facilityName) || []
-    const startPhase = parentScreenToPhaseMap[parentScreen].error[0]
-    const startDate = dates[startPhase as keyof typeof dates]
-    const endDate = getMigrationEndDate(migration, parentScreen)
-
+    const theme = useTheme()
+    const { t } = useTranslation(NAMESPACE.COMMON)
     if (alertState === 'warning') {
-      return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertWithHaptics
-            expandable={true}
-            initializeExpanded={true}
-            variant="warning"
-            header={t(`ohAlert.warning.title`, { date: startDate })}
-            description={''}>
-            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-              <Trans
-                i18nKey={`ohAlert.warning.${parentScreen}.body`}
-                components={{ bold: <TextView variant="MobileBodyBold" /> }}
-                values={{
-                  startDate: startDate,
-                  endDate: endDate,
-                }}
-              />
-            </TextView>
-            <Box mb={theme.dimensions.standardMarginBetween} />
-            <VABulletList listOfText={facilityNames} />
-            <Box mb={theme.dimensions.standardMarginBetween} />
-            {t(`ohAlert.warning.${parentScreen}.note`) !== `ohAlert.warning.${parentScreen}.note` && (
-              <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-                <Trans
-                  i18nKey={`ohAlert.warning.${parentScreen}.note`}
-                  components={{ bold: <TextView variant="MobileBodyBold" /> }}
-                />
-              </TextView>
-            )}
-          </AlertWithHaptics>
-        </Box>
-      )
+      return getMigrationWarningMessage(migration, parentScreen, theme, t)
     } else if (alertState === 'error') {
-      return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertWithHaptics
-            expandable={true}
-            initializeExpanded={true}
-            variant="error"
-            header={t(`ohAlert.error.${parentScreen}.title`, { endDate: endDate })}
-            description={''}>
-            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-              <Trans
-                i18nKey={`ohAlert.error.${parentScreen}.body`}
-                components={{ bold: <TextView variant="MobileBodyBold" /> }}
-                values={{
-                  transitionDate: startDate,
-                  endDate: endDate,
-                }}
-              />
-            </TextView>
-            <Box mb={theme.dimensions.standardMarginBetween} />
-            <VABulletList listOfText={facilityNames} />
-            <Box mb={theme.dimensions.standardMarginBetween} />
-            {t(`ohAlert.error.${parentScreen}.note`) !== `ohAlert.error.${parentScreen}.note` && (
-              <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-                {t(`ohAlert.error.${parentScreen}.note`, { featureActions: t(`ohAlert.${parentScreen}.actions`) })}
-              </TextView>
-            )}
-            {(parentScreen === OHParentScreens.Appointments || parentScreen === OHParentScreens.SecureMessaging) && (
-              <LinkWithAnalytics {...linkProps} />
-            )}
-          </AlertWithHaptics>
-        </Box>
-      )
+      return getMigrationErrorMessage(migration, parentScreen, theme, t)
     }
     return <></>
   }

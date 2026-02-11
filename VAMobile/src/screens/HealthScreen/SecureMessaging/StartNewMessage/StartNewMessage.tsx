@@ -8,6 +8,7 @@ import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-comp
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
   useAllMessageRecipients,
@@ -40,6 +41,7 @@ import {
   TextArea,
   TextView,
 } from 'components'
+import { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -60,6 +62,7 @@ import {
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
+import { getMigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -115,6 +118,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
+  const {
+    data: userAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    isFetched: hasLoadedUserAuthorizedServices,
+    refetch: refetchAuthServices,
+    isFetching: refetchingAuthServices,
+  } = useAuthorizedServices()
   const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
   const recipients = recipientsResponse?.data
 
@@ -435,6 +445,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
+  const soonestErrorMigration = getMigrationsInErrorState(
+    userAuthorizedServices?.migratingFacilitiesList || [],
+    OHParentScreens.SecureMessaging,
+  )[0]
+
   function renderContent() {
     if (noProviderError) {
       return (
@@ -468,6 +483,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             </TextView>
           </AlertWithHaptics>
         </Box>
+        {soonestErrorMigration &&
+          userAuthorizedServices &&
+          getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging, theme, t)}
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
@@ -501,7 +519,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  const hasError = recipientsError || signatureError || folderMessagesError
+  const hasError = recipientsError || signatureError || folderMessagesError || getUserAuthorizedServicesError
 
   const isLoading =
     !hasLoadedRecipients ||
@@ -512,7 +530,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     refetchingRecipients ||
     refetchingSignature ||
     !hasLoadedFolderMessages ||
-    refetchingFolderMessages
+    refetchingFolderMessages ||
+    !hasLoadedUserAuthorizedServices ||
+    refetchingAuthServices
 
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -535,6 +555,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         }
 
   const refetchData = () => {
+    if (getUserAuthorizedServicesError) return refetchAuthServices
     if (recipientsError) return refetchRecipients
     if (signatureError) return refetchSignature
     if (folderMessagesError) return refetchFolderMessages
