@@ -154,10 +154,66 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
+  build-e2e-android:
+    if: needs.output_detox_tests_to_run.outputs.output1 != ''
+    runs-on: ubuntu-latest
+    needs: output_detox_tests_to_run
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
+
+      - name: Decode base64 encoded keys
+        working-directory: VAMobile/android
+        run: |
+          mkdir keys
+          cd keys
+          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+          cd ../app
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'microsoft'
+
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: Install npm dependencies
+        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
+
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Bundle Android app
+        run: yarn e2e:android-build
+
+      - name: Upload Android app
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-android-app
+          path: VAMobile/android/app/build/outputs/apk
+          retention-days: 1
+
   matrix-e2e-android:
-    if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
+    if: (!cancelled()) && needs.build-e2e-android.result == 'success' && needs.output_detox_tests_to_run.outputs.output1 != ''
     runs-on: ubuntu-16-cores-latest
-    needs: [start_slack_thread, output_detox_tests_to_run]
+    needs: [start_slack_thread, output_detox_tests_to_run, build-e2e-android]
     strategy:
       fail-fast: false
       matrix:
@@ -188,38 +244,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libpulse-dev
 
-      - name: Set git config
-        run: |
-          git config --global user.name 'VA Mobile Automation Bot'
-          git config --global user.email 'VAFlagshipMobile@va.gov'
-
-      - name: Decode base64 encoded keys
-        working-directory: VAMobile/android
-        run: |
-          mkdir keys
-          cd keys
-          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
-          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
-          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
-          cd ../app
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
-
-      - name: Setup ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          working-directory: VAMobile/android
-
-      - name: Install bundle
-        working-directory: VAMobile/android
-        run: bundle install
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'microsoft'
-
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
@@ -230,48 +254,14 @@ jobs:
       - name: Install npm dependencies
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
-      - name: Run Android Setup Script
-        run: ../.github/scripts/run-manual-setup.sh android
-
-      - name: Set app environment variables
-        run: yarn env:staging
-
-      - name: Bundle Android app
-        run: yarn e2e:android-build
-
-      - name: Run e2e tests for Android - Full Test
-        id: run_e2e_tests
-        if: ${{needs.output_detox_tests_to_run.outputs.output2 == ''}}
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Download built Android app
+        uses: actions/download-artifact@v4
         with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_6_Pro_API_33
-          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
-        continue-on-error: true
-
-      - name: Run e2e tests for Android - Full Test - Retry
-        id: run_e2e_tests_full_retry
-        if: steps.run_e2e_tests.outcome == 'failure'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_6_Pro_API_33
-          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
-        continue-on-error: true
+          name: built-android-app
+          path: VAMobile/android/app/build/outputs/apk
 
       - name: Run e2e tests for Android
-        id: run_e2e_tests_nav_AF
-        if: ${{needs.output_detox_tests_to_run.outputs.output2 != ''}}
+        id: run_e2e_tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
@@ -281,22 +271,12 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
-          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
-        continue-on-error: true
-
-      - name: Run e2e tests for Android on failure
-        if: steps.run_e2e_tests_nav_AF.outcome == 'failure'
-        id: run_e2e_tests_retry
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_6_Pro_API_33
-          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
+          script: |
+            if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
+              yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1
+            else
+              yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --retries 1
+            fi
 
       - name: Upload e2e-junit
         if: failure() || success()
@@ -306,16 +286,12 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
-        if: failure() || steps.run_e2e_tests_full_retry.outcome == 'failure'
+        if: failure() || steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
           path: VAMobile/artifacts
           retention-days: 1
-
-      - name: Fail workflow if needed(View e2e step for details)
-        if: steps.run_e2e_tests_full_retry.outcome == 'failure'
-        run: exit 1
 
   output-slack-results-and-update-detox-failure-ticket:
     if: (!cancelled()) && github.event_name == 'schedule'
@@ -426,12 +402,7 @@ jobs:
 
   update-test-names:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs:
-      [
-        matrix-e2e-android,
-        output_detox_tests_to_run,
-        matrix_send_test_results_to_testrail,
-      ]
+    needs: [matrix-e2e-android, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
     continue-on-error: false
     runs-on: ubuntu-latest
     steps:

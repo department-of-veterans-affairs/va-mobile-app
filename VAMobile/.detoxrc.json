@@ -48,7 +48,7 @@
     "ios": {
       "device": "simulator",
       "app": "ios",
-      "headless": "false"
+      "headless": true
     },
     "android": {
       "device": "emulator",
@@ -69,7 +69,7 @@
       "screenshot": {
         "enabled": true,
         "shouldTakeAutomaticSnapshots": true,
-        "keepOnlyFailedTestsArtifacts": false,
+        "keepOnlyFailedTestsArtifacts": true,
         "takeWhen": {
           "testStart": false,
           "testDone": true,
