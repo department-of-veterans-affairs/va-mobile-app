@@ -3,7 +3,7 @@ name: '[Admin] Weekly Flagship Mobile PR Reviewer Assignment'
 on:
   schedule:
     # Run every Monday at 8:33 AM EST (1:33 PM UTC)
-    - cron: '33 13 * * 1'
+    - cron: '33 13 * * 1' # Will run every Monday, but steps will gate off week number for biweekly scheduling, starting at week 7.
 
 env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
@@ -19,7 +19,11 @@ jobs:
         run: |
           WEEK_NUM=$(date +%U)
           echo "Current week number: $WEEK_NUM"
-          # Map week number to reviewer and backup (weeks 40-52)
+          if [ "$WEEK_NUM" -lt 7 ] || [ $(( WEEK_NUM % 2 )) -ne 1 ]; then
+            echo "Not a biweekly reviewer assignment week. Exiting..."
+            exit 0
+          fi
+          # Map week number to reviewer and backup (weeks 2-52)
           case $WEEK_NUM in
             02) REVIEWER="dumathane"; BACKUP="jmarchi";;
             03) REVIEWER="jmarchi"; BACKUP="narin";;
@@ -78,8 +82,6 @@ jobs:
             ["AdryienH"]="U08N85KC05Q"
             ["jmarchi"]="U01APSBG86A"
             ["dumathane"]="U08HW514Y8Y"
-            ["keli13"]="U01ATFT0XBP"
-            ["dftony"]="U08HW41SBUG"
             ["matthew-df"]="U08UWE4S3GW"
             ["narin"]="U0A7E2P2FC7"
           )
@@ -92,44 +94,142 @@ jobs:
           echo "week_number=$WEEK_NUM" >> $GITHUB_OUTPUT
           echo "Selected reviewer: $REVIEWER and backup: $BACKUP for week $WEEK_NUM"
 
-      - name: Get Slack channel ID
-        id: get-channel
+      - name: Get #va-mobile-app channel ID
+        id: get-channel-va-mobile-app
         run: |
           CHANNEL_NAME="va-mobile-app"
-          fetch_page() {
-            last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/x-www-form-urlencoded' \
-            https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
-          }
-          get_id() {
-            id=$(jq '.channels[] | .name as $data | select($data == "'$CHANNEL_NAME'").id' <<< $last_response)
-          }
-          get_cursor() {
-            cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
-          }
           id=""
           cursor=""
           last_response=""
-          fetch_page
-          get_id
-          while [[ -z "$id" ]]
-          do
-            get_cursor
-            fetch_page
-            get_id
+          while :; do
+            url="https://slack.com/api/conversations.list?limit=1000&types=public_channel"
+            if [[ -n "$cursor" ]]; then
+              url="$url&cursor=$cursor"
+            fi
+            echo "Fetching conversations.list for $CHANNEL_NAME (cursor='$cursor')"
+            last_response=$(curl -s -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/x-www-form-urlencoded" \
+              "$url")
+            ok=$(jq -r '.ok' <<< "$last_response")
+            if [[ "$ok" != "true" ]]; then
+              echo "Slack API error: $(jq -r '.error // "unknown"' <<< "$last_response")"
+              break
+            fi
+            id=$(jq -r --arg name "$CHANNEL_NAME" '.channels[] | select(.name==$name) | .id' <<< "$last_response")
+            if [[ -n "$id" && "$id" != "null" ]]; then
+              echo "Found channel '$CHANNEL_NAME' -> $id"
+              break
+            fi
+            cursor=$(jq -r '.response_metadata.next_cursor // empty' <<< "$last_response")
+            if [[ -z "$cursor" ]]; then
+              echo "No more pages and channel not found"
+              break
+            fi
           done
-          echo "channel_id=${id}" >> $GITHUB_OUTPUT
+          echo "channel_id=$id" >> $GITHUB_OUTPUT
 
-      - name: Send Slack notification
+      - name: Get #va-mobile-app-engineering channel ID
+        id: get-channel-va-mobile-app-engineering
+        run: |
+          CHANNEL_NAME="va-mobile-app-engineering"
+          id=""
+          cursor=""
+          last_response=""
+          while :; do
+            url="https://slack.com/api/conversations.list?limit=1000&types=public_channel"
+            if [[ -n "$cursor" ]]; then
+              url="$url&cursor=$cursor"
+            fi
+            echo "Fetching conversations.list for $CHANNEL_NAME (cursor='$cursor')"
+            last_response=$(curl -s -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/x-www-form-urlencoded" \
+              "$url")
+            ok=$(jq -r '.ok' <<< "$last_response")
+            if [[ "$ok" != "true" ]]; then
+              echo "Slack API error: $(jq -r '.error // "unknown"' <<< "$last_response")"
+              break
+            fi
+            id=$(jq -r --arg name "$CHANNEL_NAME" '.channels[] | select(.name==$name) | .id' <<< "$last_response")
+            if [[ -n "$id" && "$id" != "null" ]]; then
+              echo "Found channel '$CHANNEL_NAME' -> $id"
+              break
+            fi
+            cursor=$(jq -r '.response_metadata.next_cursor // empty' <<< "$last_response")
+            if [[ -z "$cursor" ]]; then
+              echo "No more pages and channel not found"
+              break
+            fi
+          done
+          echo "channel_id=$id" >> $GITHUB_OUTPUT
+
+      - name: Update topic in #va-mobile-app
+        if: steps.select-reviewer.outputs.reviewer_person != ''
+        run: |
+          CHANNEL_ID="${{ steps.get-channel-va-mobile-app.outputs.channel_id }}"
+          SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
+          TOPIC="Primary channel for Mobile App & Platform Team and any comms related to mobile app features. PR Reviewer: $SLACK_MENTION"
+          echo "Updating topic for va-mobile-app ($CHANNEL_ID) to: $TOPIC"
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping conversations.setTopic: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC\"}" \
+              https://slack.com/api/conversations.setTopic
+          fi
+
+      - name: Update topic in #va-mobile-app-engineering
+        if: steps.select-reviewer.outputs.reviewer_person != ''
+        run: |
+          CHANNEL_ID="${{ steps.get-channel-va-mobile-app-engineering.outputs.channel_id }}"
+          SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
+          TOPIC="Channel for Mobile App engineering comms and questions. PR Reviewer: $SLACK_MENTION"
+          echo "Updating topic for va-mobile-app-engineering ($CHANNEL_ID) to: $TOPIC"
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping conversations.setTopic: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC\"}" \
+              https://slack.com/api/conversations.setTopic
+          fi
+
+      - name: Send Slack notification to #va-mobile-app
+        if: steps.select-reviewer.outputs.reviewer_person != ''
         run: |
           SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
           BACKUP_SLACK_MENTION="${{ steps.select-reviewer.outputs.backup_slack_mention }}"
-          CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
+          CHANNEL_ID="${{ steps.get-channel-va-mobile-app.outputs.channel_id }}"
           URL="https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#pull-request-review"
           MESSAGE=" *Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\n<$URL>"
-          echo "Sending Slack notification..."
-          curl -X POST \
-            -H "Authorization: Bearer $SLACK_API_TOKEN" \
-            -H "Content-type: application/json" \
-            -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
-            https://slack.com/api/chat.postMessage
+          echo "Sending Slack notification to #va-mobile-app..."
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping chat.postMessage to #va-mobile-app: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
+              https://slack.com/api/chat.postMessage
+          fi
+
+      - name: Send Slack notification to #va-mobile-app-engineering
+        if: steps.select-reviewer.outputs.reviewer_person != ''
+        run: |
+          SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
+          BACKUP_SLACK_MENTION="${{ steps.select-reviewer.outputs.backup_slack_mention }}"
+          CHANNEL_ID="${{ steps.get-channel-va-mobile-app-engineering.outputs.channel_id }}"
+          URL="https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#pull-request-review"
+          MESSAGE="*Channel for Mobile App engineering comms and questions.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\n<$URL>"
+          echo "Sending Slack notification to #va-mobile-app-engineering..."
+          if [[ -z "$CHANNEL_ID" ]]; then
+            echo "Skipping chat.postMessage to #va-mobile-app-engineering: CHANNEL_ID is empty"
+          else
+            curl -X POST \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/json" \
+              -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
+              https://slack.com/api/chat.postMessage
+          fi
