@@ -188,10 +188,9 @@ jobs:
                 fi
               done
             else
-              if [[ "$firstInstanceFile" == "true" ]]; then
+              if [[ "$test_matrix" == "" ]]; then
                 test_matrix=$fileFound
                 test_matrix=$(echo $test_matrix | jq -c '.')
-                firstInstanceFile="false"
               else
                 test_matrix=$(echo $test_matrix | jq -c '.')
                 test_matrix=$(echo $test_matrix | jq --argjson matrix "$fileFound" '. += $matrix')
