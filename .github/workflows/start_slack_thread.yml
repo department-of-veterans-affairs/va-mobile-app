@@ -12,6 +12,15 @@ on:
         description: 'Text to display for the message starting the thread.'
         type: string
         required: true
+      topic:
+        description: 'Optional topic to set on the channel.'
+        type: string
+        required: false
+      update_topic:
+        description: 'If true, update the channel topic to the value of `topic`.'
+        type: boolean
+        required: false
+        default: false
     outputs:
       thread_ts:
         description: 'Timestamp of the Slack thread that was created.'
@@ -33,32 +42,43 @@ jobs:
       - name: Search Slack for channel ID
         id: search_slack
         run: |
-          fetch_page() {
-            last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/x-www-form-urlencoded' \
-            https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
-          }
-          get_id() {
-            id=$(jq -r '.channels[] | .name as $data | select($data == "${{inputs.channel_name}}").id' <<< $last_response)
-          }
-            
-          get_cursor() {
-            cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
-          }
-          
+          CHANNEL_NAME="${{ inputs.channel_name }}"
           id=""
           cursor=""
           last_response=""
-          fetch_page
-          get_id
-          
-          while [[ -z "$id" ]]
-          do
-            get_cursor
-            fetch_page
-            get_id
+
+          while :; do
+            url="https://slack.com/api/conversations.list?limit=1000&types=public_channel,private_channel"
+            if [[ -n "$cursor" ]]; then
+              url="$url&cursor=$cursor"
+            fi
+            echo "Fetching conversations.list (cursor='$cursor')"
+            last_response=$(curl -s -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/x-www-form-urlencoded" \
+              "$url")
+
+            ok=$(jq -r '.ok // "false"' <<< "$last_response")
+            if [[ "$ok" != "true" ]]; then
+              echo "Slack API error: $(jq -r '.error // "unknown"' <<< "$last_response")"
+              exit 1
+            fi
+
+            # Debug: show some channel names from this page
+            jq -r '.channels[]?.name' <<< "$last_response" | sed -n '1,200p' | awk '{print " - " $0}' || true
+
+            id=$(jq -r --arg name "$CHANNEL_NAME" '.channels[]? | select(.name==$name) | .id' <<< "$last_response")
+            if [[ -n "$id" && "$id" != "null" ]]; then
+              echo "Found channel '$CHANNEL_NAME' -> $id"
+              echo "SLACK_CHANNEL_ID=$id" >> $GITHUB_OUTPUT
+              break
+            fi
+
+            cursor=$(jq -r '.response_metadata.next_cursor // empty' <<< "$last_response")
+            if [[ -z "$cursor" ]]; then
+              echo "No more pages and channel not found"
+              exit 1
+            fi
           done
-          echo SLACK_CHANNEL_ID=${id} >> $GITHUB_OUTPUT
   start_thread:
     name: Start thread
     runs-on: ubuntu-latest
