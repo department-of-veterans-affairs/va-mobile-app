@@ -1,4 +1,4 @@
-import { OH_MIGRATION_PHASES_BLOCKING_REPLIES, isMigrationPhaseBlockingReplies } from './secureMessaging'
+import { OH_MIGRATION_PHASES_BLOCKING_REPLIES, isMigrationPhaseBlockingReplies } from 'constants/secureMessaging'
 
 describe('isMigrationPhaseBlockingReplies', () => {
   it.each(OH_MIGRATION_PHASES_BLOCKING_REPLIES)('should return true for blocking phase %s', (phase) => {
