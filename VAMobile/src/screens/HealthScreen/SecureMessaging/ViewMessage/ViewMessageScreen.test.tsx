@@ -522,7 +522,7 @@ context('ViewMessageScreen', () => {
       },
     }
 
-    it('should show Start new message button instead of Reply when migration blocks replies', async () => {
+    it('should hide Reply and Start new message buttons when migration blocks replies', async () => {
       ;(useAuthorizedServices as jest.Mock).mockReturnValue({
         data: {
           migratingFacilitiesList: [
@@ -563,7 +563,7 @@ context('ViewMessageScreen', () => {
 
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Start new message')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Reply')).toBeFalsy())
     })
 
