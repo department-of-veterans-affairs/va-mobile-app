@@ -1,10 +1,10 @@
 export const API_ROOT = 'https://test-api'
 export const AUTH_REDIRECT_URL = 'vamobile://login-success'
 export const AUTH_SCOPES = 'openid'
-export const AUTH_SIS_ENDPOINT = 'https://test.gov/sign_in'
-export const AUTH_SIS_TOKEN_EXCHANGE_URL = 'https://test.gov/sign_in/token'
-export const AUTH_SIS_REFRESH_URL = 'https://test.gov/sign_in/refresh'
-export const AUTH_SIS_REVOKE_URL = 'https://test.gov/sign_in/revoke'
+export const AUTH_ENDPOINT = 'https://test.gov/sign_in'
+export const AUTH_TOKEN_EXCHANGE_URL = 'https://test.gov/sign_in/token'
+export const AUTH_REFRESH_URL = 'https://test.gov/sign_in/refresh'
+export const AUTH_REVOKE_URL = 'https://test.gov/sign_in/revoke'
 export const SHOW_DEBUG_MENU = true
 export const IS_TEST = true
 export const WEBVIEW_URL_CHANGE_LEGAL_NAME =
