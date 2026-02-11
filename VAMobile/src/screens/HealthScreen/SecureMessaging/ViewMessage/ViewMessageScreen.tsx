@@ -11,6 +11,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
   useFolderMessages,
@@ -42,9 +43,15 @@ import {
   TextView,
   VAModalPicker,
 } from 'components'
+import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  READ,
+  REPLY_WINDOW_IN_DAYS,
+  isMigrationPhaseBlockingReplies,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import CollapsibleMessage from 'screens/HealthScreen/SecureMessaging/ViewMessage/CollapsibleMessage'
 import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/MessageCard'
@@ -164,6 +171,12 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const userInTriageTeam = messageData?.meta?.userInTriageTeam
+
+  // Derive OH migration phase from the first thread message or the current message
+  const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
+
+  const { data: authorizedServicesData } = useAuthorizedServices()
 
   useEffect(() => {
     if (threadFetched) {
@@ -407,7 +420,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && userInTriageTeam && (
+          {replyExpired && userInTriageTeam && !migrationBlocksReply && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -417,7 +430,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          {!userInTriageTeam && (
+          {!userInTriageTeam && !migrationBlocksReply && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -441,11 +454,20 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               </AlertWithHaptics>
             </Box>
           )}
+          {migrationBlocksReply && authorizedServicesData && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <OHAlertManager
+                parentScreen={OHParentScreens.SecureMessaging}
+                authorizedServices={authorizedServicesData}
+              />
+            </Box>
+          )}
           <MessageCard
             message={message}
             folderId={currentFolderIdParam}
             userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
+            migrationBlocksReply={migrationBlocksReply}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
