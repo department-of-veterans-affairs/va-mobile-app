@@ -802,6 +802,7 @@
             "trackedItemId": 293442,
             "description": "Tell us the specific dental disability you are claiming and describe the circumstances of your dental injury.",
             "displayName": "Dental disability - More information needed",
+            "friendlyName": "Clarify claimed condition",
             "overdue": false,
             "status": "NEEDED",
             "uploaded": false,

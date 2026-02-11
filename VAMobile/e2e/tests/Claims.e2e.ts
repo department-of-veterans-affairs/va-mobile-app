@@ -181,11 +181,20 @@ describe('Claims Screen', () => {
   it('should verify that user is sent to File requests screen', async () => {
     await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
     await expect(element(by.text('You have 4 file requests from VA'))).toExist()
-    await expect(element(by.text('Dental disability - More information needed'))).toExist()
+  })
+
+  it('should display friendlyName for file requests when available and fall back to displayName when not', async () => {
+    // Verify friendlyName is displayed instead of displayName for items that have it
+    await expect(element(by.text('Clarify claimed condition'))).toExist()
+    await expect(element(by.text('Dental disability - More information needed'))).not.toExist()
+
+    // Verify displayName is displayed for items without friendlyName
+    await expect(element(by.text('Accidental injury - 21-4176 needed'))).toExist()
+    await expect(element(by.text('Automated 5103 Notice Response'))).toExist()
   })
 
   it('verify that the user is sent to the file upload page', async () => {
-    await element(by.text('Dental disability - More information needed')).tap()
+    await element(by.text('Clarify claimed condition')).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
   })
