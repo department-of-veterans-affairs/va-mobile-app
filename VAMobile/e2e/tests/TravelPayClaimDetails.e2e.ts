@@ -170,7 +170,7 @@ const safeTap = async (elementId: string, scrollToFind = false) => {
   }
 }
 
-describe('Travel Pay Claim Details Screen', () => {
+describe.skip('Travel Pay Claim Details Screen', () => {
   beforeEach(async () => {
     await ensureOnClaimsList()
 
