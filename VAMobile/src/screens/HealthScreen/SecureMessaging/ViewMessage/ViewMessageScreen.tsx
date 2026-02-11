@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { LinkProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
@@ -22,6 +22,7 @@ import {
   useThread,
 } from 'api/secureMessaging'
 import {
+  FacilityInfo,
   MoveMessageParameters,
   SecureMessagingAttachment,
   SecureMessagingFolderList,
@@ -42,6 +43,7 @@ import {
   LoadingComponent,
   PickerItem,
   TextView,
+  VABulletList,
   VAModalPicker,
 } from 'components'
 import { OHParentScreens } from 'components/OHAlertManager'
@@ -60,7 +62,7 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { anyFacilitiesInMigrationErrorState } from 'utils/ohMigration'
+import { anyFacilitiesInMigrationErrorState, getMigrationEndDate, getMigrationsInErrorState } from 'utils/ohMigration'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -287,6 +289,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       ? false
       : DateTime.fromISO(message?.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
+  const linkProps: LinkProps = {
+    type: 'url',
+    url: WEBVIEW_URL_FACILITY_LOCATOR,
+    text: t('ohAlert.error.linkText'),
+    a11yLabel: a11yLabelVA(t('ohAlert.error.linkText')),
+    testID: 'goToFindLocationInfoTestID',
+    variant: 'base',
+  }
+
   const onMove = (value: string) => {
     setShowModalPicker(false)
     const currentFolder = Number(folderWhereMessageIs.current)
@@ -388,6 +399,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           testID: 'pickerMoveMessageID',
         }
 
+  const soonestErrorMigration = getMigrationsInErrorState(
+    userAuthorizedServices?.migratingFacilitiesList || [],
+    OHParentScreens.SecureMessaging,
+  )[0]
+  const migratingFacilitiesInErrorNames = soonestErrorMigration.facilities.map(
+    (facility: FacilityInfo) => facility.facilityName,
+  )
+
   return (
     <ChildTemplate
       backLabelOnPress={navigation.goBack}
@@ -480,34 +499,37 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               </AlertWithHaptics>
             </Box>
           )}
-          {noProviderError &&
-            anyFacilitiesInMigrationErrorState(
-              userAuthorizedServices?.migratingFacilitiesList || [],
-              OHParentScreens.SecureMessaging,
-            ) && (
-              <Box my={theme.dimensions.standardMarginBetween}>
-                <AlertWithHaptics
-                  variant="error"
-                  header={t('secureMessaging.reply.youCanNoLonger')}
-                  description={t('secureMessaging.reply.youCanNoLonger.description')}
-                  descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
-                  testID="secureMessagingYouCanNoLongerAlertID">
-                  {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-                  <TextView
-                    accessible
-                    variant="MobileBody"
-                    paragraphSpacing={true}
-                    accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
-                    {t('secureMessaging.reply.error.ifYouThink')}
-                  </TextView>
-                  <LinkWithAnalytics
-                    type="custom"
-                    text={t('upcomingAppointmentDetails.findYourVAFacility')}
-                    onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+          {noProviderError && soonestErrorMigration && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                expandable={true}
+                initializeExpanded={true}
+                variant="error"
+                header={t('secureMessaging.reply.youCantReplyMigrationMessage')}
+                description={''}>
+                <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+                  {t('secureMessaging.reply.youCantReplyMigrationMessage.body')}
+                </TextView>
+                <Box mb={theme.dimensions.standardMarginBetween} />
+                <VABulletList listOfText={migratingFacilitiesInErrorNames} />
+                <Box mb={theme.dimensions.standardMarginBetween} />
+                <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+                  <Trans
+                    i18nKey={'secureMessaging.reply.youCantReplyMigrationMessage.body2'}
+                    components={{ bold: <TextView variant="MobileBodyBold" /> }}
+                    values={{
+                      endDate: getMigrationEndDate(soonestErrorMigration, OHParentScreens.SecureMessaging),
+                    }}
                   />
-                </AlertWithHaptics>
-              </Box>
-            )}
+                </TextView>
+                <Box mb={theme.dimensions.standardMarginBetween} />
+                <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+                  {t('secureMessaging.reply.youCantReplyMigrationMessage.note')}
+                </TextView>
+                <LinkWithAnalytics {...linkProps} />
+              </AlertWithHaptics>
+            </Box>
+          )}
           <MessageCard
             message={message}
             folderId={currentFolderIdParam}

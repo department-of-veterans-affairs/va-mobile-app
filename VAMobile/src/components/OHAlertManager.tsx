@@ -9,6 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel/va'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
+import { getMigrationEndDate, parentScreenToPhaseMap } from 'utils/ohMigration'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -22,29 +23,6 @@ export enum OHParentScreens {
 type OHAlertManagerProps = {
   parentScreen: OHParentScreens
   authorizedServices: UserAuthorizedServicesData
-}
-
-export const parentScreenToPhaseMap = {
-  appointments: {
-    warning: ['p0', 'p1'],
-    error: ['p2', 'p3', 'p4', 'p5', 'p6'],
-    endDate: 'p7',
-  },
-  secureMessaging: {
-    warning: ['p1', 'p2'],
-    error: ['p3', 'p4', 'p5'],
-    endDate: 'p6',
-  },
-  medicalRecords: {
-    warning: ['p1', 'p2', 'p3', 'p4'],
-    error: ['p5'],
-    endDate: 'p6',
-  },
-  medications: {
-    warning: ['p1', 'p2', 'p3'],
-    error: ['p4', 'p5'],
-    endDate: 'p6',
-  },
 }
 
 export const getAlertState = (phase: string, parentScreen: OHParentScreens) => {
@@ -74,9 +52,8 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
     const dates = migration.phases
     const facilityNames = migration.facilities.map((facility: FacilityInfo) => facility.facilityName) || []
     const startPhase = parentScreenToPhaseMap[parentScreen].error[0]
-    const endDatePhase = parentScreenToPhaseMap[parentScreen].endDate
     const startDate = dates[startPhase as keyof typeof dates]
-    const endDate = dates[endDatePhase as keyof typeof dates]
+    const endDate = getMigrationEndDate(migration, parentScreen)
 
     if (alertState === 'warning') {
       return (
