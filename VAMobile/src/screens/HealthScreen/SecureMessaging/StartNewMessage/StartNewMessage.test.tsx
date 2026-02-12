@@ -313,14 +313,16 @@ context('StartNewMessage', () => {
         initializeTestInstance()
         // Wait for form to load
         await waitFor(() => expect(screen.getByTestId('to field')).toBeTruthy())
-        // Select recipient from ComboBox
-        fireEvent.press(screen.getByTestId('to field'))
-        fireEvent.press(screen.getByText('Doctor 1'))
-        // Select category
+        // Select category first (picker modals must open before ComboBox interaction to avoid CI timing issues)
         await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
         fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
         fireEvent.press(screen.getByLabelText(t('done')))
+        // Select recipient from ComboBox
+        fireEvent.press(screen.getByTestId('to field'))
+        await waitFor(() => expect(screen.getByText('Doctor 1')).toBeTruthy())
+        fireEvent.press(screen.getByText('Doctor 1'))
         // Fill subject (required for General category)
+        await waitFor(() => expect(screen.getByTestId('startNewMessageSubjectTestID')).toBeTruthy())
         fireEvent.changeText(screen.getByTestId('startNewMessageSubjectTestID'), 'test subject')
         // Fill message
         fireEvent.changeText(screen.getByTestId('message field'), 'test message')
