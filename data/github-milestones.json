@@ -1,5 +1,77 @@
 [
   {
+    "title": "v2.69.0",
+    "due_on": "2026-02-24T00:00:00Z",
+    "issues": [
+      {
+        "title": "Fix broken LabsAndTests and TravelPayClaims E2E Tests",
+        "number": 12585,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12585",
+        "isPR": false
+      },
+      {
+        "title": "Feature/mvh/labs-dark-deploy",
+        "number": 12565,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12565",
+        "isPR": true
+      },
+      {
+        "title": "1119 - Putting the Copay endpoint behind a feature flag",
+        "number": 12564,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12564",
+        "isPR": true
+      },
+      {
+        "title": "Add structure for new VSC endpoint",
+        "number": 12418,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12418",
+        "isPR": true
+      },
+      {
+        "title": "Clean up legacy SIS/IAM code",
+        "number": 12413,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12413",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 2 - All - Settings page becomes unusable when using screen reader.",
+        "number": 12408,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12408",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 3 - Android - The bottom of screens using VAScrollView can be cutoff on Samsung Galaxy devices",
+        "number": 12399,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12399",
+        "isPR": false
+      },
+      {
+        "title": "Support 16kb Page sizes by May 30th, 2026",
+        "number": 12332,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12332",
+        "isPR": false
+      },
+      {
+        "title": "What's New Enhancements",
+        "number": 12106,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12106",
+        "isPR": false
+      },
+      {
+        "title": "CU - Fix profile screen demo mode name",
+        "number": 11974,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11974",
+        "isPR": false
+      },
+      {
+        "title": "Maintenance Window Alert Banner",
+        "number": 11598,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11598",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.68.0",
     "due_on": "2026-02-10T00:00:00Z",
     "issues": [
