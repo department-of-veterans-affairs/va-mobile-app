@@ -168,36 +168,6 @@ describe('Review presctiption details', () => {
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_BODY_LABEL))).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
-})
-
-describe('Filter and sort to find a prescription', () => {
-  it('verify prescriptions screen after filters cancel', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
-    ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_INSTRUCTIONS_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toExist()
-  })
-
-  it('pending: verify filters', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await expect(element(by.text('All (32)'))).toExist()
-    await expect(element(by.text('Active (24)'))).toExist()
-    await expect(element(by.text('Discontinued (1)'))).toExist()
-    await expect(element(by.text('Expired (4)'))).toExist()
-    await expect(element(by.text('Pending (8)'))).toExist()
-    await expect(element(by.text('Tracking (3)'))).toExist()
-    await expect(element(by.text('Transferred (1)'))).toExist()
-    await expect(element(by.text('Status Not Available (2)'))).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
-  })
 
   it('verify prescription tracking item specific info', async () => {
     await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB')))
@@ -289,6 +259,36 @@ describe('Filter and sort to find a prescription', () => {
     await device.takeScreenshot('PrescriptionTrackingWebsiteUSPS')
     await device.launchApp({ newInstance: false })
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
+  })
+})
+
+describe('Filter and sort to find a prescription', () => {
+  it('verify prescriptions screen after filters cancel', async () => {
+    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
+    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
+    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
+    await expect(
+      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
+    ).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_INSTRUCTIONS_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toExist()
+  })
+
+  it('pending: verify filters', async () => {
+    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
+    await expect(element(by.text('All (32)'))).toExist()
+    await expect(element(by.text('Active (24)'))).toExist()
+    await expect(element(by.text('Discontinued (1)'))).toExist()
+    await expect(element(by.text('Expired (4)'))).toExist()
+    await expect(element(by.text('Pending (8)'))).toExist()
+    await expect(element(by.text('Tracking (3)'))).toExist()
+    await expect(element(by.text('Transferred (1)'))).toExist()
+    await expect(element(by.text('Status Not Available (2)'))).toExist()
+    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
   })
 
   it('verify prescriptions help model information', async () => {
