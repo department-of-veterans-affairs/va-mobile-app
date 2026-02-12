@@ -182,7 +182,7 @@ context('VeteranStatusScreen', () => {
     attributes: {
       alertType: 'error',
       header: t('errors.somethingWentWrong'),
-      body: [{ type: 'text', value: t('veteranStatus.error.generic') }],
+      body: [{ type: 'text', value: t('veteranStatus.error.generic.updated') }],
       veteranStatus: 'not confirmed',
       notConfirmedReason: 'ERROR',
       serviceHistoryStatus: '500',
@@ -368,7 +368,7 @@ context('VeteranStatusScreen', () => {
         renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscAlertError }])
 
         expect(await screen.findByText(t('errors.somethingWentWrong'))).toBeTruthy()
-        expect(await screen.findByText(t('veteranStatus.error.generic'))).toBeTruthy()
+        expect(await screen.findByText(t('veteranStatus.error.generic.updated'))).toBeTruthy()
       })
 
       it('renders catch-all warning when backend returns catch-all alert', async () => {
