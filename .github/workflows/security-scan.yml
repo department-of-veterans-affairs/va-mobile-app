@@ -470,12 +470,9 @@ jobs:
   security-check:
     name: security-check
     runs-on: ubuntu-latest
-    needs: [check_for_locked_file_changes, request_bypass_approval]
+    needs: check_for_locked_file_changes
     if: |
-      always() && (
-        needs.check_for_locked_file_changes.outputs.any_changed == 'false' ||
-        (needs.check_for_locked_file_changes.outputs.any_changed == 'true' && needs.request_bypass_approval.result == 'success')
-      )
+      always() && needs.check_for_locked_file_changes.outputs.any_changed == 'false'
     steps:
       - name: Generate token
         id: generate_token
@@ -490,5 +487,28 @@ jobs:
 
       - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
         id: security_scan
+        with:
+          fail-on-critical: true
+
+  security-check-with-approval:
+    name: security-check
+    runs-on: ubuntu-latest
+    needs: [check_for_locked_file_changes, request_bypass_approval]
+    if: |
+      always() && needs.check_for_locked_file_changes.outputs.any_changed == 'true' && needs.request_bypass_approval.result == 'success'
+    steps:
+      - name: Generate token
+        id: generate_token_approved
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate_token_approved.outputs.token }}
+
+      - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
+        id: security_scan_approved
         with:
           fail-on-critical: true
