@@ -1,9 +1,10 @@
 name: '[Admin] Weekly Flagship Mobile PR Reviewer Assignment'
 
 on:
-  schedule:
-    # Run every Monday at 8:33 AM EST (1:33 PM UTC)
-    - cron: '33 13 * * 1' # Will run every Monday, but steps will gate off week number for biweekly scheduling, starting at week 7.
+  push:
+  # schedule:
+  #   # Run every Monday at 8:33 AM EST (1:33 PM UTC)
+  #   - cron: '33 13 * * 1' # Will run every Monday, but steps will gate off week number for biweekly scheduling, starting at week 7.
 
 env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
