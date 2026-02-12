@@ -251,6 +251,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   getAsyncStoredData(LANGUAGE_PREF, setTranslationKey)
 
   const toggleTranslation = async () => {
+    await getAsyncStoredData(LANGUAGE_PREF, setTranslationKey)
     const toggledTranslation = translationKey === 'en' ? 'es' : 'en'
     console.log('setting translation to ' + toggledTranslation)
     await AsyncStorage.setItem(LANGUAGE_PREF, toggledTranslation)
