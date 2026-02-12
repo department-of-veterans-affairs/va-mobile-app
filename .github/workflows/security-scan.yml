@@ -47,12 +47,7 @@ jobs:
             exit 0
           fi
 
-          echo "$RESP" | python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import json,sys
-          resp=json.load(sys.stdin)
-          labels=[l.get('name','') for l in resp.get('labels',[])]
-          print('has_approval_label=true' if 'package-scan-complete' in labels else 'has_approval_label=false')
-          PY
+          echo "$RESP" | python3 -c 'import json,sys;resp=json.load(sys.stdin);labels=[l.get("name","") for l in resp.get("labels",[])];print("has_approval_label=true" if "package-scan-complete" in labels else "has_approval_label=false")' >> "$GITHUB_OUTPUT"
 
   check_for_locked_file_changes:
     name: Check for package-lock changes
