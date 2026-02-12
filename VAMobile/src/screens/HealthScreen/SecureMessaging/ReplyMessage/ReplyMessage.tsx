@@ -10,7 +10,6 @@ import _ from 'underscore'
 
 import {
   secureMessagingKeys,
-  useAllMessageRecipients,
   useMessage,
   useMessageSignature,
   useSaveDraft,
@@ -78,7 +77,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const { messageID, attachmentFileToAdd, saveDraftConfirmFailed } = route.params
+  const { messageID, attachmentFileToAdd, saveDraftConfirmFailed, stationNumber } = route.params
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
   const {
     mutate: sendMessage,
@@ -93,11 +92,6 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const [isDiscarded, replyCancelConfirmation] = useComposeCancelConfirmation()
   const { data: threadData } = useThread(messageID, false)
   const { data: messageReplyData, isLoading: loadingMessage } = useMessage(messageID)
-  // Fetch recipients to get station_number for the reply. This is optional and fetched opportunistically -
-  // if available when the user sends, we include it. If not (still loading or failed), we send without it.
-  // We don't block the UI or check for errors since station_number is an optional field.
-  const { data: recipientsResponse } = useAllMessageRecipients()
-  const recipients = recipientsResponse?.data
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageReplyData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const includedAttachments = messageReplyData?.included?.filter((included) => included.type === 'attachments')
@@ -118,13 +112,12 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
-  const selectedRecipient = recipients?.find((recipient) => recipient.attributes.triageTeamId === receiverID)
   const messageData = {
     body: messageReply,
     category: category,
     subject: subject,
     recipient_id: receiverID,
-    station_number: selectedRecipient?.attributes.stationNumber,
+    station_number: stationNumber,
   } as SecureMessagingFormData
   // Ref for use in snackbar callbacks to ensure we have the latest messageData
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)

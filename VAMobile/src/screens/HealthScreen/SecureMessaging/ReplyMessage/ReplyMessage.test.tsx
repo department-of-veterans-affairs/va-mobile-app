@@ -3,12 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import {
-  CategoryTypeFields,
-  SecureMessagingMessageGetData,
-  SecureMessagingRecipients,
-  SecureMessagingThreadGetData,
-} from 'api/types'
+import { CategoryTypeFields, SecureMessagingMessageGetData, SecureMessagingThreadGetData } from 'api/types'
 import ReplyMessage from 'screens/HealthScreen/SecureMessaging/ReplyMessage/ReplyMessage'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -128,41 +123,10 @@ const message: SecureMessagingMessageGetData = {
   },
 }
 
-const recipients: SecureMessagingRecipients = {
-  data: [
-    {
-      id: 'id',
-      type: 'type',
-      attributes: {
-        triageTeamId: 2,
-        name: 'mock sender 3',
-        relationType: 'PATIENT',
-        preferredTeam: true,
-        stationNumber: '989',
-        locationName: 'test_location',
-        suggestedNameDisplay: 'test_suggested_name',
-        healthCareSystemName: 'test_healthcare_system_name',
-        ohTriageGroup: false,
-      },
-    },
-  ],
-  meta: {
-    sort: {
-      name: 'ASC',
-    },
-    careSystems: [
-      {
-        healthCareSystemName: 'SM STAGING CARE SYSTEM',
-        stationNumber: '989',
-      },
-    ],
-  },
-}
-
 context('ReplyMessage', () => {
   const isIOSMock = isIOS as jest.Mock
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (stationNumber?: string) => {
     isIOSMock.mockReturnValue(false)
 
     const props = mockNavProps(
@@ -173,7 +137,7 @@ context('ReplyMessage', () => {
         navigate: jest.fn(),
         setOptions: () => {},
       },
-      { params: { messageID: 3, attachmentFileToAdd: {} } },
+      { params: { messageID: 3, attachmentFileToAdd: {}, stationNumber } },
     )
 
     when(api.get as jest.Mock)
@@ -183,13 +147,11 @@ context('ReplyMessage', () => {
       .mockResolvedValue(thread)
       .calledWith(`/v0/messaging/health/messages/3`)
       .mockResolvedValue(message)
-      .calledWith('/v0/messaging/health/allrecipients')
-      .mockResolvedValue(recipients)
     render(<ReplyMessage {...props} />)
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    initializeTestInstance('989')
   })
 
   describe('render correctly', () => {
@@ -248,28 +210,9 @@ context('ReplyMessage', () => {
         )
       })
 
-      it('should send reply without station_number when recipients are not available', async () => {
-        when(api.get as jest.Mock)
-          .calledWith(`/v1/messaging/health/messages/3/thread?excludeProvidedMessage=${false}`, {
-            useCache: 'false',
-          })
-          .mockResolvedValue(thread)
-          .calledWith(`/v0/messaging/health/messages/3`)
-          .mockResolvedValue(message)
-          .calledWith('/v0/messaging/health/allrecipients')
-          .mockRejectedValue({ networkError: true } as api.APIError)
+      it('should send reply without station_number when stationNumber is not in route params', async () => {
+        initializeTestInstance()
         ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
-        const props = mockNavProps(
-          undefined,
-          {
-            addListener: mockUseComposeCancelConfirmationSpy,
-            goBack: jest.fn(),
-            navigate: jest.fn(),
-            setOptions: () => {},
-          },
-          { params: { messageID: 3, attachmentFileToAdd: {} } },
-        )
-        render(<ReplyMessage {...props} />)
         await waitFor(() => expect(screen.getByTestId('reply field')).toBeTruthy())
         fireEvent.changeText(screen.getByTestId('reply field'), 'test reply')
         fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send')))

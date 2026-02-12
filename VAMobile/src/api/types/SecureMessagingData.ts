@@ -75,6 +75,7 @@ export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
   meta: {
     userInTriageTeam: boolean
+    stationNumber?: string
   }
   included: Array<{
     attributes: {
