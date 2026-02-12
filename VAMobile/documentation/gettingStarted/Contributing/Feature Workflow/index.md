@@ -1,5 +1,5 @@
 ---
-title: Mobile Workflow Process
+title: Small code changes or bug fixes
 sidebar_position: 2
 ---
 ## Full feature workflow process or pull request?  
