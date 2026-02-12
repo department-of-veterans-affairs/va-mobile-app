@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { waitFor } from '@testing-library/react-native'
+
 import VAModalPicker from 'components/FormWrapper/FormFields/Picker/VAModalPicker'
 import { context, fireEvent, render, screen } from 'testUtils'
 
@@ -35,8 +37,10 @@ context('VAModalPicker', () => {
       initializeTestInstance()
     })
 
-    it('should update selected to the value of that option and select done', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Java' }))
+    it('should update selected to the value of that option and select done', async () => {
+      await waitFor(() => {
+        fireEvent.press(screen.getByRole('link', { name: 'Java' }))
+      })
 
       fireEvent.press(screen.getByRole('button', { name: 'Done' }))
 
@@ -44,8 +48,9 @@ context('VAModalPicker', () => {
     })
 
     it('should not update selected to the value of that option and select cancel', async () => {
-      fireEvent.press(screen.getByRole('link', { name: 'JavaScript2' }))
-
+      await waitFor(() => {
+        fireEvent.press(screen.getByRole('link', { name: 'JavaScript2' }))
+      })
       fireEvent.press(screen.getByRole('button', { name: 'Cancel' }))
 
       expect(selected).not.toEqual('js2')
