@@ -264,11 +264,6 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
 
   const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
   if (confirmEmailBtnExist) {
-    await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
-      .scroll(100, 'down')
-      
     await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
     await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
@@ -444,12 +439,7 @@ export async function openAppointments() {
 
 export async function openTravelPayClaims({ useNativeLink = false }) {
   if (useNativeLink) {
-    const isFromPayScreen = await checkIfElementIsPresent(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_PAYMENTS_SCREEN)
-    const nativeLinkID = isFromPayScreen
-      ? CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_PAYMENTS_SCREEN
-      : CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN
-
-    await element(by.id(nativeLinkID)).tap()
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN)).tap()
   } else {
     await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
   }
