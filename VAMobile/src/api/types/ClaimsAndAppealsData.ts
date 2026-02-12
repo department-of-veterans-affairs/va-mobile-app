@@ -478,6 +478,71 @@ export type ClaimsAndAppealsList = {
   }
 }
 
+/** Inline element: bold text */
+export type BoldInline = {
+  type: 'bold'
+  content: InlineContent
+}
+
+/** Inline element: italic text */
+export type ItalicInline = {
+  type: 'italic'
+  content: InlineContent
+}
+
+/** Inline element: link */
+export type LinkInline = {
+  type: 'link'
+  text: string
+  href: string
+  style?: 'active' | 'external' | 'default'
+  testId?: string
+}
+
+/** Inline element: telephone */
+export type TelephoneInline = {
+  type: 'telephone'
+  contact: string
+  tty?: boolean
+}
+
+/** Inline element: line break */
+export type LineBreakInline = {
+  type: 'lineBreak'
+}
+
+/** Union of all inline elements */
+export type InlineElement = BoldInline | ItalicInline | LinkInline | TelephoneInline | LineBreakInline
+
+/** Inline content: string or array of strings and inline elements (recursive for bold/italic) */
+export type InlineContent = string | Array<string | InlineElement>
+
+/** Paragraph block */
+export type ParagraphBlock = {
+  type: 'paragraph'
+  content: InlineContent
+}
+
+/** List block */
+export type ListBlock = {
+  type: 'list'
+  style: 'bullet' | 'numbered'
+  items: InlineContent[]
+}
+
+/** Line break block */
+export type LineBreakBlock = {
+  type: 'lineBreak'
+}
+
+/** Block-level element: paragraph, list, or line break (no link — link is inline only) */
+export type StructuredContentBlock = ParagraphBlock | ListBlock | LineBreakBlock
+
+/** Root structured content (e.g. longDescription, nextSteps) */
+export type StructuredContent = {
+  blocks: StructuredContentBlock[]
+}
+
 export type ClaimEventData = {
   trackedItemId?: number | null
   description?: string
