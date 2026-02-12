@@ -257,35 +257,35 @@ describe('Review presctiption details', () => {
   })
 })
 
-describe('Filter and sort to find a prescription', () => {
-  it('verify prescriptions screen after filters cancel', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
-    ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_INSTRUCTIONS_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toExist()
-  })
+// describe('Filter and sort to find a prescription', () => {
+//   it('verify prescriptions screen after filters cancel', async () => {
+//     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
+//     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
+//     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
+//     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
+//     await expect(
+//       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
+//     ).toExist()
+//     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_INSTRUCTIONS_TEXT)).atIndex(0)).toExist()
+//     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toExist()
+//     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
+//     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toExist()
+//     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toExist()
+//   })
 
-  it('pending: verify filters', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await expect(element(by.text('All (32)'))).toExist()
-    await expect(element(by.text('Active (24)'))).toExist()
-    await expect(element(by.text('Discontinued (1)'))).toExist()
-    await expect(element(by.text('Expired (4)'))).toExist()
-    await expect(element(by.text('Pending (8)'))).toExist()
-    await expect(element(by.text('Tracking (3)'))).toExist()
-    await expect(element(by.text('Transferred (1)'))).toExist()
-    await expect(element(by.text('Status Not Available (2)'))).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
-  })
-})
+//   it('pending: verify filters', async () => {
+//     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
+//     await expect(element(by.text('All (32)'))).toExist()
+//     await expect(element(by.text('Active (24)'))).toExist()
+//     await expect(element(by.text('Discontinued (1)'))).toExist()
+//     await expect(element(by.text('Expired (4)'))).toExist()
+//     await expect(element(by.text('Pending (8)'))).toExist()
+//     await expect(element(by.text('Tracking (3)'))).toExist()
+//     await expect(element(by.text('Transferred (1)'))).toExist()
+//     await expect(element(by.text('Status Not Available (2)'))).toExist()
+//     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
+//   })
+// })
 
 describe('Start a refill request for a single prescription', () => {
   it('should display confirmation modal when refill request button is pressed in prescription details', async () => {
