@@ -14,6 +14,7 @@ import _ from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
+  useAllMessageRecipients,
   useFolderMessages,
   useFolders,
   useMessage,
@@ -177,6 +178,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
 
   const { data: authorizedServicesData } = useAuthorizedServices()
+  const { data: recipientsData } = useAllMessageRecipients()
+  const hasAvailableRecipients = (recipientsData?.data?.length ?? 0) > 0
 
   useEffect(() => {
     if (threadFetched) {
@@ -468,6 +471,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
             migrationBlocksReply={migrationBlocksReply}
+            hasAvailableRecipients={hasAvailableRecipients}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>

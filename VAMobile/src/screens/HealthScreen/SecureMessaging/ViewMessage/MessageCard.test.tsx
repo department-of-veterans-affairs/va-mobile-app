@@ -122,7 +122,7 @@ context('MessageCard', () => {
     expect(screen.queryByText('Reply')).toBeFalsy()
   })
 
-  it('should hide Reply, Start new message, and non-urgent message help when migration blocks replies', () => {
+  it('should hide Reply and Start new message when migration blocks and user has no available recipients', () => {
     render(
       <MessageCard
         message={messageAttributes}
@@ -130,11 +130,27 @@ context('MessageCard', () => {
         userInTriageTeam={true}
         replyExpired={false}
         migrationBlocksReply={true}
+        hasAvailableRecipients={false}
       />,
     )
     expect(screen.queryByText('Reply')).toBeFalsy()
     expect(screen.queryByText(t('secureMessaging.startNewMessage'))).toBeFalsy()
     expect(screen.queryByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeFalsy()
+  })
+
+  it('should hide Reply but show Start new message when migration blocks and user has available recipients', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={false}
+        migrationBlocksReply={true}
+        hasAvailableRecipients={true}
+      />,
+    )
+    expect(screen.queryByText('Reply')).toBeFalsy()
+    expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
   })
 
   it('should show non-urgent message help when migrationBlocksReply is false', () => {

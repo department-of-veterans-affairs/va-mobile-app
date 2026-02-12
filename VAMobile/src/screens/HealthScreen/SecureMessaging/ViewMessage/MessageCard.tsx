@@ -36,9 +36,18 @@ export type MessageCardProps = {
   userInTriageTeam?: boolean
   replyExpired?: boolean
   migrationBlocksReply?: boolean
+  /** Whether the user has available recipients (triage groups) to message */
+  hasAvailableRecipients?: boolean
 }
 
-function MessageCard({ message, folderId, userInTriageTeam, replyExpired, migrationBlocksReply }: MessageCardProps) {
+function MessageCard({
+  message,
+  folderId,
+  userInTriageTeam,
+  replyExpired,
+  migrationBlocksReply,
+  hasAvailableRecipients,
+}: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -166,7 +175,8 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired, migrat
         </Box>
       )
     }
-    if (migrationBlocksReply) {
+    // During migration, only show Start New Message if user has available recipients
+    if (migrationBlocksReply && !hasAvailableRecipients) {
       return null
     }
     return (
