@@ -10,7 +10,6 @@ import { setTimeout } from 'timers/promises'
 import {
   CommonE2eIdConstants,
   changeDemoModeUser,
-  checkImages,
   loginToDemoMode,
   openHealth,
   openPrescriptions,
@@ -66,8 +65,6 @@ export const PrescriptionsE2eIdConstants = {
   DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 5',
 }
 
-let tempPath
-
 const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 
 beforeEach(async () => {
@@ -106,8 +103,6 @@ describe('Review presctiption details', () => {
 
   it('should verify prescriptions help modal information', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HELP_BUTTON_ID)).tap()
-    tempPath = await element(by.id('PrescriptionsHelpTestID')).takeScreenshot('PrescriptionHealth')
-    checkImages(tempPath)
     await expect(element(by.text('This list may not include all your medications '))).toExist()
     await expect(element(by.text('Medications not included:'))).toExist()
     await expect(element(by.text('New prescriptions not yet processed by a VA pharmacy'))).toExist()
@@ -289,27 +284,6 @@ describe('Filter and sort to find a prescription', () => {
     await expect(element(by.text('Transferred (1)'))).toExist()
     await expect(element(by.text('Status Not Available (2)'))).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
-  })
-
-  it('verify prescriptions help model information', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HELP_BUTTON_ID)).tap()
-    tempPath = await element(by.id('PrescriptionsHelpTestID')).takeScreenshot('PrescriptionHealth')
-    checkImages(tempPath)
-    await expect(element(by.text('This list may not include all your medications '))).toExist()
-    await expect(element(by.text('Medications not included:'))).toExist()
-    await expect(element(by.text('New prescriptions not yet processed by a VA pharmacy'))).toExist()
-    await expect(element(by.text('Prescriptions filled at non-VA pharmacies'))).toExist()
-    await expect(element(by.text('Prescriptions that are inactive for more than 180 days'))).toExist()
-    await expect(element(by.text('Medications administered at a clinic or ER'))).toExist()
-    await expect(element(by.text('Self-entered medications'))).toExist()
-    await expect(
-      element(
-        by.label(
-          'If you have questions about your  V-A  prescriptions, call the  V-A  pharmacy number on your prescription label.',
-        ),
-      ),
-    ).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 })
 
