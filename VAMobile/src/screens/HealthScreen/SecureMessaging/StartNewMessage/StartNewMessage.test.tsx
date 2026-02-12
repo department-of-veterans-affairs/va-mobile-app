@@ -34,6 +34,35 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   }
 })
 
+jest.mock('../../../../api/facilities/getFacilitiesInfo', () => {
+  const original = jest.requireActual('../../../../api/facilities/getFacilitiesInfo')
+  return {
+    ...original,
+    useFacilitiesInfo: jest.fn().mockReturnValue({
+      data: [
+        {
+          id: '528',
+          name: 'Test VA Medical Center',
+          city: 'Test City',
+          state: 'TS',
+          cerner: false,
+          miles: '10',
+        },
+        {
+          id: '123',
+          name: 'Different VA Medical Center',
+          city: 'Another City',
+          state: 'AC',
+          cerner: false,
+          miles: '20',
+        },
+      ],
+      isLoading: false,
+      isError: false,
+    }),
+  }
+})
+
 context('StartNewMessage', () => {
   let goBack: jest.Mock
 
