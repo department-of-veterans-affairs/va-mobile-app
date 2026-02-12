@@ -198,9 +198,10 @@ context('ReplyMessage', () => {
     describe('when the message is filled and sent', () => {
       it('should include station_number in the reply payload', async () => {
         ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
-        await waitFor(() => expect(screen.getByTestId('reply field')).toBeTruthy())
-        fireEvent.changeText(screen.getByTestId('reply field'), 'test reply')
-        fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send')))
+        const replyField = await screen.findByTestId('reply field')
+        fireEvent.changeText(replyField, 'test reply')
+        const sendButton = await screen.findByText(t('secureMessaging.formMessage.send'))
+        fireEvent.press(sendButton)
         await waitFor(() =>
           expect(api.post).toHaveBeenCalledWith(
             '/v0/messaging/health/messages/3/reply',
@@ -213,9 +214,10 @@ context('ReplyMessage', () => {
       it('should send reply without station_number when stationNumber is not in route params', async () => {
         initializeTestInstance()
         ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
-        await waitFor(() => expect(screen.getByTestId('reply field')).toBeTruthy())
-        fireEvent.changeText(screen.getByTestId('reply field'), 'test reply')
-        fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send')))
+        const replyField = await screen.findByTestId('reply field')
+        fireEvent.changeText(replyField, 'test reply')
+        const sendButton = await screen.findByText(t('secureMessaging.formMessage.send'))
+        fireEvent.press(sendButton)
         await waitFor(() =>
           expect(api.post).toHaveBeenCalledWith(
             '/v0/messaging/health/messages/3/reply',

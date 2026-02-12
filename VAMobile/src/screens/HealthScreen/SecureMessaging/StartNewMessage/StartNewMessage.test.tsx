@@ -312,8 +312,8 @@ context('StartNewMessage', () => {
         ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
         initializeTestInstance()
         // Wait for form to load (to field only appears after careSystem is auto-set for single facility)
-        await waitFor(() => expect(screen.getByTestId('to field')).toBeTruthy())
-        // Select category - use findByTestId to wait for modal content to render between each step
+        const toField = await screen.findByTestId('to field')
+        // Select category - use findBy to wait for modal content to render between each step
         const picker = await screen.findByTestId('picker')
         fireEvent.press(picker)
         const generalOption = await screen.findByTestId(t('secureMessaging.startNewMessage.general'))
@@ -321,16 +321,18 @@ context('StartNewMessage', () => {
         const doneButton = await screen.findByLabelText(t('done'))
         fireEvent.press(doneButton)
         // Select recipient from ComboBox
-        fireEvent.press(screen.getByTestId('to field'))
+        fireEvent.press(toField)
         const doctor = await screen.findByText('Doctor 1')
         fireEvent.press(doctor)
         // Fill subject (required for General category)
-        await waitFor(() => expect(screen.getByTestId('startNewMessageSubjectTestID')).toBeTruthy())
-        fireEvent.changeText(screen.getByTestId('startNewMessageSubjectTestID'), 'test subject')
+        const subjectField = await screen.findByTestId('startNewMessageSubjectTestID')
+        fireEvent.changeText(subjectField, 'test subject')
         // Fill message
-        fireEvent.changeText(screen.getByTestId('message field'), 'test message')
+        const messageField = await screen.findByTestId('message field')
+        fireEvent.changeText(messageField, 'test message')
         // Press send
-        fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send')))
+        const sendButton = await screen.findByText(t('secureMessaging.formMessage.send'))
+        fireEvent.press(sendButton)
         await waitFor(() =>
           expect(api.post).toHaveBeenCalledWith(
             '/v0/messaging/health/messages',
