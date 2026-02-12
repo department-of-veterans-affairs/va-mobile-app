@@ -41,7 +41,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         textTransform="capitalize"
         accessibilityRole="header"
         variant="ProfileScreenHeader">
-        {personalInfo.fullName}
+        {personalInfo.fullName?.toLowerCase()}
       </TextView>
     </Box>
   )
