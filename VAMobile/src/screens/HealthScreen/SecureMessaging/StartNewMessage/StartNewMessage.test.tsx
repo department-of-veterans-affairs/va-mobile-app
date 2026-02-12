@@ -317,7 +317,7 @@ context('StartNewMessage', () => {
         fireEvent.press(screen.getByTestId('to field'))
         fireEvent.press(screen.getByText('Doctor 1'))
         // Select category
-        fireEvent.press(screen.getByTestId('picker'))
+        await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
         fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
         fireEvent.press(screen.getByLabelText(t('done')))
         // Fill subject (required for General category)
