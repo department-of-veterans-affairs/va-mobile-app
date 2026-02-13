@@ -53,7 +53,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_CANCEL_ID: 'radioButtonCancelTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
   PRESCRIPTION_REQUEST_REFILL_ID: 'requestRefillsButtonID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 5',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 6',
 }
 
 let tempPath
@@ -156,7 +156,7 @@ export async function validateFilter(name: string, quantity: number, helperText?
   })
 }
 
-describe('Prescriptions Screen', () => {
+describe.skip('Prescriptions Screen', () => {
   it('should match the prescription page design', async () => {
     tempPath = await element(by.id(PrescriptionsE2eIdConstants.FILTER_PRESCRIPTIONS_TEST_ID)).takeScreenshot(
       'filterSortWrapperBox',

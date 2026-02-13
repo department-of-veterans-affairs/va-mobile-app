@@ -22,6 +22,7 @@ export type FeatureToggleType =
   | 'decisionLettersWaygate'
   | 'hsScrollAnalytics'
   | 'inAppReview'
+  | 'labsAndTests'
   | 'loadLabsAndTestsOnHomeScreen'
   | 'mrHide36HrHoldTimes'
   | 'rescheduleLink'
@@ -51,6 +52,7 @@ type FeatureToggleValues = {
   decisionLettersWaygate: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
+  labsAndTests: boolean
   loadLabsAndTestsOnHomeScreen: boolean
   mrHide36HrHoldTimes: boolean
   rescheduleLink: boolean
@@ -81,6 +83,7 @@ export const defaults: FeatureToggleValues = {
   decisionLettersWaygate: true,
   hsScrollAnalytics: false,
   inAppReview: true,
+  labsAndTests: true,
   loadLabsAndTestsOnHomeScreen: false,
   mrHide36HrHoldTimes: false,
   rescheduleLink: true,

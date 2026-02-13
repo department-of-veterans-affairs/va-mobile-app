@@ -75,7 +75,7 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
   },
   {
     featureName: 'LabsAndTests',
-    featureFlag: 'loadLabsAndTestsOnHomeScreen',
+    featureFlag: 'labsAndTests',
     authorizedService: 'labsAndTestsEnabled',
   },
 ]

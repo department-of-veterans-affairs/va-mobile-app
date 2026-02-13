@@ -10,6 +10,7 @@ import {
   openMedicalRecords,
   scrollToElement,
   testForOneOrManyOccurancesOf,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const LabsAndTestsE2eIDConstants = {
@@ -41,13 +42,14 @@ const TEST_IDS = {
 const HEADER_TEXT = 'Labs and tests'
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TEST_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openMedicalRecords()
   await openLabsAndTestRecords()
 })
 
-describe.skip('Labs And Test Screen - Date Picker', () => {
+describe('Labs And Test Screen - Date Picker', () => {
   beforeEach(async () => {
     // Navigate back to Labs and Tests screen before each test
     await navigateToLabsAndTests()
@@ -99,10 +101,6 @@ describe.skip('Labs And Test Screen - Date Picker', () => {
 
     await waitFor(element(by.text(`Jan 1, ${lastYear} - Dec 31, ${lastYear}`))).toExist()
 
-    // Go to the next page to verify last year's records
-    await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-
     // Verify last year's records are now visible
     await expect(element(by.text('Blood Work - Last Year'))).toExist()
     await expect(element(by.text('X-Ray - Last Year'))).toExist()
@@ -116,7 +114,7 @@ describe.skip('Labs And Test Screen - Date Picker', () => {
   })
 })
 
-describe.skip('Labs And Test Screen', () => {
+describe('Labs And Test Screen', () => {
   beforeAll(async () => {
     await resetDateRangeToDefault()
   })
@@ -163,7 +161,7 @@ describe.skip('Labs And Test Screen', () => {
   })
 })
 
-describe.skip('Labs And Test Details Screen with Observations', () => {
+describe('Labs And Test Details Screen with Observations', () => {
   beforeEach(async () => {
     // Navigate back to Labs and Tests screen before each test
     await navigateToLabsAndTests()

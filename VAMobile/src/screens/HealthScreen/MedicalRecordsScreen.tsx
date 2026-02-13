@@ -16,6 +16,7 @@ import getEnv from 'utils/env'
 import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
 import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
@@ -38,7 +39,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {authorizedServices?.labsAndTestsEnabled && (
+        {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton
             title={t('labsAndTests.buttonTitle')}
             onPress={() => navigateTo('LabsAndTestsList')}
