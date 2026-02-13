@@ -218,7 +218,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: VAMobile/ios/output
-          key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock', 'VAMobile/ios/Podfile.lock', 'VAMobile/package.json', 'VAMobile/src/**', 'VAMobile/ios/*.rb', 'VAMobile/ios/VAMobile/*.h', 'VAMobile/ios/VAMobile/*.m', 'VAMobile/ios/VAMobile/*.swift') }}
+          key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock', 'VAMobile/ios/Podfile.lock', 'VAMobile/package.json', 'VAMobile/ios/**', 'VAMobile/src/**/*.ts', 'VAMobile/src/**/*.tsx', '!VAMobile/src/**/*.test.tsx', '!VAMobile/src/**/*.test.ts') }}
           restore-keys: |
             ${{ runner.os }}-detox-ios-build-
 

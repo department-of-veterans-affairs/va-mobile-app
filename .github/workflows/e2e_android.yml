@@ -209,10 +209,20 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
 
+      - name: Build Cache
+        id: build-cache
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/android/app/build/outputs/apk
+          key: ${{ runner.os }}-detox-android-build-${{ hashFiles('VAMobile/yarn.lock', 'VAMobile/android/*.gradle', 'VAMobile/android/app/*.gradle', 'VAMobile/android/gradle.properties', 'VAMobile/android/app/src/**', 'VAMobile/src/**/*.ts', 'VAMobile/src/**/*.tsx', '!VAMobile/src/**/*.test.tsx', '!VAMobile/src/**/*.test.ts') }}
+          restore-keys: |
+            ${{ runner.os }}-detox-android-build-
+
       - name: Set app environment variables
         run: yarn env:staging
 
       - name: Bundle Android app
+        if: steps.build-cache.outputs.cache-hit != 'true'
         run: yarn e2e:android-build
 
       - name: Upload Android app
