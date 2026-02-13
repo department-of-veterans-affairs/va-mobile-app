@@ -201,7 +201,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         ) : null}
         <WaygateWrapper>
           <Box display="flex" justifyContent="space-between" flex={1}>
-            <Box>{renderContent()}</Box>
+            <Box flex={1}>{renderContent()}</Box>
             <LastUpdatedTimestamp datetime={dataUpdatedAt} />
           </Box>
         </WaygateWrapper>
