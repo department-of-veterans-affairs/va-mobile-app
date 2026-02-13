@@ -98,6 +98,7 @@ jobs:
 
   output_detox_tests_to_run:
     runs-on: ubuntu-latest
+    if: success() || skipped()
     needs: find_detox_tests_to_run
     outputs:
       output1: ${{ steps.matrix_value.outputs.matrix }}
