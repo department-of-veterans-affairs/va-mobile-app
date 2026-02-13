@@ -149,13 +149,13 @@ describeWithSetup('Review prescriptions list', () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
 
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_SORTED_NAME_FIRST))).toExist()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_SORTED_NAME_LAST))).toExist()
   })
 
@@ -218,12 +218,12 @@ describeWithSetup('Review prescription tracking information', () => {
   })
 
   it('verify prescription tracking item specific info', async () => {
-    await waitFor(element(by.label('IDOQUINOL 650MG TAB')))
+    await waitFor(element(by.label('IODOQUINOL 650MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
-    await expect(element(by.label('Prescription number 3 6 3 6 7 3 6'))).toExist()
+    await expect(element(by.label('Prescription number 2 7 2 0 3 3 8'))).toExist()
     await expect(
       element(
         by.text("We share tracking information here for up to 15 days, even if you've received your prescription."),
