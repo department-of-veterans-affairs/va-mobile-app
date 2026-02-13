@@ -45,13 +45,13 @@ jobs:
           get_cursor() {
             cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
           }
-          
+
           id=""
           cursor=""
           last_response=""
           fetch_page
           get_id
-          
+
           while [[ -z "$id" ]]
           do
             get_cursor
@@ -77,13 +77,13 @@ jobs:
             --arg channel "$CHANNEL_ID" \
             --arg text "$SLACK_MESSAGE" \
             '{channel: $channel, text: $text}')
-          
+
           response=$(curl -X POST \
             -H "Authorization: Bearer $SLACK_API_TOKEN" \
             -H 'Content-type: application/json' \
             --data "$payload" \
             https://slack.com/api/chat.postMessage)
-          
+
           # Check if the Slack API call was successful
           ok=$(echo "$response" | jq -r '.ok')
           if [ "$ok" != "true" ]; then
@@ -93,6 +93,6 @@ jobs:
             echo "Error: $error"
             exit 1
           fi
-          
+
           ts=$(echo "$response" | jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
