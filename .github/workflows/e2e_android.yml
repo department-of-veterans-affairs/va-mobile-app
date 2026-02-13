@@ -285,8 +285,13 @@ jobs:
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
       - name: Apply patches
-        if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
+
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Build Detox framework
+        run: yarn detox build-framework-cache
 
       - name: Download built Android app
         uses: actions/download-artifact@v4

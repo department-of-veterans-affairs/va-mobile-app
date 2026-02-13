@@ -237,7 +237,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/Library/Detox
-          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
+          key: ${{ runner.os }}-detox-framework-26.2-${{ hashFiles('VAMobile/package.json') }}
 
       - name: Set app environment variables
         run: yarn env:staging
@@ -319,6 +319,9 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
 
+      - name: Set app environment variables
+        run: yarn env:staging
+
       - name: Download built iOS app
         uses: actions/download-artifact@v4
         with:
@@ -329,7 +332,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/Library/Detox
-          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
+          key: ${{ runner.os }}-detox-framework-26.2-${{ hashFiles('VAMobile/package.json') }}
 
       - name: Build Detox framework
         run: yarn detox build-framework-cache
