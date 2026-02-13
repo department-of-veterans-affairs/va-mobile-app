@@ -1,10 +1,9 @@
-name: Automation Change Template
-description: Template for requesting a change to the automation pipeline for the application
-title: Automation - [Describe issue]
+name: Devops Change Template
+description: Template for requesting a Devops related change for the application or infrastructure
+title: Devops - [Describe issue]
 labels: devops
 projects: ['department-of-veterans-affairs/1616']
 assignees:
-  - jbergman-oddball
 
 body:
   - type: dropdown
@@ -14,6 +13,8 @@ body:
       description: What type of change are you completing
       options:
         - Update Existing Automation
+        - Documentation Change
+        - Template Change
         - Add new automation functionality
         - Fix Automation Bug
         - AWS Access
@@ -27,6 +28,7 @@ body:
       options:
         - Github Actions
         - Github Repo
+        - Documentation
         - AWS Infrastructure
         - Fastlane
         - Bash Scripts
@@ -46,26 +48,10 @@ body:
       description: 'What is the work being done with this change?'
 
   - type: textarea
-    id: testing-done
-    attributes:
-      label: Testing Done
-      description: 'What testing did you do?'
-
-  - type: textarea
-    id: testing-reviewer
-    attributes:
-      label: Testing Reviewer
-      description: 'What testing needs to be done by the reviewer?'
-
-  - type: textarea
-    id: testing-for-prod
-    attributes:
-      label: Testing for Prod
-      description: 'What testing needs to be done to ensure this work is complete in production?'
-
-  - type: textarea
     id: ac
     attributes:
       label: Acceptance Criteria
       description: 'What is the acceptance criteria?'
-      placeholder: "- [ ] AC1\n- [ ] AC2"
+      value: |
+        - [ ] AC1
+        - [ ] AC2
