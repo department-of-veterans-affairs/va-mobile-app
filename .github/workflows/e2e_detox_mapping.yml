@@ -56,9 +56,10 @@ jobs:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          filter: blob:none
           token: ${{ steps.generate_token.outputs.token }}
       - name: Get SHA
         id: get-sha
