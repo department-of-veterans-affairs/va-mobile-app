@@ -5,7 +5,6 @@ import { t } from 'i18next'
 
 import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import { context, render } from 'testUtils'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 context('PrescriptionsDetailsBanner', () => {
   it('initializes correctly', () => {
@@ -16,12 +15,6 @@ context('PrescriptionsDetailsBanner', () => {
   it('should show expanded content', () => {
     render(<PrescriptionsDetailsBanner />)
     fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
-    expect(screen.getByText(`${t('prescription.details.banner.bullet1')} ${t('or')}`)).toBeTruthy()
-    expect(screen.getByText(`${t('prescription.details.banner.bullet2')} ${t('or')}`)).toBeTruthy()
-    expect(screen.getByText(`${t('prescription.details.banner.bullet3')} ${t('or')}`)).toBeTruthy()
-    expect(screen.getByText(t('prescription.details.banner.bullet4'))).toBeTruthy()
-    expect(screen.getByText(t('automatedPhoneSystem'))).toBeTruthy()
-    expect(screen.getByText(displayedTextPhoneNumber(t('5418307563')))).toBeTruthy()
-    expect(screen.getByText(t('contactVA.tty.displayText'))).toBeTruthy()
+    expect(screen.getByText(`${t('prescription.details.banner.body')}`)).toBeTruthy()
   })
 })

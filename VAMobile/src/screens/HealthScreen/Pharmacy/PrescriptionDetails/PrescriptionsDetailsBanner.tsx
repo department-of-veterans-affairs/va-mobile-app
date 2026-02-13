@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 function PrescriptionsDetailsBanner() {
@@ -20,47 +19,16 @@ function PrescriptionsDetailsBanner() {
   }, [])
 
   const getContent = () => {
-    const bullets = [
-      {
-        text: t('prescription.details.banner.bullet1'),
-        boldedText: ' ' + t('or'),
-        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet1')) + ' ' + t('or'),
-      },
-      {
-        text: t('prescription.details.banner.bullet2'),
-        boldedText: ' ' + t('or'),
-        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet2')) + ' ' + t('or'),
-      },
-      {
-        text: t('prescription.details.banner.bullet3'),
-        boldedText: ' ' + t('or'),
-      },
-      { text: t('prescription.details.banner.bullet4') },
-    ]
-
     return (
       <>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           accessible
           variant="MobileBody"
-          accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))}
+          accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body'))}
           mb={standardMarginBetween}>
-          {t('prescription.details.banner.body1')}
+          {t('prescription.details.banner.body')}
         </TextView>
-        <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
-          {t('prescription.details.banner.body2')}
-        </TextView>
-        <Box>
-          <VABulletList listOfText={bullets} paragraphSpacing={true} />
-        </Box>
-        <TextView accessible variant="MobileBody">{t('automatedPhoneSystem')}</TextView>
-        <ClickToCallPhoneNumber
-          phone={t('5418307563')}
-          displayedText={`${displayedTextPhoneNumber(t('5418307563'))}`}
-          a11yLabel={`${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
-          variant={'base'}
-        />
       </>
     )
   }

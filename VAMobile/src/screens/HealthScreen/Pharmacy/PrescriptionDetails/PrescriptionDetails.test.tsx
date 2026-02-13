@@ -76,24 +76,6 @@ context('PrescriptionDetails', () => {
     })
   })
 
-  describe('Go to My VA Health button', () => {
-    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
-      it('should display FooterButton', () => {
-        initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED,
-        })
-        expect(screen.getByRole('button', { name: t('goToMyVAHealth') })).toBeTruthy()
-      })
-    })
-
-    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
-      it('should not display FooterButton', () => {
-        initializeTestInstance()
-        expect(screen.queryByRole('button', { name: t('goToMyVAHealth') })).toBeFalsy()
-      })
-    })
-  })
-
   describe('RequestRefillButton', () => {
     describe('when isRefillable is true', () => {
       it('should display FooterButton', () => {
