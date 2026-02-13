@@ -53,15 +53,15 @@ A large number of accessibility issues can be resolved or overcome with clear co
 
 When designing or mocking up views of the app, it is important to understand the [core patterns](https://department-of-veterans-affairs.github.io/va-mobile-app/design/Intro) at play in the app. These patterns boil down to a few basic types:
 
-* Home Screen, the front door of the application, where the user starts  
-* List View, A collection of items/options  
-* Detail View, Passive consumption of specific content  
-* Form/Input View, Active data entry and submission  
-* Global Navigation, The structural anchors (Tabs/Drawers)  
-* Modals and Overlays, Interruptions and temporary contexts, often for confirmation  
-* Alerts, Banners and other notifications to call extra attention to some content  
-* Search and Filter, Querying and dynamic results  
-* Empty/Error States: Feedback when content is unavailable
+* **Home Screen**, the front door of the application, where the user starts  
+* **List View**, A collection of items/options  
+* **Detail View**, Passive consumption of specific content  
+* **Form/Input View**, Active data entry and submission  
+* **Global Navigation**, The structural anchors (Tabs/Drawers)  
+* **Modals and Overlays**, Interruptions, and temporary contexts, often for confirmation  
+* **Alerts, Banners**, and other notifications to call extra attention to some content  
+* **Search and Filter**, Querying, and dynamic results  
+* **Empty/Error States**, Feedback when content is unavailable
 
 ### Development
 
@@ -91,27 +91,23 @@ Examples of logical groups:
 
 * Platform-Specific Focus: Managing accessibility focus differs between iOS and Android. Always use the helper function `setAccessibilityFocus` (from utils/accessibility) rather than native calls. This handles the `UIManager` events for Android and `AccessibilityInfo` for iOS automatically. **Whenever possible prioritize laying the page out the way you want it to work for accessibility so that you don’t have to jump through extra, unnecessary complexity.**
 
-#### Accessibility Props and Automation
-
-* Integration Test Compatibility: Standard accessibility props can sometimes interfere with automation queries (Detox). Use the dedicated helper functions to safely apply these properties:  
-  * `a11yHintProp`: Adds `accessibilityHint` only when not in a test environment.  
-  * `a11yValueProp`: Adds `accessibilityValue` only when not in a test environment.  
-* Test IDs: When generating Test IDs for list items, use `getTestIDFromTextLines` to ensure consistent identification for automation. *2026-02 NOTE, this may be changing*
-
 #### Developer Testing Tools
 
 Before passing to QA, developers should perform a basic accessibility sweep using some combo of the following:
 
 * **iOS:** Accessibility Inspector (Xcode), VoiceOver, and Voice Control.  
-* **Android:** TalkBack and Voice Access.  
-* **Font Scaling:** Device-level font scaling options set to factory default, 2x, and 4x  
-* **Visual Check:** Use the "Show Inspector" tool in the [React Native debug menu](https://reactnative.dev/docs/debugging) to visually verify touch target sizes.
+* **Android:** TalkBack and Voice Access.
+* **Font Scaling:** Device-level font scaling options set to factory default, and 2x at least.
+* **Visual Check:** Use the "Show Inspector" tool in the [React Native debug menu](https://reactnative.dev/docs/debugging) to validate touch target sizes.
+
+The PR template defines core QA artifacts which touch on many high-level accessibility checks.
 
 ### QA
 
 The goal of QA is to validate that the built feature meets accessibility acceptance criteria and to verify that the proper process was followed.
 
 #### Process Verification
+
 Before testing the software, verify the "how" of the development process. Document the following to the best of your ability:
 
 * **Research:** Was research conducted with disabled Veterans?  
