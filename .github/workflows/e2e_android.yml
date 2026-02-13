@@ -214,7 +214,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: VAMobile/android/app/build/outputs/apk
-          key: ${{ runner.os }}-detox-android-build-${{ hashFiles('VAMobile/yarn.lock', 'VAMobile/android/*.gradle', 'VAMobile/android/app/*.gradle', 'VAMobile/android/gradle.properties', 'VAMobile/android/app/src/**', 'VAMobile/src/**/*.ts', 'VAMobile/src/**/*.tsx', '!VAMobile/src/**/*.test.tsx', '!VAMobile/src/**/*.test.ts') }}
+          key: ${{ runner.os }}-detox-android-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/android/*.gradle','VAMobile/android/app/*.gradle','VAMobile/android/gradle.properties','VAMobile/android/app/src/**','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-detox-android-build-
 
