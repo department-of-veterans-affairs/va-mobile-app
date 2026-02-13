@@ -191,11 +191,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: npm Cache
+        id: npm-cache
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
 
       - name: Install npm dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
+
+      - name: Apply patches
+        if: steps.npm-cache.outputs.cache-hit == 'true'
+        run: yarn patch-package
 
       - name: Set app environment variables
         run: yarn env:staging
@@ -248,11 +260,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: npm Cache
+        id: npm-cache
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
 
       - name: Install npm dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
+
+      - name: Apply patches
+        if: steps.npm-cache.outputs.cache-hit == 'true'
+        run: yarn patch-package
 
       - name: Download built Android app
         uses: actions/download-artifact@v4
