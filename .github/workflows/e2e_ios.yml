@@ -174,32 +174,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 16.2
-
-      - name: Cache iOS 18.2 Runtime
-        id: cache-ios-runtime
-        uses: actions/cache@v3
-        with:
-          path: /Users/runner/ios_runtime_dmg_cache
-          key: ${{ runner.os }}-ios-runtime-18.2-dmg
-
-      - name: Install iOS 18.2 Runtime
-        run: |
-          if xcrun simctl list runtimes | grep -q "iOS 18.2"; then
-            echo "iOS 18.2 Runtime already installed."
-          else
-            RUNTIME_CACHE_DIR="/Users/runner/ios_runtime_dmg_cache"
-            if ls "$RUNTIME_CACHE_DIR"/*.dmg 1> /dev/null 2>&1; then
-              echo "Installing iOS 18.2 Runtime from cached DMG..."
-              sudo xcrun simctl runtime add "$RUNTIME_CACHE_DIR"/*.dmg
-            else
-              echo "Downloading and exporting iOS 18.2 Runtime..."
-              sudo mkdir -p "$RUNTIME_CACHE_DIR"
-              sudo xcodebuild -downloadPlatform iOS -buildVersion 18.2 -exportPath "$RUNTIME_CACHE_DIR"
-            fi
-          fi
-          # Final verification
-          xcrun simctl list runtimes | grep "iOS 18.2"
+          xcode-version: 26.2
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
@@ -313,32 +288,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 16.2
-
-      - name: Cache iOS 18.2 Runtime
-        id: cache-ios-runtime
-        uses: actions/cache@v3
-        with:
-          path: /Users/runner/ios_runtime_dmg_cache
-          key: ${{ runner.os }}-ios-runtime-18.2-dmg
-
-      - name: Install iOS 18.2 Runtime
-        run: |
-          if xcrun simctl list runtimes | grep -q "iOS 18.2"; then
-            echo "iOS 18.2 Runtime already installed."
-          else
-            RUNTIME_CACHE_DIR="/Users/runner/ios_runtime_dmg_cache"
-            if ls "$RUNTIME_CACHE_DIR"/*.dmg 1> /dev/null 2>&1; then
-              echo "Installing iOS 18.2 Runtime from cached DMG..."
-              sudo xcrun simctl runtime add "$RUNTIME_CACHE_DIR"/*.dmg
-            else
-              echo "Downloading and exporting iOS 18.2 Runtime..."
-              sudo mkdir -p "$RUNTIME_CACHE_DIR"
-              sudo xcodebuild -downloadPlatform iOS -buildVersion 18.2 -exportPath "$RUNTIME_CACHE_DIR"
-            fi
-          fi
-          # Final verification
-          xcrun simctl list runtimes | grep "iOS 18.2"
+          xcode-version: 26.2
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3

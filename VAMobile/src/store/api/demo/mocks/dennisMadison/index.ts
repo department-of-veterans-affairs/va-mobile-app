@@ -17,7 +17,7 @@ const importDennisMadisonData = () => {
     import('store/api/demo/mocks/default/prescriptions.json'),
     import('store/api/demo/mocks/default/notifications.json'),
     import('store/api/demo/mocks/default/contactInformation.json'),
-    import('store/api/demo/mocks/default/getAuthorizedServices.json'),
+    import('./getAuthorizedServices.json'),
     featureEnabled('cernerTrueForDemo')
       ? import('store/api/demo/mocks/default/getFacilitiesInfoCerner.json')
       : import('store/api/demo/mocks/default/getFacilitiesInfo.json'),
