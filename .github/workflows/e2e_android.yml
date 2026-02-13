@@ -156,7 +156,7 @@ jobs:
 
   build-e2e-android:
     if: needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16-cores-latest
     needs: output_detox_tests_to_run
     steps:
       - name: Generate token
@@ -234,7 +234,7 @@ jobs:
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.build-e2e-android.result == 'success' && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: ubuntu-16-cores-latest
+    runs-on: ubuntu-8-cores-latest
     needs: [start_slack_thread, output_detox_tests_to_run, build-e2e-android]
     strategy:
       fail-fast: false
