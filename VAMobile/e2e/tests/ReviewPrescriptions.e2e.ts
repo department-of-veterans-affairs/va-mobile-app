@@ -71,19 +71,23 @@ const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 const describeWithSetup = (name: string, fn: jest.EmptyFunction) => {
   describe(name, () => {
     beforeAll(async () => {
-      await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-      await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_FEEDBACK_TOGGLE_TEXT)
-      await loginToDemoMode()
-      await changeDemoModeUser(PrescriptionsE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
       await openHealth()
       await openPrescriptions()
     })
     afterAll(async () => {
       await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+      await loginToDemoMode()
     })
     fn()
   })
 }
+
+beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_FEEDBACK_TOGGLE_TEXT)
+  await loginToDemoMode()
+  await changeDemoModeUser(PrescriptionsE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
+})
 
 describeWithSetup('Review prescriptions list', () => {
   it('should match the prescription page design', async () => {
