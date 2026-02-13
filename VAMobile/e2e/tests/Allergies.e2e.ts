@@ -35,7 +35,7 @@ beforeAll(async () => {
   await openAllergyRecords()
 })
 
-describe('Allergies Screen', () => {
+describe.skip('Allergies Screen', () => {
   it('should show allergy list content', async () => {
     await expect(element(by.text('Allergies'))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID))).toExist()

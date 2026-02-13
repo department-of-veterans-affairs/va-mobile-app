@@ -1,14 +1,7 @@
 import { by, element, expect, waitFor } from 'detox'
 
 // eslint-disable-next-line no-restricted-imports
-import {
-  CommonE2eIdConstants,
-  loginToDemoMode,
-  openBenefits,
-  openClaims,
-  openTravelPayClaims,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openClaims, toggleRemoteConfigFlag } from './utils'
 
 const TravelPayClaimDetailsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
@@ -44,7 +37,7 @@ beforeAll(async () => {
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
-  await openTravelPayClaims({ useNativeLink: false })
+  await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
 })
 
 // Helper function to ensure we're on claims list
@@ -70,7 +63,7 @@ const ensureOnClaimsList = async () => {
       try {
         await openBenefits()
         await openClaims()
-        await openTravelPayClaims({ useNativeLink: true })
+        await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
         await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
           .toExist()
           .withTimeout(4000)
@@ -170,20 +163,18 @@ const safeTap = async (elementId: string, scrollToFind = false) => {
   }
 }
 
-describe.skip('Travel Pay Claim Details Screen', () => {
-  beforeEach(async () => {
-    await ensureOnClaimsList()
-
-    // Scroll to top to ensure first claim is visible
-    try {
-      await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('top')
-    } catch {
-      // Scrolling failed, continue anyway
-    }
-  })
-
+describe('Travel Pay Claim Details Screen', () => {
   describe('Navigation to Claim Details', () => {
     it('should navigate to claim details when claim is tapped', async () => {
+      await ensureOnClaimsList()
+
+      // Scroll to top to ensure first claim is visible
+      try {
+        await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('top')
+      } catch {
+        // Scrolling failed, continue anyway
+      }
+
       // Use safe tap with scroll enabled to find the partial payment claim
       await safeTap(TravelPayClaimDetailsE2eIds.CLAIM_3_PARTIAL_ID, true)
 
@@ -330,6 +321,8 @@ describe.skip('Travel Pay Claim Details Screen', () => {
 
   describe('Claim Details content for claims other than denied/partial payment', () => {
     it('should not show decision letter download nor amount difference accordion', async () => {
+      await ensureOnClaimsList()
+
       await safeTap(TravelPayClaimDetailsE2eIds.CLAIM_1_IN_MANUAL_REVIEW_ID, true)
 
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)))
