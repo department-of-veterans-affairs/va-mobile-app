@@ -61,7 +61,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_CANCEL_ID: 'radioButtonCancelTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
   PRESCRIPTION_REQUEST_REFILL_ID: 'requestRefillsButtonID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 5',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 6',
   PRESCRIPTION_SORTED_NAME_FIRST: 'ACETAMINOPHEN 325MG TAB',
   PRESCRIPTION_SORTED_NAME_LAST: 'ZIPRASIDONE HCL 40MG CAP',
 }
