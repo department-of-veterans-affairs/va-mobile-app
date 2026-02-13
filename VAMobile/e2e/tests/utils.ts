@@ -148,7 +148,6 @@ export const CommonE2eIdConstants = {
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
-  APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
   IN_APP_FEEDBACK_TOGGLE_TEXT: 'inAppFeedback',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
@@ -579,22 +578,14 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     }
   }
   await element(by.id(CommonE2eIdConstants.AF_TYPE_INPUT_ID)).replaceText(AFUseCase)
-  await element(by.id(CommonE2eIdConstants.AF_TYPE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_INPUT_ID)).replaceText('AF Heading Test')
-  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_BODY_INPUT_ID)).replaceText('AF Body Test')
-  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_BODY_INPUT_ID)).tapReturnKey()
-  await setTimeout(3000)
   await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_PHONE_ID)).replaceText('8006982411')
-  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_PHONE_ID)).tapReturnKey()
 
   await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-      .scroll(600, 'up')
-    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
+    await element(by.id('applyOverridesTestID')).tap()
+
     if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
       await loginToDemoMode()
     }
@@ -790,7 +781,7 @@ export async function toggleRemoteConfigFlag(flagName: string) {
 
   await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
   await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await element(by.id('applyOverridesTestID')).tap()
 }
 
 /**
