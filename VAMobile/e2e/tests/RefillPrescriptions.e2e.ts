@@ -30,6 +30,8 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT: device.getPlatform() === 'android' ? 'Cancel ' : 'Cancel',
   PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_BUTTON_TEXT:
     device.getPlatform() === 'android' ? 'Request refill ' : 'Request Refill',
+  PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT:
+    device.getPlatform() === 'android' ? 'Request refills ' : 'Request Refills',
   PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT: 'Request prescription refill?',
   PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT: 'Request refills at least 15 days before you need more medication.',
   PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL:
@@ -155,9 +157,9 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
   })
 
   it('should update the selected count when the selection of a prescription item is changed', async () => {
-    await element(by.text('AMLODIPINE BESYLATE 10MG TAB')).atIndex(0).tap()
+    await element(by.label('Prescription 1 of 10.')).tap()
     await expect(element(by.text('1/10 selected'))).toExist()
-    await element(by.text('AMLODIPINE BESYLATE 10MG TAB')).atIndex(0).tap()
+    await element(by.label('Prescription 1 of 10.')).tap()
     await expect(element(by.text('0/10 selected'))).toExist()
   })
 
@@ -170,17 +172,24 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
   })
 
   it('should display confirmation modal when refill request button is pressed', async () => {
-    await element(by.text('AMLODIPINE BESYLATE 10MG TAB')).atIndex(0).tap()
-    await element(by.text('CAPECITABINE 500MG TAB')).atIndex(0).tap()
+    await element(by.label('Prescription 1 of 10.')).tap()
+    await element(by.label('Prescription 2 of 10.')).tap()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
 
     await expect(element(by.text('Request prescription refills?'))).toExist()
-    await expect(element(by.text('Request refills'))).toExist()
-    await expect(element(by.text('Cancel'))).toExist()
+    await expect(
+      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT)),
+    ).toExist()
+
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT))).toExist()
   })
 
   it('should close the confirmation modal when cancel is pressed', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
+    if (device.getPlatform() === 'android') {
+      await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
+    } else {
+      await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).atIndex(1).tap()
+    }
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).not.toExist()
@@ -188,7 +197,7 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
 
   it('should correctly display the refill request summary when request is successful', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text('Request refills')).tap()
+    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT)).tap()
 
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_TITLE_TEXT)).atIndex(0),
