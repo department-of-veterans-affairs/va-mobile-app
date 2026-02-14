@@ -245,7 +245,7 @@ jobs:
           key: ${{ runner.os }}-detox-framework-26.2-${{ hashFiles('VAMobile/package.json') }}
 
       - name: Build Detox framework
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+        run: yarn detox build-framework-cache
 
       - name: Set app environment variables
         run: yarn env:staging
