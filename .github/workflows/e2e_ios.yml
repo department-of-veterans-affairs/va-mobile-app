@@ -185,7 +185,7 @@ jobs:
         with:
           node-version-file: 'VAMobile/.nvmrc'
 
-      - name: npm Cache
+      - name: Check for npm Cache
         id: npm-cache
         if: inputs.skip_build_cache != true
         uses: actions/cache@v3
@@ -202,7 +202,7 @@ jobs:
           working-directory: VAMobile/ios
           bundler-cache: true
 
-      - name: CocoaPods Cache
+      - name: Check for CocoaPods Cache
         if: inputs.skip_build_cache != true
         uses: actions/cache@v3
         with:
@@ -219,7 +219,7 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-      - name: Build Cache
+      - name: Check for Build Cache
         id: build-cache
         if: inputs.skip_build_cache != true
         uses: actions/cache@v3
@@ -237,15 +237,15 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
 
-      - name: Build Detox framework
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
-
-      - name: Cache Detox Framework
+      - name: Check for Detox Cache
         if: inputs.skip_build_cache != true
         uses: actions/cache@v3
         with:
           path: ~/Library/Detox
           key: ${{ runner.os }}-detox-framework-26.2-${{ hashFiles('VAMobile/package.json') }}
+
+      - name: Build Detox framework
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
       - name: Set app environment variables
         run: yarn env:staging
@@ -303,7 +303,7 @@ jobs:
         with:
           node-version-file: 'VAMobile/.nvmrc'
 
-      - name: npm Cache
+      - name: Restore npm Cache
         id: npm-cache
         uses: actions/cache@v3
         with:
@@ -336,7 +336,7 @@ jobs:
           name: built-ios-app
           path: VAMobile/ios/output/Build/Products/Release-iphonesimulator/VAMobile.app
 
-      - name: Restore Detox Framework
+      - name: Restore Detox Cache
         uses: actions/cache@v3
         with:
           path: ~/Library/Detox
