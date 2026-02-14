@@ -341,7 +341,11 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
-          script: ${{ env.CMD }}
+          script: |
+            adb wait-for-device
+            adb shell getprop sys.boot_completed
+            adb shell input keyevent 82
+            ${{ env.CMD }}
 
       - name: Upload e2e-junit
         if: failure() || success()
