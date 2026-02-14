@@ -289,7 +289,6 @@ jobs:
 
       - name: Restore npm Cache
         id: npm-cache
-        if: inputs.skip_build_cache != true
         uses: actions/cache@v3
         with:
           path: VAMobile/node_modules
