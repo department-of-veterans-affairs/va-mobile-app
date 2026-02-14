@@ -198,7 +198,7 @@ jobs:
 
       - name: npm Cache
         id: npm-cache
-        if: inputs.skip_build_cache != 'true'
+        if: inputs.skip_build_cache != true
         uses: actions/cache@v3
         with:
           path: VAMobile/node_modules
@@ -216,7 +216,7 @@ jobs:
 
       - name: Build Cache
         id: build-cache
-        if: inputs.skip_build_cache != 'true'
+        if: inputs.skip_build_cache != true
         uses: actions/cache@v3
         with:
           path: VAMobile/android/app/build/outputs/apk
@@ -228,7 +228,7 @@ jobs:
         run: yarn env:staging
 
       - name: Bundle Android app
-        if: steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_build_cache == 'true'
+        if: steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_build_cache == true
         run: yarn e2e:android-build
 
       - name: Upload Android app
