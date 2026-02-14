@@ -25,6 +25,10 @@ on:
         description: 'Run full e2e test?'
         type: boolean
         required: false
+      skip_build_cache:
+        description: 'Skip build caches?'
+        type: boolean
+        required: false
       tests_to_run:
         description: 'List tests to test in ["test name", "test name"] format.  Leave blank if running full e2e test.'
         type: string
@@ -183,6 +187,7 @@ jobs:
 
       - name: npm Cache
         id: npm-cache
+        if: inputs.skip_build_cache != 'true'
         uses: actions/cache@v3
         with:
           path: VAMobile/node_modules
@@ -198,6 +203,7 @@ jobs:
           bundler-cache: true
 
       - name: CocoaPods Cache
+        if: inputs.skip_build_cache != 'true'
         uses: actions/cache@v3
         with:
           path: VAMobile/ios/Pods
@@ -215,6 +221,7 @@ jobs:
 
       - name: Build Cache
         id: build-cache
+        if: inputs.skip_build_cache != 'true'
         uses: actions/cache@v3
         with:
           path: VAMobile/ios/output
@@ -247,7 +254,7 @@ jobs:
         run: pod install
 
       - name: Bundle iOS app
-        if: steps.build-cache.outputs.cache-hit != 'true'
+        if: (steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_build_cache == 'true')
         run: yarn e2e:ios-build
 
       - name: Upload iOS app
