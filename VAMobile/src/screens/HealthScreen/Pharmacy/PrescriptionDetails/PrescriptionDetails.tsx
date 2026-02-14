@@ -19,20 +19,26 @@ import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/Prescripti
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { useDowntime, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
+import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
+
+const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const { prescription } = route.params
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
   const submitRefillAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
   const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover');
 
   const { contentMarginBottom } = theme.dimensions
 
@@ -60,12 +66,25 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     }, [registerReviewEvent]),
   )
 
-  const getRefillButton = () => {
-    if (isRefillable) {
+  const redirectLink = (): void => {
+    launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
+  }
+
+  const getRefillVAHealthButton = () => {
+    if (refillStatus === RefillStatusConstants.TRANSFERRED && !isOHCutoverFlagEnabled) {
+      return getGoToMyVAHealthButton()
+    } else if (isRefillable) {
       return getRequestRefillButton()
     }
 
     return <></>
+  }
+  const getGoToMyVAHealthButton = () => {
+    return (
+      <Box mb={theme.dimensions.buttonPadding} mx={theme.dimensions.buttonPadding}>
+        <Button label={t('goToMyVAHealth')} onPress={redirectLink} testID={a11yLabelVA(t('goToMyVAHealth'))} />
+      </Box>
+    )
   }
 
   const getRequestRefillButton = () => {
@@ -153,7 +172,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
       ) : (
         <>
           {getBanner()}
-          {getRefillButton()}
+          {getRefillVAHealthButton()}
           <Box mb={contentMarginBottom}>
             <TextArea>
               <TextView variant="MobileBodyBold" accessibilityRole="header">

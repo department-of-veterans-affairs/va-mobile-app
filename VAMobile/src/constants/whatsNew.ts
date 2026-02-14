@@ -62,6 +62,10 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureFlag: 'COEAvailable',
   },
   {
+    featureName: 'MhvMedicationsOracleHealthCutover',
+    featureFlag: 'mhvMedicationsOracleHealthCutover',
+  },
+  {
     featureName: 'TravelListAndStatus',
     featureFlag: 'travelPayStatusList',
     bullets: 3,

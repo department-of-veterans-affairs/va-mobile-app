@@ -29,6 +29,7 @@ export type FeatureToggleType =
   | 'inAppReview'
   | 'labsAndTests'
   | 'loadLabsAndTestsOnHomeScreen'
+  | 'mhvMedicationsOracleHealthCutover'
   | 'mrHide36HrHoldTimes'
   | 'nonVAMedsLink'
   | 'rescheduleLink'
@@ -66,6 +67,7 @@ type FeatureToggleValues = {
   inAppReview: boolean
   labsAndTests: boolean
   loadLabsAndTestsOnHomeScreen: boolean
+  mhvMedicationsOracleHealthCutover: boolean
   mrHide36HrHoldTimes: boolean
   nonVAMedsLink: boolean
   rescheduleLink: boolean
@@ -104,6 +106,7 @@ export const defaults: FeatureToggleValues = {
   inAppReview: true,
   labsAndTests: true,
   loadLabsAndTestsOnHomeScreen: false,
+  mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
   nonVAMedsLink: true,
   rescheduleLink: true,
