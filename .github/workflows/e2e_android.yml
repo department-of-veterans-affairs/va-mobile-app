@@ -347,6 +347,12 @@ jobs:
             adb shell input keyevent 82
             ${{ env.CMD }}
 
+      - name: Capture logcat on failure
+        if: failure() || steps.run_e2e_tests.outcome == 'failure'
+        run: |
+          mkdir -p VAMobile/artifacts
+          adb logcat -d > VAMobile/artifacts/logcat.txt
+
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v4

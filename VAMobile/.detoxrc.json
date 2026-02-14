@@ -88,6 +88,10 @@
           "testDone": true,
           "appNotReady": true
         }
+      },
+      "log": {
+        "enabled": true,
+        "keepOnlyFailedTestsArtifacts": true
       }
     }
   }
