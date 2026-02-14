@@ -276,7 +276,7 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
-  await device.launchApp({ newInstance: false })
+  await device.launchApp({ newInstance: true })
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
 })
