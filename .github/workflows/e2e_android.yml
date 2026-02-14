@@ -279,6 +279,7 @@ jobs:
 
       - name: npm Cache
         id: npm-cache
+        if: inputs.skip_build_cache != true
         uses: actions/cache@v3
         with:
           path: VAMobile/node_modules
@@ -290,8 +291,8 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
-      - name: Run Android Setup Script
-        run: ../.github/scripts/run-manual-setup.sh android
+      - name: Apply patches
+        run: yarn patch-package
 
       - name: Set app environment variables
         run: yarn env:staging
