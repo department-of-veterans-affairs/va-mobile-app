@@ -64,8 +64,8 @@ jobs:
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
-      - name: Get Changed Files
-        id: changed-files
+      - name: Get file difference by file name
+        id: changed_files_file_name
         uses: tj-actions/changed-files@v46
         with:
           base_sha: '${{ steps.get-sha.outputs.sha }}'
@@ -100,7 +100,7 @@ jobs:
           noFileFound="false"
           fileNames=$(jq -r '.files' /tmp/detoxMapping.json)
           directoryNames=$(jq -r '.directory' /tmp/detoxMapping.json)
-          for file in ${{steps.changed-files.outputs.all_changed_and_modified_files}}; do
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
             fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
@@ -166,10 +166,10 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          test_matrix=""
+          firstInstanceFile="true"
           directoryNames=$(jq -r '.directory' /tmp/detoxMapping.json)
           fileNames=$(jq -r '.files' /tmp/detoxMapping.json)
-          for file in ${{steps.changed-files.outputs.all_changed_and_modified_files}}; do
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
             fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
@@ -178,9 +178,10 @@ jobs:
               for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
                 if [[ "$fileDirectory" =~ "$directory" ]]; then
                   directoryFound=$(echo $directoryNames | jq --arg fileName "$directory" -r '.[$fileName]')
-                  if [[ "$test_matrix" == "" ]]; then
+                  if [[ "$firstInstanceFile" == "true" ]]; then
                     test_matrix=$directoryFound
                     test_matrix=$(echo $test_matrix | jq -c '.')
+                    firstInstanceFile="false"
                   else
                     test_matrix=$(echo $test_matrix | jq -c '.')
                     test_matrix=$(echo $test_matrix | jq --argjson matrix "$directoryFound" '. += $matrix')
@@ -189,16 +190,17 @@ jobs:
                 fi
               done
             else
-              if [[ "$test_matrix" == "" ]]; then
+              if [[ "$firstInstanceFile" == "true" ]]; then
                 test_matrix=$fileFound
                 test_matrix=$(echo $test_matrix | jq -c '.')
+                firstInstanceFile="false"
               else
                 test_matrix=$(echo $test_matrix | jq -c '.')
                 test_matrix=$(echo $test_matrix | jq --argjson matrix "$fileFound" '. += $matrix')
               fi
             fi
           done
-          if [[ "$test_matrix" == "" ]]; then
+          if [[ "$firstInstanceFile" == "true" ]]; then
             test_matrix="[]"
           fi
           test_matrix=$(echo $test_matrix | jq -c 'unique')
