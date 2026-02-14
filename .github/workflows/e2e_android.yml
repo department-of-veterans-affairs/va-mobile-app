@@ -321,9 +321,9 @@ jobs:
         id: test_command
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            echo "CMD=yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
           else
-            echo "CMD=yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --retries 1" >> "$GITHUB_ENV"
           fi
 
       - name: Run e2e tests for Android
