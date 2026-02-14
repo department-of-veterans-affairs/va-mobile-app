@@ -36,7 +36,7 @@
     "prepare": "cd .. && husky VAMobile/.husky",
     "e2e:ios-build": "yarn run bundle:ios && detox build -c ios",
     "e2e:ios-test": "yarn jest:clear && detox test -c ios --cleanup --record-logs all",
-    "e2e:android-build": "detox build -c android",
+    "e2e:android-build": " yarn run bundle:android && detox build -c android",
     "e2e:android-test": "yarn jest:clear && detox test -c android --cleanup",
     "e2e:attached-build": "yarn run bundle:android && detox build -c attached",
     "e2e:attached-test": "yarn jest:clear && detox test -c attached --cleanup",

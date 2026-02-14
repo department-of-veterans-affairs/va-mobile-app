@@ -214,8 +214,6 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
 
-
-
       - name: Check for Build Cache
         id: build-cache
         if: inputs.bypass_cache != true
@@ -298,8 +296,6 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
-
-
       - name: Download built Android app
         uses: actions/download-artifact@v4
         with:
@@ -320,7 +316,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 28
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
@@ -331,7 +327,7 @@ jobs:
             adb shell getprop sys.boot_completed
             adb shell input keyevent 82
             mkdir -p artifacts
-            ${{ env.CMD }} || (timeout 60s adb logcat -d > artifacts/logcat.txt && exit 1)
+            ${{ env.CMD }} || (adb devices | grep "\tdevice" && timeout 60s adb logcat -d > artifacts/logcat.txt || echo "Device not found or logcat timed out" && exit 1)
 
       - name: Upload e2e-junit
         if: failure() || success()
