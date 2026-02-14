@@ -5,7 +5,7 @@ import { PrescriptionSortOptionConstants, PrescriptionsList, RefillStatus, Refil
 import { LabelTagTypeConstants } from 'components/LabelTag'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateUtc } from 'utils/formattingUtils'
-import { featureEnabled } from './remoteConfig'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
   switch (status) {
