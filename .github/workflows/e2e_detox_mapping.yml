@@ -56,10 +56,9 @@ jobs:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          filter: blob:none
           token: ${{ steps.generate_token.outputs.token }}
       - name: Get SHA
         id: get-sha
@@ -70,6 +69,12 @@ jobs:
         with:
           base_sha: '${{ steps.get-sha.outputs.sha }}'
           path: './VAMobile/src'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+      - name: Install dependencies
+        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - name: Convert JavaScript mapping to JSON
         run: |
           # Use Node.js to load the JavaScript file and convert to JSON
@@ -200,9 +205,6 @@ jobs:
               fi
             fi
           done
-          if [[ "$firstInstanceFile" == "true" ]]; then
-            test_matrix="[]"
-          fi
           test_matrix=$(echo $test_matrix | jq -c 'unique')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
