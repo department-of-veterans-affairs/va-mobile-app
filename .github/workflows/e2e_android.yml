@@ -213,7 +213,15 @@ jobs:
       - name: Apply patches
         if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
+      - name: Check for Detox Cache
+        if: inputs.skip_cache != true
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/Detox
+          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
 
+      - name: Build Detox framework
+        run: yarn detox build-framework-cache
       - name: Check for Build Cache
         id: build-cache
         if: inputs.skip_cache != true
@@ -295,7 +303,14 @@ jobs:
 
       - name: Set app environment variables
         run: yarn env:staging
+      - name: Restore Detox Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/Detox
+          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
 
+      - name: Build Detox framework
+        run: yarn detox build-framework-cache
       - name: Download built Android app
         uses: actions/download-artifact@v4
         with:
