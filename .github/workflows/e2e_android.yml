@@ -214,15 +214,7 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
 
-      - name: Check for Detox Cache
-        if: inputs.bypass_cache != true
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/Detox
-          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
 
-      - name: Build Detox framework
-        run: yarn detox build-framework-cache
 
       - name: Check for Build Cache
         id: build-cache
@@ -306,14 +298,7 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
-      - name: Restore Detox Cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/Detox
-          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
 
-      - name: Build Detox framework
-        run: yarn detox build-framework-cache
 
       - name: Download built Android app
         uses: actions/download-artifact@v4
@@ -346,8 +331,7 @@ jobs:
             adb shell getprop sys.boot_completed
             adb shell input keyevent 82
             mkdir -p artifacts
-            mkdir -p artifacts
-            ${{ env.CMD }} || (adb logcat -d > artifacts/logcat.txt && exit 1)
+            ${{ env.CMD }} || (timeout 60s adb logcat -d > artifacts/logcat.txt && exit 1)
 
       - name: Upload e2e-junit
         if: failure() || success()
