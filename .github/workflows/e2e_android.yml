@@ -346,10 +346,8 @@ jobs:
             adb shell getprop sys.boot_completed
             adb shell input keyevent 82
             mkdir -p artifacts
-            if ! ${{ env.CMD }}; then
-              adb logcat -d > artifacts/logcat.txt
-              exit 1
-            fi
+            mkdir -p artifacts
+            ${{ env.CMD }} || (adb logcat -d > artifacts/logcat.txt && exit 1)
 
       - name: Upload e2e-junit
         if: failure() || success()
