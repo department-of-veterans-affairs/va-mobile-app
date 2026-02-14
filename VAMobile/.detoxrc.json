@@ -21,7 +21,7 @@
       "type": "android.apk",
       "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
       "testBinaryPath": "android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
-      "build": "cd android ; ./gradlew app:assembleDebug app:assembleAndroidTest -DtestBuildType=debug -PreactNativeArchitectures=x86_64 --parallel --build-cache -x lint -x test; cd .."
+      "build": "cd android ; ./gradlew app:assembleDebug app:assembleAndroidTest -DtestBuildType=debug --parallel --build-cache -x lint -x test; cd .."
     }
   },
   "devices": {
