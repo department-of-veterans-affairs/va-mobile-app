@@ -219,16 +219,6 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-      - name: Check for Build Cache
-        id: build-cache
-        if: inputs.skip_cache != true
-        uses: actions/cache@v3
-        with:
-          path: VAMobile/ios/output
-          key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/ios/Podfile.lock','VAMobile/package.json','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','VAMobile/ios/VAMobile/**','VAMobile/ios/*.xcodeproj/**','VAMobile/ios/*.xcworkspace/**') }}
-          restore-keys: |
-            ${{ runner.os }}-detox-ios-build-
-
       - name: Install npm dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --non-interactive
@@ -246,6 +236,16 @@ jobs:
 
       - name: Build Detox framework
         run: yarn detox build-framework-cache
+
+      - name: Check for Build Cache
+        id: build-cache
+        if: inputs.skip_cache != true
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/ios/output
+          key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/ios/Podfile.lock','VAMobile/package.json','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','VAMobile/ios/VAMobile/**','VAMobile/ios/*.xcodeproj/**','VAMobile/ios/*.xcworkspace/**') }}
+          restore-keys: |
+            ${{ runner.os }}-detox-ios-build-
 
       - name: Set app environment variables
         run: yarn env:staging
@@ -330,12 +330,6 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
-      - name: Download built iOS app
-        uses: actions/download-artifact@v4
-        with:
-          name: built-ios-app
-          path: VAMobile/ios/output/Build/Products/Release-iphonesimulator/VAMobile.app
-
       - name: Restore Detox Cache
         uses: actions/cache@v3
         with:
@@ -345,16 +339,26 @@ jobs:
       - name: Build Detox framework
         run: yarn detox build-framework-cache
 
-      - name: Run e2e tests for iOS
-        id: run_e2e_tests
+      - name: Download built iOS app
+        uses: actions/download-artifact@v4
+        with:
+          name: built-ios-app
+          path: VAMobile/ios/output/Build/Products/Release-iphonesimulator/VAMobile.app
+
+      - name: Determine Test Command
+        id: test_command
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless
-            echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
+            # Optimization: Navigation.e2e and AvailabilityFramework.e2e have dedicated matrix jobs
+            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           else
-            echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000 --retries 1 --headless
+            # Targeted: Prepend prerequisites for safety
+            echo "CMD=yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           fi
+
+      - name: Run e2e tests for iOS
+        id: run_e2e_tests
+        run: ${{ env.CMD }}
 
       - name: Upload e2e-junit
         if: failure() || success()
