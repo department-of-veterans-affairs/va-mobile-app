@@ -207,9 +207,8 @@ context('PastAppointments', () => {
 
   describe('appointment travel pay eligibility and tag display', () => {
     it('should show travel pay tag and hide confirmed tag for eligible appointments', () => {
-      const threeDaysAgo = new Date()
-      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
-      const isoString = threeDaysAgo.toISOString()
+      const threeDaysAgo = DateTime.utc().minus({ days: 3 })
+      const isoString = threeDaysAgo.toISO()
 
       initializeTestInstance(
         { data: appointmentData(AppointmentStatusConstants.BOOKED, false, isoString) },
