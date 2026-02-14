@@ -24,8 +24,8 @@ on:
         description: 'Run full e2e test?'
         type: boolean
         required: false
-      skip_build_cache:
-        description: 'Skip build caches?'
+      bypass_cache:
+        description: 'Bypass caches?'
         type: boolean
         required: false
       tests_to_run:
@@ -198,7 +198,7 @@ jobs:
 
       - name: Check for npm Cache
         id: npm-cache
-        if: inputs.skip_build_cache != true
+        if: inputs.bypass_cache != true
         uses: actions/cache@v3
         with:
           path: VAMobile/node_modules
@@ -215,7 +215,7 @@ jobs:
         run: yarn patch-package
 
       - name: Check for Detox Cache
-        if: inputs.skip_build_cache != true
+        if: inputs.bypass_cache != true
         uses: actions/cache@v3
         with:
           path: ~/.local/share/Detox
@@ -226,7 +226,7 @@ jobs:
 
       - name: Check for Build Cache
         id: build-cache
-        if: inputs.skip_build_cache != true
+        if: inputs.bypass_cache != true
         uses: actions/cache@v3
         with:
           path: VAMobile/android/app/build/outputs/apk
@@ -238,7 +238,7 @@ jobs:
         run: yarn env:staging
 
       - name: Bundle Android app
-        if: steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_build_cache == true
+        if: steps.build-cache.outputs.cache-hit != 'true' || inputs.bypass_cache == true
         run: yarn e2e:android-build
 
       - name: Upload Android app
