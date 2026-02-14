@@ -256,7 +256,7 @@ jobs:
 
       - name: Bundle iOS app
         if: (steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_cache == true)
-        run: yarn e2e:ios-build
+        run: yarn e2e:ios-build-ci
 
       - name: Upload iOS app
         uses: actions/upload-artifact@v4
