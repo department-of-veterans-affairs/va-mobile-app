@@ -290,8 +290,8 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
-      - name: Apply patches
-        run: yarn patch-package
+      - name: Run Android Setup Script
+        run: ../.github/scripts/run-manual-setup.sh android
 
       - name: Set app environment variables
         run: yarn env:staging
@@ -305,6 +305,15 @@ jobs:
           name: built-android-app
           path: VAMobile/android/app/build/outputs/apk
 
+      - name: Determine Test Command
+        id: test_command
+        run: |
+          if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
+            echo "CMD=yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
+          else
+            echo "CMD=yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --retries 1" >> "$GITHUB_ENV"
+          fi
+
       - name: Run e2e tests for Android
         id: run_e2e_tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -316,7 +325,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
-          script: bash -c "if [ \"${{needs.output_detox_tests_to_run.outputs.output2}}\" = \"\" ]; then yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1; else yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --retries 1; fi"
+          script: ${{ env.CMD }}
 
       - name: Upload e2e-junit
         if: failure() || success()
