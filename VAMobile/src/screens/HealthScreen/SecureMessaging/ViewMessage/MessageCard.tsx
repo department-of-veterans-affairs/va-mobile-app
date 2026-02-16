@@ -170,7 +170,7 @@ function MessageCard({
     navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   function getReplyOrStartNewMessageButton() {
-    if (noProviderError) {
+    if (noProviderError || migrationBlocksReply) {
       return <></>
     }
 

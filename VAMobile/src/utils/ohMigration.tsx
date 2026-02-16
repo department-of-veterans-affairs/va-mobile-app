@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
@@ -8,10 +8,8 @@ import { LinkWithAnalytics, TextView, VABulletList } from 'components'
 import AlertWithHaptics from 'components/AlertWithHaptics'
 import Box from 'components/Box'
 import { OHParentScreens, getAlertState } from 'components/OHAlertManager'
-import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import getEnv from 'utils/env'
-import { useTheme } from 'utils/hooks'
 
 import { a11yLabelVA } from './a11yLabel'
 

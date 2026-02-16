@@ -61,6 +61,7 @@ import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/Messag
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { DemoState } from 'store/slices/demoSlice'
+import { render } from 'testUtils'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { a11yLabelVA } from 'utils/a11yLabel/va'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -419,6 +420,84 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     (facility: FacilityInfo) => facility.facilityName,
   )
 
+  const renderAlerts = () => {
+    if (migrationBlocksReply && soonestErrorMigration) {
+      return (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            expandable={true}
+            initializeExpanded={true}
+            variant="error"
+            header={t('secureMessaging.reply.youCantReplyMigrationMessage')}
+            description={''}>
+            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+              {t('secureMessaging.reply.youCantReplyMigrationMessage.body')}
+            </TextView>
+            <Box mb={theme.dimensions.standardMarginBetween} />
+            <VABulletList listOfText={migratingFacilitiesInErrorNames} />
+            <Box mb={theme.dimensions.standardMarginBetween} />
+            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+              <Trans
+                i18nKey={'secureMessaging.reply.youCantReplyMigrationMessage.body2'}
+                components={{ bold: <TextView variant="MobileBodyBold" /> }}
+                values={{
+                  endDate: getMigrationEndDate(soonestErrorMigration, OHParentScreens.SecureMessaging),
+                }}
+              />
+            </TextView>
+            <Box mb={theme.dimensions.standardMarginBetween} />
+            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+              {t('secureMessaging.reply.youCantReplyMigrationMessage.note')}
+            </TextView>
+            <LinkWithAnalytics {...linkProps} />
+          </AlertWithHaptics>
+        </Box>
+      )
+    }
+
+    if (!userInTriageTeam || noProviderError) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.youCanNoLonger')}
+            description={t('secureMessaging.reply.youCanNoLonger.description')}
+            descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
+            testID="secureMessagingYouCanNoLongerAlertID">
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+            <TextView
+              accessible
+              variant="MobileBody"
+              paragraphSpacing={true}
+              accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
+              {t('secureMessaging.reply.error.ifYouThink')}
+            </TextView>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('upcomingAppointmentDetails.findYourVAFacility')}
+              onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+            />
+          </AlertWithHaptics>
+        </Box>
+      )
+    }
+
+    if (replyExpired) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.tooOldForReplies')}
+            description={t('secureMessaging.reply.olderThan45Days')}
+            testID="secureMessagingOlderThan45DaysAlertID"
+          />
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <ChildTemplate
       backLabelOnPress={navigation.goBack}
@@ -477,71 +556,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && userInTriageTeam && !migrationBlocksReply && (
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="warning"
-                header={t('secureMessaging.reply.tooOldForReplies')}
-                description={t('secureMessaging.reply.olderThan45Days')}
-                testID="secureMessagingOlderThan45DaysAlertID"
-              />
-            </Box>
-          )}
-          {!userInTriageTeam && !noProviderError && !soonestErrorMigration && (
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="warning"
-                header={t('secureMessaging.reply.youCanNoLonger')}
-                description={t('secureMessaging.reply.youCanNoLonger.description')}
-                descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
-                testID="secureMessagingYouCanNoLongerAlertID">
-                {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-                <TextView
-                  accessible
-                  variant="MobileBody"
-                  paragraphSpacing={true}
-                  accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
-                  {t('secureMessaging.reply.error.ifYouThink')}
-                </TextView>
-                <LinkWithAnalytics
-                  type="custom"
-                  text={t('upcomingAppointmentDetails.findYourVAFacility')}
-                  onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
-                />
-              </AlertWithHaptics>
-            </Box>
-          )}
-          {soonestErrorMigration && (!userInTriageTeam || noProviderError) && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                expandable={true}
-                initializeExpanded={true}
-                variant="error"
-                header={t('secureMessaging.reply.youCantReplyMigrationMessage')}
-                description={''}>
-                <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-                  {t('secureMessaging.reply.youCantReplyMigrationMessage.body')}
-                </TextView>
-                <Box mb={theme.dimensions.standardMarginBetween} />
-                <VABulletList listOfText={migratingFacilitiesInErrorNames} />
-                <Box mb={theme.dimensions.standardMarginBetween} />
-                <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-                  <Trans
-                    i18nKey={'secureMessaging.reply.youCantReplyMigrationMessage.body2'}
-                    components={{ bold: <TextView variant="MobileBodyBold" /> }}
-                    values={{
-                      endDate: getMigrationEndDate(soonestErrorMigration, OHParentScreens.SecureMessaging),
-                    }}
-                  />
-                </TextView>
-                <Box mb={theme.dimensions.standardMarginBetween} />
-                <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-                  {t('secureMessaging.reply.youCantReplyMigrationMessage.note')}
-                </TextView>
-                <LinkWithAnalytics {...linkProps} />
-              </AlertWithHaptics>
-            </Box>
-          )}
+          {renderAlerts()}
           <MessageCard
             message={message}
             folderId={currentFolderIdParam}
