@@ -48,11 +48,16 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
-import { OHParentScreens } from 'components/OHAlertManager'
+import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  FormHeaderTypeConstants,
+  REPLY_WINDOW_IN_DAYS,
+  isMigrationPhaseBlockingReplies,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import {
   useComposeCancelConfirmation,
@@ -155,7 +160,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const hasRecentMessages = thread.some(
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
-  const replyDisabled = isReplyDraft && !hasRecentMessages
+  const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
+  const { data: authorizedServicesData } = useAuthorizedServices()
+  const replyDisabled = isReplyDraft && (!hasRecentMessages || migrationBlocksReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -834,7 +842,15 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {replyDisabled && renderAlert()}
+          {replyDisabled && !migrationBlocksReply && renderAlert()}
+          {migrationBlocksReply && authorizedServicesData && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <OHAlertManager
+                parentScreen={OHParentScreens.SecureMessaging}
+                authorizedServices={authorizedServicesData}
+              />
+            </Box>
+          )}
           <Box>{renderForm()}</Box>
           <Box>{isReplyDraft && renderMessageThread()}</Box>
         </Box>

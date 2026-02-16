@@ -9,7 +9,7 @@ import { LinkProps, useSnackbar } from '@department-of-veterans-affairs/mobile-c
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
-import _, { get } from 'underscore'
+import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
@@ -49,7 +49,12 @@ import {
 import { OHParentScreens } from 'components/OHAlertManager'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  READ,
+  REPLY_WINDOW_IN_DAYS,
+  isMigrationPhaseBlockingReplies,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import CollapsibleMessage from 'screens/HealthScreen/SecureMessaging/ViewMessage/CollapsibleMessage'
 import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/MessageCard'
@@ -187,6 +192,13 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const userInTriageTeam = messageData?.meta?.userInTriageTeam
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
+
+  // Derive OH migration phase from the first thread message or the current message
+  const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
+  const { data: recipientsData } = useAllMessageRecipients()
+  const hasAvailableRecipients = (recipientsData?.data?.length ?? 0) > 0
+
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
@@ -465,7 +477,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && userInTriageTeam && (
+          {replyExpired && userInTriageTeam && !migrationBlocksReply && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -536,6 +548,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
             noProviderError={noProviderError}
+            migrationBlocksReply={migrationBlocksReply}
+            hasAvailableRecipients={hasAvailableRecipients}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
