@@ -205,15 +205,6 @@ jobs:
           working-directory: VAMobile/ios
           bundler-cache: true
 
-      - name: Check for CocoaPods Cache
-        if: inputs.skip_cache != true
-        uses: actions/cache@v3
-        with:
-          path: VAMobile/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('VAMobile/ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
       - name: Install macOS dependencies
         run: |
           brew tap wix/brew
@@ -233,6 +224,24 @@ jobs:
       - name: Build Detox framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Check for CocoaPods Cache
+        if: inputs.skip_cache != true
+        id: pod-cache
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('VAMobile/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install pods
+        if: steps.pod-cache.outputs.cache-hit != 'true'
+        working-directory: VAMobile/ios
+        run: pod install
+
       - name: Check for Build Cache
         id: build-cache
         if: inputs.skip_cache != true
@@ -240,13 +249,6 @@ jobs:
         with:
           path: VAMobile/ios/output
           key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/ios/Podfile.lock','VAMobile/package.json','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','VAMobile/ios/VAMobile/**','VAMobile/ios/*.xcodeproj/**','VAMobile/ios/*.xcworkspace/**') }}
-
-      - name: Set app environment variables
-        run: yarn env:staging
-
-      - name: Install pods
-        working-directory: VAMobile/ios
-        run: pod install
 
       - name: Bundle iOS app
         if: (steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_cache == true)
