@@ -16,7 +16,7 @@ import {
 } from './utils'
 
 export const PrescriptionsE2eIdConstants = {
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 6',
+  DESIRED_DEMO_MODE_USER_ID: 'John Monroe option 6 of 6',
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
   PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
   PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 06/06/2022',
