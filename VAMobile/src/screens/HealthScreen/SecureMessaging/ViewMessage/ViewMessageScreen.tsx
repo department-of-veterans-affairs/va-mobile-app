@@ -465,16 +465,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
             testID="secureMessagingYouCanNoLongerAlertID">
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-            <TextView
-              accessible
-              variant="MobileBody"
-              paragraphSpacing={true}
-              accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
-              {t('secureMessaging.reply.error.ifYouThink')}
-            </TextView>
             <LinkWithAnalytics
               type="custom"
-              text={t('upcomingAppointmentDetails.findYourVAFacility')}
+              text={t('ohAlert.error.linkText')}
               onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
             />
           </AlertWithHaptics>
