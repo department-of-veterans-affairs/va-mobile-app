@@ -28,6 +28,7 @@ const fullTestRun = [
   'Prescriptions',
   'ProfileScreen',
   'PushNotifications',
+  'ReviewClaimDetails',
   'SettingsScreen',
   'SignIn',
   'TravelPay',
