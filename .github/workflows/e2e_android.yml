@@ -218,7 +218,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local/share/Detox
-          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
+          key: ${{ runner.os }}-detox-framework-v3-${{ hashFiles('VAMobile/package.json', '.github/workflows/e2e_android.yml') }}
 
       - name: Build Detox framework
         run: yarn detox build-framework-cache
@@ -303,11 +303,12 @@ jobs:
 
       - name: Set app environment variables
         run: yarn env:staging
+
       - name: Restore Detox Cache
         uses: actions/cache@v3
         with:
           path: ~/.local/share/Detox
-          key: ${{ runner.os }}-detox-framework-${{ hashFiles('VAMobile/package.json') }}
+          key: ${{ runner.os }}-detox-framework-v3-${{ hashFiles('VAMobile/package.json', '.github/workflows/e2e_android.yml') }}
 
       - name: Build Detox framework
         run: yarn detox build-framework-cache
@@ -336,12 +337,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 28
+          api-level: 33
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_6_Pro_API_33
+          avd-name: Pixel_6_Pro_API_28
           script: |
             adb wait-for-device
             adb shell getprop sys.boot_completed
