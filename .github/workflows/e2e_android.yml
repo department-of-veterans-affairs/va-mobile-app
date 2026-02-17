@@ -341,12 +341,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 28
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_6_Pro_API_33
+          avd-name: Pixel_6_Pro_API_28
           script: |
             adb wait-for-device
             adb shell getprop sys.boot_completed
