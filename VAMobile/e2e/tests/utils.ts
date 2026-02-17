@@ -532,14 +532,6 @@ export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
 }
 
-export async function openTravelPayClaims({ useNativeLink = false }) {
-  if (useNativeLink) {
-    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN)).tap()
-  } else {
-    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
-  }
-}
-
 export async function openPayments() {
   await element(by.id(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_ID)).tap()
 }

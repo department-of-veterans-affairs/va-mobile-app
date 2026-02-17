@@ -194,16 +194,19 @@ export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof
 export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFunction<T> => {
   const navigation = useNavigation()
   type TT = keyof T
-  return <X extends TT>(routeName: X, args?: T[X]) => {
-    if (waygateNativeAlert(`WG_${String(routeName)}` as WaygateToggleType)) {
-      navigation.dispatch(
-        CommonActions.navigate({
-          name: `${String(routeName)}`,
-          params: args,
-        }),
-      )
-    }
-  }
+  return useCallback(
+    <X extends TT>(routeName: X, args?: T[X]) => {
+      if (waygateNativeAlert(`WG_${String(routeName)}` as WaygateToggleType)) {
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: `${String(routeName)}`,
+            params: args,
+          }),
+        )
+      }
+    },
+    [navigation],
+  )
 }
 type RouteNavParams<T extends ParamListBase> = {
   [K in keyof T]: T[K]
@@ -295,7 +298,7 @@ export function useGiveFeedback(): (task: string) => void {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return (task: string) => {
+  return useCallback((task: string) => {
     const onOKPress = () => {
       logAnalyticsEvent(Events.vama_feedback_ask(task, true))
       navigateTo('FeedbackIntercept', { task })
@@ -313,7 +316,7 @@ export function useGiveFeedback(): (task: string) => void {
       },
       { text: t('giveFeedback'), onPress: onOKPress, style: 'default' },
     ])
-  }
+  }, [navigateTo, t])
 }
 
 export type UseAlertProps = {
