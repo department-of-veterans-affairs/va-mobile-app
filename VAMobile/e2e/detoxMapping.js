@@ -11,7 +11,6 @@ const fullTestRun = [
   'AppointmentsTestTime',
   'AvailabilityFramework',
   'Claims',
-  'ReviewClaimDetails',
   'ContactInformation',
   'DecisionLetters',
   'DirectDeposit',
