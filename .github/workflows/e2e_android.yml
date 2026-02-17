@@ -347,6 +347,8 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
+          ram-size: 3072M
+          heap-size: 512M
           script: |
             adb wait-for-device
             adb shell getprop sys.boot_completed
