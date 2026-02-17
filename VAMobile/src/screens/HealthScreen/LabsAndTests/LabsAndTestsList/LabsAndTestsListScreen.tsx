@@ -287,7 +287,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
               logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICAL_RECORDS))
               navigateTo('Webview', {
                 url: LINK_URL_MHV_VA_MEDICAL_RECORDS,
-                displayTitle: t('labsAndTests.medicalImages.linkTitle'),
+                displayTitle: t('vaMedicalRecords.title'),
                 loadingMessage: t('webview.medicalRecords.loading'),
                 useSSO: true,
               })
