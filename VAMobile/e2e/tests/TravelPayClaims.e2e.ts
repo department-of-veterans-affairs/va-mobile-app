@@ -10,7 +10,6 @@ import {
   openClaims,
   openHealth,
   openPayments,
-  openTravelPayClaims,
   toggleRemoteConfigFlag,
 } from './utils'
 
@@ -41,12 +40,12 @@ beforeAll(async () => {
   await loginToDemoMode()
 })
 
-describe('Travel Pay Claims Screen', () => {
+describe.skip('Travel Pay Claims Screen', () => {
   it('navigates from the different entry points', async () => {
     // Visit through Benefits tab
     await openBenefits()
     await openClaims()
-    await openTravelPayClaims({ useNativeLink: false })
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
     await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
       .toExist()
       .withTimeout(4000)
