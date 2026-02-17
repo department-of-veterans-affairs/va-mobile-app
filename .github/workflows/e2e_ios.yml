@@ -247,8 +247,6 @@ jobs:
         with:
           path: VAMobile/ios/output
           key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/ios/Podfile.lock','VAMobile/package.json','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','VAMobile/ios/VAMobile/**','VAMobile/ios/*.xcodeproj/**','VAMobile/ios/*.xcworkspace/**') }}
-          restore-keys: |
-            ${{ runner.os }}-detox-ios-build-
 
       - name: Set app environment variables
         run: yarn env:staging

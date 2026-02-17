@@ -232,8 +232,6 @@ jobs:
         with:
           path: VAMobile/android/app/build/outputs/apk
           key: ${{ runner.os }}-detox-android-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/android/*.gradle','VAMobile/android/app/*.gradle','VAMobile/android/gradle.properties','VAMobile/android/app/src/**','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','.github/workflows/e2e_android.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-detox-android-build-
 
       - name: Set app environment variables
         run: yarn env:staging
