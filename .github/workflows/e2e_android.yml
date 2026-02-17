@@ -215,18 +215,6 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit == 'true'
         run: yarn patch-package
 
-      - name: Check for Detox Cache
-        if: inputs.skip_cache != true
-        id: detox-cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/Detox
-          key: ${{ runner.os }}-detox-framework-v3-${{ hashFiles('VAMobile/package.json', '.github/workflows/e2e_android.yml') }}
-
-      - name: Build Detox framework
-        if: steps.detox-cache.outputs.cache-hit != 'true'
-        run: yarn detox build-framework-cache
-
       - name: Check for Build Cache
         id: build-cache
         if: inputs.skip_cache != true
@@ -307,9 +295,6 @@ jobs:
 
       - name: Set app environment variables
         run: yarn env:staging
-
-      - name: Build Detox framework
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
       - name: Download built Android app
         uses: actions/download-artifact@v4
