@@ -335,6 +335,8 @@ jobs:
             adb shell input keyevent 82
             mkdir -p artifacts
             ${{ env.CMD }} || (adb devices | grep "\tdevice" && timeout 60s adb logcat -d > artifacts/logcat.txt || echo "Device not found or logcat timed out" && exit 1)
+            # Force-kill the emulator process so android-emulator-runner teardown doesn't hang waiting for it to exit
+            pkill -f qemu-system-x86_64 || true
 
       - name: Upload e2e-junit
         if: failure() || success()
