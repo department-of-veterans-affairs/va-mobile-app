@@ -35,9 +35,10 @@ export type MessageCardProps = {
   folderId: number
   userInTriageTeam?: boolean
   replyExpired?: boolean
+  stationNumber?: string
 }
 
-function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: MessageCardProps) {
+function MessageCard({ message, folderId, userInTriageTeam, replyExpired, stationNumber }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -155,7 +156,12 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
   }
 
   const onReplyPress = () =>
-    navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+    navigateTo('ReplyMessage', {
+      messageID: message.messageId,
+      attachmentFileToAdd: {},
+      attachmentFileToRemove: {},
+      stationNumber,
+    })
 
   function getReplyOrStartNewMessageButton() {
     return (
