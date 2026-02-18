@@ -8,14 +8,14 @@ jobs:
     uses: ./.github/workflows/get-slack-user-id.yml
     secrets: inherit
     with:
-      git_handle: dumathane
+      git_handle: matthew-df
 
   get_slack_id_user2:
     name: Get Slack ID for User2
     uses: ./.github/workflows/get-slack-user-id.yml
     secrets: inherit
     with:
-      git_handle: kellylein
+      git_handle: matthew-df
 
   notify_slack:
     name: Notify Both Slack Users
@@ -23,5 +23,5 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-app
+      channel_name: va-mobile-sandbox
       message: '📱 New Onboarding request for: *${{ github.event.issue.title }}* <@${{ needs.get_slack_id_user1.outputs.slackId }}> <@${{ needs.get_slack_id_user2.outputs.slackId }}> | <${{ github.event.issue.html_url }}|View Issue>'
