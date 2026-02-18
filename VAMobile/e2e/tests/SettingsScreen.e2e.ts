@@ -39,7 +39,7 @@ beforeAll(async () => {
   await openSettings()
 })
 
-describe.skip('Settings Screen', () => {
+describe('Settings Screen', () => {
   it('should show settings list content', async () => {
     await waitFor(element(by.text(SettingsE2eIdConstants.SETTINGS_SCREEN_TEXT)))
       .toExist()
@@ -111,12 +111,22 @@ describe.skip('Settings Screen', () => {
 
   it('should show and dismiss signout popup', async () => {
     await element(by.id(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
-    await expect(element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
-    await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
+    await waitFor(element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT)))
+      .toExist()
+      .withTimeout(4000)
+    // iOS 26: native action sheet Cancel button is not accessible via text/label
+    // Dismiss by swiping down on the action sheet (equivalent gesture in iOS 26 liquid glass design)
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT)).swipe('down', 'fast', 0.75)
+    await waitFor(element(by.id(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)))
+      .toExist()
+      .withTimeout(4000)
   })
 
   it('should sign out', async () => {
     await element(by.id(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
+    await waitFor(element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT)))
+      .toExist()
+      .withTimeout(4000)
     await element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT)).tap()
     await expect(element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID))).toExist()
   })

@@ -15,7 +15,7 @@
     "ios": {
       "type": "ios.app",
       "binaryPath": "ios/output/Build/Products/Release-iphonesimulator/VAMobile.app",
-      "build": "cd ios && xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO STRIP_INSTALLED_PRODUCT=NO build && cd .."
+      "build": "cd ios && xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -derivedDataPath ./output -sdk iphonesimulator ARCHS=arm64 BUILD_LIBRARIES_FOR_DISTRIBUTION=YES DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO STRIP_INSTALLED_PRODUCT=NO build && cd .."
     },
     "android": {
       "type": "android.apk",
