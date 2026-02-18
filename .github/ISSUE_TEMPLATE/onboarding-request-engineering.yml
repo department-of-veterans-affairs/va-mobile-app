@@ -32,7 +32,6 @@ body:
     placeholder: '@Alex-smith-va'
   validations:
     required: true
-
 - type: input
   id: vaemail
   attributes:
@@ -41,7 +40,6 @@ body:
     placeholder: 'Alex.Smith1@va.gov'
   validations:
     required: true
-
 - type: input
   id: teamname
   attributes:
@@ -49,7 +47,6 @@ body:
     description: Exposing the primary team name helps us sort access requests
   validations:
     required: true
-
 - type: input
   id: vaoctopo
   attributes:
@@ -57,15 +54,10 @@ body:
     description: Add a PO helps us triage requests, and know who the main point of contact is.
   validations:
     required: true
-
-
-
 - type: markdown
   attributes:
     value: |
       The checklist items below should be left blank, as they will be filled out during the onboarding process.
-
-
 - type: checkboxes
   attributes:
     label: System access granted by VA Mobile Platform
@@ -76,7 +68,6 @@ body:
     - label: Firebase (VA Mobile will provide)
     - label: App Tester (VA Mobile will provide through Firebase)
     - label: Write access to applicable repositories (VA Mobile will provide)
-
 - type: checkboxes
   attributes:
     label: Tasks for Experience Team member to complete
