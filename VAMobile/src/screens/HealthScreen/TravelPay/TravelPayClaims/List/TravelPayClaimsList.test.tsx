@@ -2,11 +2,13 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
 import { render } from 'testUtils'
 import getEnv from 'utils/env'
+import { formatDateMMMMDDYYYY, getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -54,7 +56,7 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
         id: 'f33ef640-000f-4ecf-82b8-1c50df13d178',
         claimNumber: 'c68baadf-3d95-45d5-857b-eca5bef6d4a5',
         claimStatus: 'Claim submitted',
-        appointmentDateTime: '2025-08-10T20:54:34.828Z',
+        appointmentDateTime: '2025-08-10T23:54:34.828Z',
         facilityName: 'Cheyenne VA Medical Center',
         createdOn: '2025-08-11T20:54:34.828Z',
         modifiedOn: '2025-08-11T20:54:34.828Z',
@@ -71,7 +73,7 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
         claimStatus: 'Saved',
         appointmentDateTime: '2025-08-09T20:54:34.828Z',
         facilityName: 'Tomah VA Medical Center',
-        createdOn: '2025-08-10T20:54:34.828Z',
+        createdOn: '2025-08-10T2:54:34.828Z',
         modifiedOn: '2025-08-10T20:54:34.828Z',
         totalCostRequested: 50.0,
         reimbursementAmount: 25.0,
@@ -151,6 +153,20 @@ describe('TravelPayClaimsList', () => {
     expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
 
     expect(screen.queryByTestId(t('travelPay.statusList.loading'))).toBeFalsy()
+  })
+
+  it('displays time correctly for list items', () => {
+    initializeTestInstance()
+
+    const appointmentDateTime = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].attributes.appointmentDateTime
+    const dateString = formatDateMMMMDDYYYY(appointmentDateTime)
+    const timeString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.TIME_SIMPLE)
+
+    const dateText = screen.getByText(`${dateString} at`)
+    const timeText = screen.getByText(`${timeString} appointment`) // No timezone
+
+    expect(dateText).toBeTruthy()
+    expect(timeText).toBeTruthy()
   })
 
   it('does not render pagination when total <= page size', () => {
