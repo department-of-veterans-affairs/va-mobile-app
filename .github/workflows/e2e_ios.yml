@@ -227,7 +227,7 @@ jobs:
           path: |
             VAMobile/ios/Pods
             VAMobile/ios/build/generated
-          key: ${{ runner.os }}-pods-${{ hashFiles('VAMobile/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-pods-v2-${{ hashFiles('VAMobile/ios/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
 
