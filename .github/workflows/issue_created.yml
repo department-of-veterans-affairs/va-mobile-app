@@ -1,9 +1,9 @@
 name: '[Admin] Issue created notifications'
 
-on: push
-#  issues:
-#    types:
-#      - opened
+on:
+  issues:
+    types:
+      - opened
 
 jobs:
   user-onboarding-issue-notification:
@@ -13,7 +13,7 @@ jobs:
     secrets: inherit
   automation-issue-notification:
     name: Notify Slack of DevOps issues
-    #if: contains(github.event.issue.labels.*.name, 'devops')
+    if: contains(github.event.issue.labels.*.name, 'devops')
     uses: ./.github/workflows/automation-issue-notification.yml
     secrets: inherit
   go-live-issue-notification:
@@ -22,7 +22,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app
       message: 'New Go-Live approval request for: *${{ github.event.issue.title }}* | <${{ github.event.issue.html_url }}|View Issue>'
   project-kickoff-issue-notification:
     name: Notify Slack of new project kickoff issues
@@ -30,5 +30,5 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app
       message: 'New Project Kickoff approval request for: *${{ github.event.issue.title }}* | <${{ github.event.issue.html_url }}|View Issue>'

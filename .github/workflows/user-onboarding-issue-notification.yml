@@ -23,5 +23,5 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app
       message: '📱 New Onboarding request for: *${{ github.event.issue.title }}* <@${{ needs.get_slack_id_user1.outputs.slackId }}> <@${{ needs.get_slack_id_user2.outputs.slackId }}> | <${{ github.event.issue.html_url }}|View Issue>'
