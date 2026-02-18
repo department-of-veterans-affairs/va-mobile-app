@@ -8,14 +8,14 @@ jobs:
     uses: ./.github/workflows/get-slack-user-id.yml
     secrets: inherit
     with:
-      git_handle: matthew-df
+      git_handle: dumathane
 
   get_slack_id_user2:
     name: Get Slack ID for User2
     uses: ./.github/workflows/get-slack-user-id.yml
     secrets: inherit
     with:
-      git_handle: matthew-df
+      git_handle: kellylein
 
   notify_slack:
     name: Notify Both Slack Users
