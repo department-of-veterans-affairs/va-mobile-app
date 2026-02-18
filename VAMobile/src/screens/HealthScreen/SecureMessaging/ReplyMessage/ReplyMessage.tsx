@@ -77,7 +77,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const { messageID, attachmentFileToAdd, saveDraftConfirmFailed } = route.params
+  const { messageID, attachmentFileToAdd, saveDraftConfirmFailed, stationNumber } = route.params
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
   const {
     mutate: sendMessage,
@@ -117,6 +117,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     category: category,
     subject: subject,
     recipient_id: receiverID,
+    station_number: stationNumber,
   } as SecureMessagingFormData
   // Ref for use in snackbar callbacks to ensure we have the latest messageData
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)
