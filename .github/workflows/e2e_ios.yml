@@ -224,7 +224,9 @@ jobs:
         id: pod-cache
         uses: actions/cache@v3
         with:
-          path: VAMobile/ios/Pods
+          path: |
+            VAMobile/ios/Pods
+            VAMobile/ios/build/generated
           key: ${{ runner.os }}-pods-${{ hashFiles('VAMobile/ios/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
