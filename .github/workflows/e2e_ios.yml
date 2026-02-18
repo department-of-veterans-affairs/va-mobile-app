@@ -205,14 +205,6 @@ jobs:
           working-directory: VAMobile/ios
           bundler-cache: true
 
-      - name: Install macOS dependencies
-        run: |
-          brew tap wix/brew
-          brew install applesimutils
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: 1
-          HOMEBREW_NO_INSTALL_CLEANUP: 1
-
       - name: Install npm dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --non-interactive
@@ -309,10 +301,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
+      - name: Cache applesimutils
+        id: applesimutils-cache
+        if: inputs.skip_cache != true
+        uses: actions/cache@v3
+        with:
+          path: /opt/homebrew/Cellar/applesimutils
+          key: ${{ runner.os }}-applesimutils-${{ hashFiles('.github/workflows/e2e_ios.yml') }}
+
       - name: Install macOS dependencies
         run: |
-          brew tap wix/brew
-          brew install applesimutils
+          if [[ "${{ steps.applesimutils-cache.outputs.cache-hit }}" == "true" ]]; then
+            brew link applesimutils
+          else
+            brew tap wix/brew
+            brew install applesimutils
+          fi
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
