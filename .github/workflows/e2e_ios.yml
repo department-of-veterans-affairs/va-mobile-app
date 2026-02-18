@@ -301,7 +301,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
-      - name: Cache applesimutils
+      - name: Restore applesimutils Cache
         id: applesimutils-cache
         if: inputs.skip_cache != true
         uses: actions/cache@v3
