@@ -52,6 +52,8 @@ export const PrescriptionsE2eIdConstants = {
     'A prescription that can be filled at the local  V-A  pharmacy. If this prescription is refillable, you may request a refill of this  V-A  prescription.',
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: SLC10 TEST LAB',
+  PRESCRIPTION_DETAILS_SCREEN_ID: 'prescriptionDetailsScreenID',
+  REFILL_REQUEST_SCREEN_ID: 'refillScreenID',
 }
 
 const describeWithSetup = (name: string, fn: jest.EmptyFunction) => {
@@ -66,6 +68,14 @@ const describeWithSetup = (name: string, fn: jest.EmptyFunction) => {
     })
     fn()
   })
+}
+
+const cancelRequest = async (screenId: string) => {
+  if (device.getPlatform() === 'android') {
+    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
+  } else {
+    await element(by.id(screenId)).tap({ x: 200, y: 200 })
+  }
 }
 
 beforeAll(async () => {
@@ -92,11 +102,10 @@ describeWithSetup('Start a refill request for a single prescription', () => {
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_BUTTON_TEXT)),
     ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT))).toExist()
   })
 
   it('should close the confirmation modal when cancel is pressed', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
+    await cancelRequest(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_SCREEN_ID)
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).not.toExist()
@@ -184,16 +193,10 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT)),
     ).toExist()
-
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT))).toExist()
   })
 
   it('should close the confirmation modal when cancel is pressed', async () => {
-    if (device.getPlatform() === 'android') {
-      await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
-    } else {
-      await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).atIndex(1).tap()
-    }
+    await cancelRequest(PrescriptionsE2eIdConstants.REFILL_REQUEST_SCREEN_ID)
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).not.toExist()

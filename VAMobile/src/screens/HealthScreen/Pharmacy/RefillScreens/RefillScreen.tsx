@@ -187,7 +187,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
         }
         onSubmitPressed()
       }}
-      screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID}>
+      screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID}
+      testID="refillScreenID">
       {loadingHistory ? (
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       ) : showLoadingScreenRequestRefills ? (
