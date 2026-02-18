@@ -168,15 +168,16 @@ function MainApp() {
     const previousRouteName = routeNameRef.current
     const currentRouteName = navigationRef.current?.getCurrentRoute()?.name
 
+    // Update ref immediately to prevent race conditions in rapid successive calls
+    // Like navigating across tabs directly to a screen
+    routeNameRef.current = currentRouteName || ''
+
     if (previousRouteName !== currentRouteName && currentRouteName !== undefined) {
       await analytics().logScreenView({
         screen_name: currentRouteName,
         screen_class: currentRouteName,
       })
     }
-
-    // Save the current route name for later comparison
-    routeNameRef.current = currentRouteName || ''
   }
 
   return (

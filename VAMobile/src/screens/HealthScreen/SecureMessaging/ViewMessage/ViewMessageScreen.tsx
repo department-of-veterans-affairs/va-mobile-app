@@ -164,6 +164,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const userInTriageTeam = messageData?.meta?.userInTriageTeam
+  const stationNumber = messageData?.meta?.stationNumber
 
   useEffect(() => {
     if (threadFetched) {
@@ -446,6 +447,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             folderId={currentFolderIdParam}
             userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
+            stationNumber={stationNumber}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
