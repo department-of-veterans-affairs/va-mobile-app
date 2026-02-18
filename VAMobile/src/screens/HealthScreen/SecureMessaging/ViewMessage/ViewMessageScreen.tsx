@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -450,9 +449,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                   {t('secureMessaging.reply.error.ifYouThink')}
                 </TextView>
                 <LinkWithAnalytics
-                  type="custom"
+                  type="url"
                   text={t('upcomingAppointmentDetails.findYourVAFacility')}
-                  onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+                  url={WEBVIEW_URL_FACILITY_LOCATOR}
                 />
               </AlertWithHaptics>
             </Box>
