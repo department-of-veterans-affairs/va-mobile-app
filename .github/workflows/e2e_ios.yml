@@ -232,7 +232,6 @@ jobs:
             ${{ runner.os }}-pods-
 
       - name: Install pods
-        if: steps.pod-cache.outputs.cache-hit != 'true'
         working-directory: VAMobile/ios
         run: pod install
 
