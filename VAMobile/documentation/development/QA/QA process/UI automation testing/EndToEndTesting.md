@@ -7,7 +7,7 @@ sidebar_position: 1
 
 ## Adding a new e2e test to navigation (Note: The only things tested are places in the app where you have the ability to navigate through the bottom navigation bar)
 
-1. Open the Navigation.e2e test
+1. Open the NavigationShared.e2e test
 2. Add the necessary information to navigationDic. The dictionary is broken down into the 4 sections found in the bottom navigation bar: Home, Health, Benefits, and Payments. Add new tests under the appropriate key value.
    1. The array follows the following format: [a, b, c]
       1. For single e2e tests: string of name of the test. Ex: ‘DisabilityRatings.e2e’. For multiple e2e tests: array of strings with the names of the tests. Ex: [‘Claims.e2e’, ‘Appeals.e2e’]
