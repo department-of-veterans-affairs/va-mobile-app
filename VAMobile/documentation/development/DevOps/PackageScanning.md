@@ -11,15 +11,14 @@ There may be some times that we need to scan packages that are being added to th
 
 > **You will need to be a member of the `bypass-package-lock` protection group to complete this next step.**
 
-Currently any changes that are made to any `package.json` files are reviewed before a merge is to happen. Upon approval, the rest of the scanning will complete. If the security-scan workflow detects a `package.json` change, it will pass the workflow to the bypass-packag-check environent check. When this happens, a team is alerted that a package needs to be reviewed.
+Currently any changes that are made to any `package.json` files are reviewed before a merge is to happen. Upon approval, the rest of the scanning will complete. If the security-scan workflow detects a `package.json` change, it will pass the workflow to the bypass-package-lock environment check. When this happens, a team is alerted that a package needs to be reviewed.
 
-As of now, we look at the PR and check for `package.json` updates. Below you can see this is a script update that triggered the approval.
-
+When this scan runs, it will check the most recent version of package.json for any changes. If changes are detected, it will print these changes in the action summary. It will then take these changes and run them through `npm info` to verify all the data is correct. It will then pass them through `guarddog`. This will check for any vulnerabilities. Once the scanning is complete and the changes are approved, a label will be applied to the PR stating the checks are complete. This will stop unnecessary secondary scans. If the `package.json` is updated again, it will remove the label, and it will trigger the entire process again. If the scan detects anything that is not a package update, it will pass the check automatically. (Below is an example of a script change that will pass this check)
 ![MobilePackageUpdate](../../static/img/devops/mobPackageUpdate.png)
 
-### npm review
+### npm info
 
-The package will need to be checked against the npm listing for it. For this we can use `npm info`.
+The package will be checked against the npm listing for it. For this we can use `npm info`.
 
 ```bash
 npm info @testing-library/jest-dom
@@ -81,7 +80,16 @@ Found 0 potentially malicious indicators scanning @testing-library/jest-dom
 
 ### Results
 
-Once you have the results, locate the job that is waiting for the approval. You can find this on the [Actions](https://github.com/department-of-veterans-affairs/va-mobile-app/actions) page of the repo.
+The results of all the scans will be printed to the summary of the action. The same info will also be added to a slack thread in a more truncated form with links to the workflow.
+The below image is a snippet of the summary of the action workflow with package scanning.
+
+![MobilePackageScan](../../static/img/devops/mobPackageScan.png)
+
+This image shows that the job ran, but there was no scanning completed.
+
+![MobilePackageNoScan](../../static/img/devops/mobPackageNoScan.png)
+
+When you are ready to approve or deny the change, head over to the [Actions](https://github.com/department-of-veterans-affairs/va-mobile-app/actions) page of the repo.
 
 ![MobileRepoActions](../../static/img/devops/mobActionsMain.png)
 
@@ -100,7 +108,3 @@ On the Review Deployments window you will see the job waiting. Click on `Review 
 In the Review Deployment Modal, make sure you are in the group, check the `bypass-package-lock` box and enter the reasoning for deployment. If it is approved, click `Approve and Deploy`. If it is denied, click `reject`
 
 ![MobileDeployModal](../../static/img/devops/mobModalFinal.png)
-
-For documentation purposes, add a comment to the PR that shows the scan status also so it is documented.
-
-![MobileCommentStatus](../../static/img/devops/mobCommentStatus.png)

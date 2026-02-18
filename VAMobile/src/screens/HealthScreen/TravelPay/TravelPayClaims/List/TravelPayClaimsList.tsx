@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { DateTime } from 'luxon'
+
 import { TravelPayClaimData } from 'api/types'
 import {
   Box,
@@ -18,7 +20,7 @@ import { CONNECTION_STATUS } from 'constants/offline'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
 import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -81,7 +83,7 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
 
       const dateString = formatDateMMMMDDYYYY(appointmentDateTime)
 
-      const timeString = getFormattedTimeForTimeZone(appointmentDateTime)
+      const timeString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.TIME_SIMPLE)
       textLines.push({
         text: t('travelPay.statusList.appointmentDateLine1', { date: dateString }),
         variant: 'MobileBodyBold',
