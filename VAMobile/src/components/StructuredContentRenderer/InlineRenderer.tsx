@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextStyle } from 'react-native'
 
-import { InlineContent, InlineElement } from 'api/types'
+import { InlineContent } from 'api/types'
 import { ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import type { FontVariant } from 'components/TextView'
 
@@ -35,58 +35,37 @@ export const InlineRenderer = ({
     return (
       <>
         {content.map((item, idx) => (
-          <InlineRenderer
-            key={idx}
-            content={item as InlineContent}
-            variantOverride={variantOverride}
-            styleOverride={styleOverride}
-          />
+          <InlineRenderer key={idx} content={item} variantOverride={variantOverride} styleOverride={styleOverride} />
         ))}
       </>
     ) as React.ReactElement
   }
 
-  const el = content as InlineElement
-  switch (el.type) {
+  switch (content.type) {
     case 'bold':
-      return (
-        <InlineRenderer
-          content={(el as { content: InlineContent }).content}
-          variantOverride="MobileBodyBold"
-          styleOverride={styleOverride}
-        />
-      )
+      return <InlineRenderer content={content.content} variantOverride="MobileBodyBold" styleOverride={styleOverride} />
     case 'italic':
       return (
         <InlineRenderer
-          content={(el as { content: InlineContent }).content}
+          content={content.content}
           variantOverride={variantOverride}
-          styleOverride={italicTextStyle}
+          styleOverride={{ ...styleOverride, ...italicTextStyle }}
         />
       )
-    case 'link': {
-      const linkEl = el as { href: string; text: string; testId?: string }
-      // linkEl.style ('active' | 'external') could be mapped when design system Link supports it
+    case 'link':
       return (
         <LinkWithAnalytics
           type="url"
-          url={linkEl.href}
-          text={linkEl.text}
-          a11yLabel={linkEl.text}
-          testID={linkEl.testId}
+          url={content.href}
+          text={content.text}
+          a11yLabel={content.text}
+          testID={content.testId}
           icon="no icon"
           disablePadding
         />
       )
-    }
     case 'telephone':
-      return (
-        <ClickToCallPhoneNumber
-          phone={(el as { contact: string }).contact}
-          ttyBypass={!(el as { tty?: boolean }).tty}
-          a11yLabel={(el as { contact: string }).contact}
-        />
-      )
+      return <ClickToCallPhoneNumber phone={content.contact} ttyBypass={!!content.tty} />
     case 'lineBreak':
       return <TextView variant="MobileBody">{'\n'}</TextView>
     default:

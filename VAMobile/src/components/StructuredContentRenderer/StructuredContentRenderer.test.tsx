@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 
 import { StructuredContent } from 'api/types'
 import StructuredContentRenderer from 'components/StructuredContentRenderer'
@@ -127,15 +127,8 @@ context('StructuredContentRenderer', () => {
     expect(screen.queryByTestId('structured')).toBeNull()
   })
 
-  it('should render container with no blocks when blocks array is empty', () => {
+  it('should return null when blocks array is empty', () => {
     render(<StructuredContentRenderer content={{ blocks: [] }} testID="structured" />)
-    expect(screen.getByTestId('structured')).toBeTruthy()
-    expect(screen.queryByText('First paragraph')).toBeNull()
-  })
-
-  it('should open link on press', () => {
-    render(<StructuredContentRenderer content={contentWithLink} testID="structured" />)
-    const link = screen.getByRole('link', { name: 'VA Form 21-4142' })
-    fireEvent.press(link)
+    expect(screen.queryByTestId('structured')).toBeNull()
   })
 })

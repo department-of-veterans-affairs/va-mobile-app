@@ -514,8 +514,8 @@ export type LineBreakInline = {
 /** Union of all inline elements */
 export type InlineElement = BoldInline | ItalicInline | LinkInline | TelephoneInline | LineBreakInline
 
-/** Inline content: string or array of strings and inline elements (recursive for bold/italic) */
-export type InlineContent = string | Array<string | InlineElement>
+/** Inline content: string, single inline element, or array of strings and inline elements */
+export type InlineContent = string | InlineElement | Array<string | InlineElement>
 
 /** Paragraph block */
 export type ParagraphBlock = {

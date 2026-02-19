@@ -12,7 +12,7 @@ export type StructuredContentRendererProps = {
 
 /** Renders structured content (longDescription/nextSteps) from the API. */
 const StructuredContentRenderer = ({ content, testID }: StructuredContentRendererProps): React.ReactElement | null => {
-  if (!content?.blocks || !Array.isArray(content.blocks)) {
+  if (!content?.blocks || !Array.isArray(content.blocks) || content.blocks.length === 0) {
     return null
   }
 

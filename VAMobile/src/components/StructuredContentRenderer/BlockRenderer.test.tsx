@@ -64,9 +64,9 @@ context('BlockRenderer', () => {
           style: 'bullet',
           items: [
             'Simple item',
-            ['Item with ', { type: 'bold' as const, content: 'bold text' }],
-            { type: 'link' as const, text: 'Link item', href: '/test' },
-          ] as InlineContent[],
+            ['Item with ', { type: 'bold', content: 'bold text' }],
+            { type: 'link', text: 'Link item', href: '/test' },
+          ],
         }}
       />,
     )
@@ -137,10 +137,10 @@ context('BlockRenderer', () => {
           items: [
             'String item',
             null as unknown as InlineContent,
-            { type: 'bold' as const, content: 'Bold object' },
+            { type: 'bold', content: 'Bold object' },
             ['Array ', 'item'],
             '',
-          ] as InlineContent[],
+          ],
         }}
       />,
     )
@@ -159,9 +159,9 @@ context('BlockRenderer', () => {
           items: [
             'Valid string',
             [] as unknown as InlineContent,
-            { type: 'bold' as const, content: 'Valid object' },
+            { type: 'bold', content: 'Valid object' },
             ['Valid', ' array'],
-          ] as InlineContent[],
+          ],
         }}
       />,
     )

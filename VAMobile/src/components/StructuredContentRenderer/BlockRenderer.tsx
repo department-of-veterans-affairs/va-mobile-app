@@ -21,7 +21,7 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
   switch (block.type) {
     case 'paragraph':
       return (
-        <Box mb={marginBetween} display="flex" flexDirection="row" flexWrap="wrap" accessible accessibilityRole="text">
+        <Box mb={marginBetween} display="flex" flexDirection="row" flexWrap="wrap">
           <InlineRenderer content={block.content} />
         </Box>
       )
@@ -40,16 +40,14 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
       }
 
       return (
-        <Box mb={marginBetween} accessible accessibilityRole="list">
+        <Box mb={marginBetween} accessibilityRole="list">
           {validItems.map((item, idx) => (
             <Box
               key={idx}
               display="flex"
               flexDirection="row"
               alignItems="flex-start"
-              mb={block.style === 'numbered' ? 8 : undefined}
-              accessible
-              accessibilityRole="text">
+              mb={block.style === 'numbered' ? 8 : undefined}>
               {block.style === 'numbered' ? (
                 <Box mr={20} mt={12} minWidth={16}>
                   <TextView variant="MobileBody">{idx + 1}.</TextView>
