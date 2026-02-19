@@ -5,7 +5,6 @@ import { screen } from '@testing-library/react-native'
 import { Facility, FacilityInfo, MigratingFacility, MigrationPhases } from 'api/types'
 import { OHParentScreens } from 'components/OHAlertManager'
 import { context, render } from 'testUtils'
-
 import {
   allFacilitiesInMigrationErrorState,
   anyFacilitiesInMigrationErrorState,
@@ -15,7 +14,7 @@ import {
   getMigrationWarningMessage,
   getMigrationsInErrorState,
   parentScreenToPhaseMap,
-} from './ohMigration'
+} from 'utils/ohMigration'
 
 const mockFacilities: FacilityInfo[] = [
   { facilityId: 528, facilityName: 'Test VA Medical Center' },

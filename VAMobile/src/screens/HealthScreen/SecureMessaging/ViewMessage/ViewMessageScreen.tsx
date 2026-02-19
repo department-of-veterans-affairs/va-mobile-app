@@ -61,7 +61,6 @@ import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/Messag
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { DemoState } from 'store/slices/demoSlice'
-import { render } from 'testUtils'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { a11yLabelVA } from 'utils/a11yLabel/va'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
