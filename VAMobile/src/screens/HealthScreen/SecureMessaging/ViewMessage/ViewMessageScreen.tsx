@@ -418,7 +418,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          {!providerAllowsReply && userInTriageTeam && (
+          {!providerAllowsReply && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -428,7 +428,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          {!userInTriageTeam && (
+          {!userInTriageTeam && providerAllowsReply && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
