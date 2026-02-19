@@ -6,12 +6,12 @@ import { Facility, FacilityInfo, MigratingFacility, MigrationPhases } from 'api/
 import { OHParentScreens } from 'components/OHAlertManager'
 import { context, render } from 'testUtils'
 import {
+  MigrationErrorMessage,
+  MigrationWarningMessage,
   allFacilitiesInMigrationErrorState,
   anyFacilitiesInMigrationErrorState,
   getMigrationEndDate,
-  getMigrationErrorMessage,
   getMigrationStartDate,
-  getMigrationWarningMessage,
   getMigrationsInErrorState,
   parentScreenToPhaseMap,
 } from 'utils/ohMigration'
@@ -294,7 +294,7 @@ context('ohMigration', () => {
     })
   })
 
-  describe('getMigrationWarningMessage', () => {
+  describe('MigrationWarningMessage', () => {
     const WarningMessageWrapper = ({
       parentScreen,
       currentPhase,
@@ -303,7 +303,7 @@ context('ohMigration', () => {
       currentPhase: string
     }) => {
       const migration = createMigration(currentPhase)
-      return <>{getMigrationWarningMessage(migration, parentScreen)}</>
+      return <MigrationWarningMessage migration={migration} parentScreen={parentScreen} />
     }
 
     it('should render a warning alert for appointments', () => {
@@ -337,7 +337,7 @@ context('ohMigration', () => {
     it('should render with single facility', () => {
       const SingleFacilityWrapper = () => {
         const migration = createMigration('p0', [mockFacilities[0]])
-        return <>{getMigrationWarningMessage(migration, OHParentScreens.Appointments)}</>
+        return <MigrationWarningMessage migration={migration} parentScreen={OHParentScreens.Appointments} />
       }
       render(<SingleFacilityWrapper />)
       expect(screen.getByText('Test VA Medical Center')).toBeTruthy()
@@ -345,7 +345,7 @@ context('ohMigration', () => {
     })
   })
 
-  describe('getMigrationErrorMessage', () => {
+  describe('MigrationErrorMessage', () => {
     const ErrorMessageWrapper = ({
       parentScreen,
       currentPhase,
@@ -354,7 +354,7 @@ context('ohMigration', () => {
       currentPhase: string
     }) => {
       const migration = createMigration(currentPhase)
-      return <>{getMigrationErrorMessage(migration, parentScreen)}</>
+      return <MigrationErrorMessage migration={migration} parentScreen={parentScreen} />
     }
 
     it('should render an error alert for appointments', () => {
@@ -407,7 +407,7 @@ context('ohMigration', () => {
     it('should render with single facility', () => {
       const SingleFacilityWrapper = () => {
         const migration = createMigration('p2', [mockFacilities[0]])
-        return <>{getMigrationErrorMessage(migration, OHParentScreens.Appointments)}</>
+        return <MigrationErrorMessage migration={migration} parentScreen={OHParentScreens.Appointments} />
       }
       render(<SingleFacilityWrapper />)
       expect(screen.getByText('Test VA Medical Center')).toBeTruthy()

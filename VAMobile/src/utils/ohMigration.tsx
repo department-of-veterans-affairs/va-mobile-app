@@ -71,7 +71,13 @@ export const getMigrationStartDate = (migration: MigratingFacility, feature: OHP
   return migration.phases[startDatePhase as keyof typeof migration.phases]
 }
 
-export const getMigrationWarningMessage = (migration: MigratingFacility, parentScreen: OHParentScreens) => {
+export const MigrationWarningMessage = ({
+  migration,
+  parentScreen,
+}: {
+  migration: MigratingFacility
+  parentScreen: OHParentScreens
+}) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const endDate = getMigrationEndDate(migration, parentScreen)
@@ -111,7 +117,13 @@ export const getMigrationWarningMessage = (migration: MigratingFacility, parentS
   )
 }
 
-export const getMigrationErrorMessage = (migration: MigratingFacility, parentScreen: OHParentScreens) => {
+export const MigrationErrorMessage = ({
+  migration,
+  parentScreen,
+}: {
+  migration: MigratingFacility
+  parentScreen: OHParentScreens
+}) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()

@@ -62,7 +62,7 @@ import {
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
-import { getMigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
+import { MigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -485,7 +485,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             </TextView>
           </AlertWithHaptics>
         </Box>
-        {soonestErrorMigration && getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging)}
+        {soonestErrorMigration && (
+          <MigrationErrorMessage migration={soonestErrorMigration} parentScreen={OHParentScreens.SecureMessaging} />
+        )}
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}

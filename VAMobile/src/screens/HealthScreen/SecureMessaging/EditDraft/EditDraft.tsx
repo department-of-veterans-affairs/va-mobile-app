@@ -70,7 +70,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useAttachments, useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { getMigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
+import { MigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -840,10 +840,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           {replyDisabled && !migrationBlocksReply && renderAlert()}
-          {migrationBlocksReply &&
-            authorizedServicesData &&
-            soonestErrorMigration &&
-            getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging)}
+          {migrationBlocksReply && authorizedServicesData && soonestErrorMigration && (
+            <MigrationErrorMessage migration={soonestErrorMigration} parentScreen={OHParentScreens.SecureMessaging} />
+          )}
           <Box>{renderForm()}</Box>
           <Box>{isReplyDraft && renderMessageThread()}</Box>
         </Box>

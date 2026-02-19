@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
-import { getMigrationErrorMessage, getMigrationWarningMessage, parentScreenToPhaseMap } from 'utils/ohMigration'
+import { MigrationErrorMessage, MigrationWarningMessage, parentScreenToPhaseMap } from 'utils/ohMigration'
 
 export enum OHParentScreens {
   Appointments = 'appointments',
@@ -28,9 +28,9 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
   const alertsForScreen = (migration: MigratingFacility) => {
     const alertState = getAlertState(migration.phases.current, parentScreen)
     if (alertState === 'warning') {
-      return getMigrationWarningMessage(migration, parentScreen)
+      return <MigrationWarningMessage migration={migration} parentScreen={parentScreen} />
     } else if (alertState === 'error') {
-      return getMigrationErrorMessage(migration, parentScreen)
+      return <MigrationErrorMessage migration={migration} parentScreen={parentScreen} />
     }
     return <></>
   }
