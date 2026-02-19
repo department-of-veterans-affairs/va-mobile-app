@@ -97,20 +97,8 @@ function VeteranStatusCardScreen({ navigation }: VeteranStatusCardScreenProps) {
 
     const { header, body, alertType } = vscAlert.attributes
 
-    if (alertType === 'error') {
-      return (
-        <AlertWithHaptics
-          variant="error"
-          header={t('errors.somethingWentWrong')}
-          headerA11yLabel={a11yLabelVA(t('errors.somethingWentWrong'))}
-          description={t('veteranStatus.error.generic.updated')}
-          descriptionA11yLabel={a11yLabelVA(t('veteranStatus.error.generic.updated'))}
-        />
-      )
-    }
-
     return (
-      <AlertWithHaptics variant="warning" header={header} headerA11yLabel={a11yLabelVA(header)}>
+      <AlertWithHaptics variant={alertType} header={header} headerA11yLabel={a11yLabelVA(header)}>
         {body?.map((row: VSCAlertBodyRow, idx: number) => {
           if (row.type === 'text') {
             return (
