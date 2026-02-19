@@ -4,9 +4,19 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { isBefore, parseISO } from 'date-fns'
 import { map } from 'underscore'
 
-import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  BoxProps,
+  ClickToCallPhoneNumber,
+  StructuredContentRenderer,
+  TextArea,
+  TextView,
+  VAScrollView,
+} from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
@@ -26,7 +36,29 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const navigateTo = useRouteNavigation()
   const { claimID, request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { displayName, type, status, description, uploadDate, documents } = request
+  const {
+    displayName,
+    type,
+    status,
+    description,
+    uploadDate,
+    documents,
+    friendlyName,
+    shortDescription,
+    longDescription,
+    nextSteps,
+    canUploadFile,
+    uploadsAllowed,
+    suspenseDate,
+  } = request
+
+  // Use override content fields with graceful fallback
+  const title = friendlyName || displayName
+  const showUploadButtons = canUploadFile ?? uploadsAllowed ?? true
+  // Check if we have enriched content (longDescription indicates override content is present)
+  const hasEnrichedContent = !!longDescription?.blocks && longDescription.blocks.length > 0
+  // Check if suspense date is in the past
+  const isPastDue = suspenseDate ? isBefore(parseISO(suspenseDate), new Date()) : false
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -78,11 +110,38 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     navigateTo('TakePhotos', { claimID, request })
   }
 
+  // Determine if action buttons should be shown
+  const shouldShowActionButtons = !hasUploaded && showUploadButtons
+
   return (
     <VAScrollView testID="fileRequestDetailsID">
-      <SubtaskTitle title={displayName || ''} />
+      <SubtaskTitle title={title || ''} />
 
       <Box mb={contentMarginBottom} flex={1}>
+        {/* Show due date when suspenseDate is present */}
+        {suspenseDate && (
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <TextView variant="MobileBody">
+              {t('fileRequestDetails.respondBy', { date: formatDateMMMMDDYYYY(suspenseDate) })}
+            </TextView>
+          </Box>
+        )}
+
+        {/* Show past due warning alert when suspense date has passed */}
+        {isPastDue && (
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <AlertWithHaptics
+              variant="warning"
+              header={t('fileRequestDetails.pastDue.title')}
+              description={t('fileRequestDetails.pastDue.body')}>
+              <Box mt={standardMarginBetween}>
+                <TextView variant="MobileBody">{t('fileRequestDetails.pastDue.callText')}</TextView>
+                <ClickToCallPhoneNumber phone={t('8008271000')} />
+              </Box>
+            </AlertWithHaptics>
+          </Box>
+        )}
+
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
             <TextArea>
@@ -112,14 +171,41 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
             </TextArea>
           </Box>
         )}
-        <TextArea>
-          <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-            {displayName}
-          </TextView>
-          <TextView variant="MobileBody">{description}</TextView>
-        </TextArea>
+
+        {/* Enriched content layout */}
+        {hasEnrichedContent ? (
+          <>
+            {/* "What we need from you" section with longDescription */}
+            <TextArea>
+              <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+                {t('fileRequestDetails.whatWeNeed')}
+              </TextView>
+              <StructuredContentRenderer content={longDescription} testID="longDescriptionContent" />
+            </TextArea>
+
+            {/* Render nextSteps as "How to submit this information" */}
+            {nextSteps?.blocks && nextSteps.blocks.length > 0 && (
+              <Box mt={standardMarginBetween}>
+                <TextArea>
+                  <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+                    {t('fileRequestDetails.howToSubmit')}
+                  </TextView>
+                  <StructuredContentRenderer content={nextSteps} testID="nextStepsContent" />
+                </TextArea>
+              </Box>
+            )}
+          </>
+        ) : (
+          /* Fallback: existing layout when enriched content is not present */
+          <TextArea>
+            <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+              {title}
+            </TextView>
+            <TextView variant="MobileBody">{shortDescription || description}</TextView>
+          </TextArea>
+        )}
       </Box>
-      {!hasUploaded && (
+      {shouldShowActionButtons && (
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
             <Button

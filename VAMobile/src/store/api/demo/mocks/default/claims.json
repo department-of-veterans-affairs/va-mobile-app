@@ -579,6 +579,71 @@
         "eventsTimeline": [
           {
             "type": "still_need_from_you_list",
+            "trackedItemId": 12345,
+            "description": "We need your authorization to disclose information to a third party.",
+            "displayName": "21-4142/21-4142a",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2026-01-21",
+            "requestedDate": "2026-01-21",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2026-02-14",
+            "documents": [],
+            "uploadDate": null,
+            "date": "2026-01-21",
+            "documentType": null,
+            "filename": null,
+            "friendlyName": "Authorization to disclose information",
+            "shortDescription": "We need your permission to request your personal information from a non-VA source, like a private doctor or hospital.",
+            "longDescription": {
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "content": "For your benefits claim, we need your permission to request your personal information from a non-VA source, like a private doctor or hospital."
+                },
+                {
+                  "type": "paragraph",
+                  "content": "Personal information may include:"
+                },
+                {
+                  "type": "list",
+                  "style": "bullet",
+                  "items": ["Medical treatments", "Hospitalizations", "Psychotherapy", "Outpatient care"]
+                },
+                {
+                  "type": "paragraph",
+                  "content": "Even if you already submitted VA Form 21-4142a, we may still need the separate VA Form 21-4142 in order to request your personal information."
+                }
+              ]
+            },
+            "nextSteps": {
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "content": "Use VA Form 21-4142 to give us permission to request your personal information."
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    "You can complete and sign this form online, or use a PDF version and upload or mail it.",
+                    { "type": "lineBreak" },
+                    {
+                      "type": "link",
+                      "text": "VA Form 21-4142",
+                      "href": "https://www.va.gov/find-forms/about-form-21-4142/",
+                      "testId": "VA Form 21-4142"
+                    }
+                  ]
+                }
+              ]
+            },
+            "canUploadFile": true
+          },
+          {
+            "type": "still_need_from_you_list",
             "trackedItemId": 651827,
             "description": "Automated 5103 Notice Response",
             "displayName": "Automated 5103 Notice Response",

@@ -478,67 +478,22 @@ export type ClaimsAndAppealsList = {
   }
 }
 
-/** Inline element: bold text */
-export type BoldInline = {
-  type: 'bold'
-  content: InlineContent
-}
+// Inline elements used within structured content blocks
+export type InlineElement =
+  | { type: 'bold'; content: InlineContent }
+  | { type: 'italic'; content: InlineContent }
+  | { type: 'link'; href: string; text: string }
+  | { type: 'telephone'; contact: string; tty?: boolean }
+  | { type: 'lineBreak' }
 
-/** Inline element: italic text */
-export type ItalicInline = {
-  type: 'italic'
-  content: InlineContent
-}
+// Inline content can be a string, an inline element, or an array of mixed content
+export type InlineContent = string | InlineElement | Array<string | InlineElement>
 
-/** Inline element: link */
-export type LinkInline = {
-  type: 'link'
-  text: string
-  href: string
-  style?: 'active' | 'external' | 'default'
-  testId?: string
-}
+export type StructuredContentBlock =
+  | { type: 'paragraph'; content: InlineContent }
+  | { type: 'list'; style: 'bullet' | 'numbered'; items: InlineContent[] }
+  | { type: 'lineBreak' }
 
-/** Inline element: telephone */
-export type TelephoneInline = {
-  type: 'telephone'
-  contact: string
-  tty?: boolean
-}
-
-/** Inline element: line break */
-export type LineBreakInline = {
-  type: 'lineBreak'
-}
-
-/** Union of all inline elements */
-export type InlineElement = BoldInline | ItalicInline | LinkInline | TelephoneInline | LineBreakInline
-
-/** Inline content: string or array of strings and inline elements (recursive for bold/italic) */
-export type InlineContent = string | Array<string | InlineElement>
-
-/** Paragraph block */
-export type ParagraphBlock = {
-  type: 'paragraph'
-  content: InlineContent
-}
-
-/** List block */
-export type ListBlock = {
-  type: 'list'
-  style: 'bullet' | 'numbered'
-  items: InlineContent[]
-}
-
-/** Line break block */
-export type LineBreakBlock = {
-  type: 'lineBreak'
-}
-
-/** Block-level element: paragraph, list, or line break (no link — link is inline only) */
-export type StructuredContentBlock = ParagraphBlock | ListBlock | LineBreakBlock
-
-/** Root structured content (e.g. longDescription, nextSteps) */
 export type StructuredContent = {
   blocks: StructuredContentBlock[]
 }
@@ -565,6 +520,20 @@ export type ClaimEventData = {
   documents?: Array<ClaimEventDocumentData>
   phase?: number
   documentId?: string
+
+  // Plain Language Overrides for Tracked Items
+  friendlyName?: string | null
+  shortDescription?: string | null
+  activityDescription?: string | null
+  longDescription?: StructuredContent
+  nextSteps?: StructuredContent | null
+  supportAliases?: string[] | null
+  canUploadFile?: boolean | null
+  noActionNeeded?: boolean | null
+  isDBQ?: boolean | null
+  isProperNoun?: boolean | null
+  isSensitive?: boolean | null
+  noProvidePrefix?: boolean | null
 }
 
 export type ClaimEFolderData = {
