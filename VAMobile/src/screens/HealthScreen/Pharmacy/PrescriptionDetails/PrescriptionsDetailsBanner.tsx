@@ -8,10 +8,12 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 function PrescriptionsDetailsBanner() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover');
 
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
@@ -37,6 +39,21 @@ function PrescriptionsDetailsBanner() {
       },
       { text: t('prescription.details.banner.bullet4') },
     ]
+
+    if (isOHCutoverFlagEnabled) {
+      return (
+        <>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+          <TextView
+            accessible
+            variant="MobileBody"
+            accessibilityLabel={a11yLabelVA(t('prescription.details.banner.bodyV2'))}
+            mb={standardMarginBetween}>
+            {t('prescription.details.banner.bodyV2')}
+          </TextView>
+        </>
+      )
+    }
 
     return (
       <>
@@ -72,7 +89,7 @@ function PrescriptionsDetailsBanner() {
           variant="warning"
           expandable={true}
           focusOnError={false}
-          header={t('prescription.details.banner.title')}
+          header={isOHCutoverFlagEnabled ? t('prescription.details.banner.titleV2') : t('prescription.details.banner.title')}
           analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
           {getContent()}
         </AlertWithHaptics>
