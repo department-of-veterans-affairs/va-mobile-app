@@ -29,7 +29,6 @@ context('MedicalRecordsScreen', () => {
   // TODO: update tests to cover flag disabled
   const initializeTestInstance = (flagEnabled = true, labsEnabled = true) => {
     when(featureEnabled).calledWith('labsAndTests').mockReturnValue(flagEnabled)
-    when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
     render(<MedicalRecordsScreen {...mockNavProps()} />, {
       queriesData: [
         {

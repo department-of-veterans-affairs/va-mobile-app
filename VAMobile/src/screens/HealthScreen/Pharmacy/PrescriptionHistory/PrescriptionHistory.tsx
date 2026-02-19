@@ -621,7 +621,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       ) : (
         <>
           <OHAlertManager parentScreen={OHParentScreens.Medications} authorizedServices={userAuthorizedServices} />
-          {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
+          {getNonVAMedsAlert()}
           {getTransferAlert()}
           {screenReaderEnabled ? getRequestRefillButton() : undefined}
           {getContent()}

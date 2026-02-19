@@ -57,6 +57,7 @@ describe('usePrescriptions', () => {
           refillStatus: 'active',
           refillSubmitDate: null,
           refillDate: null,
+          sortedDispensedDate: null,
           refillRemaining: 3,
           facilityName: 'Test Facility',
           facilityPhoneNumber: '123-456-7890',
