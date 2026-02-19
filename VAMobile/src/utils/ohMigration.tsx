@@ -1,17 +1,16 @@
-import { Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library'
-import { TFunction } from 'i18next'
 
 import { Facility, FacilityInfo, MigratingFacility } from 'api/types'
 import { LinkWithAnalytics, TextView, VABulletList } from 'components'
 import AlertWithHaptics from 'components/AlertWithHaptics'
 import Box from 'components/Box'
 import { OHParentScreens, getAlertState } from 'components/OHAlertManager'
-import { VATheme } from 'styles/theme'
+import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
-
-import { a11yLabelVA } from './a11yLabel'
+import { useTheme } from 'utils/hooks'
 
 export const parentScreenToPhaseMap = {
   appointments: {
@@ -71,12 +70,9 @@ export const getMigrationStartDate = (migration: MigratingFacility, feature: OHP
   return migration.phases[startDatePhase as keyof typeof migration.phases]
 }
 
-export const getMigrationWarningMessage = (
-  migration: MigratingFacility,
-  parentScreen: OHParentScreens,
-  theme: VATheme,
-  t: TFunction,
-) => {
+export const getMigrationWarningMessage = (migration: MigratingFacility, parentScreen: OHParentScreens) => {
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const endDate = getMigrationEndDate(migration, parentScreen)
   const startDate = getMigrationStartDate(migration, parentScreen)
   const facilityNames = migration.facilities.map((facility: FacilityInfo) => facility.facilityName) || []
@@ -114,12 +110,9 @@ export const getMigrationWarningMessage = (
   )
 }
 
-export const getMigrationErrorMessage = (
-  migration: MigratingFacility,
-  parentScreen: OHParentScreens,
-  theme: VATheme,
-  t: TFunction,
-) => {
+export const getMigrationErrorMessage = (migration: MigratingFacility, parentScreen: OHParentScreens) => {
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
   const linkProps: LinkProps = {
     type: 'url',

@@ -1,9 +1,6 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
-import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
 import { getMigrationErrorMessage, getMigrationWarningMessage, parentScreenToPhaseMap } from 'utils/ohMigration'
 
 export enum OHParentScreens {
@@ -30,12 +27,10 @@ export const getAlertState = (phase: string, parentScreen: OHParentScreens) => {
 export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertManagerProps) => {
   const alertsForScreen = (migration: MigratingFacility) => {
     const alertState = getAlertState(migration.phases.current, parentScreen)
-    const theme = useTheme()
-    const { t } = useTranslation(NAMESPACE.COMMON)
     if (alertState === 'warning') {
-      return getMigrationWarningMessage(migration, parentScreen, theme, t)
+      return getMigrationWarningMessage(migration, parentScreen)
     } else if (alertState === 'error') {
-      return getMigrationErrorMessage(migration, parentScreen, theme, t)
+      return getMigrationErrorMessage(migration, parentScreen)
     }
     return <></>
   }
