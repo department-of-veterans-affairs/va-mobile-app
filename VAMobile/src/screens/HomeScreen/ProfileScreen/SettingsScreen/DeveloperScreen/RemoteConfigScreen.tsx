@@ -35,7 +35,10 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
   const navigateTo = useRouteNavigation()
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentConfig = getFeatureToggles()
-  const [toggles, setToggles] = useState({ ...currentConfig })
+  const sortedConfig = Object.fromEntries(
+    Object.entries(currentConfig).sort(([a], [b]) => a.localeCompare(b)),
+  ) as typeof currentConfig
+  const [toggles, setToggles] = useState({ ...sortedConfig })
   const currentWaygateConfig = getWaygateToggles()
   const [waygateToggles] = useState({ ...currentWaygateConfig })
   const isFocused = useIsFocused()
@@ -137,7 +140,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
           <TextArea>
             <Button
               onPress={() => {
-                if (JSON.stringify(currentConfig) === JSON.stringify(toggles)) {
+                if (JSON.stringify(sortedConfig) === JSON.stringify(toggles)) {
                   snackbar.show('No values changed', { isError: true })
                   return
                 }

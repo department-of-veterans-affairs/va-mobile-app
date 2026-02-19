@@ -62,4 +62,12 @@ context('RemoteConfigScreen', () => {
 
     expect(logoutSpy).toHaveBeenCalled()
   })
+
+  it('displays feature toggles in alphabetical order', () => {
+    initializeTestInstance()
+    const switches = screen.getAllByRole('switch')
+    const labels = switches.map((s) => s.props.accessibilityLabel || s.props.children).filter(Boolean)
+    const sortedLabels = [...labels].sort((a, b) => a.localeCompare(b))
+    expect(labels).toEqual(sortedLabels)
+  })
 })
