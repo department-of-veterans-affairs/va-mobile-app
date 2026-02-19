@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
