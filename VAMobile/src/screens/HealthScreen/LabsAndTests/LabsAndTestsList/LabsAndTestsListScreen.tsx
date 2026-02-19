@@ -297,9 +297,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             accessibilityHint={a11yLabelVA(t('labsAndTests.medicalImages.linkText'))}
             testID="viewMedicalImagesNoteLinkID">
             <TextView variant="MobileBodyLink">{t('labsAndTests.medicalImages.linkText')}</TextView>
-            <Box ml={4}>
-              <Icon name="Launch" fill={theme.colors.icon.link} width={22} height={22} />
-            </Box>
           </Pressable>
         </Box>
       </Box>
