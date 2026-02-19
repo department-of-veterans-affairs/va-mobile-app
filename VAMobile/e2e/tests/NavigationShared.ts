@@ -5,9 +5,39 @@ When to update:
 Update navigationDic whenever a new feature/page with the bottom nav bar is added to the app.
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
-import { by, element, expect, waitFor } from 'detox'
+import { exec } from 'child_process'
+import { by, element, waitFor } from 'detox'
 
 import { CommonE2eIdConstants } from './utils'
+
+const ACCOUNT_SECURITY_LONG_TEXT =
+  'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.'
+
+export const navigationValue: string | undefined = process.argv[7] ?? process.argv[6]
+
+export const getTestName = (nameArray: any[]): string => {
+  const name = nameArray[2] as string
+  return name === ACCOUNT_SECURITY_LONG_TEXT ? 'Account security' : name
+}
+
+export const shouldRunTest = (nameArray: any[], value: any[]): boolean => {
+  if (navigationValue === undefined) return true
+  if (nameArray[0] instanceof Array) {
+    for (let z = 0; z < value.length; z++) {
+      if (navigationValue === nameArray[0][z]) return true
+    }
+    return false
+  }
+  return navigationValue === nameArray[0]
+}
+
+export const execCommand = (command: string) => {
+  exec(command, (error: Error | null) => {
+    if (error) {
+      console.error(`exec error: ${error}`)
+    }
+  })
+}
 
 export const navigationDic = {
   Home: [
@@ -151,20 +181,17 @@ export const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Scroll to bring 'Get prescription details' into view above the 'Start refill request' button.
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(100, 'down', 0.5, 0.5)
-      // With large text (text resize mode), the fixed 100px scroll can overshoot and place the element
-      // behind the navigation bar safe area. Check the element's screen Y and scroll back up if needed.
-      const prescriptionAttrs = await element(by.text('Get prescription details')).atIndex(0).getAttributes()
-      const prescriptionTopY: number = (prescriptionAttrs as any).frame?.y ?? 0
-      if (prescriptionTopY < 110) {
-        await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(
-          110 - prescriptionTopY,
-          'up',
-          0.5,
-          0.5,
-        )
-      }
+      // Use by.id() to match only the Pressable's accessibilityIdentifier, avoiding
+      // ghost RCTTextView nodes that text-based matchers also match at y≈0 in
+      // XXXL text-resize mode. waitFor+scroll is adaptive in case the Pressable
+      // is below the visible area (XXXL text makes cards taller than normal).
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+      await waitFor(element(by.id(CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).atIndex(0))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+        .scroll(50, 'down', 0.5, 0.5)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).atIndex(0).tap()
+      return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()

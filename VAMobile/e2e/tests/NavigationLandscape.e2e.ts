@@ -13,14 +13,8 @@ See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Quali
 */
 import { by, device, element, expect } from 'detox'
 
-import { navigateToPage, navigationDic } from './NavigationShared'
+import { getTestName, navigateToPage, navigationDic, shouldRunTest } from './NavigationShared'
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
-
-let navigationValue = process.argv[7]
-
-if (navigationValue === undefined) {
-  navigationValue = process.argv[6]
-}
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
@@ -32,24 +26,8 @@ describe('Navigation - Landscape', () => {
   for (const [key, value] of Object.entries(navigationDic)) {
     for (let j = 0; j < value.length; j++) {
       const nameArray = value[j]
-      let testName = nameArray[2]
-      if (
-        nameArray[2] ===
-        'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.'
-      ) {
-        testName = 'Account security'
-      }
-      let runTest = false
-      if (nameArray[0] instanceof Array) {
-        for (let z = 0; z < value.length; z++) {
-          if (navigationValue === nameArray[0][z]) {
-            runTest = true
-          }
-        }
-      } else if (navigationValue === nameArray[0]) {
-        runTest = true
-      }
-      if (runTest === true || navigationValue === undefined) {
+      const testName = getTestName(nameArray)
+      if (shouldRunTest(nameArray, value)) {
         testsRun = true
         if (testName !== 'Community care' && testName !== 'Claim exam') {
           it('verify navigation landscape mode for: ' + testName, async () => {

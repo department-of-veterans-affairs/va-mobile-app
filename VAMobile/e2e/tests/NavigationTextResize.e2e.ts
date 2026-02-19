@@ -11,18 +11,11 @@ When to update:
 Update NavigationShared.ts whenever a new feature/new page that has the bottom nav bar is added to the app.
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
-import { exec } from 'child_process'
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { navigateToPage, navigationDic } from './NavigationShared'
+import { execCommand, getTestName, navigateToPage, navigationDic, shouldRunTest } from './NavigationShared'
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
-
-let navigationValue = process.argv[7]
-
-if (navigationValue === undefined) {
-  navigationValue = process.argv[6]
-}
 
 const FONT_RESIZING_LARGEST =
   device.getPlatform() === 'ios'
@@ -38,37 +31,17 @@ const DISPLAY_RESIZING_RESET = 'adb shell wm density reset'
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
-  exec(FONT_RESIZING_LARGEST, (error: Error | null) => {
-    if (error) {
-      console.error(`exec error: ${error}`)
-      return
-    }
-  })
+  execCommand(FONT_RESIZING_LARGEST)
   if (device.getPlatform() === 'android') {
-    exec(DISPLAY_RESIZING_LARGEST, (error: Error | null) => {
-      if (error) {
-        console.error(`exec error: ${error}`)
-        return
-      }
-    })
+    execCommand(DISPLAY_RESIZING_LARGEST)
     await setTimeout(2000)
   }
 })
 
 afterAll(async () => {
-  exec(FONT_RESIZING_RESET, (error: Error | null) => {
-    if (error) {
-      console.error(`exec error: ${error}`)
-      return
-    }
-  })
+  execCommand(FONT_RESIZING_RESET)
   if (device.getPlatform() === 'android') {
-    exec(DISPLAY_RESIZING_RESET, (error: Error | null) => {
-      if (error) {
-        console.error(`exec error: ${error}`)
-        return
-      }
-    })
+    execCommand(DISPLAY_RESIZING_RESET)
   }
 })
 
@@ -77,24 +50,8 @@ describe('Navigation - Text Resize', () => {
   for (const [key, value] of Object.entries(navigationDic)) {
     for (let j = 0; j < value.length; j++) {
       const nameArray = value[j]
-      let testName = nameArray[2]
-      if (
-        nameArray[2] ===
-        'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.'
-      ) {
-        testName = 'Account security'
-      }
-      let runTest = false
-      if (nameArray[0] instanceof Array) {
-        for (let z = 0; z < value.length; z++) {
-          if (navigationValue === nameArray[0][z]) {
-            runTest = true
-          }
-        }
-      } else if (navigationValue === nameArray[0]) {
-        runTest = true
-      }
-      if (runTest === true || navigationValue === undefined) {
+      const testName = getTestName(nameArray)
+      if (shouldRunTest(nameArray, value)) {
         testsRun = true
         if (testName !== 'Community care' && testName !== 'Claim exam') {
           it('verify navigation text resizing for: ' + testName, async () => {

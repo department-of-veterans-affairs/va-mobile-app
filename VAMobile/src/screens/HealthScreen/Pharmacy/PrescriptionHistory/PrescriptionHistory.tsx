@@ -239,6 +239,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         accessible: true,
         accessibilityRole: 'link',
         accessibilityLabel: t('prescription.history.getDetails'),
+        testID: 'getPrescriptionDetailsTestID',
       }
 
       const mainContent = (
