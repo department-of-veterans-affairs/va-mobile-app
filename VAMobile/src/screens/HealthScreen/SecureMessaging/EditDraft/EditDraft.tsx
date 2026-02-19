@@ -48,7 +48,7 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
-import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
+import { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
