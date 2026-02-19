@@ -486,8 +486,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             </TextView>
           </AlertWithHaptics>
         </Box>
-        {soonestErrorMigration &&
-          getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging, theme, t)}
+        {soonestErrorMigration && getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging)}
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}

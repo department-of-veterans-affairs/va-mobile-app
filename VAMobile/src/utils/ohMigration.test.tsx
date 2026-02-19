@@ -303,12 +303,8 @@ context('ohMigration', () => {
       parentScreen: OHParentScreens
       currentPhase: string
     }) => {
-      const { useTheme } = require('utils/hooks')
-      const { useTranslation } = require('react-i18next')
-      const theme = useTheme()
-      const { t } = useTranslation('common')
       const migration = createMigration(currentPhase)
-      return <>{getMigrationWarningMessage(migration, parentScreen, theme, t)}</>
+      return <>{getMigrationWarningMessage(migration, parentScreen)}</>
     }
 
     it('should render a warning alert for appointments', () => {
@@ -341,12 +337,8 @@ context('ohMigration', () => {
 
     it('should render with single facility', () => {
       const SingleFacilityWrapper = () => {
-        const { useTheme } = require('utils/hooks')
-        const { useTranslation } = require('react-i18next')
-        const theme = useTheme()
-        const { t } = useTranslation('common')
         const migration = createMigration('p0', [mockFacilities[0]])
-        return <>{getMigrationWarningMessage(migration, OHParentScreens.Appointments, theme, t)}</>
+        return <>{getMigrationWarningMessage(migration, OHParentScreens.Appointments)}</>
       }
       render(<SingleFacilityWrapper />)
       expect(screen.getByText('Test VA Medical Center')).toBeTruthy()
@@ -362,12 +354,8 @@ context('ohMigration', () => {
       parentScreen: OHParentScreens
       currentPhase: string
     }) => {
-      const { useTheme } = require('utils/hooks')
-      const { useTranslation } = require('react-i18next')
-      const theme = useTheme()
-      const { t } = useTranslation('common')
       const migration = createMigration(currentPhase)
-      return <>{getMigrationErrorMessage(migration, parentScreen, theme, t)}</>
+      return <>{getMigrationErrorMessage(migration, parentScreen)}</>
     }
 
     it('should render an error alert for appointments', () => {
@@ -419,12 +407,8 @@ context('ohMigration', () => {
 
     it('should render with single facility', () => {
       const SingleFacilityWrapper = () => {
-        const { useTheme } = require('utils/hooks')
-        const { useTranslation } = require('react-i18next')
-        const theme = useTheme()
-        const { t } = useTranslation('common')
         const migration = createMigration('p2', [mockFacilities[0]])
-        return <>{getMigrationErrorMessage(migration, OHParentScreens.Appointments, theme, t)}</>
+        return <>{getMigrationErrorMessage(migration, OHParentScreens.Appointments)}</>
       }
       render(<SingleFacilityWrapper />)
       expect(screen.getByText('Test VA Medical Center')).toBeTruthy()

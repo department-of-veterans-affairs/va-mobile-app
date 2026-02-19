@@ -707,8 +707,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           errorList={errorList}
           replyTriageError={replyTriageError}
         />
-        {soonestErrorMigration &&
-          getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging, theme, t)}
+        {soonestErrorMigration && getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging)}
         <TextArea>
           {message && isReplyDraft && (
             <>
