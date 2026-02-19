@@ -26,6 +26,7 @@ const mockOverrides = {
   inAppReview: true,
   labsAndTests: true,
   loadLabsAndTestsOnHomeScreen: false,
+  mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
