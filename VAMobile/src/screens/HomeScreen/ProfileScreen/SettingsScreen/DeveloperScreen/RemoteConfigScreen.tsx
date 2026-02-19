@@ -75,6 +75,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
       const { enabled, type, errorMsgTitle, errorMsgBody, appUpdateButton, errorMsgBodyV2, errorPhoneNumber } = wg
       toggleItems.push(
         <AccordionCollapsible
+          key={index}
           header={
             <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
               <Button onPress={() => navigateTo('WaygateEdit', { waygateName: index, waygate: wg })} label={index} />

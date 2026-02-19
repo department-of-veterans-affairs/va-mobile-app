@@ -6,7 +6,8 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
-import { logout } from 'store/slices/authSlice'
+import { AppThunk } from 'store'
+import * as AuthSlice from 'store/slices/authSlice'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 const mockNavigationSpy = jest.fn()
@@ -15,19 +16,6 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
   clear: jest.fn(),
 }))
-
-jest.mock('store/slices/authSlice', () => {
-  const actual = jest.requireActual('store/slices/authSlice')
-  return {
-    ...actual,
-    logout: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
 
 context('DemoModeUsersScreen', () => {
   const getItem = AsyncStorage.getItem as jest.Mock
@@ -54,6 +42,8 @@ context('DemoModeUsersScreen', () => {
   describe('when selecting a new demo user', () => {
     it('should update async storage and logout', async () => {
       getItem.mockResolvedValueOnce('benjaminAdams')
+      const logoutSpy = jest.spyOn(AuthSlice, 'logout').mockImplementationOnce((): AppThunk => async () => {})
+
       initializeTestInstance()
       const radioButton = screen.getByRole('radio', { selected: false, name: 'Clara Jefferson' })
       expect(radioButton).toBeDefined()
@@ -65,7 +55,7 @@ context('DemoModeUsersScreen', () => {
 
       await waitFor(() => {
         expect(AsyncStorage.setItem).toBeCalledWith(DEMO_USER, 'claraJefferson')
-        expect(logout).toHaveBeenCalled()
+        expect(logoutSpy).toHaveBeenCalled()
       })
     })
   })

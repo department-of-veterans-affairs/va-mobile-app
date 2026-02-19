@@ -67,3 +67,5 @@ export const ASCENDING = 'ascending'
 export const DESCENDING = 'descending'
 
 export const ACTIVITY_STALE_TIME = 300000 // 5 minutes
+
+export const MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS = 1

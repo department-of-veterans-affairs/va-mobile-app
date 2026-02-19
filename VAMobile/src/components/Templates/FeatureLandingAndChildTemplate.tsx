@@ -12,6 +12,7 @@ import {
   HeaderButton,
   LastUpdatedTimestamp,
   LoadingComponent,
+  MaintenanceBanner,
   OfflineBanner,
   TextView,
   TextViewProps,
@@ -184,6 +185,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
       />
       <HeaderBanner {...headerProps} />
       <OfflineBanner />
+      <MaintenanceBanner screenID={screenID} />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}
@@ -199,7 +201,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         ) : null}
         <WaygateWrapper>
           <Box display="flex" justifyContent="space-between" flex={1}>
-            <Box>{renderContent()}</Box>
+            <Box flex={1}>{renderContent()}</Box>
             <LastUpdatedTimestamp datetime={dataUpdatedAt} />
           </Box>
         </WaygateWrapper>

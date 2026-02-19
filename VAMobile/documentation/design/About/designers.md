@@ -80,9 +80,14 @@ If you have questions or need assistance, reach out in the [#va-mobile-app-share
 
 --- 
 
-## Design Critique Overview & Sign-Up
+# Design Critique Overview & Sign-Up
 
 Design Critique is a collaborative session for sharing in-progress work, exploring ideas, and gathering peer feedback to strengthen design direction, make sure we’re asking and answering the right questions, and ensure usability early on.
+
+## Sign up
+Use these booking links to schedule time: 
+* [Regularly scheduled](https://outlook.office.com/bookwithme/user/4229e91465894d5b996e664028d925f0@va.gov/meetingtype/O70SFh4PbESj2jUTJlvesw2?anonymous&ismsaljsauthenabled&ep=mLinkFromTile) (Mondays, Thursdays, and every other Fridays) 
+* [Ad hoc session](https://outlook.office.com/bookwithme/user/4229e91465894d5b996e664028d925f0@va.gov/meetingtype/x5hedDbu-Uir5UCTuE4pyA2?anonymous&ismsaljsauthenabled&ep=mLinkFromTile) (As needed, impromptu sessions)
 
 ### When to Attend
 Go to a Design Critique when...
@@ -92,13 +97,14 @@ Go to a Design Critique when...
 
 > Tip: One critique leading to one review is the ideal agile flow. When in doubt default to attending critique more often than not and bringing a design multiple times, Design Reviews on the other hand should be a “close to final” step only.
 
-#### Meeting schedule
+### Meeting schedule
 Meetings are held up to three times a week. If you’re a member of #va-mobile-app-design, you should receive an automated reminder 15 minutes before each session. A MS Teams join link is included in the reminder.
 * Mondays at 08:05AM PT
 * Thursdays at 08:05AM PT
-* Fridays, biweekly, at 10:05AM PT (For 2025, ISO weeks ending in an even number have a session, i.e. W44, W46, etc.)
+* Fridays, biweekly, at 10:05AM PT
+   * (For 2025, ISO weeks ending in an even number have a session, i.e. W44, W46, etc.)
 
-### How to Prepare
+## How to Prepare
 * **Provide context...**
     * Be ready to share the problem, user goals, and your hypotheses
 * **Bring design artifacts...**
@@ -119,9 +125,3 @@ Meetings are held up to three times a week. If you’re a member of #va-mobile-a
 * **Capture feedback**—Record notes, decisions, and key insights (async for those who missed it). For critique you can do this via Slack, FigJam, Figma, etc—this is informal and the modality is up to you to decide.
 * **Prioritize next steps**—Not all feedback is equal. Align on what to implement, once aligned Product should post updates to GitHub and update issues, AC and/or Reqs, as needed. For critiques this means talking with your Development and Product team, building context, and aligning on what to do next.
 * **Close the loop**—Designer should make and share updates back to the team in the next session or async post to Slack or GitHub based on your teams communication norms.
-
-## Sign-up
-You can find a the signup sheet for [regularly scheduled](https://outlook.office.com/bookwithme/user/4229e91465894d5b996e664028d925f0@va.gov/meetingtype/O70SFh4PbESj2jUTJlvesw2?anonymous&ismsaljsauthenabled&ep=mLinkFromTile) sessions in our #va-mobile-app-design Slack [canavas](https://dsva.slack.com/docs/T03FECE8V/F07TD1LNP2M?focus_section_id=temp:C:DcU942e6bf479a64c7f81d50abf8). Please book via the link above and also add your details to the signup sheet.  
-
-### Ad-Hoc Sign-up
-If you need an unplanned, impromptu, [ad-hoc session](https://outlook.office.com/bookwithme/user/4229e91465894d5b996e664028d925f0@va.gov/meetingtype/x5hedDbu-Uir5UCTuE4pyA2?anonymous&ismsaljsauthenabled&ep=mLinkFromTile) you can book a Design Critique directly with our PO, Ryan Thurwelll. These invites are fully self-service, you can adjust timing or cancel via the booking link, as well as forward to team mates as needed.

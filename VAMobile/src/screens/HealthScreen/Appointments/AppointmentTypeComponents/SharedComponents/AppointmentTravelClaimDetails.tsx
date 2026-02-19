@@ -65,7 +65,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { maintenanceWindows } = useMaintenanceWindows()
-  const endTime = formatDateTimeReadable(maintenanceWindows[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime)
+  const endTime = formatDateTimeReadable(maintenanceWindows?.[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime)
 
   const mutationState = useTravelClaimSubmissionMutationState(appointmentID)
   const isSubmitting = mutationState?.status === 'pending'

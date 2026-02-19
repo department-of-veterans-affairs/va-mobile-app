@@ -243,7 +243,9 @@ context('TravelPayClaims', () => {
     for (let i = 0; i < timeFrames.length; i++) {
       // Open the picker, select the date range, close the picker
       fireEvent.press(screen.getByTestId('getDateRangeTestID'))
-      fireEvent.press(screen.getByText(timeFrames[i]))
+      await waitFor(() => {
+        fireEvent.press(screen.getByText(timeFrames[i]))
+      })
       fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
       await waitFor(() => expect(screen.queryByTestId('filterButtonApplyTestID')).toBeNull())
 
@@ -252,7 +254,7 @@ context('TravelPayClaims', () => {
     }
   })
 
-  it('should apply the selected date range to the list of claims', () => {
+  it('should apply the selected date range to the list of claims', async () => {
     initializeTestInstance()
 
     const claimId1 = 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178'
@@ -268,7 +270,9 @@ context('TravelPayClaims', () => {
 
     // Bring up the date picker and select the last year option
     fireEvent.press(screen.getByTestId('getDateRangeTestID'))
-    fireEvent.press(screen.getByTestId(`All of ${currentYear}`))
+    await waitFor(() => {
+      fireEvent.press(screen.getByTestId(`All of ${currentYear}`))
+    })
     fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
 
     // Check the claim list is accurate for the date selection
@@ -300,7 +304,9 @@ context('TravelPayClaims', () => {
 
     // Change the date range back
     fireEvent.press(screen.getByTestId('getDateRangeTestID'))
-    fireEvent.press(screen.getByTestId(`Past 3 months`))
+    await waitFor(() => {
+      fireEvent.press(screen.getByTestId(`Past 3 months`))
+    })
     fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
 
     // Verify filter is reset to "All"
