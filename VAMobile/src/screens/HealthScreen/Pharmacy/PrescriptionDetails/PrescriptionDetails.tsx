@@ -48,7 +48,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     isRefillable,
     instructions,
     refillRemaining,
-    refillDate,
+    sortedDispensedDate,
     quantity,
     facilityName,
     facilityPhoneNumber,
@@ -141,7 +141,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [lastRefilledDateFormatted, lastRefilledDateFormattedA11yLabel] = getDateTextAndLabel(
     t,
-    refillDate,
+    sortedDispensedDate,
     t('prescription.details.fillDateNotAvailable'),
   )
   const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(
