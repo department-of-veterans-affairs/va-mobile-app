@@ -80,7 +80,6 @@ const cancelRequest = async (screenId: string) => {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_FEEDBACK_TOGGLE_TEXT)
   await loginToDemoMode()
   await changeDemoModeUser(PrescriptionsE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
 })
