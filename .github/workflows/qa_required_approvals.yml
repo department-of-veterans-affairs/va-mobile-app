@@ -51,6 +51,7 @@ jobs:
           EXCLUDE_PATTERNS=(
             ".github/**" # Exclude anything in .github/ at any depth
             "VAMobile/src/*.test.tsx" # Exclude test files
+            "VAMobile/e2e/**" # Exclude e2e test files
           )
           for file in $CHANGED_FILES; do
             echo "$file"
