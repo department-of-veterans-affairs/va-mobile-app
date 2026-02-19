@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   CategoryTypeFields,
   SecureMessagingCareSystemData,
@@ -33,6 +34,8 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
   }
 })
+
+jest.mock('api/authorizedServices/getAuthorizedServices')
 
 jest.mock('../../../../api/facilities/getFacilitiesInfo', () => {
   const original = jest.requireActual('../../../../api/facilities/getFacilitiesInfo')
@@ -193,6 +196,14 @@ context('StartNewMessage', () => {
 
     render(<StartNewMessage {...props} />, {})
   }
+
+  beforeEach(() => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {
+        migratingFacilitiesList: [],
+      },
+    })
+  })
 
   const initializeApiCalls = (isSingleFaciltyTest: boolean = false) => {
     if (isSingleFaciltyTest) {
@@ -399,6 +410,152 @@ context('StartNewMessage', () => {
           ),
         ).toBeTruthy(),
       )
+    })
+  })
+
+  describe('migration alerts', () => {
+    const mockMigrationPhases = {
+      current: 'p3',
+      p0: 'March 1, 2026',
+      p1: 'March 15, 2026',
+      p2: 'April 1, 2026',
+      p3: 'April 24, 2026',
+      p4: 'April 27, 2026',
+      p5: 'May 1, 2026',
+      p6: 'May 3, 2026',
+      p7: 'May 8, 2026',
+    }
+
+    it('should show migration error alert when a facility is in error state for secure messaging', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p3' },
+            },
+          ],
+        },
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
+      )
+      expect(screen.getByText('Test VA Medical Center')).toBeTruthy()
+    })
+
+    it('should show migration error alert for p4 phase', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p4' },
+            },
+          ],
+        },
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
+      )
+    })
+
+    it('should show migration error alert for p5 phase', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p5' },
+            },
+          ],
+        },
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
+      )
+    })
+
+    it('should show the facility locator link in the migration error alert', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p3' },
+            },
+          ],
+        },
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
+    })
+
+    it('should not show migration error alert when no facilities are in error state', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p1' },
+            },
+          ],
+        },
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByText("You can't use messages to contact some facilities right now")).toBeNull(),
+      )
+    })
+
+    it('should not show migration error alert when migratingFacilitiesList is empty', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [],
+        },
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByText("You can't use messages to contact some facilities right now")).toBeNull(),
+      )
+    })
+
+    it('should show the first migration in error state when multiple exist', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p3' },
+            },
+            {
+              migrationDate: '2026-06-01',
+              facilities: [{ facilityId: 123, facilityName: 'Different VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p4' },
+            },
+          ],
+        },
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
+      )
+      expect(screen.getByText('Test VA Medical Center')).toBeTruthy()
     })
   })
 })
