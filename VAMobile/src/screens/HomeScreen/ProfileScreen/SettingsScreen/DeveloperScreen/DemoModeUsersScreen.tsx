@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, FeatureLandingTemplate, RadioGroup, TextArea, radioOption } from 'components'
+import FloatingButton from 'components/FloatingButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
@@ -41,7 +42,7 @@ function DemoModeUsersScreen({ navigation, route }: DemoModeUsersScreenSettingsS
 
   const getDoneButton = () => {
     return (
-      <Button
+      <FloatingButton
         onPress={async () => {
           await AsyncStorage.setItem(DEMO_USER, demoUser)
           if (fromLogin) {
@@ -52,6 +53,7 @@ function DemoModeUsersScreen({ navigation, route }: DemoModeUsersScreenSettingsS
         }}
         label={fromLogin ? 'Save' : 'Save and Logout'}
         testID={'demoModeUserSave'}
+        isHidden={false}
       />
     )
   }
@@ -60,13 +62,11 @@ function DemoModeUsersScreen({ navigation, route }: DemoModeUsersScreenSettingsS
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
       title={t('demoModeUsers.title')}
+      footerContent={getDoneButton()}
       testID="demoModeUserTestID">
-      <Box mb={contentMarginBottom}>
+      <Box mb={100}>
         <RadioGroup isRadioList value={demoUser} options={demoUsers} onChange={setDemoUser} />
       </Box>
-      <TextArea>
-        {getDoneButton()}
-      </TextArea>
     </FeatureLandingTemplate>
   )
 }

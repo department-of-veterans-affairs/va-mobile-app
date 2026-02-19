@@ -23,7 +23,11 @@ context('DemoModeUsersScreen', () => {
   const getItem = AsyncStorage.getItem as jest.Mock
   const initializeTestInstance = (fromLogin = false) => {
     goBack = jest.fn()
-    const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy, goBack }, { params: { fromLogin }})
+    const props = mockNavProps(
+      undefined,
+      { setOptions: jest.fn(), navigate: mockNavigationSpy, goBack },
+      { params: { fromLogin } },
+    )
 
     render(<DemoModeUsersScreen {...props} />)
   }

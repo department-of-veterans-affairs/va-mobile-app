@@ -4,6 +4,7 @@ import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
@@ -24,6 +25,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import DemoAlert from 'screens/auth/LoginScreen/DemoAlert'
 import { RootState } from 'store'
+import DemoUsers, { DemoUserIds } from 'store/api/demo/mocks/users'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
@@ -33,7 +35,6 @@ import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 import { vaGovWebviewTitle } from 'utils/webview'
-import { useFocusEffect } from '@react-navigation/native'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -136,15 +137,19 @@ function LoginScreen() {
       />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       {!loadingRefreshToken && <CrisisLineButton />}
-      {demoMode &&
-          <>
-            <AlertWithHaptics variant="info" description="DEMO MODE" />
-              <Box px={theme.dimensions.gutter} pt={theme.dimensions.standardMarginBetween}>
-                  <TextView pb={theme.dimensions.condensedMarginBetween}>Demo User: {demoUser}</TextView>
-                  <Button onPress={onSelectDemoUser} label={'Change Demo User'} />
-              </Box>
-          </>
-      }
+      {demoMode && (
+        <>
+          <AlertWithHaptics variant="info" description="DEMO MODE">
+            <TextView pb={theme.dimensions.condensedMarginBetween}>
+              User: {DemoUsers[demoUser as DemoUserIds].name}
+            </TextView>
+            {/*<TextView pb={theme.dimensions.condensedMarginBetween}>{DemoUsers[demoUser as DemoUserIds].notes}</TextView>*/}
+          </AlertWithHaptics>
+          <Box px={theme.dimensions.gutter} pt={theme.dimensions.standardMarginBetween}>
+            <Button onPress={onSelectDemoUser} label={'Change Demo User'} />
+          </Box>
+        </>
+      )}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}
