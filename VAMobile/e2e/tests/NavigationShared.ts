@@ -5,7 +5,7 @@ When to update:
 Update navigationDic whenever a new feature/page with the bottom nav bar is added to the app.
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
-import { by, element, waitFor } from 'detox'
+import { by, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants } from './utils'
 
@@ -151,8 +151,20 @@ export const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Scroll so that 'Get prescription details' is visible but not under the 'Start refill request' button
+      // Scroll to bring 'Get prescription details' into view above the 'Start refill request' button.
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(100, 'down', 0.5, 0.5)
+      // With large text (text resize mode), the fixed 100px scroll can overshoot and place the element
+      // behind the navigation bar safe area. Check the element's screen Y and scroll back up if needed.
+      const prescriptionAttrs = await element(by.text('Get prescription details')).atIndex(0).getAttributes()
+      const prescriptionTopY: number = (prescriptionAttrs as any).frame?.y ?? 0
+      if (prescriptionTopY < 110) {
+        await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(
+          110 - prescriptionTopY,
+          'up',
+          0.5,
+          0.5,
+        )
+      }
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()
