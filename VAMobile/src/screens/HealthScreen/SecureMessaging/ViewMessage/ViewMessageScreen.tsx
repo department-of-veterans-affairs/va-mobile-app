@@ -199,6 +199,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
   const { data: recipientsData } = useAllMessageRecipients()
   const hasAvailableRecipients = (recipientsData?.data?.length ?? 0) > 0
+  const stationNumber = messageData?.meta?.stationNumber
 
   useEffect(() => {
     if (threadFetched) {
@@ -565,6 +566,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             noProviderError={noProviderError}
             migrationBlocksReply={migrationBlocksReply}
             hasAvailableRecipients={hasAvailableRecipients}
+            stationNumber={stationNumber}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>

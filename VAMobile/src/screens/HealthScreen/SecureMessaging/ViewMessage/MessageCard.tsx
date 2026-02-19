@@ -39,6 +39,7 @@ export type MessageCardProps = {
   /** Whether the user has available recipients (triage groups) to message */
   hasAvailableRecipients?: boolean
   noProviderError?: boolean
+  stationNumber?: string
 }
 
 function MessageCard({
@@ -49,6 +50,7 @@ function MessageCard({
   migrationBlocksReply,
   hasAvailableRecipients,
   noProviderError,
+  stationNumber,
 }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
@@ -167,7 +169,12 @@ function MessageCard({
   }
 
   const onReplyPress = () =>
-    navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+    navigateTo('ReplyMessage', {
+      messageID: message.messageId,
+      attachmentFileToAdd: {},
+      attachmentFileToRemove: {},
+      stationNumber,
+    })
 
   function getReplyOrStartNewMessageButton() {
     if (noProviderError || migrationBlocksReply) {
