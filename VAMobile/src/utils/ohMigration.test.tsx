@@ -11,6 +11,7 @@ import {
   allFacilitiesInMigrationErrorState,
   anyFacilitiesInMigrationErrorState,
   getMigrationEndDate,
+  getMigrationForFacilityId,
   getMigrationStartDate,
   getMigrationsInErrorState,
   parentScreenToPhaseMap,
@@ -251,6 +252,56 @@ context('ohMigration', () => {
       // p2 is warning for secureMessaging
       const migrations = [createMigration('p2')]
       expect(anyFacilitiesInMigrationErrorState(migrations, OHParentScreens.SecureMessaging)).toBe(false)
+    })
+  })
+
+  describe('getMigrationForFacilityId', () => {
+    it('should return the migration containing the given facility id as a number', () => {
+      const migration = createMigration('p3', [mockFacilities[0]])
+      const result = getMigrationForFacilityId([migration], 528)
+      expect(result).toBe(migration)
+    })
+
+    it('should return the migration containing the given facility id as a string', () => {
+      const migration = createMigration('p3', [mockFacilities[0]])
+      const result = getMigrationForFacilityId([migration], '528')
+      expect(result).toBe(migration)
+    })
+
+    it('should return undefined when no migration contains the facility id', () => {
+      const migration = createMigration('p3', [mockFacilities[0]])
+      const result = getMigrationForFacilityId([migration], 999)
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined when facilityId is undefined', () => {
+      const migration = createMigration('p3', [mockFacilities[0]])
+      const result = getMigrationForFacilityId([migration], undefined)
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined when facilityId is an empty string', () => {
+      const migration = createMigration('p3', [mockFacilities[0]])
+      const result = getMigrationForFacilityId([migration], '')
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined when migrations list is empty', () => {
+      const result = getMigrationForFacilityId([], 528)
+      expect(result).toBeUndefined()
+    })
+
+    it('should find the correct migration when multiple migrations have different facilities', () => {
+      const migration1 = createMigration('p3', [mockFacilities[0]])
+      const migration2 = createMigration('p4', [mockFacilities[1]])
+      const result = getMigrationForFacilityId([migration1, migration2], 123)
+      expect(result).toBe(migration2)
+    })
+
+    it('should match when facility is one of multiple in a migration', () => {
+      const migration = createMigration('p3', mockFacilities)
+      const result = getMigrationForFacilityId([migration], 123)
+      expect(result).toBe(migration)
     })
   })
 
