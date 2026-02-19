@@ -143,7 +143,6 @@ function LoginScreen() {
             <TextView pb={theme.dimensions.condensedMarginBetween}>
               User: {DemoUsers[demoUser as DemoUserIds].name}
             </TextView>
-            {/*<TextView pb={theme.dimensions.condensedMarginBetween}>{DemoUsers[demoUser as DemoUserIds].notes}</TextView>*/}
           </AlertWithHaptics>
           <Box px={theme.dimensions.gutter} pt={theme.dimensions.standardMarginBetween}>
             <Button onPress={onSelectDemoUser} label={'Change Demo User'} />
