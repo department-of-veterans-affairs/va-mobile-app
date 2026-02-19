@@ -25,6 +25,8 @@ export type FeatureToggleType =
   | 'labsAndTests'
   | 'loadLabsAndTestsOnHomeScreen'
   | 'mrHide36HrHoldTimes'
+  | 'noErrorPhasesKimOH'
+  | 'noRecipientsKimOH'
   | 'rescheduleLink'
   | 'submitEvidenceExpansion'
   | 'sso'
@@ -55,6 +57,8 @@ type FeatureToggleValues = {
   labsAndTests: boolean
   loadLabsAndTestsOnHomeScreen: boolean
   mrHide36HrHoldTimes: boolean
+  noErrorPhasesKimOH: boolean
+  noRecipientsKimOH: boolean
   rescheduleLink: boolean
   submitEvidenceExpansion: boolean
   sso: boolean
@@ -86,6 +90,8 @@ export const defaults: FeatureToggleValues = {
   labsAndTests: true,
   loadLabsAndTestsOnHomeScreen: false,
   mrHide36HrHoldTimes: false,
+  noErrorPhasesKimOH: false,
+  noRecipientsKimOH: false,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
   sso: true,
