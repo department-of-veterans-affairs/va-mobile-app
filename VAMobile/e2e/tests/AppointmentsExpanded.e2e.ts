@@ -22,6 +22,9 @@ beforeAll(async () => {
 
 describe(':ios: Appointments Screen Expansion', () => {
   it('verify confirmed VA in-person appointment details', async () => {
+    // The VA in-person appointment is on page 2 of the paginated upcoming list
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
     await waitFor(element(by.text('At San Francisco VA Health Care System')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
@@ -35,6 +38,9 @@ describe(':ios: Appointments Screen Expansion', () => {
   })
 
   it('verify confirmed home video appointment details', async () => {
+    // Navigate back to page 1 where the home video appointment is
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id('previous-page')).tap()
     await waitFor(element(by.text('Sami Alsahhar - HOME - Confirmed')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
