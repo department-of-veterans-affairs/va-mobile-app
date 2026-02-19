@@ -23,6 +23,7 @@ import getEnv from 'utils/env'
 import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -37,6 +38,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
 
   const { contentMarginBottom } = theme.dimensions
 
@@ -69,7 +71,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   }
 
   const getRefillVAHealthButton = () => {
-    if (refillStatus === RefillStatusConstants.TRANSFERRED) {
+    if (refillStatus === RefillStatusConstants.TRANSFERRED && !isOHCutoverFlagEnabled) {
       return getGoToMyVAHealthButton()
     } else if (isRefillable) {
       return getRequestRefillButton()
