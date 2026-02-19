@@ -622,36 +622,45 @@ context('EditDraft', () => {
       },
     }
 
-    it('should hide the Send button and Add Files button when migration blocks replies', async () => {
+    const mockMigrationPhases = {
+      current: 'p3',
+      p0: 'March 1, 2026',
+      p1: 'March 15, 2026',
+      p2: 'April 1, 2026',
+      p3: 'April 24, 2026',
+      p4: 'April 27, 2026',
+      p5: 'May 1, 2026',
+      p6: 'May 3, 2026',
+      p7: 'May 8, 2026',
+    }
+
+    const mockMigrationFacilities = [
+      { facilityId: 528, facilityName: 'Test VA Medical Center' },
+      { facilityId: 123, facilityName: 'Different VA Medical Center' },
+    ]
+
+    const setupMigrationMock = (currentPhase: string, facilities = [mockMigrationFacilities[0]]) => {
       ;(useAuthorizedServices as jest.Mock).mockReturnValue({
         data: {
           migratingFacilitiesList: [
             {
               migrationDate: '2026-05-01',
-              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
-              phases: {
-                current: 'p3',
-                p0: 'March 1, 2026',
-                p1: 'March 15, 2026',
-                p2: 'April 1, 2026',
-                p3: 'April 24, 2026',
-                p4: 'April 27, 2026',
-                p5: 'May 1, 2026',
-                p6: 'May 3, 2026',
-                p7: 'May 8, 2026',
-              },
+              facilities,
+              phases: { ...mockMigrationPhases, current: currentPhase },
             },
           ],
         },
       })
+    }
 
+    const setupApiCalls = (threadData = migrationThread, messageData = migrationMessage) => {
       when(api.get as jest.Mock)
         .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
           useCache: 'false',
         })
-        .mockResolvedValue(migrationThread)
+        .mockResolvedValue(threadData)
         .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(migrationMessage)
+        .mockResolvedValue(messageData)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
@@ -660,53 +669,129 @@ context('EditDraft', () => {
           useCache: 'false',
         } as api.Params)
         .mockResolvedValue(folderMessages)
+    }
+
+    it('should hide the Send button and Add Files button when migration blocks replies', async () => {
+      setupMigrationMock('p3')
+      setupApiCalls()
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
     })
 
-    it('should not show "too old for replies" alert when migration blocks replies', async () => {
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: {
-          migratingFacilitiesList: [
-            {
-              migrationDate: '2026-05-01',
-              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
-              phases: {
-                current: 'p5',
-                p0: 'March 1, 2026',
-                p1: 'March 15, 2026',
-                p2: 'April 1, 2026',
-                p3: 'April 24, 2026',
-                p4: 'April 27, 2026',
-                p5: 'May 1, 2026',
-                p6: 'May 3, 2026',
-                p7: 'May 8, 2026',
-              },
-            },
-          ],
-        },
+    describe('renderAlerts', () => {
+      it('should show migration error alert with correct header when migration blocks replies', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls()
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
       })
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(migrationThread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(migrationMessage)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
-      initializeTestInstance()
-      await waitFor(() =>
-        expect(screen.queryByRole('heading', { name: 'This conversation is too old for new replies' })).toBeFalsy(),
-      )
+      it('should show migration error alert body text', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls()
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(
+            screen.getByText("You can't reply to conversations with care teams at these facilities:"),
+          ).toBeTruthy(),
+        )
+      })
+
+      it('should display facility names in the migration error alert', async () => {
+        setupMigrationMock('p3', mockMigrationFacilities)
+        setupApiCalls()
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('Test VA Medical Center')).toBeTruthy())
+        await waitFor(() => expect(screen.getByText('Different VA Medical Center')).toBeTruthy())
+      })
+
+      it('should show the note about calling the facility directly', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls()
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(
+            screen.getByText('If you need to contact your care team now, call the facility directly.'),
+          ).toBeTruthy(),
+        )
+      })
+
+      it('should show the facility locator link in migration error alert', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls()
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
+      })
+
+      it('should show migration error alert for p4 phase', async () => {
+        setupMigrationMock('p4')
+        const p4Thread: SecureMessagingThreadGetData = {
+          data: migrationThread.data.map((msg) => ({
+            ...msg,
+            attributes: { ...msg.attributes, ohMigrationPhase: 'p4' },
+          })),
+        }
+        const p4Message: SecureMessagingMessageGetData = {
+          ...migrationMessage,
+          data: {
+            ...migrationMessage.data,
+            attributes: { ...migrationMessage.data.attributes, ohMigrationPhase: 'p4' },
+          },
+        }
+        setupApiCalls(p4Thread, p4Message)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+      })
+
+      it('should show migration error alert for p5 phase', async () => {
+        setupMigrationMock('p5')
+        const p5Thread: SecureMessagingThreadGetData = {
+          data: migrationThread.data.map((msg) => ({
+            ...msg,
+            attributes: { ...msg.attributes, ohMigrationPhase: 'p5' },
+          })),
+        }
+        const p5Message: SecureMessagingMessageGetData = {
+          ...migrationMessage,
+          data: {
+            ...migrationMessage.data,
+            attributes: { ...migrationMessage.data.attributes, ohMigrationPhase: 'p5' },
+          },
+        }
+        setupApiCalls(p5Thread, p5Message)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+      })
+
+      it('should take precedence over "too old for replies" alert when migration blocks replies', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls()
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+        await waitFor(() =>
+          expect(screen.queryByRole('heading', { name: 'This conversation is too old for new replies' })).toBeFalsy(),
+        )
+      })
+
+      it('should show no alerts when reply enabled and no migration blocking', async () => {
+        setupApiCalls(thread, message)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.queryByRole('heading', { name: 'This conversation is too old for new replies' })).toBeFalsy(),
+        )
+        await waitFor(() =>
+          expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
+        )
+      })
     })
   })
 })

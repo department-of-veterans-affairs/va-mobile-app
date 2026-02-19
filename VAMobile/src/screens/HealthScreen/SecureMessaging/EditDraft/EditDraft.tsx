@@ -692,11 +692,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       )
     }
 
-    const soonestErrorMigration = getMigrationsInErrorState(
-      userAuthorizedServices?.migratingFacilitiesList || [],
-      OHParentScreens.SecureMessaging,
-    )[0]
-
     return (
       <Box>
         <MessageAlert
@@ -707,7 +702,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           errorList={errorList}
           replyTriageError={replyTriageError}
         />
-        {soonestErrorMigration && getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging)}
         <TextArea>
           {message && isReplyDraft && (
             <>
@@ -806,6 +800,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           ? t('secureMessaging.deletingChanges.loading')
           : t('secureMessaging.draft.loading')
   const leftButtonAction = noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel
+  const soonestErrorMigration = getMigrationsInErrorState(
+    userAuthorizedServices?.migratingFacilitiesList || [],
+    OHParentScreens.SecureMessaging,
+  )[0]
 
   return (
     <FullScreenSubtask
@@ -842,14 +840,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           {replyDisabled && !migrationBlocksReply && renderAlert()}
-          {migrationBlocksReply && authorizedServicesData && (
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <OHAlertManager
-                parentScreen={OHParentScreens.SecureMessaging}
-                authorizedServices={authorizedServicesData}
-              />
-            </Box>
-          )}
+          {migrationBlocksReply &&
+            authorizedServicesData &&
+            soonestErrorMigration &&
+            getMigrationErrorMessage(soonestErrorMigration, OHParentScreens.SecureMessaging)}
           <Box>{renderForm()}</Box>
           <Box>{isReplyDraft && renderMessageThread()}</Box>
         </Box>
