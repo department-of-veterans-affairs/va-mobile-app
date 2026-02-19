@@ -5,7 +5,6 @@ import { PrescriptionSortOptionConstants, PrescriptionsList, RefillStatus, Refil
 import { LabelTagTypeConstants } from 'components/LabelTag'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateUtc } from 'utils/formattingUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
   switch (status) {
@@ -83,7 +82,6 @@ export const getStatusDefinitionTextForRefillStatus = (
   status: RefillStatus,
   t: TFunction,
 ): { text: string; a11yLabel: string } => {
-  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
   switch (status) {
     case RefillStatusConstants.ACTIVE:
       return {
@@ -113,10 +111,8 @@ export const getStatusDefinitionTextForRefillStatus = (
       }
     case RefillStatusConstants.TRANSFERRED:
       return {
-        text: isOHCutoverFlagEnabled ? t('statusDefinition.transferredV2') : t('statusDefinition.transferred'),
-        a11yLabel: a11yLabelVA(
-          isOHCutoverFlagEnabled ? t('statusDefinition.transferredV2') : t('statusDefinition.transferred'),
-        ),
+        text: t('statusDefinition.transferred'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.transferred')),
       }
     case RefillStatusConstants.DISCONTINUED:
     case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:

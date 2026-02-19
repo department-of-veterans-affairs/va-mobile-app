@@ -5,16 +5,10 @@ import { t } from 'i18next'
 
 import { PrescriptionAttributeData, RefillStatusConstants } from 'api/types'
 import PrescriptionDetails from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionDetails'
-import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
-
-jest.mock('utils/remoteConfig')
+import { context, mockNavProps, render } from 'testUtils'
 
 context('PrescriptionDetails', () => {
-  const initializeTestInstance = (
-    mockAttributeData: Partial<PrescriptionAttributeData> = {},
-    cutoverFlagValue = false,
-  ) => {
+  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}) => {
     const props = mockNavProps(undefined, undefined, {
       params: {
         prescription: {
@@ -42,7 +36,7 @@ context('PrescriptionDetails', () => {
         },
       },
     })
-    when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(cutoverFlagValue)
+
     render(<PrescriptionDetails {...props} />)
   }
 
@@ -82,6 +76,24 @@ context('PrescriptionDetails', () => {
     })
   })
 
+  describe('Go to My VA Health button', () => {
+    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
+      it('should display FooterButton', () => {
+        initializeTestInstance({
+          refillStatus: RefillStatusConstants.TRANSFERRED,
+        })
+        expect(screen.getByRole('button', { name: t('goToMyVAHealth') })).toBeTruthy()
+      })
+    })
+
+    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
+      it('should not display FooterButton', () => {
+        initializeTestInstance()
+        expect(screen.queryByRole('button', { name: t('goToMyVAHealth') })).toBeFalsy()
+      })
+    })
+  })
+
   describe('RequestRefillButton', () => {
     describe('when isRefillable is true', () => {
       it('should display FooterButton', () => {
@@ -111,32 +123,10 @@ context('PrescriptionDetails', () => {
       })
     })
 
-    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
-      it('should not display the PrescriptionsDetailsBanner', () => {
-        initializeTestInstance()
-        expect(screen.queryByText(t('prescription.details.banner.title'))).toBeFalsy()
-      })
-    })
-
-    describe('when status is RefillStatusConstants.TRANSFERRED and cutover flag is enabled', () => {
-      it('should display the PrescriptionsDetailsBanner', () => {
-        initializeTestInstance(
-          {
-            refillStatus: RefillStatusConstants.TRANSFERRED,
-          },
-          true,
-        )
-        expect(screen.queryByText(t('prescription.details.banner.titleV2'))).toBeTruthy()
-      })
-    })
-
-    describe('when status is RefillStatusConstants.TRANSFERRED and cutover flag is disabled', () => {
-      it('should display the VA Health button', () => {
-        initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED,
-        })
-        expect(screen.getByRole('button', { name: t('goToMyVAHealth') })).toBeTruthy()
-      })
+    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {})
+    it('should not display the PrescriptionsDetailsBanner', () => {
+      initializeTestInstance()
+      expect(screen.queryByText(t('prescription.details.banner.title'))).toBeFalsy()
     })
   })
 })
