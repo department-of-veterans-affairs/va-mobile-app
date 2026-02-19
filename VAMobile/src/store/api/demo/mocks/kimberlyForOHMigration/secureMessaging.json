@@ -481,7 +481,8 @@
       }
     },
     "meta": {
-      "userInTriageTeam": true
+      "userInTriageTeam": true,
+      "stationNumber": "528"
     }
   },
   "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true": {

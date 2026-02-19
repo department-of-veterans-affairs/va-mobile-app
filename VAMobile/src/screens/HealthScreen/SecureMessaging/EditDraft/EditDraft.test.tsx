@@ -792,6 +792,29 @@ context('EditDraft', () => {
           expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
         )
       })
+
+      it('should show error alerts for all migrations in error state', async () => {
+        ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+          data: {
+            migratingFacilitiesList: [
+              {
+                migrationDate: '2026-05-01',
+                facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+                phases: { ...mockMigrationPhases, current: 'p3' },
+              },
+              {
+                migrationDate: '2026-06-01',
+                facilities: [{ facilityId: 123, facilityName: 'Different VA Medical Center' }],
+                phases: { ...mockMigrationPhases, current: 'p4' },
+              },
+            ],
+          },
+        })
+        setupApiCalls()
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('Test VA Medical Center')).toBeTruthy())
+        await waitFor(() => expect(screen.getByText('Different VA Medical Center')).toBeTruthy())
+      })
     })
   })
 })

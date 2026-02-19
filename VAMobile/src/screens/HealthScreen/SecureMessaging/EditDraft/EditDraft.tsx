@@ -800,10 +800,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           ? t('secureMessaging.deletingChanges.loading')
           : t('secureMessaging.draft.loading')
   const leftButtonAction = noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel
-  const soonestErrorMigration = getMigrationsInErrorState(
+  const allMigrationsInErrorState = getMigrationsInErrorState(
     userAuthorizedServices?.migratingFacilitiesList || [],
     OHParentScreens.SecureMessaging,
-  )[0]
+  )
 
   return (
     <FullScreenSubtask
@@ -840,9 +840,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           {replyDisabled && !migrationBlocksReply && renderAlert()}
-          {migrationBlocksReply && authorizedServicesData && soonestErrorMigration && (
-            <MigrationErrorMessage migration={soonestErrorMigration} parentScreen={OHParentScreens.SecureMessaging} />
-          )}
+          {migrationBlocksReply &&
+            authorizedServicesData &&
+            allMigrationsInErrorState.length > 0 &&
+            allMigrationsInErrorState.map((migration) => (
+              <MigrationErrorMessage migration={migration} parentScreen={OHParentScreens.SecureMessaging} />
+            ))}
           <Box>{renderForm()}</Box>
           <Box>{isReplyDraft && renderMessageThread()}</Box>
         </Box>

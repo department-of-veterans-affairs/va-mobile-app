@@ -536,6 +536,7 @@ context('ViewMessageScreen', () => {
       included: [],
       meta: {
         userInTriageTeam: true,
+        stationNumber: '528',
       },
     }
 
@@ -685,6 +686,7 @@ context('ViewMessageScreen', () => {
           included: [],
           meta: {
             userInTriageTeam: true,
+            stationNumber: '528',
           },
         }
         setupApiCalls(45, migrationOldMessage, oldThread)
@@ -702,6 +704,7 @@ context('ViewMessageScreen', () => {
           ...migrationMessage,
           meta: {
             userInTriageTeam: false,
+            stationNumber: '528',
           },
         }
         setupApiCalls(3, migrationNoTriageMessage)
@@ -738,6 +741,7 @@ context('ViewMessageScreen', () => {
           included: [],
           meta: {
             userInTriageTeam: true,
+            stationNumber: '528',
           },
         }
 

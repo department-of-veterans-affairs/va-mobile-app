@@ -61,6 +61,17 @@ export const getMigrationsInErrorState = (
   return migratingFacilitiesList.filter((migration) => getAlertState(migration.phases.current, feature) === 'error')
 }
 
+// Each facility should only ever be in one migration at a time
+export const getMigrationForFacilityId = (
+  migratingFacilitiesList: MigratingFacility[],
+  facilityId: number | string | undefined,
+): MigratingFacility | undefined => {
+  if (!facilityId) return undefined
+  return migratingFacilitiesList.find((migration) =>
+    migration.facilities.some((facility) => String(facility.facilityId) === String(facilityId)),
+  )
+}
+
 export const getMigrationEndDate = (migration: MigratingFacility, feature: OHParentScreens): string => {
   const endDatePhase = parentScreenToPhaseMap[feature].endDate
   return migration.phases[endDatePhase as keyof typeof migration.phases]

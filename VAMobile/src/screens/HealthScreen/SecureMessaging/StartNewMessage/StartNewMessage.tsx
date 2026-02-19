@@ -447,10 +447,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
-  const soonestErrorMigration = getMigrationsInErrorState(
+  const allMigrationsInErrorState = getMigrationsInErrorState(
     userAuthorizedServices?.migratingFacilitiesList || [],
     OHParentScreens.SecureMessaging,
-  )[0]
+  )
 
   function renderContent() {
     if (noProviderError) {
@@ -485,9 +485,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             </TextView>
           </AlertWithHaptics>
         </Box>
-        {soonestErrorMigration && (
-          <MigrationErrorMessage migration={soonestErrorMigration} parentScreen={OHParentScreens.SecureMessaging} />
-        )}
+        {allMigrationsInErrorState.length > 0 &&
+          allMigrationsInErrorState.map((migration) => (
+            <MigrationErrorMessage migration={migration} parentScreen={OHParentScreens.SecureMessaging} />
+          ))}
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}

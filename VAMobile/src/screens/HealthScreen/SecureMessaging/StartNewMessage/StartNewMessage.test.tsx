@@ -533,7 +533,7 @@ context('StartNewMessage', () => {
       )
     })
 
-    it('should show the first migration in error state when multiple exist', async () => {
+    it('should show error alerts for all migrations in error state when multiple exist', async () => {
       ;(useAuthorizedServices as jest.Mock).mockReturnValue({
         data: {
           migratingFacilitiesList: [
@@ -556,6 +556,7 @@ context('StartNewMessage', () => {
         expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
       )
       expect(screen.getByText('Test VA Medical Center')).toBeTruthy()
+      expect(screen.getByText('Different VA Medical Center')).toBeTruthy()
     })
   })
 })

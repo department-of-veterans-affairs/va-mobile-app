@@ -67,7 +67,7 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { getMigrationEndDate, getMigrationsInErrorState } from 'utils/ohMigration'
+import { getMigrationEndDate, getMigrationForFacilityId, getMigrationsInErrorState } from 'utils/ohMigration'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -412,16 +412,17 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           testID: 'pickerMoveMessageID',
         }
 
-  const soonestErrorMigration = getMigrationsInErrorState(
-    userAuthorizedServices?.migratingFacilitiesList || [],
-    OHParentScreens.SecureMessaging,
-  )[0]
-  const migratingFacilitiesInErrorNames = soonestErrorMigration?.facilities.map(
+  const associatedErrorMigration = getMigrationForFacilityId(
+    getMigrationsInErrorState(userAuthorizedServices?.migratingFacilitiesList || [], OHParentScreens.SecureMessaging),
+    stationNumber || '',
+  )
+
+  const migratingFacilitiesInErrorNames = associatedErrorMigration?.facilities.map(
     (facility: FacilityInfo) => facility.facilityName,
   )
 
   const renderAlerts = () => {
-    if (migrationBlocksReply && soonestErrorMigration) {
+    if (migrationBlocksReply && associatedErrorMigration && migratingFacilitiesInErrorNames) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertWithHaptics
@@ -441,7 +442,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 i18nKey={'secureMessaging.reply.youCantReplyMigrationMessage.body2'}
                 components={{ bold: <TextView variant="MobileBodyBold" /> }}
                 values={{
-                  endDate: getMigrationEndDate(soonestErrorMigration, OHParentScreens.SecureMessaging),
+                  endDate: getMigrationEndDate(associatedErrorMigration, OHParentScreens.SecureMessaging),
                 }}
               />
             </TextView>
