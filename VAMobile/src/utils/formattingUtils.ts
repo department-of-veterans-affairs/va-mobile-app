@@ -40,7 +40,7 @@ export const getFormattedDateOrTimeWithFormatOption = (
     dateObj = dateObj.setZone(timeZone)
   }
 
-  return dateObj.toLocaleString(Object.assign(dateTimeType, dateTimeOptions))
+  return dateObj.toLocaleString(Object.assign({}, dateTimeType, dateTimeOptions))
 }
 
 /**
