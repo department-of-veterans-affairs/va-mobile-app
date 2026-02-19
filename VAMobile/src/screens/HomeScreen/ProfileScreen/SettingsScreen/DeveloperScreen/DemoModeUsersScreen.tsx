@@ -16,12 +16,14 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type DemoModeUsersScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'DemoModeUsers'>
 
-function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenProps) {
+function DemoModeUsersScreen({ navigation, route }: DemoModeUsersScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { contentMarginBottom } = theme.dimensions
   const [demoUser, setDemoUser] = useState('kimberlyWashington')
+
+  const { fromLogin } = route.params
 
   useEffect(() => {
     AsyncStorage.getItem(DEMO_USER).then((storedDemoUser) => {
@@ -37,6 +39,23 @@ function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenPr
     additionalLabelText: [DemoUsers[id as DemoUserIds].notes || ''],
   }))
 
+  const getDoneButton = () => {
+    return (
+      <Button
+        onPress={async () => {
+          await AsyncStorage.setItem(DEMO_USER, demoUser)
+          if (fromLogin) {
+            navigation.goBack()
+          } else {
+            dispatch(logout())
+          }
+        }}
+        label={fromLogin ? 'Save' : 'Save and Logout'}
+        testID={'demoModeUserSave'}
+      />
+    )
+  }
+
   return (
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
@@ -46,14 +65,7 @@ function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenPr
         <RadioGroup isRadioList value={demoUser} options={demoUsers} onChange={setDemoUser} />
       </Box>
       <TextArea>
-        <Button
-          onPress={async () => {
-            await AsyncStorage.setItem(DEMO_USER, demoUser)
-            dispatch(logout())
-          }}
-          label={'Save and Logout'}
-          testID={'demoModeUserSave'}
-        />
+        {getDoneButton()}
       </TextArea>
     </FeatureLandingTemplate>
   )

@@ -32,7 +32,7 @@ import NotificationManager, { useNotificationContext } from 'components/Notifica
 import { EnvironmentTypesConstants } from 'constants/common'
 import { linking } from 'constants/linking'
 import { NAMESPACE } from 'constants/namespaces'
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import {FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS} from 'constants/screens'
 import {
   BenefitsScreen,
   HealthScreen,
@@ -80,6 +80,7 @@ import { useNetworkConnectionListener, useOfflineAnnounce, useOfflineNavEvents }
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 import { fetchAndActivate } from 'utils/remoteConfig'
+import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 
 const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
 const REMOTE_CONFIG_REFRESH = 30 // minutes
@@ -127,6 +128,7 @@ type StackNavParamList = WebviewStackParams & {
   Login: undefined
   LoaGate: undefined
   VeteransCrisisLine: undefined
+  DemoModeUsers: { fromLogin: boolean }
 }
 
 type RootTabNavParamList = {
@@ -451,6 +453,11 @@ export function AuthGuard() {
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="DemoModeUsers"
+          component={DemoModeUsersScreen}
+          options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+        />
       </Stack.Navigator>
     )
   }

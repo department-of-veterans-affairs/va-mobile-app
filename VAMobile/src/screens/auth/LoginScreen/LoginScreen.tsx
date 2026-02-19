@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -33,6 +33,7 @@ import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 import { vaGovWebviewTitle } from 'utils/webview'
+import { useFocusEffect } from '@react-navigation/native'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -47,6 +48,7 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
+  const [demoUser, setDemoUser] = useState('')
 
   useEffect(() => {
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
@@ -63,6 +65,18 @@ function LoginScreen() {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
+  const handleDemoUserUpdated = async () => {
+    const storedDemoUser = await AsyncStorage.getItem(DEMO_USER)
+    setDemoUser(storedDemoUser || '')
+    return storedDemoUser
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      handleDemoUserUpdated()
+    }, []),
+  )
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -73,16 +87,20 @@ function LoginScreen() {
   }
 
   const handleUpdateDemoMode = async () => {
-    const demoUser = await AsyncStorage.getItem(DEMO_USER)
+    await handleDemoUserUpdated()
     dispatch(updateDemoMode(true, demoUser))
   }
   const tapForDemo = () => {
     demoTaps++
-    console.log(`demotaps: ${demoTaps}`)
+    console.debug(`demotaps: ${demoTaps}`)
     if (demoTaps >= TAPS_FOR_DEMO) {
       demoTaps = 0
       setDemoPromptVisible(true)
     }
+  }
+
+  const onSelectDemoUser = () => {
+    navigateTo('DemoModeUsers', { fromLogin: true })
   }
 
   async function setFirstTimeLogin() {
@@ -118,7 +136,15 @@ function LoginScreen() {
       />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       {!loadingRefreshToken && <CrisisLineButton />}
-      {demoMode && <AlertWithHaptics variant="info" description="DEMO MODE" />}
+      {demoMode &&
+          <>
+            <AlertWithHaptics variant="info" description="DEMO MODE" />
+              <Box px={theme.dimensions.gutter} pt={theme.dimensions.standardMarginBetween}>
+                  <TextView pb={theme.dimensions.condensedMarginBetween}>Demo User: {demoUser}</TextView>
+                  <Button onPress={onSelectDemoUser} label={'Change Demo User'} />
+              </Box>
+          </>
+      }
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}

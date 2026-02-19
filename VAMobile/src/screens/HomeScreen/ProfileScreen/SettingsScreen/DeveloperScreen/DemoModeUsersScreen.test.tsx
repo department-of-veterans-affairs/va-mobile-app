@@ -17,10 +17,13 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   clear: jest.fn(),
 }))
 
+let goBack: jest.Mock
+
 context('DemoModeUsersScreen', () => {
   const getItem = AsyncStorage.getItem as jest.Mock
-  const initializeTestInstance = () => {
-    const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
+  const initializeTestInstance = (fromLogin = false) => {
+    goBack = jest.fn()
+    const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy, goBack }, { params: { fromLogin }})
 
     render(<DemoModeUsersScreen {...props} />)
   }
@@ -56,6 +59,26 @@ context('DemoModeUsersScreen', () => {
       await waitFor(() => {
         expect(AsyncStorage.setItem).toBeCalledWith(DEMO_USER, 'claraJefferson')
         expect(logoutSpy).toHaveBeenCalled()
+      })
+    })
+
+    it('from the login page should go back instead of log out', async () => {
+      getItem.mockResolvedValueOnce('benjaminAdams')
+      const logoutSpy = jest.spyOn(AuthSlice, 'logout').mockImplementationOnce((): AppThunk => async () => {})
+
+      initializeTestInstance(true)
+      const radioButton = screen.getByRole('radio', { selected: false, name: 'Clara Jefferson' })
+      expect(radioButton).toBeDefined()
+      fireEvent.press(radioButton)
+
+      const saveButton = screen.getByRole('button', { name: 'Save' })
+      expect(saveButton).toBeDefined()
+      fireEvent.press(saveButton)
+
+      await waitFor(() => {
+        expect(AsyncStorage.setItem).toBeCalledWith(DEMO_USER, 'claraJefferson')
+        expect(logoutSpy).not.toHaveBeenCalled()
+        expect(goBack).toHaveBeenCalled()
       })
     })
   })
