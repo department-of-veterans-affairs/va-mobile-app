@@ -478,6 +478,15 @@ export type ClaimsAndAppealsList = {
   }
 }
 
+export type StructuredContentBlock =
+  | { type: 'paragraph'; content: string }
+  | { type: 'list'; style: 'bullet' | 'numbered'; items: string[] }
+  | { type: 'link'; text: string; href: string }
+
+export type StructuredContent = {
+  blocks: StructuredContentBlock[]
+}
+
 export type ClaimEventData = {
   trackedItemId?: number | null
   description?: string
@@ -500,6 +509,20 @@ export type ClaimEventData = {
   documents?: Array<ClaimEventDocumentData>
   phase?: number
   documentId?: string
+
+  // Plain Language Overrides for Tracked Items
+  friendlyName?: string | null
+  shortDescription?: string | null
+  activityDescription?: string | null
+  longDescription?: StructuredContent | null
+  nextSteps?: StructuredContent | null
+  supportAliases?: string[] | null
+  canUploadFile?: boolean | null
+  noActionNeeded?: boolean | null
+  isDBQ?: boolean | null
+  isProperNoun?: boolean | null
+  isSensitive?: boolean | null
+  noProvidePrefix?: boolean | null
 }
 
 export type ClaimEFolderData = {
