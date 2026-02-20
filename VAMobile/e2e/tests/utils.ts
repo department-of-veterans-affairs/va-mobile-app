@@ -104,7 +104,6 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
-  PRESCRIPTION_DETAILS_LINK_ID: 'getPrescriptionDetailsTestID',
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
