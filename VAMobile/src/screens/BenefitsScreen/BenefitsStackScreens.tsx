@@ -42,6 +42,9 @@ export type BenefitsStackParamList = {
   }
   ClaimsHistoryScreen: undefined
   TravelPayClaims: undefined
+  TravelPayClaimDetailsScreen: {
+    claimId: string
+  }
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: {
