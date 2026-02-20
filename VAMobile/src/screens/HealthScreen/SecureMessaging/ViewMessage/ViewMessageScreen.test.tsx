@@ -420,7 +420,7 @@ context('ViewMessageScreen', () => {
     })
   })
 
-  describe('when provider disbles replies on latest message', () => {
+  describe('when provider disables replies on latest message', () => {
     it('should have the Start new message button', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
