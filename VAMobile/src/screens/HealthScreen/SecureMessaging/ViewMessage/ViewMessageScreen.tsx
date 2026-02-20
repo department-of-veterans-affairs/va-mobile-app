@@ -563,7 +563,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             replyExpired={replyExpired}
             noProviderError={noProviderError}
             migrationBlocksReply={migrationBlocksReply}
-            hasAvailableRecipients={hasAvailableRecipients}
             stationNumber={stationNumber}
           />
           {thread.length > 0 && (
