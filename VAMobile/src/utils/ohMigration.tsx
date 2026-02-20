@@ -78,7 +78,7 @@ export const getMigrationEndDate = (migration: MigratingFacility, feature: OHPar
 }
 
 export const getMigrationStartDate = (migration: MigratingFacility, feature: OHParentScreens): string => {
-  const startDatePhase = parentScreenToPhaseMap[feature].warning[0]
+  const startDatePhase = parentScreenToPhaseMap[feature].error[0]
   return migration.phases[startDatePhase as keyof typeof migration.phases]
 }
 
