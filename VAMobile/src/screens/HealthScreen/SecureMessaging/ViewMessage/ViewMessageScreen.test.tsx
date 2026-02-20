@@ -616,12 +616,12 @@ context('ViewMessageScreen', () => {
         .mockResolvedValue(messages)
     }
 
-    it('should hide Reply and Start new message buttons when migration blocks replies', async () => {
+    it('should hide Reply and show Start new message buttons when migration blocks replies', async () => {
       setupMigrationMock('p3')
       setupApiCalls(3, migrationMessage)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
-      await waitFor(() => expect(screen.queryByText('Start new message')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText('Start new message')).toBeTruthy())
       await waitFor(() => expect(screen.queryByText('Reply')).toBeFalsy())
     })
 
