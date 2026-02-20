@@ -6,7 +6,7 @@ Update navigationDic whenever a new feature/page with the bottom nav bar is adde
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
 import { exec } from 'child_process'
-import { by, element, waitFor } from 'detox'
+import { by, device, element, waitFor } from 'detox'
 
 import { CommonE2eIdConstants } from './utils'
 
@@ -181,16 +181,12 @@ export const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Use by.id() to match only the Pressable's accessibilityIdentifier, avoiding
-      // ghost RCTTextView nodes that text-based matchers also match at y≈0 in
-      // XXXL text-resize mode. waitFor+scroll is adaptive in case the Pressable
-      // is below the visible area (XXXL text makes cards taller than normal).
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-      await waitFor(element(by.id(CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).atIndex(0))
+      await waitFor(element(by.text('AMLODIPINE BESYLATE 10MG TAB')))
         .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-        .scroll(50, 'down', 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).atIndex(0).tap()
+        .withTimeout(10000)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(200, 'down', 0.5, 0.5)
+      await element(by.text('Get prescription details')).atIndex(0).tap()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
