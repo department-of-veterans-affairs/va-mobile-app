@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useFolderMessages } from 'api/secureMessaging'
+import { useAllMessageRecipients } from 'api/secureMessaging/getAllMessageRecipients'
 import { SecureMessagingMessageData, SecureMessagingMessageList } from 'api/types'
 import {
   AlertWithHaptics,
@@ -48,6 +49,15 @@ function FolderMessages({ route }: FolderMessagesProps) {
     enabled: isFocused && screenContentAllowed('WG_FolderMessages'),
   })
   const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
+  const [noRecipientsError, setNoRecipientsError] = useState(true)
+  const { data: recipientsResponse, isFetched: hasLoadedRecipients } = useAllMessageRecipients()
+  const recipients = recipientsResponse?.data
+
+  useEffect(() => {
+    if (hasLoadedRecipients) {
+      setNoRecipientsError(!recipients || recipients.length === 0)
+    }
+  }, [recipients, hasLoadedRecipients])
 
   useEffect(() => {
     const messagesList = folderMessagesData?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
@@ -133,16 +143,18 @@ function FolderMessages({ route }: FolderMessagesProps) {
           />
         </Box>
       ) : messages.length === 0 ? (
-        <NoFolderMessages />
+        <NoFolderMessages noRecipientsError={noRecipientsError} />
       ) : (
         <>
-          <Box mx={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('secureMessaging.startNewMessage')}
-              onPress={onPress}
-              testID={'startNewMessageButtonTestID'}
-            />
-          </Box>
+          {!noRecipientsError && (
+            <Box mx={theme.dimensions.buttonPadding}>
+              <Button
+                label={t('secureMessaging.startNewMessage')}
+                onPress={onPress}
+                testID={'startNewMessageButtonTestID'}
+              />
+            </Box>
+          )}
           <Box mt={theme.dimensions.standardMarginBetween}>
             <MessageList items={getMessagesListItems(messagesToShow, t, onMessagePress, folderName)} />
           </Box>

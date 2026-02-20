@@ -4,11 +4,10 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { SecureMessagingFolderMessagesGetData } from 'api/types'
-import { LARGE_PAGE_SIZE } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
-import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { mockSMAllRecipients, mockSMFolderMessages } from 'screens/HealthScreen/SecureMessaging/smTestHelpers'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -60,6 +59,28 @@ context('FolderMessages', () => {
     },
   }
 
+  const mockRecipients = {
+    data: [
+      {
+        id: '1',
+        type: 'mock',
+        attributes: {
+          triageTeamId: 1,
+          name: 'Test Team',
+          relationType: 'PATIENT',
+          preferredTeam: true,
+          stationNumber: '123',
+        },
+      },
+    ],
+    meta: { sort: { name: 'ASC' as const }, careSystems: [] },
+  }
+
+  const mockEmptyRecipients = {
+    data: [],
+    meta: { sort: { name: 'ASC' as const }, careSystems: [] },
+  }
+
   const initializeTestInstance = (folderID = SecureMessagingSystemFolderIdConstants.SENT, draftSaved = false) => {
     let folderName
     if (folderID > 0) folderName = 'Custom'
@@ -77,13 +98,7 @@ context('FolderMessages', () => {
 
   describe('when a message is pressed', () => {
     it('should call navigate', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, messages)
       initializeTestInstance()
       expect(screen.getByText('Loading your messages...')).toBeTruthy()
       await waitFor(() =>
@@ -95,33 +110,14 @@ context('FolderMessages', () => {
 
   describe('when there are no messages', () => {
     it('should render the NoFolderMessages', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue({
-          data: [],
-          links: {
-            self: '',
-            first: '',
-            prev: '',
-            next: '',
-            last: '',
-          },
-          meta: {
-            sort: {
-              sentDate: 'DESC',
-            },
-            pagination: {
-              currentPage: 2,
-              perPage: 1,
-              totalPages: 3,
-              totalEntries: 5,
-            },
-          },
-        })
+      mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
+        data: [],
+        links: { self: '', first: '', prev: '', next: '', last: '' },
+        meta: {
+          sort: { sentDate: 'DESC' },
+          pagination: { currentPage: 2, perPage: 1, totalPages: 3, totalEntries: 5 },
+        },
+      })
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy())
     })
@@ -129,15 +125,33 @@ context('FolderMessages', () => {
 
   describe('drafts', () => {
     it('should mark messages as a draft', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.DRAFTS}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, messages)
+      mockSMAllRecipients(mockRecipients)
       initializeTestInstance(SecureMessagingSystemFolderIdConstants.DRAFTS)
       await waitFor(() => expect(screen.getByText('DRAFT - Recipient')).toBeTruthy())
+    })
+  })
+
+  describe('start new message button visibility', () => {
+    it('should show the button when recipients are available', async () => {
+      mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, messages)
+      mockSMAllRecipients(mockRecipients)
+      initializeTestInstance(SecureMessagingSystemFolderIdConstants.SENT)
+      await waitFor(() => expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy())
+    })
+
+    it('should hide the button when no recipients are returned', async () => {
+      mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, messages)
+      mockSMAllRecipients(mockEmptyRecipients)
+      initializeTestInstance(SecureMessagingSystemFolderIdConstants.SENT)
+      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+    })
+
+    it('should hide the button when recipients data is undefined', async () => {
+      mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, messages)
+      mockSMAllRecipients(undefined)
+      initializeTestInstance(SecureMessagingSystemFolderIdConstants.DRAFTS)
+      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
     })
   })
 })
