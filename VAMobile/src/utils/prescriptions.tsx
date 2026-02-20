@@ -83,7 +83,7 @@ export const getStatusDefinitionTextForRefillStatus = (
   status: RefillStatus,
   t: TFunction,
 ): { text: string; a11yLabel: string } => {
-  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover');
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
   switch (status) {
     case RefillStatusConstants.ACTIVE:
       return {
@@ -114,7 +114,9 @@ export const getStatusDefinitionTextForRefillStatus = (
     case RefillStatusConstants.TRANSFERRED:
       return {
         text: isOHCutoverFlagEnabled ? t('statusDefinition.transferredV2') : t('statusDefinition.transferred'),
-        a11yLabel: a11yLabelVA(isOHCutoverFlagEnabled ? t('statusDefinition.transferredV2') : t('statusDefinition.transferred')),
+        a11yLabel: a11yLabelVA(
+          isOHCutoverFlagEnabled ? t('statusDefinition.transferredV2') : t('statusDefinition.transferred'),
+        ),
       }
     case RefillStatusConstants.DISCONTINUED:
     case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
