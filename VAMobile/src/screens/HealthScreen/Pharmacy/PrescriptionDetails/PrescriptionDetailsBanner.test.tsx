@@ -35,4 +35,3 @@ context('PrescriptionsDetailsBanner', () => {
     expect(screen.getByText(`${t('prescription.details.banner.bodyV2')}`)).toBeTruthy()
   })
 })
-
