@@ -347,10 +347,10 @@ jobs:
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
             # Optimization: NavigationLandscape/DarkMode/TextResize.e2e and AvailabilityFramework.e2e have dedicated matrix jobs
-            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           else
             # Targeted: Prepend prerequisites for safety
-            echo "CMD=yarn e2e:ios-test /e2e/tests/NavigationLandscape.e2e NavigationDarkMode.e2e NavigationTextResize.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:ios-test /e2e/tests/NavigationLandscape.e2e NavigationDarkMode.e2e NavigationTextResize.e2e AvailabilityFramework.e2e ${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           fi
 
       - name: Run e2e tests for iOS
