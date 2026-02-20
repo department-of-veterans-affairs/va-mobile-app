@@ -201,7 +201,7 @@ jobs:
       - name: Check for npm Cache
         id: npm-cache
         if: inputs.skip_cache != true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: VAMobile/node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
@@ -219,7 +219,7 @@ jobs:
       - name: Check for Build Cache
         id: build-cache
         if: inputs.skip_cache != true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: VAMobile/android/app/build/outputs/apk
           key: ${{ runner.os }}-detox-android-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/android/*.gradle','VAMobile/android/app/*.gradle','VAMobile/android/gradle.properties','VAMobile/android/app/src/**','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','.github/workflows/e2e_android.yml') }}
@@ -280,7 +280,7 @@ jobs:
 
       - name: Restore npm Cache
         id: npm-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: VAMobile/node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}

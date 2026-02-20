@@ -191,7 +191,7 @@ jobs:
       - name: Check for npm Cache
         id: npm-cache
         if: inputs.skip_cache != true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: VAMobile/node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
@@ -222,7 +222,7 @@ jobs:
       - name: Check for CocoaPods Cache
         if: inputs.skip_cache != true
         id: pod-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             VAMobile/ios/Pods
@@ -238,7 +238,7 @@ jobs:
       - name: Check for Build Cache
         id: build-cache
         if: inputs.skip_cache != true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: VAMobile/ios/output
           key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/ios/Podfile.lock','VAMobile/package.json','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','VAMobile/ios/VAMobile/**','VAMobile/ios/*.xcodeproj/**','VAMobile/ios/*.xcworkspace/**') }}
@@ -295,7 +295,7 @@ jobs:
 
       - name: Restore npm Cache
         id: npm-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: VAMobile/node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
@@ -305,7 +305,7 @@ jobs:
       - name: Restore applesimutils Cache
         id: applesimutils-cache
         if: inputs.skip_cache != true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /opt/homebrew/Cellar/applesimutils
           key: ${{ runner.os }}-applesimutils-${{ hashFiles('.github/workflows/e2e_ios.yml') }}
