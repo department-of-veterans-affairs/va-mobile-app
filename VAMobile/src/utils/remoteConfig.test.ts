@@ -27,7 +27,6 @@ const mockOverrides = {
   loadLabsAndTestsOnHomeScreen: false,
   mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
-  sso: true,
   startScheduling: false,
   testFeature: false,
   appointmentsTestTime: true,
