@@ -4,24 +4,20 @@ import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { Box, FeatureLandingTemplate, RadioGroup, TextArea, radioOption } from 'components'
+import { Box, FeatureLandingTemplate, RadioGroup, radioOption } from 'components'
 import FloatingButton from 'components/FloatingButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import DemoUsers, { DemoUserIds } from 'store/api/demo/mocks/users'
 import { logout } from 'store/slices/authSlice'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 
 type DemoModeUsersScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'DemoModeUsers'>
 
 function DemoModeUsersScreen({ navigation, route }: DemoModeUsersScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { contentMarginBottom } = theme.dimensions
   const [demoUser, setDemoUser] = useState('kimberlyWashington')
 
   const { fromLogin } = route.params
