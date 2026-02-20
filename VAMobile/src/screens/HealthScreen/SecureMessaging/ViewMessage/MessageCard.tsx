@@ -36,9 +36,19 @@ export type MessageCardProps = {
   userInTriageTeam?: boolean
   replyExpired?: boolean
   stationNumber?: string
+  migrationBlocksReply?: boolean
+  hasAvailableRecipients?: boolean
 }
 
-function MessageCard({ message, folderId, userInTriageTeam, replyExpired, stationNumber }: MessageCardProps) {
+function MessageCard({
+  message,
+  folderId,
+  userInTriageTeam,
+  replyExpired,
+  stationNumber,
+  migrationBlocksReply,
+  hasAvailableRecipients,
+}: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -164,17 +174,24 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired, statio
     })
 
   function getReplyOrStartNewMessageButton() {
+    if (!replyExpired && userInTriageTeam && !migrationBlocksReply) {
+      return (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
+        </Box>
+      )
+    }
+    // During migration, only show Start New Message if user has available recipients
+    if (migrationBlocksReply && !hasAvailableRecipients) {
+      return null
+    }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {!replyExpired && userInTriageTeam ? (
-          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
-        ) : (
-          <Button
-            label={t('secureMessaging.startNewMessage')}
-            onPress={onStartMessagePress}
-            testID={'startNewMessageButtonTestID'}
-          />
-        )}
+        <Button
+          label={t('secureMessaging.startNewMessage')}
+          onPress={onStartMessagePress}
+          testID={'startNewMessageButtonTestID'}
+        />
       </Box>
     )
   }
@@ -185,7 +202,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired, statio
         {getHeader()}
         {getContent()}
         {(hasAttachments || attachment) && getAttachment()}
-        {getMessageHelp()}
+        {!migrationBlocksReply && getMessageHelp()}
         {getReplyOrStartNewMessageButton()}
       </Box>
     </Box>
