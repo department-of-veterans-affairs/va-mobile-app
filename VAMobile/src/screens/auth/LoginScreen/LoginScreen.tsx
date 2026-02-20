@@ -111,6 +111,10 @@ function LoginScreen() {
     await AsyncStorage.setItem(NEW_SESSION, 'true')
   }
 
+  const getDemoUser = () => {
+    return `User: ${demoUser ? DemoUsers[demoUser as DemoUserIds].name : DemoUsers.kimberlyWashington.name}`
+  }
+
   const onLoginInit = demoMode
     ? () => {
         setNewSession()
@@ -140,9 +144,7 @@ function LoginScreen() {
       {demoMode && (
         <>
           <AlertWithHaptics variant="info" description="DEMO MODE">
-            <TextView pb={theme.dimensions.condensedMarginBetween}>
-              User: {DemoUsers[demoUser as DemoUserIds].name}
-            </TextView>
+            <TextView pb={theme.dimensions.condensedMarginBetween}>{getDemoUser()}</TextView>
           </AlertWithHaptics>
           <Box px={theme.dimensions.gutter} pt={theme.dimensions.standardMarginBetween}>
             <Button onPress={onSelectDemoUser} label={'Change Demo User'} />
