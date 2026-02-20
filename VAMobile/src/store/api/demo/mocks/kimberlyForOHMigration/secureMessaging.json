@@ -1914,7 +1914,8 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "ohMigrationPhase": "p5"
       },
       "relationships": {
         "attachments": {

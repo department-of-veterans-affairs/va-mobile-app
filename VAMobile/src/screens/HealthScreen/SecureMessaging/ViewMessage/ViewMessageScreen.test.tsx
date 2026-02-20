@@ -258,6 +258,10 @@ context('ViewMessageScreen', () => {
       data: {
         migratingFacilitiesList: [],
       },
+      isFetched: true,
+      error: null,
+      refetch: jest.fn(),
+      isFetching: false,
     })
   })
 
@@ -551,6 +555,10 @@ context('ViewMessageScreen', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
     }
 

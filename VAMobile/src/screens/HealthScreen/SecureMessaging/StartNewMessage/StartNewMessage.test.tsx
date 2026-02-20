@@ -202,6 +202,10 @@ context('StartNewMessage', () => {
       data: {
         migratingFacilitiesList: [],
       },
+      isFetched: true,
+      error: null,
+      refetch: jest.fn(),
+      isFetching: false,
     })
   })
 
@@ -437,6 +441,10 @@ context('StartNewMessage', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
       initializeApiCalls()
       initializeTestInstance()
@@ -457,6 +465,10 @@ context('StartNewMessage', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
       initializeApiCalls()
       initializeTestInstance()
@@ -476,6 +488,10 @@ context('StartNewMessage', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
       initializeApiCalls()
       initializeTestInstance()
@@ -495,6 +511,10 @@ context('StartNewMessage', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
       initializeApiCalls()
       initializeTestInstance()
@@ -512,6 +532,10 @@ context('StartNewMessage', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
       initializeApiCalls()
       initializeTestInstance()
@@ -525,6 +549,10 @@ context('StartNewMessage', () => {
         data: {
           migratingFacilitiesList: [],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
       initializeApiCalls()
       initializeTestInstance()
@@ -549,6 +577,10 @@ context('StartNewMessage', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
       initializeApiCalls()
       initializeTestInstance()

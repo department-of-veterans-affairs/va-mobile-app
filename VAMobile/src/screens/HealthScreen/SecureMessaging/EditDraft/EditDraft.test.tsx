@@ -308,6 +308,10 @@ context('EditDraft', () => {
       data: {
         migratingFacilitiesList: [],
       },
+      isFetched: true,
+      error: null,
+      refetch: jest.fn(),
+      isFetching: false,
     })
   })
 
@@ -650,6 +654,10 @@ context('EditDraft', () => {
             },
           ],
         },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
       })
     }
 
@@ -685,45 +693,8 @@ context('EditDraft', () => {
         setupApiCalls()
         initializeTestInstance()
         await waitFor(() =>
-          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+          expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
         )
-      })
-
-      it('should show migration error alert body text', async () => {
-        setupMigrationMock('p3')
-        setupApiCalls()
-        initializeTestInstance()
-        await waitFor(() =>
-          expect(
-            screen.getByText("You can't reply to conversations with care teams at these facilities:"),
-          ).toBeTruthy(),
-        )
-      })
-
-      it('should display facility names in the migration error alert', async () => {
-        setupMigrationMock('p3', mockMigrationFacilities)
-        setupApiCalls()
-        initializeTestInstance()
-        await waitFor(() => expect(screen.getByText('Test VA Medical Center')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('Different VA Medical Center')).toBeTruthy())
-      })
-
-      it('should show the note about calling the facility directly', async () => {
-        setupMigrationMock('p3')
-        setupApiCalls()
-        initializeTestInstance()
-        await waitFor(() =>
-          expect(
-            screen.getByText('If you need to contact your care team now, call the facility directly.'),
-          ).toBeTruthy(),
-        )
-      })
-
-      it('should show the facility locator link in migration error alert', async () => {
-        setupMigrationMock('p3')
-        setupApiCalls()
-        initializeTestInstance()
-        await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
       })
 
       it('should show migration error alert for p4 phase', async () => {
@@ -744,7 +715,7 @@ context('EditDraft', () => {
         setupApiCalls(p4Thread, p4Message)
         initializeTestInstance()
         await waitFor(() =>
-          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+          expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
         )
       })
 
@@ -766,7 +737,7 @@ context('EditDraft', () => {
         setupApiCalls(p5Thread, p5Message)
         initializeTestInstance()
         await waitFor(() =>
-          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+          expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
         )
       })
 
@@ -775,7 +746,7 @@ context('EditDraft', () => {
         setupApiCalls()
         initializeTestInstance()
         await waitFor(() =>
-          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+          expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
         )
         await waitFor(() =>
           expect(screen.queryByRole('heading', { name: 'This conversation is too old for new replies' })).toBeFalsy(),
@@ -789,7 +760,7 @@ context('EditDraft', () => {
           expect(screen.queryByRole('heading', { name: 'This conversation is too old for new replies' })).toBeFalsy(),
         )
         await waitFor(() =>
-          expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
+          expect(screen.queryByText("You can't use messages to contact some facilities right now")).toBeFalsy(),
         )
       })
 
@@ -809,6 +780,10 @@ context('EditDraft', () => {
               },
             ],
           },
+          isFetched: true,
+          error: null,
+          refetch: jest.fn(),
+          isFetching: false,
         })
         setupApiCalls()
         initializeTestInstance()
