@@ -65,7 +65,6 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
   },
   {
     featureName: 'TravelListAndStatus',
-    featureFlag: 'travelPayStatusList',
     bullets: 3,
   },
   {
