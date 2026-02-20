@@ -59,7 +59,7 @@ describe('Review Upcoming Appointments', () => {
       .scroll(200, 'down')
     await element(by.text('Vilanisi Reddy')).tap()
 
-    // Verify Appoinment details
+    // Verify Appointment details
     await expect(element(by.text(Appointmentse2eConstants.UPCOMING_CC_APPT_TITLE))).toExist()
     await expect(element(by.text(Appointmentse2eConstants.UPCOMING_CC_APPT_BODY))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.ADD_TO_CALENDAR_ID))).toExist()
@@ -150,7 +150,7 @@ describe('Review Past Appointments', () => {
       .scroll(200, 'down')
     await element(by.text('Sami Alsahhar - Onsite - Confirmed')).tap()
 
-    // Verify Appoinment details
+    // Verify Appointment details
     await expect(element(by.text(Appointmentse2eConstants.PAST_APPT_TITLE))).toExist()
     await expect(element(by.text(Appointmentse2eConstants.PAST_APPT_BODY))).toExist()
     await expect(element(by.text(Appointmentse2eConstants.TYPE_OF_CARE_TITLE))).toExist()

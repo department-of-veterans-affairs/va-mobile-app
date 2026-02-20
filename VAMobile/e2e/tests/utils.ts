@@ -457,7 +457,7 @@ export const fillHomeAddressFields = async ({
 }
 
 /**
- * Executes the flow to update the entered address as save it to demo mode
+ * Executes the flow to update the entered address and save it to demo mode
  */
 export async function updateAddress() {
   // Save the address by using the suggested address

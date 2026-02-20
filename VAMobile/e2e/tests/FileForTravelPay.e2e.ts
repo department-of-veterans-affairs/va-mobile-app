@@ -92,7 +92,7 @@ const TravelPayE2eIdConstants = {
   SUCCESS_CONTENT_SECTION_TITLE_ID: 'successContentSectionTitleID',
   SUCCESS_CONTENT_INSTRUCTION_TEXT_ID: 'successContentInstructionTextID',
   SUCCESS_CONTENT_ADDITIONAL_TEXT_ID: 'successContentAdditionalTextID',
-  TAVEL_PAY_DETAILS_STATUS_TEXT: 'Status: In Progress',
+  TRAVEL_PAY_DETAILS_STATUS_TEXT: 'Status: In Progress',
   TRAVEL_AGREEMENT_HEADER_ID: 'travelAgreementHeaderID',
   TRAVEL_AGREEMENT_LINK_ID: 'travelAgreementLinkID',
   TRAVEL_CLAIM_HELP_SCREEN_ID: 'travelClaimHelpScreenID',
@@ -270,7 +270,7 @@ describe('File for Travel Pay', () => {
   it('navigates to the Review Claim screen when the user answers Yes to the Address screen', async () => {
     await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
 
-    // Verfiy Review Claim Screen
+    // Verify Review Claim Screen
     await expect(element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.REVIEW_TITLE_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.WHAT_ID))).toExist()
