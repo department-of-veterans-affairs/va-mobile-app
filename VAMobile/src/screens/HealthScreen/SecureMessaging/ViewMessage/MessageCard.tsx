@@ -36,7 +36,6 @@ export type MessageCardProps = {
   userInTriageTeam?: boolean
   replyExpired?: boolean
   migrationBlocksReply?: boolean
-  hasAvailableRecipients?: boolean
   noProviderError?: boolean
   stationNumber?: string
 }
@@ -48,7 +47,6 @@ function MessageCard({
   replyExpired,
   stationNumber,
   migrationBlocksReply,
-  hasAvailableRecipients,
   noProviderError,
 }: MessageCardProps) {
   const theme = useTheme()
@@ -176,7 +174,7 @@ function MessageCard({
     })
 
   function getReplyOrStartNewMessageButton() {
-    if (noProviderError || migrationBlocksReply) {
+    if (noProviderError) {
       return <></>
     }
 
@@ -187,10 +185,7 @@ function MessageCard({
         </Box>
       )
     }
-    // During migration, only show Start New Message if user has available recipients
-    if (migrationBlocksReply && !hasAvailableRecipients) {
-      return null
-    }
+
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <Button

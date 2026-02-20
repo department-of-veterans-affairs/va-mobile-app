@@ -196,8 +196,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   // Derive OH migration phase from the first thread message or the current message
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
-  const { data: recipientsData } = useAllMessageRecipients()
-  const hasAvailableRecipients = (recipientsData?.data?.length ?? 0) > 0
   const stationNumber = messageData?.meta?.stationNumber
 
   useEffect(() => {
