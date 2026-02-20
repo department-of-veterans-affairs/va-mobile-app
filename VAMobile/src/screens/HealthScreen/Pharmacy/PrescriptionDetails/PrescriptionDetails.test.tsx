@@ -11,7 +11,10 @@ import { featureEnabled } from 'utils/remoteConfig'
 jest.mock('utils/remoteConfig')
 
 context('PrescriptionDetails', () => {
-  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}, cutoverFlagValue = false) => {
+  const initializeTestInstance = (
+    mockAttributeData: Partial<PrescriptionAttributeData> = {},
+    cutoverFlagValue = false,
+  ) => {
     const props = mockNavProps(undefined, undefined, {
       params: {
         prescription: {
@@ -117,9 +120,12 @@ context('PrescriptionDetails', () => {
 
     describe('when status is RefillStatusConstants.TRANSFERRED and cutover flag is enabled', () => {
       it('should display the PrescriptionsDetailsBanner', () => {
-        initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED,
-        }, true)
+        initializeTestInstance(
+          {
+            refillStatus: RefillStatusConstants.TRANSFERRED,
+          },
+          true,
+        )
         expect(screen.queryByText(t('prescription.details.banner.titleV2'))).toBeTruthy()
       })
     })

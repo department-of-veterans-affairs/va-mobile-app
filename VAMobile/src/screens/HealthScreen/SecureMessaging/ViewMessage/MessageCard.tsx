@@ -36,7 +36,6 @@ export type MessageCardProps = {
   userInTriageTeam?: boolean
   replyExpired?: boolean
   migrationBlocksReply?: boolean
-  /** Whether the user has available recipients (triage groups) to message */
   hasAvailableRecipients?: boolean
   noProviderError?: boolean
   stationNumber?: string
@@ -47,10 +46,10 @@ function MessageCard({
   folderId,
   userInTriageTeam,
   replyExpired,
+  stationNumber,
   migrationBlocksReply,
   hasAvailableRecipients,
   noProviderError,
-  stationNumber,
 }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
