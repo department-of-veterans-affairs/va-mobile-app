@@ -9,13 +9,11 @@ import {
   SecureMessagingFolderMessagesGetData,
   SecureMessagingMessageGetData,
   SecureMessagingRecipients,
-  SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
-import { LARGE_PAGE_SIZE } from 'constants/common'
 import EditDraft from 'screens/HealthScreen/SecureMessaging/EditDraft/EditDraft'
-import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { mockEditDraftEndpoints, mockSMAllRecipientsError } from 'screens/HealthScreen/SecureMessaging/smTestHelpers'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
 
@@ -332,28 +330,13 @@ context('EditDraft', () => {
 
   describe('when no recipients are returned', () => {
     it('should display an AlertBox and on click of Go to inbox it should navigate', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue({
-          data: [],
-          meta: {
-            sort: {
-              name: 'ASC',
-            },
-          },
-        })
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({
+        messageId: 3,
+        thread,
+        message,
+        recipients: { data: [], meta: { sort: { name: 'ASC' } } },
+        folderMessages,
+      })
       initializeTestInstance()
       expect(screen.getByText('Loading your draft...')).toBeTruthy()
       await waitFor(() => expect(screen.getByText("We can't match you with a provider")).toBeTruthy())
@@ -364,21 +347,8 @@ context('EditDraft', () => {
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockRejectedValue({ networkError: true } as api.APIError)
+      mockEditDraftEndpoints({ messageId: 3, thread, message, recipients, folderMessages })
+      mockSMAllRecipientsError()
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
@@ -386,21 +356,7 @@ context('EditDraft', () => {
 
   describe('when there are no recent messages', () => {
     it('should display an alert and should hide the Add Files button and Send button', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(oldThread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({ messageId: 3, thread: oldThread, message, recipients, folderMessages })
       initializeTestInstance()
       await waitFor(() =>
         expect(screen.getByRole('heading', { name: 'This conversation is too old for new replies' })).toBeTruthy(),
@@ -412,21 +368,7 @@ context('EditDraft', () => {
 
   describe('on click of the collapsible view', () => {
     it('should show the Reply Help panel', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({ messageId: 3, thread, message, recipients, folderMessages })
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
@@ -435,21 +377,7 @@ context('EditDraft', () => {
 
   describe('when the user only has multiple facilities on record', () => {
     it('should display care systems selection box', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(nonReplyDraftThread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({ messageId: 3, thread: nonReplyDraftThread, message, recipients, folderMessages })
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
@@ -465,21 +393,13 @@ context('EditDraft', () => {
         },
       ]
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(nonReplyDraftThread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(mockSingleCareSystemRecipientsResponse)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({
+        messageId: 3,
+        thread: nonReplyDraftThread,
+        message,
+        recipients: mockSingleCareSystemRecipientsResponse,
+        folderMessages,
+      })
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
     })
@@ -487,21 +407,7 @@ context('EditDraft', () => {
 
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({ messageId: 3, thread, message, recipients, folderMessages })
       initializeTestInstance()
       await waitFor(() => fireEvent.changeText(screen.getByTestId('messageText'), 'Random String'))
       await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Cancel' })))
@@ -512,21 +418,7 @@ context('EditDraft', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({ messageId: 3, thread, message, recipients, folderMessages })
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Add Files' })))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
@@ -662,21 +554,7 @@ context('EditDraft', () => {
     }
 
     const setupApiCalls = (threadData = migrationThread, messageData = migrationMessage) => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(threadData)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(messageData)
-        .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(folderMessages)
+      mockEditDraftEndpoints({ messageId: 3, thread: threadData, message: messageData, recipients, folderMessages })
     }
 
     it('should hide the Send button and Add Files button when migration blocks replies', async () => {

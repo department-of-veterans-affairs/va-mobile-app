@@ -9,13 +9,11 @@ import {
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
   SecureMessagingMessageGetData,
-  SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
-import { LARGE_PAGE_SIZE } from 'constants/common'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
-import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { mockViewMessageEndpoints } from 'screens/HealthScreen/SecureMessaging/smTestHelpers'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
 jest.mock('api/secureMessaging/getAllMessageRecipients')
@@ -319,21 +317,13 @@ context('ViewMessageScreen', () => {
 
   describe('when latest message is older than 45 days', () => {
     it('should have the Start new message button', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(oldThread)
-        .calledWith(`/v0/messaging/health/messages/${45}`)
-        .mockResolvedValue(oldMessage)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 45,
+        thread: oldThread,
+        message: oldMessage,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
       initializeTestInstance(45)
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
@@ -343,21 +333,7 @@ context('ViewMessageScreen', () => {
 
   describe('Should load the screen correctly', () => {
     it('renders correct amount of CollapsibleMessages', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({ messageId: 3, thread, message, folders: listOfFolders, inboxMessages: messages })
       initializeTestInstance()
       expect(screen.getByText('Loading your message...')).toBeTruthy()
       await waitFor(() => expect(screen.queryByRole('link', { name: '1-800-698-2411.Thank' })).toBeFalsy())
@@ -398,21 +374,13 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(oldThread)
-        .calledWith(`/v0/messaging/health/messages/${45}`)
-        .mockResolvedValue(messageWithTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 45,
+        thread: oldThread,
+        message: messageWithTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance(45)
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
@@ -428,21 +396,13 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(recentMessageWithTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 3,
+        thread,
+        message: recentMessageWithTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
@@ -460,21 +420,13 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(messageWithoutTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 3,
+        thread,
+        message: messageWithoutTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
@@ -510,21 +462,13 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(oldThread)
-        .calledWith(`/v0/messaging/health/messages/${45}`)
-        .mockResolvedValue(oldMessageWithoutTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 45,
+        thread: oldThread,
+        message: oldMessageWithoutTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance(45)
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
@@ -599,21 +543,13 @@ context('ViewMessageScreen', () => {
     }
 
     const setupApiCalls = (messageID: number, messageData: SecureMessagingMessageGetData, threadData = thread) => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(threadData)
-        .calledWith(`/v0/messaging/health/messages/${messageID}`)
-        .mockResolvedValue(messageData)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: messageID,
+        thread: threadData,
+        message: messageData,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
     }
 
     it('should hide Reply and show Start new message buttons when migration blocks replies', async () => {
