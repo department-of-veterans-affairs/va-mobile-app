@@ -152,7 +152,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const hasRecentMessages = thread.some(
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
-  const providerAllowsReply = !thread.some( (msg) => msg.attributes?.replyDisabled === true)
+  const providerAllowsReply = !thread.some((msg) => msg.attributes?.replyDisabled === true)
   const replyIsStale = isReplyDraft && !hasRecentMessages
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
