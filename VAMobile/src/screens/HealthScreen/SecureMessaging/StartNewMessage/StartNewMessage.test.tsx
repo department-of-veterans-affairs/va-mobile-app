@@ -34,6 +34,35 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   }
 })
 
+jest.mock('../../../../api/facilities/getFacilitiesInfo', () => {
+  const original = jest.requireActual('../../../../api/facilities/getFacilitiesInfo')
+  return {
+    ...original,
+    useFacilitiesInfo: jest.fn().mockReturnValue({
+      data: [
+        {
+          id: '528',
+          name: 'Test VA Medical Center',
+          city: 'Test City',
+          state: 'TS',
+          cerner: false,
+          miles: '10',
+        },
+        {
+          id: '123',
+          name: 'Different VA Medical Center',
+          city: 'Another City',
+          state: 'AC',
+          cerner: false,
+          miles: '20',
+        },
+      ],
+      isLoading: false,
+      isError: false,
+    }),
+  }
+})
+
 context('StartNewMessage', () => {
   let goBack: jest.Mock
 
@@ -230,7 +259,9 @@ context('StartNewMessage', () => {
       initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
-      fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      await waitFor(() => {
+        fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      })
       fireEvent.press(screen.getByLabelText(t('done')))
       await waitFor(() =>
         expect(screen.getByText(`${t('secureMessaging.startNewMessage.subject')} ${t('required')}`)).toBeTruthy(),
@@ -250,7 +281,9 @@ context('StartNewMessage', () => {
       initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
-      fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      await waitFor(() => {
+        fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      })
       fireEvent.press(screen.getByLabelText(t('done')))
       fireEvent.press(screen.getByText(t('cancel')))
       await waitFor(() => expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled())
@@ -303,6 +336,43 @@ context('StartNewMessage', () => {
         expect(screen.getAllByText(t('secureMessaging.formMessage.message.fieldError'))).toBeTruthy()
         expect(screen.getByText(t('secureMessaging.formMessage.weNeedMoreInfo'))).toBeTruthy()
         expect(screen.getByText(t('secureMessaging.formMessage.sendMessage.validation.text'))).toBeTruthy()
+      })
+    })
+
+    describe('when the form is filled and sent', () => {
+      it('should include station_number in the send message payload', async () => {
+        initializeApiCalls(true)
+        ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+        initializeTestInstance()
+        // Wait for form to load (to field only appears after careSystem is auto-set for single facility)
+        const toField = await screen.findByTestId('to field')
+        // Select category - use findBy to wait for modal content to render between each step
+        const picker = await screen.findByTestId('picker')
+        fireEvent.press(picker)
+        const generalOption = await screen.findByTestId(t('secureMessaging.startNewMessage.general'))
+        fireEvent.press(generalOption)
+        const doneButton = await screen.findByLabelText(t('done'))
+        fireEvent.press(doneButton)
+        // Select recipient from ComboBox
+        fireEvent.press(toField)
+        const doctor = await screen.findByText('Doctor 1')
+        fireEvent.press(doctor)
+        // Fill subject (required for General category)
+        const subjectField = await screen.findByTestId('startNewMessageSubjectTestID')
+        fireEvent.changeText(subjectField, 'test subject')
+        // Fill message
+        const messageField = await screen.findByTestId('message field')
+        fireEvent.changeText(messageField, 'test message')
+        // Press send
+        const sendButton = await screen.findByText(t('secureMessaging.formMessage.send'))
+        fireEvent.press(sendButton)
+        await waitFor(() =>
+          expect(api.post).toHaveBeenCalledWith(
+            '/v0/messaging/health/messages',
+            expect.objectContaining({ station_number: '357' }),
+            undefined,
+          ),
+        )
       })
     })
   })

@@ -35,8 +35,8 @@ export type MessageCardProps = {
   folderId: number
   userInTriageTeam?: boolean
   replyExpired?: boolean
+  stationNumber?: string
   migrationBlocksReply?: boolean
-  /** Whether the user has available recipients (triage groups) to message */
   hasAvailableRecipients?: boolean
 }
 
@@ -45,6 +45,7 @@ function MessageCard({
   folderId,
   userInTriageTeam,
   replyExpired,
+  stationNumber,
   migrationBlocksReply,
   hasAvailableRecipients,
 }: MessageCardProps) {
@@ -165,7 +166,12 @@ function MessageCard({
   }
 
   const onReplyPress = () =>
-    navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+    navigateTo('ReplyMessage', {
+      messageID: message.messageId,
+      attachmentFileToAdd: {},
+      attachmentFileToRemove: {},
+      stationNumber,
+    })
 
   function getReplyOrStartNewMessageButton() {
     if (!replyExpired && userInTriageTeam && !migrationBlocksReply) {

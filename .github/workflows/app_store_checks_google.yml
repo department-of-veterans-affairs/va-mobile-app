@@ -1,5 +1,5 @@
 # workflow to check that PR does not break any Google Play Store max file or max character limits
-name: "App Store requirement checks"
+name: 'App Store requirement checks'
 
 on:
   pull_request:
@@ -8,13 +8,13 @@ on:
       - develop
       - 'release/v**'
     paths:
-      - "VAMobile/android/fastlane/metadata/android/en-US/**"
+      - 'VAMobile/android/fastlane/metadata/android/en-US/**'
 
 jobs:
   check_max_android_phone_screenshots:
     uses: ./.github/workflows/check_max_size.yml
     with:
-      max_size: 8
+      max_size: 9 # Updating to 9 due to archive folder.
       working_dir: VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
       counting_function: ls | wc -l
   check_max_android_seven_inch_screenshots:

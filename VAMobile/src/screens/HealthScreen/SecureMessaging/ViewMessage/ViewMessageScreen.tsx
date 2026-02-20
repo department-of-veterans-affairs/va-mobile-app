@@ -171,6 +171,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const userInTriageTeam = messageData?.meta?.userInTriageTeam
+  const stationNumber = messageData?.meta?.stationNumber
 
   // Derive OH migration phase from the first thread message or the current message
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
@@ -471,6 +472,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             replyExpired={replyExpired}
             migrationBlocksReply={migrationBlocksReply}
             hasAvailableRecipients={hasAvailableRecipients}
+            stationNumber={stationNumber}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
