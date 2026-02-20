@@ -470,12 +470,13 @@ context('EditDraft', () => {
 
   describe('when there are no recent messages and provider does not allow reply', () => {
     it('should display an alert and should hide the Add Files button and Send button', async () => {
-      oldThread.data[2].attributes.replyDisabled = true;
+      const threadWithReplyDisabled = JSON.parse(JSON.stringify(oldThread))
+      threadWithReplyDisabled.data[2].attributes.replyDisabled = true
       when(api.get as jest.Mock)
         .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
           useCache: 'false',
         })
-        .mockResolvedValue(oldThread)
+        .mockResolvedValue(threadWithReplyDisabled)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
