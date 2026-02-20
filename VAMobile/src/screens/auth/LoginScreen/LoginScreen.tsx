@@ -66,23 +66,18 @@ function LoginScreen() {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
-  const handleUpdateDemoMode = async () => {
-    await handleDemoUserUpdated()
-    dispatch(updateDemoMode(true, demoUser))
-  }
-
-  const handleDemoUserUpdated = async () => {
+  const handleDemoUserUpdated = useCallback(async () => {
     const storedDemoUser = await AsyncStorage.getItem(DEMO_USER)
     setDemoUser(storedDemoUser || '')
-    return storedDemoUser
-  }
+    dispatch(updateDemoMode(true, storedDemoUser))
+  }, [dispatch])
 
   useFocusEffect(
     useCallback(() => {
       if (demoMode) {
-        handleUpdateDemoMode()
+        handleDemoUserUpdated()
       }
-    }, [demoMode, handleUpdateDemoMode]),
+    }, [demoMode, handleDemoUserUpdated]),
   )
 
   const onFacilityLocator = () => {
@@ -142,7 +137,7 @@ function LoginScreen() {
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.background.main}
       />
-      <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
+      <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleDemoUserUpdated} />
       {!loadingRefreshToken && <CrisisLineButton />}
       {demoMode && (
         <>
