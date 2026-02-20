@@ -3,6 +3,7 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useAllMessageRecipients } from 'api/secureMessaging/getAllMessageRecipients'
 import {
   CategoryTypeFields,
   SecureMessagingFolderMessagesGetData,
@@ -17,6 +18,7 @@ import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
+jest.mock('api/secureMessaging/getAllMessageRecipients')
 
 context('ViewMessageScreen', () => {
   const thread: SecureMessagingThreadGetData = {
@@ -257,6 +259,40 @@ context('ViewMessageScreen', () => {
     ;(useAuthorizedServices as jest.Mock).mockReturnValue({
       data: {
         migratingFacilitiesList: [],
+      },
+      isFetched: true,
+      error: null,
+      refetch: jest.fn(),
+      isFetching: false,
+    })
+    ;(useAllMessageRecipients as jest.Mock).mockReturnValue({
+      data: {
+        data: [
+          {
+            id: 'id',
+            type: 'type',
+            attributes: {
+              triageTeamId: 0,
+              name: 'Doctor 1',
+              relationType: 'PATIENT',
+              preferredTeam: true,
+              stationNumber: '528',
+              locationName: 'test_location',
+              suggestedNameDisplay: 'test_suggested_name',
+              healthCareSystemName: 'test_healthcare_system_name',
+              ohTriageGroup: false,
+            },
+          },
+        ],
+        meta: {
+          sort: { name: 'ASC' },
+          careSystems: [
+            {
+              stationNumber: '528',
+              healthCareSystemName: 'test_healthcare_system_name',
+            },
+          ],
+        },
       },
       isFetched: true,
       error: null,

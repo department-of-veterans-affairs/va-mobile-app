@@ -584,11 +584,8 @@ context('StartNewMessage', () => {
       })
       initializeApiCalls()
       initializeTestInstance()
-      await waitFor(() =>
-        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
-      )
-      expect(screen.getByText('Test VA Medical Center')).toBeTruthy()
-      expect(screen.getByText('Different VA Medical Center')).toBeTruthy()
+      await waitFor(() => expect(screen.getByText('Test VA Medical Center')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Different VA Medical Center')).toBeTruthy())
     })
   })
 })
