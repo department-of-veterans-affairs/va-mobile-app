@@ -440,7 +440,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 variant="warning"
                 header={t('secureMessaging.reply.cannotReplyHeader')}
                 description={t('secureMessaging.reply.cannotReplyBody')}
-                testID="secureMessagingOlderThan45DaysAlertID"
+                testID="secureMessagingCannotReplyAlertID"
               />
             </Box>
           )}
