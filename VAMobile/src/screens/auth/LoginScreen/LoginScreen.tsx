@@ -66,6 +66,11 @@ function LoginScreen() {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
+  const handleUpdateDemoMode = async () => {
+    await handleDemoUserUpdated()
+    dispatch(updateDemoMode(true, demoUser))
+  }
+
   const handleDemoUserUpdated = async () => {
     const storedDemoUser = await AsyncStorage.getItem(DEMO_USER)
     setDemoUser(storedDemoUser || '')
@@ -74,8 +79,10 @@ function LoginScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      handleDemoUserUpdated()
-    }, []),
+      if (demoMode) {
+        handleUpdateDemoMode()
+      }
+    }, [demoMode, handleUpdateDemoMode]),
   )
 
   const onFacilityLocator = () => {
@@ -87,10 +94,6 @@ function LoginScreen() {
     })
   }
 
-  const handleUpdateDemoMode = async () => {
-    await handleDemoUserUpdated()
-    dispatch(updateDemoMode(true, demoUser))
-  }
   const tapForDemo = () => {
     demoTaps++
     console.debug(`demotaps: ${demoTaps}`)
