@@ -328,20 +328,20 @@ context('ohMigration', () => {
   describe('getMigrationStartDate', () => {
     const migration = createMigration('p0')
 
-    it('should return the p0 date for appointments (first warning phase)', () => {
-      expect(getMigrationStartDate(migration, OHParentScreens.Appointments)).toBe('March 1, 2026')
+    it('should return the p2 date for appointments (first error phase)', () => {
+      expect(getMigrationStartDate(migration, OHParentScreens.Appointments)).toBe('April 1, 2026')
     })
 
-    it('should return the p1 date for secureMessaging (first warning phase)', () => {
-      expect(getMigrationStartDate(migration, OHParentScreens.SecureMessaging)).toBe('March 15, 2026')
+    it('should return the p3 date for secureMessaging (first error phase)', () => {
+      expect(getMigrationStartDate(migration, OHParentScreens.SecureMessaging)).toBe('April 24, 2026')
     })
 
-    it('should return the p1 date for medicalRecords (first warning phase)', () => {
-      expect(getMigrationStartDate(migration, OHParentScreens.MedicalRecords)).toBe('March 15, 2026')
+    it('should return the p5 date for medicalRecords (first error phase)', () => {
+      expect(getMigrationStartDate(migration, OHParentScreens.MedicalRecords)).toBe('May 1, 2026')
     })
 
-    it('should return the p1 date for medications (first warning phase)', () => {
-      expect(getMigrationStartDate(migration, OHParentScreens.Medications)).toBe('March 15, 2026')
+    it('should return the p4 date for medications (first error phase)', () => {
+      expect(getMigrationStartDate(migration, OHParentScreens.Medications)).toBe('April 27, 2026')
     })
   })
 
