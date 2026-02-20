@@ -25,6 +25,7 @@ export type SecureMessagingMessageAttributes = {
   readReceipt?: string
   isOhMessage: boolean
   replyDisabled?: boolean
+  ohMigrationPhase?: string | null
 }
 
 export type CategoryTypes =
