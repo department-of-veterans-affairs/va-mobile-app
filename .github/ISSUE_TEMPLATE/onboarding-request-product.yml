@@ -1,0 +1,98 @@
+name: Onboarding Request (Product)
+description: Fill out this form to request onboarding of a new Product role working on the va-mobile-app
+title: 'Onboarding: [name]'
+projects: ['department-of-veterans-affairs/1616']
+labels: [user-onboarding]
+assignees:
+  - kellylein
+  - dumathane
+body:
+- type: markdown
+  attributes:
+    value: |
+      **Please read before continuing**: This issue form is to start the onboarding process for a product person planning to work in the VAHB Mobile App.
+      After this issue is reviewed it will be dual-assigned to a Mobile Platform onboarding point of contact and the Experience Team member who is being onboarded for completion.
+- type: markdown
+  attributes:
+    value: |
+      Please note: For Google products (like Firebase), if the user has a VA.gov email address or does not yet have a Google account, they will need to create one by visiting [this link](https://accounts.google.com/signup/v2/webcreateaccount?continue=https%3A%2F%2Faccounts.google.com%2FManageAccount&gmb=exp&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp). Once at that link, VA.gov users and external users with email accounts that are not Google based should select the option "Use my current email address instead".
+- type: input
+  id: fullname
+  attributes:
+    label: Full Name
+    description: Users Full Name
+    placeholder: Alex Smith
+  validations:
+    required: true
+- type: input
+  id: username
+  attributes:
+    label: GitHub Username
+    description: Before mobile onboarding this user must already be within the VA Github Organization
+    placeholder: '@Alex-smith-va'
+  validations:
+    required: true
+- type: input
+  id: vaemail
+  attributes:
+    label: VA Email Address
+    description: Onboarding requires a VA email address to access developer systems
+    placeholder: 'Alex.Smith1@va.gov'
+  validations:
+    required: true
+- type: input
+  id: teamname
+  attributes:
+    label: Which team is this person on?
+    description: Exposing the primary team name helps us sort access requests
+  validations:
+    required: true
+- type: input
+  id: vaoctopo
+  attributes:
+    label: Who is the OCTO Product Owner for this person's team?
+    description: Adding a PO helps us triage requests, and know who the main point of contact is.
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: |
+      The checklist items below should be left blank, as they will be filled out during the onboarding process.
+- type: checkboxes
+  attributes:
+    label: System access granted by VA Mobile Platform
+    description: Before system access can be granted, the user _must_ be onboarded into VA Github Organization
+    options:
+    - label: App store connect (VA Mobile will provide)
+    - label: TestFlight (VA Mobile will provide)
+    - label: Firebase (VA Mobile will provide)
+    - label: App Tester (VA Mobile will provide through Firebase)
+    - label: Write access to applicable repositories (VA Mobile will provide)
+- type: checkboxes
+  attributes:
+    label: Tasks for Experience Team member to complete
+    description: These are things done by the new Experience Team member to ensure they know the resources available as they ramp up on the Mobile Platform
+    options:
+    - label: Join [#va-mobile-app slack channel](https://dsva.slack.com/archives/C018V2JCWRJ)
+    - label: Join [#va-mobile-app-announce slack channel](https://dsva.slack.com/archives/C0AECDP4800)
+    - label: Read all documentation links below
+- type: checkboxes
+  attributes:
+    label: Mobile Platform Documentation
+    description: As you've started onboarding, please check off the documentation as you read through it. All documentation should be reviewed, but we've called out some specifics below to help guide onboarding.
+    options:
+      - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
+      - label: Read about [the Mobile Workflow Process](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Intro)
+      - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/QA%20process/QAs%20role)
+      - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Quick%20Reference/Accessibility%20Guidance)
+      - label: Review the [release overview](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Releases/releaseCalendar)
+      - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
+      - label: Information about [accessing Demo Mode](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DemoMode/)
+- type: checkboxes
+  attributes:
+    label: Product-specific documentation
+    options:
+      - label: Familiarize yourself with [what types of features belong in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/AppCriteria)
+      - label: Review the breakdown of responsibility between the Experience Teams and the Mobile Platform [here](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Working%20with%20the%20mobile%20platform/)
+      - label: Get up to speed on the [Mobile Design System](https://department-of-veterans-affairs.github.io/va-mobile-app/design/Intro)
+      - label: Review the [Incident Response Workflow](https://department-of-veterans-affairs.github.io/va-mobile-app/communityAndSupport/Incident%20Response/Response/)
