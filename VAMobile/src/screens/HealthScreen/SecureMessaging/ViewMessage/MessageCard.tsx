@@ -175,7 +175,7 @@ function MessageCard({
     })
 
   function getReplyOrStartNewMessageButton() {
-    if (!replyExpired && userInTriageTeam && !migrationBlocksReply) {
+    if (!replyExpired && providerAllowsReply && userInTriageTeam && !migrationBlocksReply) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
@@ -188,15 +188,11 @@ function MessageCard({
     }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {!replyExpired && providerAllowsReply && userInTriageTeam ? (
-          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
-        ) : (
-          <Button
-            label={t('secureMessaging.startNewMessage')}
-            onPress={onStartMessagePress}
-            testID={'startNewMessageButtonTestID'}
-          />
-        )}
+        <Button
+          label={t('secureMessaging.startNewMessage')}
+          onPress={onStartMessagePress}
+          testID={'startNewMessageButtonTestID'}
+        />
       </Box>
     )
   }
