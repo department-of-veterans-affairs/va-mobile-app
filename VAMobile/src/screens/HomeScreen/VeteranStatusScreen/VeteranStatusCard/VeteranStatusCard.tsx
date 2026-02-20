@@ -148,7 +148,7 @@ export function VeteranStatusCard({
           </TextView>
         </Box>
 
-        {getLatestPeriodOfService && showLatestPeriodOfService && (
+        {showLatestPeriodOfService && getLatestPeriodOfService && (
           <Box>
             <TextView color="primaryContrast" variant={headerVariant} mt={8}>
               {t('veteranStatus.latestPeriodOfService')}
