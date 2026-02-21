@@ -7,6 +7,7 @@ See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Quali
 */
 import { exec } from 'child_process'
 import { by, expect as detoxExpect, device, element, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
 import { CommonE2eIdConstants } from './utils'
 
@@ -152,9 +153,10 @@ export const featureID: { [key: string]: string } = {
  * @param navigationDicValue An array defining the navigation path and verification text.
  */
 export const navigateToPage = async (key: string, navigationDicValue: any[]) => {
-  // Disable synchronization during navigation to avoid Detox hangs on background animations.
-  // We use explicit waitFor calls to ensure elements are ready.
-  await device.disableSynchronization()
+  // Use surgical synchronization: keep UI sync on but ignore network activity.
+  // This prevents Detox from hanging on background network requests while still
+  // waiting for UI transitions (fixing the UITransitionView bug).
+  await device.setURLBlacklist(['.*'])
 
   try {
     await element(by.id(key)).tap()
@@ -164,6 +166,9 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       .withTimeout(5000)
     await element(by.text(key)).atIndex(0).tap()
   }
+  // Short delay to allow screen transitions to settle.
+  await setTimeout(1000)
+
   let scrollID: string
   const navigationArray = navigationDicValue
   if (typeof navigationArray[1] === 'string') {
@@ -241,6 +246,8 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
         .toBeVisible()
         .withTimeout(5000)
       await element(by.text(subNavigationArray[k])).atIndex(0).tap()
+      // Give each step a moment to settle.
+      await setTimeout(500)
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
@@ -285,6 +292,4 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       .atIndex(0)
       .tap()
   }
-  // Re-enable synchronization after navigation is complete so verification (screenshots) are sync'd.
-  await device.enableSynchronization()
 }
