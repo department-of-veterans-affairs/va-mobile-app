@@ -142,7 +142,7 @@ export const featureID: { [key: string]: string } = {
   'Drafts (3)': 'messagesTestID',
 }
 
-let scrollID: string
+// scrollID is now local to navigateToPage to avoid cross-test state pollution
 
 /**
  * Navigates to a specific page based on the navigation dictionary value.
@@ -151,11 +151,19 @@ let scrollID: string
  * @param navigationDicValue An array defining the navigation path and verification text.
  */
 export const navigateToPage = async (key: string, navigationDicValue: any[]) => {
+  // Disable synchronization during navigation to avoid Detox hangs on background animations.
+  // We use explicit waitFor calls to ensure elements are ready.
+  await device.disableSynchronization()
+
   try {
     await element(by.id(key)).tap()
   } catch (ex) {
+    await waitFor(element(by.text(key)))
+      .toExist()
+      .withTimeout(5000)
     await element(by.text(key)).atIndex(0).tap()
   }
+  let scrollID: string
   const navigationArray = navigationDicValue
   if (typeof navigationArray[1] === 'string') {
     const target = navigationArray[1].replace('.e2e.ts', '')
@@ -242,6 +250,7 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
           .scroll(100, 'down')
       }
       await element(by.text('Get prescription details')).atIndex(0).tap()
+      await device.enableSynchronization()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
@@ -266,4 +275,6 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       .atIndex(0)
       .tap()
   }
+  // Re-enable synchronization after navigation is complete so verification (screenshots) are sync'd.
+  await device.enableSynchronization()
 }

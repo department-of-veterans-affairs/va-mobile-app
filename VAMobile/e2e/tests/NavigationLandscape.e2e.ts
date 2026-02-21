@@ -29,12 +29,14 @@ describe('Navigation - Landscape', () => {
             // Step 1: Navigate to the target page in portrait mode
             await navigateToPage(key, value[j])
             // Step 2: Set orientation to landscape
+            await device.disableSynchronization()
             await device.setOrientation('landscape')
             // Step 3: Verify content visibility and take screenshot
             await detoxExpect(element(by.text(verifyText)).atIndex(0)).toExist()
             const feature = await device.takeScreenshot(verifyText)
             checkImages(feature)
             await device.setOrientation('portrait')
+            await device.enableSynchronization()
           })
         }
       }
