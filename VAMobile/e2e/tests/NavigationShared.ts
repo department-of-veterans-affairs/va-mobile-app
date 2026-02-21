@@ -104,7 +104,7 @@ export const navigationDic = {
   ],
 }
 
-export const featureID = {
+export const featureID: { [key: string]: string } = {
   Home: 'homeScreenID',
   'Contact VA': 'homeScreenID',
   'Personal information': 'profileID',
@@ -126,9 +126,9 @@ export const featureID = {
   'Drafts (3)': 'messagesTestID',
 }
 
-let scrollID
+let scrollID: string
 
-export const navigateToPage = async (key, navigationDicValue) => {
+export const navigateToPage = async (key: string, navigationDicValue: any[]) => {
   try {
     await element(by.id(key)).tap()
   } catch (ex) {
