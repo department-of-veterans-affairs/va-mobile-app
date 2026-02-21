@@ -129,6 +129,7 @@ export const featureID: { [key: string]: string } = {
   Settings: 'profileID',
   'Account security': 'settingsID',
   Notifications: 'settingsID',
+  Profile: 'profileID',
   Benefits: 'benefitsTestID',
   'Received July 20, 2021': 'claimsHistoryID',
   'Received January 01, 2021': 'claimsHistoryID',
@@ -188,6 +189,9 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     }
+    await waitFor(element(by.text(navigationArray[1])).atIndex(0))
+      .toBeVisible()
+      .withTimeout(5000)
     await element(by.text(navigationArray[1])).atIndex(0).tap()
   } else {
     // Logic for deep sub-navigation (e.g., [Step1, Step2, Target])
@@ -233,7 +237,10 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
             .scroll(50, 'down')
         }
       }
-      await element(by.text(subNavigationArray[k])).tap()
+      await waitFor(element(by.text(subNavigationArray[k])).atIndex(0))
+        .toBeVisible()
+        .withTimeout(5000)
+      await element(by.text(subNavigationArray[k])).atIndex(0).tap()
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
@@ -271,6 +278,9 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     }
+    await waitFor(element(by.text(subNavigationArray.slice(-1)[0])).atIndex(0))
+      .toBeVisible()
+      .withTimeout(5000)
     await element(by.text(subNavigationArray.slice(-1)[0]))
       .atIndex(0)
       .tap()

@@ -347,7 +347,7 @@ jobs:
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
             # Optimization: NavigationLandscape/DarkMode/TextResize.e2e and AvailabilityFramework.e2e have dedicated matrix jobs
-            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 0 --headless" >> "$GITHUB_ENV"
           else
             # Targeted: Prepend prerequisites for safety unless the target test is one of them
             if [[ "${{matrix.testsuite}}" == "NavigationLandscape.e2e.ts" ]] || [[ "${{matrix.testsuite}}" == "NavigationDarkMode.e2e.ts" ]] || [[ "${{matrix.testsuite}}" == "NavigationTextResize.e2e.ts" ]] || [[ "${{matrix.testsuite}}" == "AvailabilityFramework.e2e.ts" ]]; then
