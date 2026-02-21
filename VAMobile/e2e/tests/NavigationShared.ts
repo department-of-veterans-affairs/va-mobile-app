@@ -6,7 +6,7 @@ Update navigationDic whenever a new feature/page with the bottom nav bar is adde
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
 import { exec } from 'child_process'
-import { by, device, element, waitFor } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants } from './utils'
 
@@ -182,6 +182,13 @@ export const navigateToPage = async (key, navigationDicValue) => {
         await waitFor(element(by.id(scrollID)))
           .toExist()
           .withTimeout(5000)
+        await waitFor(element(by.text(subNavigationArray[k])))
+          .toBeVisible()
+          .whileElement(by.id(scrollID))
+          .scroll(50, 'down')
+      } else if (k > 0 && subNavigationArray[k - 1] in featureID) {
+        // Fallback: use previous step's scroll ID if current doesn't have one
+        scrollID = featureID[subNavigationArray[k - 1]]
         await waitFor(element(by.text(subNavigationArray[k])))
           .toBeVisible()
           .whileElement(by.id(scrollID))
