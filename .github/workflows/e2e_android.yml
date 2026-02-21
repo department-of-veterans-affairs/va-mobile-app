@@ -128,7 +128,7 @@ jobs:
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                echo "matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
+                echo 'matrix=${{ inputs.tests_to_run}}' >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
               else
                 echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -144,7 +144,7 @@ jobs:
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
                   if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                    echo "matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
+                    echo 'matrix=${{ inputs.tests_to_run}}' >> "$GITHUB_OUTPUT"
                     echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
                   else
                     echo "matrix=" >> "$GITHUB_OUTPUT" 
