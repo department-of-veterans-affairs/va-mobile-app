@@ -309,7 +309,7 @@ jobs:
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
             # Full Suite / Nightly: matrix.testsuite is the full filename (e.g. "Appointments.e2e.ts")
             # from the GitHub API. Use it directly — no suffix — to prevent prefix-matching sibling
-            # test files (e.g. AppointmentsTestTime.e2e.ts, AppointmentsExpanded.e2e.ts).
+            # test files
             echo "CMD=yarn e2e:android-test e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
           else
             # PR / Targeted Run: Prepend prerequisites unless the target test is one of them.
