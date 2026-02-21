@@ -138,12 +138,18 @@ export const navigateToPage = async (key, navigationDicValue) => {
   if (typeof navigationArray[1] === 'string') {
     if (navigationArray[1] in featureID) {
       scrollID = featureID[navigationArray[1]]
+      await waitFor(element(by.id(scrollID)))
+        .toExist()
+        .withTimeout(5000)
       await waitFor(element(by.text(navigationArray[1])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     } else if (key in featureID) {
       scrollID = featureID[key]
+      await waitFor(element(by.id(scrollID)))
+        .toExist()
+        .withTimeout(5000)
       await waitFor(element(by.text(navigationArray[1])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
@@ -164,6 +170,9 @@ export const navigateToPage = async (key, navigationDicValue) => {
 
       if (k === 0 && key in featureID) {
         scrollID = featureID[key]
+        await waitFor(element(by.id(scrollID)))
+          .toExist()
+          .withTimeout(5000)
         await waitFor(element(by.text(subNavigationArray[k])))
           .toBeVisible()
           .whileElement(by.id(scrollID))
@@ -172,6 +181,9 @@ export const navigateToPage = async (key, navigationDicValue) => {
 
       if (subNavigationArray[k] in featureID) {
         scrollID = featureID[subNavigationArray[k]]
+        await waitFor(element(by.id(scrollID)))
+          .toExist()
+          .withTimeout(5000)
         await waitFor(element(by.text(subNavigationArray[k])))
           .toBeVisible()
           .whileElement(by.id(scrollID))
@@ -185,7 +197,10 @@ export const navigateToPage = async (key, navigationDicValue) => {
       await waitFor(element(by.text('AMLODIPINE BESYLATE 10MG TAB')))
         .toBeVisible()
         .withTimeout(10000)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(200, 'down', 0.5, 0.5)
+      await waitFor(element(by.text('Get prescription details')).atIndex(0))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+        .scroll(100, 'down')
       await element(by.text('Get prescription details')).atIndex(0).tap()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
@@ -199,6 +214,9 @@ export const navigateToPage = async (key, navigationDicValue) => {
 
     if (subNavigationArray.slice(-1)[0] in featureID) {
       scrollID = featureID[subNavigationArray.slice(-1)[0]]
+      await waitFor(element(by.id(scrollID)))
+        .toExist()
+        .withTimeout(5000)
       await waitFor(element(by.text(subNavigationArray.slice(-1)[0])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
