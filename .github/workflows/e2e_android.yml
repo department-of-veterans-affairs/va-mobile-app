@@ -315,7 +315,7 @@ jobs:
             # PR / Targeted Run: Prepend prerequisites unless the target test is one of them.
             # Safety: Ensure Navigation and Availability checks run before the feature test to catch basic failures early.
             if [[ "${{matrix.testsuite}}" == "NavigationLandscape.e2e.ts" ]] || [[ "${{matrix.testsuite}}" == "NavigationDarkMode.e2e.ts" ]] || [[ "${{matrix.testsuite}}" == "NavigationTextResize.e2e.ts" ]] || [[ "${{matrix.testsuite}}" == "AvailabilityFramework.e2e.ts" ]]; then
-              echo "CMD=yarn e2e:android-test e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
+              echo "CMD=yarn e2e:android-test e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 0" >> "$GITHUB_ENV"
             else
               echo "CMD=yarn e2e:android-test e2e/tests/NavigationLandscape.e2e.ts e2e/tests/NavigationDarkMode.e2e.ts e2e/tests/NavigationTextResize.e2e.ts e2e/tests/AvailabilityFramework.e2e.ts e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
             fi
