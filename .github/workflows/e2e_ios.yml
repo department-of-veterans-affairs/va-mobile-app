@@ -120,7 +120,7 @@ jobs:
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                echo "matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
               else
                 echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -136,7 +136,7 @@ jobs:
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
                   if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                    echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                    echo "matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
                     echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
                   else
                     echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -359,7 +359,9 @@ jobs:
 
       - name: Run e2e tests for iOS
         id: run_e2e_tests
-        run: ${{ env.CMD }}
+        run: |
+          mkdir -p artifacts
+          ${{ env.CMD }}
 
       - name: Upload e2e-junit
         if: failure() || success()

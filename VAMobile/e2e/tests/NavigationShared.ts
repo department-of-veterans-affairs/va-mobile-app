@@ -136,6 +136,7 @@ export const navigateToPage = async (key, navigationDicValue) => {
   }
   const navigationArray = navigationDicValue
   if (typeof navigationArray[1] === 'string') {
+    const target = navigationArray[1].replace('.e2e.ts', '')
     if (key in featureID) {
       scrollID = featureID[key]
       await waitFor(element(by.id(scrollID)))
@@ -145,8 +146,8 @@ export const navigateToPage = async (key, navigationDicValue) => {
         .toBeVisible()
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
-    } else if (navigationArray[1] in featureID) {
-      scrollID = featureID[navigationArray[1]]
+    } else if (target in featureID) {
+      scrollID = featureID[target]
       await waitFor(element(by.id(scrollID)))
         .toExist()
         .withTimeout(5000)
@@ -168,6 +169,7 @@ export const navigateToPage = async (key, navigationDicValue) => {
         await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
       }
 
+      const target = subNavigationArray[k].replace('.e2e.ts', '')
       if (k === 0 && key in featureID) {
         scrollID = featureID[key]
         await waitFor(element(by.id(scrollID)))
@@ -177,8 +179,8 @@ export const navigateToPage = async (key, navigationDicValue) => {
           .toBeVisible()
           .whileElement(by.id(scrollID))
           .scroll(50, 'down')
-      } else if (subNavigationArray[k] in featureID) {
-        scrollID = featureID[subNavigationArray[k]]
+      } else if (target in featureID) {
+        scrollID = featureID[target]
         await waitFor(element(by.id(scrollID)))
           .toExist()
           .withTimeout(5000)
@@ -186,13 +188,16 @@ export const navigateToPage = async (key, navigationDicValue) => {
           .toBeVisible()
           .whileElement(by.id(scrollID))
           .scroll(50, 'down')
-      } else if (k > 0 && subNavigationArray[k - 1] in featureID) {
-        // Fallback: use previous step's scroll ID if current doesn't have one
-        scrollID = featureID[subNavigationArray[k - 1]]
-        await waitFor(element(by.text(subNavigationArray[k])))
-          .toBeVisible()
-          .whileElement(by.id(scrollID))
-          .scroll(50, 'down')
+      } else if (k > 0) {
+        const prevTarget = subNavigationArray[k - 1].replace('.e2e.ts', '')
+        if (prevTarget in featureID) {
+          // Fallback: use previous step's scroll ID if current doesn't have one
+          scrollID = featureID[prevTarget]
+          await waitFor(element(by.text(subNavigationArray[k])))
+            .toBeVisible()
+            .whileElement(by.id(scrollID))
+            .scroll(50, 'down')
+        }
       }
       await element(by.text(subNavigationArray[k])).tap()
     }
