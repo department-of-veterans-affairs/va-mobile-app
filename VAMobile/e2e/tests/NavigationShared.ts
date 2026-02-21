@@ -6,7 +6,7 @@ Update navigationDic whenever a new feature/page with the bottom nav bar is adde
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
 import { exec } from 'child_process'
-import { by, device, element, expect, waitFor } from 'detox'
+import { by, expect as detoxExpect, device, element, waitFor } from 'detox'
 
 import { CommonE2eIdConstants } from './utils'
 
@@ -20,6 +20,10 @@ export const getTestName = (nameArray: any[]): string => {
   return name === ACCOUNT_SECURITY_LONG_TEXT ? 'Account security' : name
 }
 
+/**
+ * Determines if a specific test should run based on the 'tests_to_run' input in CI.
+ * Supports partial matching of test names.
+ */
 export const shouldRunTest = (nameArray: any[], value: any[]): boolean => {
   if (navigationValue === undefined) return true
   if (nameArray[0] instanceof Array) {
@@ -31,6 +35,9 @@ export const shouldRunTest = (nameArray: any[], value: any[]): boolean => {
   return navigationValue === nameArray[0]
 }
 
+/**
+ * Helper to execute shell commands (used for toggling device settings like dark mode).
+ */
 export const execCommand = (command: string) => {
   exec(command, (error: Error | null) => {
     if (error) {
@@ -39,6 +46,11 @@ export const execCommand = (command: string) => {
   })
 }
 
+/**
+ * navigationDic defines the navigation tree for regression tests.
+ * Structure: { [BottomTabName]: [ [TestFileName, TargetLinkName | [SubNavigationSteps], VerificationText], ... ] }
+ * This allows the test suite to dynamically generate navigation tests for every page.
+ */
 export const navigationDic = {
   Home: [
     ['HomeScreen.e2e', 'Contact us', 'Contact VA'],
@@ -104,6 +116,10 @@ export const navigationDic = {
   ],
 }
 
+/**
+ * featureID maps navigation items to the ID of the scrollable container that contains them.
+ * This is used by navigateToPage to ensure the correct screen is scrolled when searching for a link.
+ */
 export const featureID: { [key: string]: string } = {
   Home: 'homeScreenID',
   'Contact VA': 'homeScreenID',
@@ -128,6 +144,12 @@ export const featureID: { [key: string]: string } = {
 
 let scrollID: string
 
+/**
+ * Navigates to a specific page based on the navigation dictionary value.
+ * Performs scrolling and multi-step navigation if necessary.
+ * @param key The starting bottom tab name.
+ * @param navigationDicValue An array defining the navigation path and verification text.
+ */
 export const navigateToPage = async (key: string, navigationDicValue: any[]) => {
   try {
     await element(by.id(key)).tap()
@@ -137,6 +159,8 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
   const navigationArray = navigationDicValue
   if (typeof navigationArray[1] === 'string') {
     const target = navigationArray[1].replace('.e2e.ts', '')
+    // Logic: Identify which scrollable container to use.
+    // Prioritize the current 'key' (bottom tab) to ensure we scroll the screen we just landed on.
     if (key in featureID) {
       scrollID = featureID[key]
       await waitFor(element(by.id(scrollID)))
@@ -158,8 +182,10 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     }
     await element(by.text(navigationArray[1])).atIndex(0).tap()
   } else {
+    // Logic for deep sub-navigation (e.g., [Step1, Step2, Target])
     const subNavigationArray = navigationArray[1]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
+      // Hardcoded scroll logic for specific complex screens
       if (subNavigationArray[k] === 'Received July 17, 2008') {
         await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
@@ -208,7 +234,7 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
         .toBeVisible()
         .withTimeout(10000)
       try {
-        await expect(element(by.text('Get prescription details')).atIndex(0)).toBeVisible()
+        await detoxExpect(element(by.text('Get prescription details')).atIndex(0)).toBeVisible()
       } catch (e) {
         await waitFor(element(by.text('Get prescription details')).atIndex(0))
           .toBeVisible()

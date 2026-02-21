@@ -11,12 +11,13 @@ When to update:
 Update NavigationShared.ts whenever a new feature/new page that has the bottom nav bar is added to the app.
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
-import { by, device, element, expect } from 'detox'
+import { by, expect as detoxExpect, device, element } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import { execCommand, getTestName, navigateToPage, navigationDic, shouldRunTest } from './NavigationShared'
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
 
+// OS-level commands to simulate accessibility settings for high-density and large font scales
 const FONT_RESIZING_LARGEST =
   device.getPlatform() === 'ios'
     ? 'xcrun simctl ui booted content_size extra-extra-extra-large'
@@ -28,6 +29,7 @@ const FONT_RESIZING_RESET =
     : 'adb shell settings put system font_scale 1.00'
 const DISPLAY_RESIZING_RESET = 'adb shell wm density reset'
 
+// Before all tests, set device font and display scales to the largest available settings
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
@@ -47,6 +49,7 @@ afterAll(async () => {
 
 describe('Navigation - Text Resize', () => {
   let testsRun = false
+  // Loop through all navigation scenarios and verify readability with large text
   for (const [key, value] of Object.entries(navigationDic)) {
     for (let j = 0; j < value.length; j++) {
       const nameArray = value[j]
@@ -57,8 +60,10 @@ describe('Navigation - Text Resize', () => {
           it('verify navigation text resizing for: ' + testName, async () => {
             if (device.getPlatform() === 'ios') {
               const verifyText = value[j][2] as string
+              // Step 1: Navigate to page with large font size active
               await navigateToPage(key, value[j])
-              await expect(element(by.text(verifyText)).atIndex(0)).toExist()
+              // Step 2: Verify accessibility and take screenshot
+              await detoxExpect(element(by.text(verifyText)).atIndex(0)).toExist()
               const feature = await device.takeScreenshot(verifyText)
               checkImages(feature)
               try {
