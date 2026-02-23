@@ -142,7 +142,6 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const handleRefresh = () => {
     if (recipientsError) {
       refetchRecipients()
-      return
     }
     if (inboxError) {
       refetchInbox()
