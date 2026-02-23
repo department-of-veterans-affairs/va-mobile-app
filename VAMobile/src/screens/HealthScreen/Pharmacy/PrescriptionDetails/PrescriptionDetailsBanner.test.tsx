@@ -3,12 +3,31 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { PrescriptionData, RefillStatus } from 'api/types'
+import { MigratingFacility, PrescriptionData, RefillStatus } from 'api/types'
+import { getMigratingPrescriptions } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/prescriptionUtils'
 import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 context('PrescriptionsDetailsBanner', () => {
+  const mockMigratingFacilitiesList: MigratingFacility[] = [
+    {
+      migrationDate: '2026-05-01',
+      facilities: [{ facilityId: 979, facilityName: 'SLC10 TEST LAB' }],
+      phases: {
+        current: 'p3',
+        p0: 'March 1, 2026',
+        p1: 'March 15, 2026',
+        p2: 'April 1, 2026',
+        p3: 'April 24, 2026',
+        p4: 'April 27, 2026',
+        p5: 'May 1, 2026',
+        p6: 'May 3, 2026',
+        p7: 'May 8, 2026',
+      },
+    },
+  ]
+
   const mockMigratingPrescriptions: PrescriptionData[] = [
     {
       id: '123',
@@ -129,6 +148,57 @@ context('PrescriptionsDetailsBanner', () => {
       render(<PrescriptionsDetailsBanner migratingPrescriptions={mockMigratingPrescriptions} />)
       fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
       expect(screen.getByText('Affected medications:')).toBeTruthy()
+    })
+  })
+
+  describe('integration with getMigratingPrescriptions utility', () => {
+    const mockNonMigratingPrescription: PrescriptionData = {
+      id: '789',
+      type: 'Prescription',
+      attributes: {
+        prescriptionName: 'NON-MIGRATING PRESCRIPTION',
+        prescriptionNumber: '9999999',
+        refillStatus: 'active' as RefillStatus,
+        refillSubmitDate: '2021-09-08T18:28:22.000Z',
+        refillDate: '2021-09-21T04:00:00.000Z',
+        refillRemaining: 1,
+        facilityName: 'Other Facility',
+        facilityPhoneNumber: '(555) 555-5555',
+        isRefillable: true,
+        isTrackable: false,
+        orderedDate: '2021-05-03T04:00:00.000Z',
+        quantity: 30,
+        expirationDate: '2022-05-04T04:00:00.000Z',
+        dispensedDate: '2021-09-06T04:00:00.000Z',
+        stationNumber: '999', // Does not match migrating facilities
+        instructions: 'TAKE ONE TABLET EVERY DAY',
+      },
+    }
+
+    it('should only display prescriptions filtered by getMigratingPrescriptions utility', () => {
+      const allPrescriptions = [...mockMigratingPrescriptions, mockNonMigratingPrescription]
+      const filteredPrescriptions = getMigratingPrescriptions(allPrescriptions, mockMigratingFacilitiesList)
+
+      render(<PrescriptionsDetailsBanner migratingPrescriptions={filteredPrescriptions} />)
+      fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
+
+      // Should show migrating prescriptions
+      expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
+      expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy()
+
+      // Should not show non-migrating prescription
+      expect(screen.queryByText('NON-MIGRATING PRESCRIPTION')).toBeFalsy()
+    })
+
+    it('should not display medication links when getMigratingPrescriptions returns empty array', () => {
+      const nonMigratingPrescriptions = [mockNonMigratingPrescription]
+      const filteredPrescriptions = getMigratingPrescriptions(nonMigratingPrescriptions, mockMigratingFacilitiesList)
+
+      render(<PrescriptionsDetailsBanner migratingPrescriptions={filteredPrescriptions} />)
+      fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
+
+      expect(screen.queryByText('NON-MIGRATING PRESCRIPTION')).toBeFalsy()
+      expect(screen.queryByText('Affected medications:')).toBeFalsy()
     })
   })
 })

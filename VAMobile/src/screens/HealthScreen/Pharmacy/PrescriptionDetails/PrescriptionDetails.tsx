@@ -9,12 +9,13 @@ import { MutateOptions } from '@tanstack/react-query'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRequestRefills } from 'api/prescriptions'
-import { MigratingFacility, PrescriptionsList, RefillRequestSummaryItems, RefillStatusConstants } from 'api/types'
+import { PrescriptionsList, RefillRequestSummaryItems, RefillStatusConstants } from 'api/types'
 import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import RefillTag from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/RefillTag'
+import { isPrescriptionAtMigratingFacility } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/prescriptionUtils'
 import DetailsTextSections from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/DetailsTextSections'
 import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -60,22 +61,10 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
-  /**
-   * Checks if the prescription's station is in the migrating facilities list
-   * Returns true if the station is migrating (should hide refill button and show banner)
-   */
-  const isPrescriptionAtMigratingFacility = (): boolean => {
-    const migratingFacilitiesList = userAuthorizedServices?.migratingFacilitiesList
-    if (!migratingFacilitiesList || migratingFacilitiesList.length === 0 || !stationNumber) {
-      return false
-    }
-
-    return migratingFacilitiesList.some((migration: MigratingFacility) =>
-      migration.facilities.some((facility) => String(facility.facilityId) === stationNumber),
-    )
-  }
-
-  const isAtMigratingFacility = isPrescriptionAtMigratingFacility()
+  const isAtMigratingFacility = isPrescriptionAtMigratingFacility(
+    prescription,
+    userAuthorizedServices?.migratingFacilitiesList,
+  )
 
   useFocusEffect(
     React.useCallback(() => {

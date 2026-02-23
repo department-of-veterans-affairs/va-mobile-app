@@ -9,7 +9,7 @@ import { filter } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions, useRequestRefills } from 'api/prescriptions'
-import { MigratingFacility, PrescriptionData, PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
+import { PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import SelectionList from 'components/SelectionList'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
@@ -17,7 +17,7 @@ import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import { PrescriptionListItem, getMigratingPrescriptions } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
 import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import NoRefills from 'screens/HealthScreen/Pharmacy/RefillScreens/NoRefills'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -66,34 +66,10 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
-  /**
-   * Checks if a prescription's station is in the migrating facilities list
-   */
-  const isPrescriptionAtMigratingFacility = (prescription: PrescriptionData): boolean => {
-    const migratingFacilitiesList = userAuthorizedServices?.migratingFacilitiesList
-    if (!migratingFacilitiesList || migratingFacilitiesList.length === 0) {
-      return false
-    }
-    const stationNumber = prescription.attributes.stationNumber
-    if (!stationNumber) {
-      return false
-    }
-    return migratingFacilitiesList.some((migration: MigratingFacility) =>
-      migration.facilities.some((facility) => String(facility.facilityId) === stationNumber),
-    )
-  }
-
-  /**
-   * Gets all prescriptions that are at migrating facilities
-   */
-  const getMigratingPrescriptions = (): PrescriptionData[] => {
-    if (!allPrescriptions || allPrescriptions.length === 0) {
-      return []
-    }
-    return allPrescriptions.filter((prescription) => isPrescriptionAtMigratingFacility(prescription))
-  }
-
-  const migratingPrescriptions = getMigratingPrescriptions()
+  const migratingPrescriptions = getMigratingPrescriptions(
+    allPrescriptions,
+    userAuthorizedServices?.migratingFacilitiesList,
+  )
   const hasMigratingPrescriptions = migratingPrescriptions.length > 0
 
   const refillable = refillablePrescriptions || []
