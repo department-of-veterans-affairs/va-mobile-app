@@ -10,7 +10,6 @@ import {
   openClaims,
   openHealth,
   openPayments,
-  openTravelPayClaims,
   toggleRemoteConfigFlag,
 } from './utils'
 
@@ -46,7 +45,7 @@ describe.skip('Travel Pay Claims Screen', () => {
     // Visit through Benefits tab
     await openBenefits()
     await openClaims()
-    await openTravelPayClaims({ useNativeLink: false })
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
     await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
       .toExist()
       .withTimeout(4000)
@@ -54,7 +53,7 @@ describe.skip('Travel Pay Claims Screen', () => {
 
     // Visit through Payments tab
     await openPayments()
-    await openTravelPayClaims({ useNativeLink: true })
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_PAYMENTS_SCREEN)).tap()
     await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
       .toExist()
       .withTimeout(4000)
@@ -62,7 +61,7 @@ describe.skip('Travel Pay Claims Screen', () => {
 
     // Visit through Health tab
     await openHealth()
-    await openTravelPayClaims({ useNativeLink: true })
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN)).tap()
     await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
       .toExist()
       .withTimeout(4000)

@@ -514,7 +514,7 @@ export type ClaimEventData = {
   friendlyName?: string | null
   shortDescription?: string | null
   activityDescription?: string | null
-  longDescription?: StructuredContent
+  longDescription?: StructuredContent | null
   nextSteps?: StructuredContent | null
   supportAliases?: string[] | null
   canUploadFile?: boolean | null

@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { DateTime } from 'luxon'
@@ -22,10 +24,10 @@ export const IN_APP_FEEDBACK_ACTIONS_THRESHOLD = 3
 export const useReviewEvent = (screenView?: boolean, feedbackScreen?: string): (() => Promise<void>) => {
   const inAppFeedback = useGiveFeedback()
 
-  const reviewEvent = async () => {
-    if (!featureEnabled('inAppReview') && !featureEnabled('inAppFeedback')) return
+  return useCallback(async () => {
+    if (!featureEnabled('inAppReview')) return
     //Checked for feedbackScreen triggers first.
-    if (featureEnabled('inAppFeedback') && feedbackScreen) {
+    if (feedbackScreen) {
       const feedbackKey = STORAGE_FEEDBACK_EVENT_KEY.concat(feedbackScreen)
       const feedbackCount = await AsyncStorage.getItem(STORAGE_FEEDBACK_EVENT_KEY.concat(feedbackScreen))
       const totalFeedback = feedbackCount ? parseInt(feedbackCount, 10) + 1 : 1
@@ -66,9 +68,7 @@ export const useReviewEvent = (screenView?: boolean, feedbackScreen?: string): (
         }
       }
     }
-  }
-
-  return reviewEvent
+  }, [feedbackScreen, inAppFeedback, screenView])
 }
 
 const callReviewAPI = async (versionName: string): Promise<void> => {
