@@ -385,7 +385,13 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   // If error is caused by an individual message, we want the error alert to be
   // contained to that message, not to take over the entire screen
   const hasError =
-    folderMessagesError || foldersError || messageError || threadError || !smNotInDowntime || recipientsError
+    folderMessagesError ||
+    foldersError ||
+    messageError ||
+    threadError ||
+    !smNotInDowntime ||
+    recipientsError ||
+    getUserAuthorizedServicesError
   const isLoading =
     loadingFolder ||
     loadingThread ||

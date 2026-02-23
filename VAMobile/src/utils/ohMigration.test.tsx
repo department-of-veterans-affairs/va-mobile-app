@@ -43,10 +43,10 @@ const createMigration = (currentPhase: string, facilities?: FacilityInfo[]): Mig
   },
 })
 
-const createUserFacilities = (count: number): Facility[] =>
-  Array.from({ length: count }, (_, i) => ({
-    id: String(i + 1),
-    name: `Facility ${i + 1}`,
+const createUserFacilities = (facilityIds: number[]): Facility[] =>
+  facilityIds.map((facilityId) => ({
+    id: String(facilityId),
+    name: `Facility ${facilityId}`,
     city: 'Test City',
     state: 'TS',
     cerner: false,
@@ -158,21 +158,21 @@ context('ohMigration', () => {
   describe('allFacilitiesInMigrationErrorState', () => {
     it('should return true when all user facilities are covered by error-state migrations', () => {
       const migrations = [createMigration('p2', mockFacilities)]
-      const userFacilities = createUserFacilities(2)
+      const userFacilities = createUserFacilities([528, 123])
       const result = allFacilitiesInMigrationErrorState(migrations, userFacilities, OHParentScreens.Appointments)
       expect(result).toBe(true)
     })
 
     it('should return false when user has more facilities than those in error state', () => {
       const migrations = [createMigration('p2', [mockFacilities[0]])]
-      const userFacilities = createUserFacilities(2)
+      const userFacilities = createUserFacilities([528, 123])
       const result = allFacilitiesInMigrationErrorState(migrations, userFacilities, OHParentScreens.Appointments)
       expect(result).toBe(false)
     })
 
     it('should return false when no migrations are in error state', () => {
       const migrations = [createMigration('p0', mockFacilities)]
-      const userFacilities = createUserFacilities(2)
+      const userFacilities = createUserFacilities([528, 123])
       const result = allFacilitiesInMigrationErrorState(migrations, userFacilities, OHParentScreens.Appointments)
       expect(result).toBe(false)
     })
@@ -183,7 +183,7 @@ context('ohMigration', () => {
     })
 
     it('should return false when migrations list is empty and user has facilities', () => {
-      const userFacilities = createUserFacilities(1)
+      const userFacilities = createUserFacilities([1])
       const result = allFacilitiesInMigrationErrorState([], userFacilities, OHParentScreens.Appointments)
       expect(result).toBe(false)
     })
@@ -191,7 +191,7 @@ context('ohMigration', () => {
     it('should aggregate facilities from multiple error-state migrations', () => {
       const migration1 = createMigration('p2', [mockFacilities[0]])
       const migration2 = createMigration('p3', [mockFacilities[1]])
-      const userFacilities = createUserFacilities(2)
+      const userFacilities = createUserFacilities([528, 123])
       const result = allFacilitiesInMigrationErrorState(
         [migration1, migration2],
         userFacilities,
@@ -203,7 +203,7 @@ context('ohMigration', () => {
     it('should use the correct error phases for each feature', () => {
       // p2 is warning for secureMessaging, not error
       const migrations = [createMigration('p2', mockFacilities)]
-      const userFacilities = createUserFacilities(2)
+      const userFacilities = createUserFacilities([528, 123])
       const result = allFacilitiesInMigrationErrorState(migrations, userFacilities, OHParentScreens.SecureMessaging)
       expect(result).toBe(false)
     })

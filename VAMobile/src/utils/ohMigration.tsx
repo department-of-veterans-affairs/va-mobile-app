@@ -7,11 +7,17 @@ import { Facility, FacilityInfo, MigratingFacility } from 'api/types'
 import { LinkWithAnalytics, TextView, VABulletList } from 'components'
 import AlertWithHaptics from 'components/AlertWithHaptics'
 import Box from 'components/Box'
-import { OHParentScreens, getAlertState } from 'components/OHAlertManager'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
+
+export enum OHParentScreens {
+  Appointments = 'appointments',
+  SecureMessaging = 'secureMessaging',
+  MedicalRecords = 'medicalRecords',
+  Medications = 'medications',
+}
 
 export const parentScreenToPhaseMap = {
   appointments: {
@@ -36,15 +42,26 @@ export const parentScreenToPhaseMap = {
   },
 }
 
+export const getAlertState = (phase: string, parentScreen: OHParentScreens) => {
+  if (parentScreenToPhaseMap[parentScreen].error.includes(phase)) {
+    return 'error'
+  } else if (parentScreenToPhaseMap[parentScreen].warning.includes(phase)) {
+    return 'warning'
+  }
+  return ''
+}
+
 export const allFacilitiesInMigrationErrorState = (
   migratingFacilitiesList: MigratingFacility[],
   userFacilities: Facility[],
   feature: OHParentScreens,
 ): boolean => {
-  const migratingFacilityIdsInErrorState = getMigrationsInErrorState(migratingFacilitiesList, feature).flatMap(
-    (migration) => migration.facilities.map((facility) => facility.facilityId),
+  const migratingFacilityIdsInErrorState = new Set(
+    getMigrationsInErrorState(migratingFacilitiesList, feature).flatMap((migration) =>
+      migration.facilities.map((facility) => String(facility.facilityId)),
+    ),
   )
-  return migratingFacilityIdsInErrorState.length === userFacilities.length
+  return userFacilities.every((facility) => migratingFacilityIdsInErrorState.has(String(facility.id)))
 }
 
 export const anyFacilitiesInMigrationErrorState = (

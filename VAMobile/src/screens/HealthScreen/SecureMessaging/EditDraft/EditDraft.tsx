@@ -822,7 +822,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
-          error={recipientsError || threadError || messageError}
+          error={
+            recipientsError || threadError || messageError || folderMessagesError || getUserAuthorizedServicesError
+          }
           onTryAgain={
             recipientsError
               ? refetchRecipients
@@ -844,7 +846,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             authorizedServicesData &&
             allMigrationsInErrorState.length > 0 &&
             allMigrationsInErrorState.map((migration) => (
-              <MigrationErrorMessage migration={migration} parentScreen={OHParentScreens.SecureMessaging} />
+              <MigrationErrorMessage
+                key={migration.migrationDate}
+                migration={migration}
+                parentScreen={OHParentScreens.SecureMessaging}
+              />
             ))}
           <Box>{renderForm()}</Box>
           <Box>{isReplyDraft && renderMessageThread()}</Box>

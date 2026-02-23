@@ -1,27 +1,13 @@
 import React from 'react'
 
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
-import { MigrationErrorMessage, MigrationWarningMessage, parentScreenToPhaseMap } from 'utils/ohMigration'
+import { MigrationErrorMessage, MigrationWarningMessage, OHParentScreens, getAlertState } from 'utils/ohMigration'
 
-export enum OHParentScreens {
-  Appointments = 'appointments',
-  SecureMessaging = 'secureMessaging',
-  MedicalRecords = 'medicalRecords',
-  Medications = 'medications',
-}
+export { OHParentScreens, getAlertState }
 
 type OHAlertManagerProps = {
   parentScreen: OHParentScreens
   authorizedServices: UserAuthorizedServicesData
-}
-
-export const getAlertState = (phase: string, parentScreen: OHParentScreens) => {
-  if (parentScreenToPhaseMap[parentScreen].error.includes(phase)) {
-    return 'error'
-  } else if (parentScreenToPhaseMap[parentScreen].warning.includes(phase)) {
-    return 'warning'
-  }
-  return ''
 }
 
 export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertManagerProps) => {
@@ -36,7 +22,9 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
   }
   let alerts: JSX.Element[] = []
   if (authorizedServices.migratingFacilitiesList && authorizedServices.migratingFacilitiesList.length > 0) {
-    alerts = authorizedServices.migratingFacilitiesList.map((migration) => alertsForScreen(migration))
+    alerts = authorizedServices.migratingFacilitiesList.map((migration, index) => (
+      <React.Fragment key={migration.migrationDate || index}>{alertsForScreen(migration)}</React.Fragment>
+    ))
   }
   return <>{alerts}</>
 }

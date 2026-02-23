@@ -140,7 +140,10 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   }
 
   const handleRefresh = () => {
-    if (recipientsError) return refetchRecipients
+    if (recipientsError) {
+      refetchRecipients()
+      return
+    }
     if (inboxError) {
       refetchInbox()
     } else if (foldersError) {

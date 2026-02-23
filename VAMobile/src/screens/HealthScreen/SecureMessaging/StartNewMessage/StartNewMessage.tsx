@@ -487,7 +487,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         </Box>
         {allMigrationsInErrorState.length > 0 &&
           allMigrationsInErrorState.map((migration) => (
-            <MigrationErrorMessage migration={migration} parentScreen={OHParentScreens.SecureMessaging} />
+            <MigrationErrorMessage
+              key={migration.migrationDate}
+              migration={migration}
+              parentScreen={OHParentScreens.SecureMessaging}
+            />
           ))}
         <MessageAlert
           hasValidationError={formContainsError}
@@ -558,10 +562,21 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         }
 
   const refetchData = () => {
-    if (getUserAuthorizedServicesError) return refetchAuthServices
-    if (recipientsError) return refetchRecipients
-    if (signatureError) return refetchSignature
-    if (folderMessagesError) return refetchFolderMessages
+    if (getUserAuthorizedServicesError) {
+      refetchAuthServices()
+      return
+    }
+    if (recipientsError) {
+      refetchRecipients()
+      return
+    }
+    if (signatureError) {
+      refetchSignature()
+      return
+    }
+    if (folderMessagesError) {
+      refetchFolderMessages()
+    }
   }
 
   return (
@@ -580,7 +595,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
-          error={recipientsError || signatureError || folderMessagesError}
+          error={recipientsError || signatureError || folderMessagesError || getUserAuthorizedServicesError}
           onTryAgain={refetchData}
         />
       ) : (
