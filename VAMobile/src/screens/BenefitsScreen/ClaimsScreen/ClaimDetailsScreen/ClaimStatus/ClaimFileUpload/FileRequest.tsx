@@ -91,8 +91,14 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     }
 
     return map(requests, (request, index) => {
-      const { friendlyName, displayName } = request
-      const requestName = friendlyName || displayName
+      const { friendlyName, isSensitive } = request
+      // Display title logic:
+      // - Generic (no friendlyName) -> "Request for evidence"
+      // - With friendlyName and isSensitive=true -> "Request for evidence"
+      // - With friendlyName and isSensitive=false -> friendlyName
+      const hasOverrides = friendlyName != null
+      const requestName =
+        hasOverrides && isSensitive === false ? friendlyName : t('fileRequestDetails.requestForEvidence')
       const hasUploaded = hasUploadedOrReceived(request)
       const item: SimpleListItemObj = {
         text: requestName || '',
