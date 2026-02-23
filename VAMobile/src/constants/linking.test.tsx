@@ -1,11 +1,14 @@
-import { linking } from './linking'
+import { linking } from 'constants/linking'
+
+type LinkingConfig = Parameters<NonNullable<typeof linking.getStateFromPath>>[1]
+const linkingConfig = linking.config as LinkingConfig
 
 describe('linking', () => {
   describe('getStateFromPath', () => {
     describe('track-claims/your-claim-letters/link', () => {
-      it('should navigate to ClaimLettersScreen when path is track-claims/your-claim-letters/link', () => {
+      it('should navigate to ClaimLettersScreen when path is /track-claims/your-claim-letters/link', () => {
         const path = '/track-claims/your-claim-letters/link'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -28,7 +31,7 @@ describe('linking', () => {
 
       it('should navigate to ClaimLettersScreen without leading slash', () => {
         const path = 'track-claims/your-claim-letters/link'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -49,23 +52,30 @@ describe('linking', () => {
         })
       })
 
-      it('should not match track-claims without your-claim-letters', () => {
+      it('should not match /track-claims without your-claim-letters/link', () => {
         const path = '/track-claims'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
+
+        expect(state).toBeUndefined()
+      })
+
+      it('should not match /track-claims/your-claim-letters without /link', () => {
+        const path = '/track-claims/your-claim-letters'
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toBeUndefined()
       })
 
       it('should not match partial path', () => {
         const path = '/track-claims/your-claim'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toBeUndefined()
       })
 
-      it('should not match without /link suffix', () => {
-        const path = '/track-claims/your-claim-letters'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+      it('should not match when path has extra segments', () => {
+        const path = '/track-claims/your-claim-letters/link/extra'
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toBeUndefined()
       })
@@ -74,7 +84,7 @@ describe('linking', () => {
     describe('claimLetters (legacy path)', () => {
       it('should navigate to ClaimLettersScreen when path is claimLetters', () => {
         const path = '/claimLetters'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -99,7 +109,7 @@ describe('linking', () => {
     describe('my-health/appointments', () => {
       it('should navigate to Appointments tab when path is my-health/appointments', () => {
         const path = '/my-health/appointments'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -122,7 +132,7 @@ describe('linking', () => {
 
       it('should navigate to past Appointments when path is my-health/appointments/past', () => {
         const path = '/my-health/appointments/past'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -148,7 +158,7 @@ describe('linking', () => {
       it('should navigate to UpcomingAppointmentDetails with decoded ID', () => {
         const encodedID = 'some%20encoded%20id'
         const path = `/appointments/${encodedID}`
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -178,7 +188,7 @@ describe('linking', () => {
 
       it('should navigate to Appointments without ID', () => {
         const path = '/appointments'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -204,7 +214,7 @@ describe('linking', () => {
       it('should navigate to ViewMessage with messageID', () => {
         const messageID = '123456'
         const path = `/messages/${messageID}`
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -231,7 +241,7 @@ describe('linking', () => {
 
       it('should navigate to SecureMessaging without messageID', () => {
         const path = '/messages'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -256,7 +266,7 @@ describe('linking', () => {
     describe('pastAppointments', () => {
       it('should navigate to past Appointments tab', () => {
         const path = '/pastAppointments'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -281,7 +291,7 @@ describe('linking', () => {
     describe('prescriptions', () => {
       it('should navigate to PrescriptionHistory', () => {
         const path = '/prescriptions'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -306,7 +316,7 @@ describe('linking', () => {
     describe('claims', () => {
       it('should navigate to ClaimsHistoryScreen', () => {
         const path = '/claims'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -331,7 +341,7 @@ describe('linking', () => {
     describe('copays', () => {
       it('should navigate to Copays', () => {
         const path = '/copays'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -356,7 +366,7 @@ describe('linking', () => {
     describe('debts', () => {
       it('should navigate to Debts', () => {
         const path = '/debts'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toEqual({
           routes: [
@@ -381,21 +391,21 @@ describe('linking', () => {
     describe('unknown paths', () => {
       it('should return undefined for unknown paths', () => {
         const path = '/unknown/path'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toBeUndefined()
       })
 
       it('should return undefined for empty path', () => {
         const path = ''
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toBeUndefined()
       })
 
       it('should return undefined for root path', () => {
         const path = '/'
-        const state = linking.getStateFromPath?.(path, linking.config as any)
+        const state = linking.getStateFromPath?.(path, linkingConfig)
 
         expect(state).toBeUndefined()
       })
@@ -413,19 +423,43 @@ describe('linking', () => {
 
   describe('config', () => {
     it('should map ClaimLettersScreen to claimLetters path', () => {
-      const config = linking.config as any
+      const config = linking.config as {
+        screens?: {
+          Tabs?: {
+            screens?: {
+              BenefitsTab?: { screens?: { ClaimLettersScreen?: string } }
+            }
+          }
+        }
+      }
       expect(config?.screens?.Tabs?.screens?.BenefitsTab?.screens?.ClaimLettersScreen).toBe('claimLetters')
     })
 
     it('should map UpcomingAppointmentDetails with parameter', () => {
-      const config = linking.config as any
+      const config = linking.config as {
+        screens?: {
+          Tabs?: {
+            screens?: {
+              HealthTab?: { screens?: { UpcomingAppointmentDetails?: string } }
+            }
+          }
+        }
+      }
       expect(config?.screens?.Tabs?.screens?.HealthTab?.screens?.UpcomingAppointmentDetails).toBe(
         'appointments/:vetextID',
       )
     })
 
     it('should map ViewMessage with parameter', () => {
-      const config = linking.config as any
+      const config = linking.config as {
+        screens?: {
+          Tabs?: {
+            screens?: {
+              HealthTab?: { screens?: { ViewMessage?: string } }
+            }
+          }
+        }
+      }
       expect(config?.screens?.Tabs?.screens?.HealthTab?.screens?.ViewMessage).toBe('messages/:messageID')
     })
   })
