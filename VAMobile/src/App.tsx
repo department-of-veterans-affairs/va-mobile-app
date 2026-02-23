@@ -32,7 +32,7 @@ import NotificationManager, { useNotificationContext } from 'components/Notifica
 import { EnvironmentTypesConstants } from 'constants/common'
 import { linking } from 'constants/linking'
 import { NAMESPACE } from 'constants/namespaces'
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import {
   BenefitsScreen,
   HealthScreen,
@@ -48,6 +48,7 @@ import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetails
 import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import FeedbackInterceptScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/FeedbackInterceptScreen'
 import VeteransCrisisLineScreen from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from 'screens/OnboardingCarousel'
@@ -127,6 +128,7 @@ type StackNavParamList = WebviewStackParams & {
   Login: undefined
   LoaGate: undefined
   VeteransCrisisLine: undefined
+  DemoModeUsers: { fromLogin: boolean }
 }
 
 type RootTabNavParamList = {
@@ -451,6 +453,7 @@ export function AuthGuard() {
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
+        <Stack.Screen name="DemoModeUsers" component={DemoModeUsersScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       </Stack.Navigator>
     )
   }
