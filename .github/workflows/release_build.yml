@@ -33,7 +33,7 @@ jobs:
       version: ${{ github.ref_name }}
   notify_ios_failure:
     name: Notify ios Failure
-    needs: [ start_slack_thread, ios ]
+    needs: [start_slack_thread, ios]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
@@ -58,7 +58,7 @@ jobs:
       version: ${{ github.ref_name }}
   notify_android_failure:
     name: Notify Android Failure
-    needs: [ start_slack_thread, android ]
+    needs: [start_slack_thread, android]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
