@@ -298,25 +298,28 @@ export function useGiveFeedback(): (task: string) => void {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return useCallback((task: string) => {
-    const onOKPress = () => {
-      logAnalyticsEvent(Events.vama_feedback_ask(task, true))
-      navigateTo('FeedbackIntercept', { task })
-    }
+  return useCallback(
+    (task: string) => {
+      const onOKPress = () => {
+        logAnalyticsEvent(Events.vama_feedback_ask(task, true))
+        navigateTo('FeedbackIntercept', { task })
+      }
 
-    const onCancelPress = () => {
-      logAnalyticsEvent(Events.vama_feedback_ask(task, false))
-    }
+      const onCancelPress = () => {
+        logAnalyticsEvent(Events.vama_feedback_ask(task, false))
+      }
 
-    Alert.alert(t('inAppFeedback.popup.title'), t('inAppFeedback.popup.body'), [
-      {
-        text: t('inAppFeedback.popup.notNow'),
-        style: 'cancel',
-        onPress: onCancelPress,
-      },
-      { text: t('giveFeedback'), onPress: onOKPress, style: 'default' },
-    ])
-  }, [navigateTo, t])
+      Alert.alert(t('inAppFeedback.popup.title'), t('inAppFeedback.popup.body'), [
+        {
+          text: t('inAppFeedback.popup.notNow'),
+          style: 'cancel',
+          onPress: onCancelPress,
+        },
+        { text: t('giveFeedback'), onPress: onOKPress, style: 'default' },
+      ])
+    },
+    [navigateTo, t],
+  )
 }
 
 export type UseAlertProps = {

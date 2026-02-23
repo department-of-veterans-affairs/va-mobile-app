@@ -14,6 +14,7 @@ on:
       - opened
     paths:
       - 'VAMobile/src/**'
+      - 'VAMobile/e2e/**'
       - 'VAMobile/package.json'
       - '.github/workflows/e2e_android.yml'
       - '.github/workflows/e2e_ios.yml'
@@ -22,6 +23,10 @@ on:
     inputs:
       run_full_test:
         description: 'Run full e2e test?'
+        type: boolean
+        required: false
+      skip_cache:
+        description: 'Skip caches?'
         type: boolean
         required: false
       tests_to_run:
@@ -98,11 +103,13 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
           token: ${{ steps.generate_token.outputs.token }}
+
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
@@ -144,10 +151,113 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
-  matrix-e2e-ios:
-    if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
+  build-e2e-ios:
+    if: needs.output_detox_tests_to_run.outputs.output1 != ''
     runs-on: macos-15-xlarge
-    needs: [start_slack_thread, output_detox_tests_to_run]
+    needs: output_detox_tests_to_run
+    env:
+      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
+      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
+      IOS_SCHEME: 'VAMobileRelease'
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
+
+      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
+        working-directory: VAMobile/ios
+        run: |
+          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+
+      - name: Check for npm Cache
+        id: npm-cache
+        if: inputs.skip_cache != true
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          working-directory: VAMobile/ios
+          bundler-cache: true
+
+      - name: Install npm dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Apply patches
+        if: steps.npm-cache.outputs.cache-hit == 'true'
+        run: yarn patch-package
+
+      - name: Build Detox framework
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Check for CocoaPods Cache
+        if: inputs.skip_cache != true
+        id: pod-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            VAMobile/ios/Pods
+            VAMobile/ios/build/generated
+          key: ${{ runner.os }}-pods-v2-${{ hashFiles('VAMobile/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install pods
+        working-directory: VAMobile/ios
+        run: pod install
+
+      - name: Check for Build Cache
+        id: build-cache
+        if: inputs.skip_cache != true
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/ios/output
+          key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/ios/Podfile.lock','VAMobile/package.json','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','VAMobile/ios/VAMobile/**','VAMobile/ios/*.xcodeproj/**','VAMobile/ios/*.xcworkspace/**') }}
+
+      - name: Bundle iOS app
+        if: (steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_cache == true)
+        run: yarn e2e:ios-build-ci
+
+      - name: Upload iOS app
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-ios-app
+          path: VAMobile/ios/output/Build/Products/Release-iphonesimulator/VAMobile.app
+          retention-days: 1
+
+  matrix-e2e-ios:
+    if: (!cancelled()) && needs.build-e2e-ios.result == 'success' && needs.output_detox_tests_to_run.outputs.output1 != ''
+    runs-on: macos-15-xlarge
+    needs: [start_slack_thread, output_detox_tests_to_run, build-e2e-ios]
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -167,16 +277,11 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
           token: ${{ steps.generate_token.outputs.token }}
-
-      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
-        working-directory: VAMobile/ios
-        run: |
-          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
-          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
 
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
@@ -187,59 +292,70 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: Restore npm Cache
+        id: npm-cache
+        uses: actions/cache@v3
+        with:
+          path: VAMobile/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('VAMobile/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Restore applesimutils Cache
+        id: applesimutils-cache
+        if: inputs.skip_cache != true
+        uses: actions/cache@v3
+        with:
+          path: /opt/homebrew/Cellar/applesimutils
+          key: ${{ runner.os }}-applesimutils-${{ hashFiles('.github/workflows/e2e_ios.yml') }}
 
       - name: Install macOS dependencies
         run: |
-          brew tap wix/brew
-          brew install applesimutils
+          if [[ "${{ steps.applesimutils-cache.outputs.cache-hit }}" == "true" ]]; then
+            brew link applesimutils
+          else
+            brew tap wix/brew
+            brew install applesimutils
+          fi
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Install npm dependencies
-        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Build Detox framework
-        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+      - name: Apply patches
+        if: steps.npm-cache.outputs.cache-hit == 'true'
+        run: yarn patch-package
 
       - name: Set app environment variables
         run: yarn env:staging
 
-      - name: Install pods
-        working-directory: VAMobile/ios
-        run: pod install
+      - name: Build Detox framework
+        run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
-      - name: Install Ruby gems
-        working-directory: VAMobile/ios
-        run: bundle install
+      - name: Download built iOS app
+        uses: actions/download-artifact@v4
+        with:
+          name: built-ios-app
+          path: VAMobile/ios/output/Build/Products/Release-iphonesimulator/VAMobile.app
 
-      - name: Bundle iOS app
-        run: yarn e2e:ios-build
+      - name: Determine Test Command
+        id: test_command
+        run: |
+          if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
+            # Optimization: Navigation.e2e and AvailabilityFramework.e2e have dedicated matrix jobs
+            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+          else
+            # Targeted: Prepend prerequisites for safety
+            echo "CMD=yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+          fi
 
       - name: Run e2e tests for iOS
         id: run_e2e_tests
-        run: |
-          if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000
-            echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
-          else
-            echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
-          fi
-        continue-on-error: true
-
-      - name: Rerun e2e tests for iOS if failed
-        if: steps.run_e2e_tests.outcome == 'failure'
-        id: rerun_e2e_tests
-        run: |
-          yarn jest:clear;
-          if [[ "${{ steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN}}" != "" ]]; then
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
-          else
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000
-          fi
+        run: ${{ env.CMD }}
 
       - name: Upload e2e-junit
         if: failure() || success()
@@ -256,10 +372,6 @@ jobs:
           path: VAMobile/artifacts
           retention-days: 1
 
-      - name: Fail workflow if needed(View e2e step for details)
-        if: steps.run_e2e_tests.outcome == 'failure' && steps.rerun_e2e_tests.outcome == 'failure'
-        run: exit 1
-
   output-slack-results-and-update-detox-failure-ticket:
     if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-ios, start_slack_thread]
@@ -271,6 +383,7 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
@@ -369,17 +482,13 @@ jobs:
 
   update-test-names:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs:
-      [
-        matrix-e2e-ios,
-        output_detox_tests_to_run,
-        matrix_send_test_results_to_testrail,
-      ]
+    needs: [matrix-e2e-ios, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
     runs-on: ubuntu-latest
     continue-on-error: false
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: update-test-names
         run: |
           for ((i=0; ; i+=250)); do

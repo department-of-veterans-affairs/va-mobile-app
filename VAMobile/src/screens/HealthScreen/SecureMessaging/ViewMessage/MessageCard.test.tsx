@@ -121,4 +121,62 @@ context('MessageCard', () => {
     expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
     expect(screen.queryByText('Reply')).toBeFalsy()
   })
+
+  it('should hide Reply and Start new message when migration blocks and user has no available recipients', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={false}
+        migrationBlocksReply={true}
+        hasAvailableRecipients={false}
+      />,
+    )
+    expect(screen.queryByText('Reply')).toBeFalsy()
+    expect(screen.queryByText(t('secureMessaging.startNewMessage'))).toBeFalsy()
+    expect(screen.queryByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeFalsy()
+  })
+
+  it('should hide Reply but show Start new message when migration blocks and user has available recipients', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={false}
+        migrationBlocksReply={true}
+        hasAvailableRecipients={true}
+      />,
+    )
+    expect(screen.queryByText('Reply')).toBeFalsy()
+    expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
+  })
+
+  it('should show non-urgent message help when migrationBlocksReply is false', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={false}
+        migrationBlocksReply={false}
+      />,
+    )
+    expect(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeTruthy()
+  })
+
+  it('should allow user to reply when migrationBlocksReply is false', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={false}
+        migrationBlocksReply={false}
+      />,
+    )
+    expect(screen.getByText('Reply')).toBeTruthy()
+    expect(screen.queryByText(t('secureMessaging.startNewMessage'))).toBeFalsy()
+  })
 })

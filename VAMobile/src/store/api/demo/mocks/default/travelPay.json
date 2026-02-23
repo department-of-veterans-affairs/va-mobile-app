@@ -605,6 +605,53 @@
       }
     }
   },
+  "/v0/travel-pay/claims/6a5302bb-f6ee-4cf9-89b7-7b2775f056bd": {
+    "data": {
+      "id": "6a5302bb-f6ee-4cf9-89b7-7b2775f056bd",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "6a5302bb-f6ee-4cf9-89b7-7b2775f056bd",
+        "claimNumber": "ec8b6f84-7a29-4e30-9800-d6ff2dd6cc7e",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "John",
+        "claimantMiddleName": "M",
+        "claimantLastName": "Doe",
+        "claimStatus": "In manual review",
+        "appointmentDate": "{{now - 1 day}}",
+        "facilityName": "Cheyenne VA Medical Center",
+        "totalCostRequested": 47.5,
+        "reimbursementAmount": 47.5,
+        "appointment": {
+          "id": "6a5302bb-appointment-id",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 1 day}}",
+          "appointmentName": "Primary Care Appointment",
+          "appointmentType": "Primary Care",
+          "facilityId": "589",
+          "facilityName": "Cheyenne VA Medical Center",
+          "serviceConnectedDisability": 1,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-12345",
+          "associatedClaimId": "6a5302bb-f6ee-4cf9-89b7-7b2775f056bd",
+          "associatedClaimNumber": "ec8b6f84-7a29-4e30-9800-d6ff2dd6cc7e",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-claim-mileage",
+            "expenseType": "Mileage",
+            "expenseAmount": 47.5,
+            "expenseDate": "{{now - 1 day}}",
+            "claimId": "6a5302bb-f6ee-4cf9-89b7-7b2775f056bd"
+          }
+        ],
+        "documents": [],
+        "createdOn": "{{now - 1 day}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
+  },
   "/v0/travel-pay/claims/7519378a-e9ef-4a84-8673-591776c8f06b": {
     "data": {
       "id": "7519378a-e9ef-4a84-8673-591776c8f06b",

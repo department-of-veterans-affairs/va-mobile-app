@@ -24,6 +24,7 @@ export type SecureMessagingMessageAttributes = {
   recipientName: string
   readReceipt?: string
   isOhMessage: boolean
+  ohMigrationPhase?: string | null
 }
 
 export type CategoryTypes =
@@ -75,6 +76,7 @@ export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
   meta: {
     userInTriageTeam: boolean
+    stationNumber?: string
   }
   included: Array<{
     attributes: {
@@ -97,6 +99,7 @@ export type SecureMessagingFormData = {
   body: string
   subject?: string
   draft_id?: number
+  station_number?: string
 }
 
 /**

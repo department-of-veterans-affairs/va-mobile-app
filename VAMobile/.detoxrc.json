@@ -15,12 +15,13 @@
     "ios": {
       "type": "ios.app",
       "binaryPath": "ios/output/Build/Products/Release-iphonesimulator/VAMobile.app",
-      "build": "cd ios && xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES build && cd .."
+      "build": "cd ios && xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO STRIP_INSTALLED_PRODUCT=NO build && cd .."
     },
     "android": {
       "type": "android.apk",
       "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
-      "build": "cd android ; ./gradlew app:assembleDebug app:assembleAndroidTest -DtestBuildType=debug; cd .."
+      "testBinaryPath": "android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "build": "cd android ; ./gradlew app:assembleDebug app:assembleAndroidTest -DtestBuildType=debug -PreactNativeArchitectures=x86_64 --parallel --build-cache -x lint -x test; cd .."
     }
   },
   "devices": {
@@ -55,7 +56,7 @@
     "ios": {
       "device": "simulator",
       "app": "ios",
-      "headless": "false"
+      "headless": false
     },
     "ipad": {
       "device": "ipadSimulator",
@@ -81,12 +82,16 @@
       "screenshot": {
         "enabled": true,
         "shouldTakeAutomaticSnapshots": true,
-        "keepOnlyFailedTestsArtifacts": false,
+        "keepOnlyFailedTestsArtifacts": true,
         "takeWhen": {
           "testStart": false,
           "testDone": true,
           "appNotReady": true
         }
+      },
+      "log": {
+        "enabled": true,
+        "keepOnlyFailedTestsArtifacts": true
       }
     }
   }
