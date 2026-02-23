@@ -82,7 +82,13 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     error: recipientsError,
     refetch: refetchRecipients,
     isFetching: refetchingRecipients,
-  } = useAllMessageRecipients()
+  } = useAllMessageRecipients({
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
+  })
   const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const inboxUnreadCount = foldersData?.inboxUnreadCount || 0

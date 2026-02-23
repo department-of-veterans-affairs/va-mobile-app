@@ -50,14 +50,19 @@ function FolderMessages({ route }: FolderMessagesProps) {
   })
   const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
   const [noRecipientsError, setNoRecipientsError] = useState(true)
-  const { data: recipientsResponse, isFetched: hasLoadedRecipients } = useAllMessageRecipients()
+  const {
+    data: recipientsResponse,
+    isFetched: hasLoadedRecipients,
+    isFetching: loadingRecipients,
+    error: recipientsError,
+  } = useAllMessageRecipients({ enabled: isFocused && screenContentAllowed('WG_FolderMessages') })
   const recipients = recipientsResponse?.data
 
   useEffect(() => {
-    if (hasLoadedRecipients) {
-      setNoRecipientsError(!recipients || recipients.length === 0)
+    if (hasLoadedRecipients && !loadingRecipients) {
+      setNoRecipientsError((!recipients || recipients.length === 0) && !recipientsError)
     }
-  }, [recipients, hasLoadedRecipients])
+  }, [recipients, hasLoadedRecipients, loadingRecipients, recipientsError])
 
   useEffect(() => {
     const messagesList = folderMessagesData?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)

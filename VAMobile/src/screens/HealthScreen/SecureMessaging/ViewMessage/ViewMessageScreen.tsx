@@ -172,7 +172,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     error: recipientsError,
     refetch: refetchRecipients,
     isFetching: refetchingRecipients,
-  } = useAllMessageRecipients()
+  } = useAllMessageRecipients({
+    enabled: isScreenContentAllowed && smNotInDowntime,
+  })
 
   const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
