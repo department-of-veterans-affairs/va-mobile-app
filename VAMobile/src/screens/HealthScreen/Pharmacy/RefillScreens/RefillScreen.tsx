@@ -7,8 +7,9 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { MutateOptions } from '@tanstack/react-query'
 import { filter } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions, useRequestRefills } from 'api/prescriptions'
-import { PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
+import { MigratingFacility, PrescriptionData, PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import SelectionList from 'components/SelectionList'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
@@ -17,6 +18,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import NoRefills from 'screens/HealthScreen/Pharmacy/RefillScreens/NoRefills'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HiddenA11yElement } from 'styles/common'
@@ -61,6 +63,38 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     isError: refillRequestHasError,
     reset: resetRefillRequest,
   } = useRequestRefills()
+
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  /**
+   * Checks if a prescription's station is in the migrating facilities list
+   */
+  const isPrescriptionAtMigratingFacility = (prescription: PrescriptionData): boolean => {
+    const migratingFacilitiesList = userAuthorizedServices?.migratingFacilitiesList
+    if (!migratingFacilitiesList || migratingFacilitiesList.length === 0) {
+      return false
+    }
+    const stationNumber = prescription.attributes.stationNumber
+    if (!stationNumber) {
+      return false
+    }
+    return migratingFacilitiesList.some((migration: MigratingFacility) =>
+      migration.facilities.some((facility) => String(facility.facilityId) === stationNumber),
+    )
+  }
+
+  /**
+   * Gets all prescriptions that are at migrating facilities
+   */
+  const getMigratingPrescriptions = (): PrescriptionData[] => {
+    if (!allPrescriptions || allPrescriptions.length === 0) {
+      return []
+    }
+    return allPrescriptions.filter((prescription) => isPrescriptionAtMigratingFacility(prescription))
+  }
+
+  const migratingPrescriptions = getMigratingPrescriptions()
+  const hasMigratingPrescriptions = migratingPrescriptions.length > 0
 
   const refillable = refillablePrescriptions || []
 
@@ -202,6 +236,9 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
         <NoRefills />
       ) : (
         <>
+          {hasMigratingPrescriptions && (
+            <PrescriptionsDetailsBanner variant="warning" migratingPrescriptions={migratingPrescriptions} />
+          )}
           {showAlert && (
             <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics

@@ -7,8 +7,9 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { MutateOptions } from '@tanstack/react-query'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRequestRefills } from 'api/prescriptions'
-import { PrescriptionsList, RefillRequestSummaryItems, RefillStatusConstants } from 'api/types'
+import { MigratingFacility, PrescriptionsList, RefillRequestSummaryItems, RefillStatusConstants } from 'api/types'
 import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -53,9 +54,28 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     prescriptionNumber,
     expirationDate,
     orderedDate,
+    stationNumber,
   } = prescription?.attributes
 
   const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  /**
+   * Checks if the prescription's station is in the migrating facilities list
+   * Returns true if the station is migrating (should hide refill button and show banner)
+   */
+  const isPrescriptionAtMigratingFacility = (): boolean => {
+    const migratingFacilitiesList = userAuthorizedServices?.migratingFacilitiesList
+    if (!migratingFacilitiesList || migratingFacilitiesList.length === 0 || !stationNumber) {
+      return false
+    }
+
+    return migratingFacilitiesList.some((migration: MigratingFacility) =>
+      migration.facilities.some((facility) => String(facility.facilityId) === stationNumber),
+    )
+  }
+
+  const isAtMigratingFacility = isPrescriptionAtMigratingFacility()
 
   useFocusEffect(
     React.useCallback(() => {
@@ -68,7 +88,14 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
   }
 
+  // Hide refill button if the prescription is at a migrating facility
+  const shouldShowRefillButton = !isAtMigratingFacility
+
   const getRefillVAHealthButton = () => {
+    if (!shouldShowRefillButton) {
+      return <></>
+    }
+
     if (refillStatus === RefillStatusConstants.TRANSFERRED) {
       return getGoToMyVAHealthButton()
     } else if (isRefillable) {
@@ -130,6 +157,17 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   }
 
   const getBanner = () => {
+    // Ensure phoneNumber is a string or undefined
+    const phoneNumberString: string | undefined =
+      typeof facilityPhoneNumber === 'string'
+        ? facilityPhoneNumber
+        : facilityPhoneNumber && typeof facilityPhoneNumber === 'object' && 'phone' in facilityPhoneNumber
+          ? String(facilityPhoneNumber.phone)
+          : undefined
+
+    if (!shouldShowRefillButton) {
+      return <PrescriptionsDetailsBanner variant="error" phoneNumber={phoneNumberString} />
+    }
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
       return <></>
     }

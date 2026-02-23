@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { PrescriptionsGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { RefillScreen } from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillScreen'
@@ -11,7 +12,30 @@ import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
+jest.mock('api/authorizedServices/getAuthorizedServices')
+
+const mockUseAuthorizedServices = useAuthorizedServices as jest.Mock
+
 context('RefillScreen', () => {
+  const migratingFacilitiesList = [
+    {
+      migrationDate: '2026-05-01',
+      facilities: [
+        { facilityId: 979, facilityName: 'SLC10 TEST LAB' }, // Matches stationNumber in mockData
+      ],
+      phases: {
+        current: 'p3',
+        p0: 'March 1, 2026',
+        p1: 'March 15, 2026',
+        p2: 'April 1, 2026',
+        p3: 'April 24, 2026',
+        p4: 'April 27, 2026',
+        p5: 'May 1, 2026',
+        p6: 'May 3, 2026',
+        p7: 'May 8, 2026',
+      },
+    },
+  ]
   const mock: PrescriptionsGetData = {
     data: mockData,
     meta: {
@@ -93,6 +117,15 @@ context('RefillScreen', () => {
     render(<RefillScreen {...props} />)
   }
 
+  beforeEach(() => {
+    // Default mock with no migrating facilities
+    mockUseAuthorizedServices.mockReturnValue({
+      data: {
+        migratingFacilitiesList: [],
+      },
+    })
+  })
+
   describe('when there are refillable prescriptions', () => {
     it('should show prescription info and Request Refills button', async () => {
       const params = {
@@ -171,6 +204,103 @@ context('RefillScreen', () => {
         ),
       )
       await waitFor(() => expect(screen.getByText(t('prescriptions.refill.pleaseSelect'))).toBeTruthy())
+    })
+  })
+
+  describe('migrating facilities banner', () => {
+    it('should show banner when prescriptions are at migrating facilities', async () => {
+      mockUseAuthorizedServices.mockReturnValue({
+        data: {
+          migratingFacilitiesList: migratingFacilitiesList,
+        },
+      })
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status',
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue(mock)
+      initializeTestInstance()
+      // Banner should show with affected medication names as links
+      await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy())
+    })
+
+    it('should not show banner when no prescriptions are at migrating facilities', async () => {
+      mockUseAuthorizedServices.mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [
+                { facilityId: 999, facilityName: 'Other VA Medical Center' }, // Does not match stationNumber in mockData
+              ],
+              phases: {
+                current: 'p3',
+                p0: 'March 1, 2026',
+                p1: 'March 15, 2026',
+                p2: 'April 1, 2026',
+                p3: 'April 24, 2026',
+                p4: 'April 27, 2026',
+                p5: 'May 1, 2026',
+                p6: 'May 3, 2026',
+                p7: 'May 8, 2026',
+              },
+            },
+          ],
+        },
+      })
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status',
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue(mock)
+      initializeTestInstance()
+      // Should still show prescription headers but not the banner content
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      // Banner title should not be present since no prescriptions match migrating facilities
+      await waitFor(() => expect(screen.queryByText(t('prescription.details.banner.title'))).toBeNull())
+    })
+
+    it('should not show banner when migratingFacilitiesList is empty', async () => {
+      mockUseAuthorizedServices.mockReturnValue({
+        data: {
+          migratingFacilitiesList: [],
+        },
+      })
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status',
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue(mock)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText(t('prescription.details.banner.title'))).toBeNull())
+    })
+
+    it('should not show banner when userAuthorizedServices is undefined', async () => {
+      mockUseAuthorizedServices.mockReturnValue({
+        data: undefined,
+      })
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status',
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue(mock)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText(t('prescription.details.banner.title'))).toBeNull())
     })
   })
 })
