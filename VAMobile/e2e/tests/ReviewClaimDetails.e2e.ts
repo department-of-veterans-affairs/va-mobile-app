@@ -58,11 +58,11 @@ export const ReviewClaimDetailsE2eIdConstants = {
     'Your claim has been assigned to a reviewer who is determining if additional information is needed.',
   STEP_2_COLLAPSE_TOGGLE: 'Step 2',
   WHAT_YOUVE_CLAIMED: "What you've claimed",
-  FILE_REQUEST_TEXT: 'You have 4 file requests',
-  FILE_REQUEST_TITLE: 'You have 4 file requests from VA',
-  FILE_REQUEST_LIST_ITEM: 'Dental disability - More information needed',
+  FILE_REQUEST_TEXT: 'You have 5 file requests',
+  FILE_REQUEST_TITLE: 'You have 5 file requests from VA',
+  FILE_REQUEST_LIST_ITEM: 'Clarify claimed condition',
   BACK: 'Back',
-  LIST_ITEM_5103: 'Automated 5103 Notice Response',
+  LIST_ITEM_5103: 'Request for evidence',
   TITLE_5103: '5103 notice - Evidence we may need',
   DECISION_LETTER_READY: 'Decision letter ready',
   PAYMENTS: 'Payments',
@@ -178,7 +178,7 @@ describe('Review Claim Details', () => {
   })
 
   it('should open the 5103 notice', async () => {
-    await element(by.text(ReviewClaimDetailsE2eIdConstants.LIST_ITEM_5103)).tap()
+    await element(by.text(ReviewClaimDetailsE2eIdConstants.LIST_ITEM_5103)).atIndex(0).tap()
 
     await expect(element(by.text(ReviewClaimDetailsE2eIdConstants.TITLE_5103))).toExist()
     await element(by.id(ReviewClaimDetailsE2eIdConstants.NOTICE_5103_REQUEST_DETAILS_ID)).scrollTo('bottom')

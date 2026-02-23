@@ -174,7 +174,7 @@ describe('Claims Screen', () => {
   })
 
   it('should verify that the review file request alert is visible', async () => {
-    await expect(element(by.label('You have 4 file requests')).atIndex(1)).toExist()
+    await expect(element(by.label('You have 5 file requests')).atIndex(1)).toExist()
     await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
   })
 
@@ -209,7 +209,8 @@ describe('Claims Screen', () => {
 
   it('should back out of the file request screen and reenter a new file request screen', async () => {
     await element(by.text('Back')).atIndex(0).tap()
-    await element(by.text('Request for evidence')).atIndex(0).tap()
+    // Use index 1 to tap a regular file request (index 0 is the 5103 notice which has different navigation)
+    await element(by.text('Request for evidence')).atIndex(1).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
   })
 
