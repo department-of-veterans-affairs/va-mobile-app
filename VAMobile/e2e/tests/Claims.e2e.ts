@@ -183,12 +183,12 @@ describe('Claims Screen', () => {
     await expect(element(by.text('You have 5 file requests from VA'))).toExist()
   })
 
-  it('should display friendlyName when available and isSensitive is false', async () => {
+  it('should display friendlyName when provided and isSensitive is false', async () => {
     await expect(element(by.text('Clarify claimed condition'))).toExist()
     await expect(element(by.text('Dental disability - More information needed'))).not.toExist()
   })
 
-  it('should display "Request for evidence" when friendlyName is unavailable or isSensitive is true', async () => {
+  it('should display "Request for evidence" when friendlyName is not provided or isSensitive is true', async () => {
     // 4 items should show "Request for evidence"
     await expect(element(by.text('Request for evidence')).atIndex(0)).toExist()
     await expect(element(by.text('Request for evidence')).atIndex(1)).toExist()
