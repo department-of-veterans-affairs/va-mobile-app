@@ -333,7 +333,7 @@ describe('File for Travel Pay', () => {
       .whileElement(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID))
       .scroll(100, 'down', NaN, 0.8)
     await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID))).toExist()
-    await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
+    await expect(element(by.text(TravelPayE2eIdConstants.TRAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
   })
 
   it('updates the appointments cache when the travel pay claim is submitted', async () => {
@@ -347,6 +347,6 @@ describe('File for Travel Pay', () => {
       .whileElement(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID))
       .scroll(100, 'down', NaN, 0.8)
     await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID))).toExist()
-    await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
+    await expect(element(by.text(TravelPayE2eIdConstants.TRAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
   })
 })
