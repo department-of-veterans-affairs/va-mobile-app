@@ -916,8 +916,11 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
     CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID,
     CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID,
   )
-  waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
-  await element(by.id(testIdOfDesiredUser)).tap()
+  await waitFor(element(by.text(testIdOfDesiredUser)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID))
+    .scroll(200, 'down')
+  await element(by.text(testIdOfDesiredUser)).atIndex(0).tap()
   await scrollToIDThenTap(
     CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
     CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,
