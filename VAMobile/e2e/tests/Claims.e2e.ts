@@ -188,17 +188,15 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Dental disability - More information needed'))).not.toExist()
   })
 
-  it('should display "Request for evidence" when friendlyName is not provided or isSensitive is true', async () => {
-    // 4 items should show "Request for evidence"
-    await expect(element(by.text('Request for evidence')).atIndex(0)).toExist()
-    await expect(element(by.text('Request for evidence')).atIndex(1)).toExist()
-    await expect(element(by.text('Request for evidence')).atIndex(2)).toExist()
-    await expect(element(by.text('Request for evidence')).atIndex(3)).toExist()
-    // displayName and sensitive friendlyName values should not be shown
-    await expect(element(by.text('Accidental injury - 21-4176 needed'))).not.toExist()
-    await expect(element(by.text('Automated 5103 Notice Response'))).not.toExist()
-    await expect(element(by.text('Documents relating to disability needed'))).not.toExist()
+  it('should display "Request for evidence" when friendlyName is provided and isSensitive is true', async () => {
+    await expect(element(by.text('Request for evidence'))).toExist()
     await expect(element(by.text('Service information related to herbicide exposure'))).not.toExist()
+  })
+
+  it('should display displayName when no friendlyName is provided', async () => {
+    await expect(element(by.text('Automated 5103 Notice Response'))).toExist()
+    await expect(element(by.text('Documents relating to disability needed'))).toExist()
+    await expect(element(by.text('Accidental injury - 21-4176 needed'))).toExist()
   })
 
   it('verify that the user is sent to the file upload page', async () => {
@@ -209,13 +207,12 @@ describe('Claims Screen', () => {
 
   it('should back out of the file request screen and reenter a new file request screen', async () => {
     await element(by.text('Back')).atIndex(0).tap()
-    // Use index 1 to tap a regular file request (index 0 is the 5103 notice which has different navigation)
-    await element(by.text('Request for evidence')).atIndex(1).tap()
+    await element(by.text('Documents relating to disability needed')).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
   })
 
   it('should be able to open the 5103 notice', async () => {
-    await element(by.text('Request for evidence')).atIndex(0).tap()
+    await element(by.text('Automated 5103 Notice Response')).tap()
 
     await expect(element(by.text('5103 notice - Evidence we may need'))).toExist()
     await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_REQUEST_DETAILS_ID)).scrollTo('bottom')

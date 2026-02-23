@@ -91,14 +91,17 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     }
 
     return map(requests, (request, index) => {
-      const { friendlyName, isSensitive } = request
-      // Display title logic:
-      // - Generic (no friendlyName) -> "Request for evidence"
+      const { friendlyName, isSensitive, displayName } = request
+      // Display title logic (as of 2/23/2026):
+      // - Generic (no friendlyName) -> use API displayName
       // - With friendlyName and isSensitive=true -> "Request for evidence"
       // - With friendlyName and isSensitive=false -> friendlyName
       const hasOverrides = friendlyName != null
-      const requestName =
-        hasOverrides && isSensitive === false ? friendlyName : t('fileRequestDetails.requestForEvidence')
+      const requestName = hasOverrides
+        ? isSensitive === false
+          ? friendlyName
+          : t('fileRequestDetails.requestForEvidence')
+        : displayName
       const hasUploaded = hasUploadedOrReceived(request)
       const item: SimpleListItemObj = {
         text: requestName || '',

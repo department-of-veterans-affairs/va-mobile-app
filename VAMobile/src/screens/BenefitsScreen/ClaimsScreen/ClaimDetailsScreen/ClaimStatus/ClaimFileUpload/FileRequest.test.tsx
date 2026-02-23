@@ -108,9 +108,7 @@ context('FileRequest', () => {
       renderWithData(request)
       await waitFor(() => expect(screen.getByText(t('claimPhase.youHaveFileRequestVA', { count: 1 }))).toBeTruthy())
       await waitFor(() => expect(screen.getByText(t('fileRequest.weSentYouALaterText'))).toBeTruthy())
-      await waitFor(() =>
-        fireEvent.press(screen.getByRole('link', { name: t('fileRequestDetails.requestForEvidence') })),
-      )
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: /Request 1/ })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
           claimID: '600156928',
@@ -160,18 +158,18 @@ context('FileRequest', () => {
         })
     }
 
-    it('should display "Request for evidence" when friendlyName is undefined', async () => {
+    it('should display displayName when friendlyName is undefined', async () => {
       const requests = [createRequest()]
       mockApiResponse(requests)
       renderWithData(requests)
-      await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('API Display Name')).toBeTruthy())
     })
 
-    it('should display "Request for evidence" when friendlyName is null', async () => {
+    it('should display displayName when friendlyName is null', async () => {
       const requests = [createRequest({ friendlyName: null })]
       mockApiResponse(requests)
       renderWithData(requests)
-      await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('API Display Name')).toBeTruthy())
     })
 
     it('should display "Request for evidence" when overrides exist but isSensitive=true', async () => {
