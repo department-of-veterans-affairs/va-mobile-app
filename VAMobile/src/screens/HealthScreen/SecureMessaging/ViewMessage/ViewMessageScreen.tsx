@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -11,8 +10,10 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
+  useAllMessageRecipients,
   useFolderMessages,
   useFolders,
   useMessage,
@@ -42,9 +43,15 @@ import {
   TextView,
   VAModalPicker,
 } from 'components'
+import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  READ,
+  REPLY_WINDOW_IN_DAYS,
+  isMigrationPhaseBlockingReplies,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import CollapsibleMessage from 'screens/HealthScreen/SecureMessaging/ViewMessage/CollapsibleMessage'
 import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/MessageCard'
@@ -165,6 +172,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const userInTriageTeam = messageData?.meta?.userInTriageTeam
   const stationNumber = messageData?.meta?.stationNumber
+
+  // Derive OH migration phase from the first thread message or the current message
+  const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
+
+  const { data: authorizedServicesData } = useAuthorizedServices()
+  const { data: recipientsData } = useAllMessageRecipients()
+  const hasAvailableRecipients = (recipientsData?.data?.length ?? 0) > 0
 
   useEffect(() => {
     if (threadFetched) {
@@ -408,7 +423,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && userInTriageTeam && (
+          {replyExpired && userInTriageTeam && !migrationBlocksReply && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -418,7 +433,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          {!userInTriageTeam && (
+          {!userInTriageTeam && !migrationBlocksReply && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
@@ -435,11 +450,19 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                   {t('secureMessaging.reply.error.ifYouThink')}
                 </TextView>
                 <LinkWithAnalytics
-                  type="custom"
+                  type="url"
                   text={t('upcomingAppointmentDetails.findYourVAFacility')}
-                  onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+                  url={WEBVIEW_URL_FACILITY_LOCATOR}
                 />
               </AlertWithHaptics>
+            </Box>
+          )}
+          {migrationBlocksReply && authorizedServicesData && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <OHAlertManager
+                parentScreen={OHParentScreens.SecureMessaging}
+                authorizedServices={authorizedServicesData}
+              />
             </Box>
           )}
           <MessageCard
@@ -447,6 +470,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             folderId={currentFolderIdParam}
             userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
+            migrationBlocksReply={migrationBlocksReply}
+            hasAvailableRecipients={hasAvailableRecipients}
             stationNumber={stationNumber}
           />
           {thread.length > 0 && (
