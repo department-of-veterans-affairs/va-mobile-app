@@ -161,7 +161,53 @@ context('ClaimsAndAppealsListView', () => {
         ),
       )
       await waitFor(() =>
-        expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '1', claimType: 'ACTIVE' }),
+        expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', {
+          claimID: '1',
+          claimType: 'ACTIVE',
+          provider: undefined,
+        }),
+      )
+    })
+  })
+
+  describe('on click of a claim with provider', () => {
+    it('should pass provider to ClaimDetailsScreen navigation', async () => {
+      const payloadWithProvider: ClaimsAndAppealsListPayload = {
+        ...mockPayload,
+        data: [
+          {
+            ...mockPayload.data[0],
+            attributes: {
+              ...mockPayload.data[0].attributes,
+              provider: 'lighthouse',
+            },
+          },
+          ...mockPayload.data.slice(1),
+        ],
+      }
+
+      const props = mockNavProps({ claimType: 'ACTIVE' as ClaimType })
+      const queriesData: QueriesData = [
+        {
+          queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE'],
+          data: payloadWithProvider,
+        },
+      ]
+      render(<ClaimsAndAppealsListView {...props} />, { queriesData })
+
+      await waitFor(() =>
+        fireEvent.press(
+          screen.getByRole('link', {
+            name: `Claim for compensation ${t('claims.evidenceRequested')} ${t('claimDetails.receivedOn', { date: 'October 01, 2020' })} ${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')} ${t('movedToThisStepOn', { date: 'October 05, 2020' })}`,
+          }),
+        ),
+      )
+      await waitFor(() =>
+        expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', {
+          claimID: '1',
+          claimType: 'ACTIVE',
+          provider: 'lighthouse',
+        }),
       )
     })
   })
