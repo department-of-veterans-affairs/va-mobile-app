@@ -373,8 +373,12 @@ describe('AppointmentTravelClaimDetails', () => {
           fireEvent.press(claimDetailsLink)
 
           // Should navigate to the native screen with correct claimId and backLabel
-          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaimDetailsScreen', {
-            claimId: '20d73591-ff18-4b66-9838-1429ebbf1b6e',
+          expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', {
+            screen: 'TravelPayClaimDetailsScreen',
+            initial: false,
+            params: {
+              claimId: '20d73591-ff18-4b66-9838-1429ebbf1b6e',
+            },
           })
         })
 

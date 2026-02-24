@@ -191,8 +191,10 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
               if (showTravelPayClaimDetails) {
                 logAnalyticsEvent(Events.vama_link_click)
-                navigateTo('TravelPayClaimDetailsScreen', {
-                  claimId,
+                navigateTo('BenefitsTab', {
+                  screen: 'TravelPayClaimDetailsScreen',
+                  initial: false,
+                  params: { claimId },
                 })
               } else {
                 logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
