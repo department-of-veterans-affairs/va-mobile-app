@@ -208,10 +208,13 @@ export const CommonE2eIdConstants = {
  * */
 export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
+    await device.disableSynchronization()
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(120000)
+      .withTimeout(60000)
+    await device.enableSynchronization()
   } catch (ex) {
+    await device.enableSynchronization()
     await device.uninstallApp()
     await device.installApp()
     if (pushNotifications) {
@@ -224,9 +227,11 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     } else {
       await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     }
+    await device.disableSynchronization()
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
       .withTimeout(60000)
+    await device.enableSynchronization()
   }
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toBeVisible()
