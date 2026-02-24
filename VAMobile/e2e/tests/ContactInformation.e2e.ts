@@ -65,7 +65,9 @@ export async function validateAddresses(addressID: string, addressType: string) 
   it(addressType + ': verify action sheet for cancel', async () => {
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
-    await expect(element(by.text('Delete changes to your ' + addressType.toLowerCase() + ' address?'))).toExist()
+    await waitFor(element(by.text('Delete changes to your ' + addressType.toLowerCase() + ' address?')))
+      .toBeVisible()
+      .withTimeout(4000)
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
@@ -185,14 +187,18 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
       .withTimeout(4000)
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
-    await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
+    await waitFor(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?')))
+      .toBeVisible()
+      .withTimeout(4000)
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
   it(phoneType + ': verify fields are filled on keep editing', async () => {
     await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
-    await expect(element(by.text('276-608-6180')).atIndex(0)).toExist()
+    await waitFor(element(by.text('276-608-6180')).atIndex(0))
+      .toBeVisible()
+      .withTimeout(4000)
     await expect(element(by.text('1234'))).toExist()
   })
 
@@ -272,7 +278,9 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
     await element(by.id(contactInfoTypeText)).tap()
     await element(by.text('Remove ' + type)).tap()
     await setTimeout(2000)
-    await expect(element(by.text('Remove your ' + type + '?'))).toExist()
+    await waitFor(element(by.text('Remove your ' + type + '?')))
+      .toBeVisible()
+      .withTimeout(4000)
     await expect(
       element(
         by.text("We'll remove your " + type + ' from many VA records. You can always add it to your profile again.'),
@@ -283,11 +291,15 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
   it('should tap keep and verify the ' + type + ' information appears', async () => {
     await element(by.text(CommonE2eIdConstants.REMOVE_KEEP_TEXT)).tap()
     if (type === 'mobile phone' || type === 'work phone' || type === 'home phone') {
-      await expect(element(by.text('276-608-6180')).atIndex(1)).toExist()
+      await waitFor(element(by.text('276-608-6180')).atIndex(1))
+        .toBeVisible()
+        .withTimeout(4000)
     } else if (type === 'home address') {
       await expect(element(by.text('3101 N Fort Valley Rd'))).toExist()
     } else if (type === 'email address') {
-      await expect(element(by.text('attended1@gmail.com')).atIndex(1)).toExist()
+      await waitFor(element(by.text('attended1@gmail.com')).atIndex(1))
+        .toBeVisible()
+        .withTimeout(4000)
     }
   })
 

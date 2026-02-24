@@ -133,7 +133,8 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
     // AMLODIPINE BESYLATE 10MG TAB is first in Status (A to Z) sort (active before expired)
-    await waitFor(element(by.label('AMLODIPINE BESYLATE 10MG TAB')))
+    await expect(element(by.label('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
+    await waitFor(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(100, 'down', 0.5, 0.5)
@@ -157,7 +158,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify prescription details information', async () => {
-    await waitFor(element(by.label('AMLODIPINE BESYLATE 10MG TAB')))
+    await waitFor(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
@@ -224,7 +225,8 @@ describe('Prescriptions Screen', () => {
   it('verify prescription tracking item specific info', async () => {
     // ACETAMINOPHEN 325MG TAB is expired and appears last in Status (A to Z) sort
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-    await waitFor(element(by.label('ACETAMINOPHEN 325MG TAB')))
+    await expect(element(by.label('ACETAMINOPHEN 325MG TAB'))).toExist()
+    await waitFor(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
@@ -263,7 +265,8 @@ describe('Prescriptions Screen', () => {
   it('verify tracking info for multiple packages', async () => {
     // ACETAMINOPHEN has 2 UPS tracking records — should display as Package 1 of 2 and Package 2 of 2
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-    await waitFor(element(by.label('ACETAMINOPHEN 325MG TAB')))
+    await expect(element(by.label('ACETAMINOPHEN 325MG TAB'))).toExist()
+    await waitFor(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
