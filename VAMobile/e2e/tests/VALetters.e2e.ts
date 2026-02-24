@@ -81,7 +81,7 @@ beforeAll(async () => {
   await openLetters()
 })
 
-describe.skip('VA Letters', () => {
+describe('VA Letters', () => {
   it('should match design', async () => {
     await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })

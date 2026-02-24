@@ -302,12 +302,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
 
   const onDeletePressed = (): void => {
     const options = [t('delete'), t('keepEditing')]
-    let cancelBtnIndex = 1
     let saveButtonExists = false
     if (!replyDisabled) {
       saveButtonExists = true
       options.splice(1, 0, t('save'))
-      cancelBtnIndex = 2
     }
 
     destructiveAlert(
@@ -316,7 +314,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         title: t('deleteDraft'),
         message: t('secureMessaging.deleteDraft.deleteInfo'),
         destructiveButtonIndex: 0,
-        cancelButtonIndex: cancelBtnIndex,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
