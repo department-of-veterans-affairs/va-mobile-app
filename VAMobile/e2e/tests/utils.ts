@@ -28,6 +28,15 @@ const mockNotification = {
   },
 }
 
+export async function dismissActionSheet() {
+  if (device.getPlatform() === 'ios') {
+    // Swipe down on the first UILabel in the action sheet.
+    await element(by.type('UILabel').withAncestor(by.type('_UIAlertControllerPhoneTVMacView')))
+      .atIndex(0)
+      .swipe('down', 'fast', 0.6)
+  }
+}
+
 export const CommonE2eIdConstants = {
   //device-specific
   OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
