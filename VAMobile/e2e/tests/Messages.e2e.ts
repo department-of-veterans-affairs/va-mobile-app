@@ -322,7 +322,9 @@ describe.only('Messages Screen', () => {
     await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
-    // await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
+    if (device.getPlatform() === 'android') {
+      await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
+    }
   })
 
   it('should tap keep editing and send the message', async () => {
@@ -412,7 +414,9 @@ describe.only('Messages Screen', () => {
     await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
-    // await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
+    if (device.getPlatform() === 'android') {
+      await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
+    }
   })
 
   it(':ios: verify the previous made fields are filled on keep editing', async () => {
@@ -506,7 +510,9 @@ describe.only('Messages Screen', () => {
     await expect(element(by.text("If you save your changes, we'll remove the attachments."))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT))).toExist()
-    // await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
+    if (device.getPlatform() === 'android') {
+      await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
+    }
   })
 
   it('drafts: verify the previous made fields are filled on keep editing', async () => {
