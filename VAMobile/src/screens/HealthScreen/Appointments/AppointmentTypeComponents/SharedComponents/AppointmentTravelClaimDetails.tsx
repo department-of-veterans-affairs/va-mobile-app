@@ -163,8 +163,10 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
               }
 
               logAnalyticsEvent(Events.vama_link_click)
-              navigateTo('TravelPayClaimDetailsScreen', {
-                claimId,
+              navigateTo('BenefitsTab', {
+                screen: 'TravelPayClaimDetailsScreen',
+                initial: false,
+                params: { claimId },
               })
             }}
             text={t('travelPay.travelClaimFiledDetails.goToClaimDetails')}

@@ -64,10 +64,6 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureFlag: 'COEAvailable',
   },
   {
-    featureName: 'TravelListAndStatus',
-    bullets: 3,
-  },
-  {
     featureName: 'DecisionLetter',
     authorizedService: 'benefitsPushNotification',
     bullets: 1,
@@ -76,6 +72,10 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureName: 'LabsAndTests',
     featureFlag: 'labsAndTests',
     authorizedService: 'labsAndTestsEnabled',
+  },
+  {
+    featureName: 'StartScheduling',
+    featureFlag: 'startScheduling',
   },
 ]
 
