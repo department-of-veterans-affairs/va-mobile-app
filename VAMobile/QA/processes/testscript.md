@@ -76,6 +76,20 @@ This script defines baseline checks that must be verified for every feature tick
 - [ ] State persists correctly across app backgrounding and foregrounding
 - [ ] Logout/login cycle does not produce stale data
 
+## 8. Feature-Specific Verification
+
+> These checks are informed by the **QA Test Context** section of the PR.
+
+- [ ] **Happy path**: Navigate to the feature using the path described in the PR and verify it works as described
+- [ ] **Risk-calibrated exploration**: Based on the stated risk level, perform exploratory testing:
+    - Low -> Spot check, confirm it doesn't break surrounding features
+    - Medium -> Test primary + at least one alternate flow, one negative case
+    - High -> Full exploratory session: alternate flows, negative cases, boundary conditions, interaction with adjacent features
+- [ ] **Feature flag behavior**: If flagged, verify ON/OFF behavior matches what the PR describes
+- [ ] **Offline behavior**: If noted in the PR, verify offline handling
+- [ ] **Edge cases identified by QA**: Document any additional edge cases found during exploratory testing
+- [ ] **Regression spot-check**: Verify that features adjacent to the change still work
+
 ---
 
 ## Resources
