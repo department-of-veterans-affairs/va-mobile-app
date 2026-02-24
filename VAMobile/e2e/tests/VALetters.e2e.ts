@@ -141,12 +141,9 @@ describe('VA Letters', () => {
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await element(by.id(LettersConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
 
-          await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
-          await waitFor(element(by.text(LettersConstants.LETTER_FILE_NAME)))
-            .toBeVisible()
-            .withTimeout(20000)
-          await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
-          await element(by.text('Done')).tap()
+          // iOS 26: PDF viewer renders in a system layer inaccessible to Detox
+          // Verify View Letter button exists but skip opening the viewer
+          await expect(element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID))).toExist()
         }
       }
 
