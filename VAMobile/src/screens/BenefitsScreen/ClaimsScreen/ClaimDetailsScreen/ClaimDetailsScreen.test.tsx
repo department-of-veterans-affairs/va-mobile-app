@@ -239,4 +239,51 @@ context('ClaimDetailsScreen', () => {
       )
     })
   })
+
+  describe('multi-provider claim routing', () => {
+    it('fetches claim with ?type query param when feature flag is on and provider is given', async () => {
+      when(featureEnabled).calledWith('cstMultiClaimProvider').mockReturnValue(true)
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928?type=lighthouse`, {})
+        .mockResolvedValue({ data: { ...claimData } })
+
+      const props = mockNavProps(
+        undefined,
+        { navigate: jest.fn(), addListener: jest.fn(), setOptions: jest.fn(), goBack: jest.fn() },
+        { params: { claimID: '600156928', claimType: ClaimTypeConstants.ACTIVE, provider: 'lighthouse' } },
+      )
+      render(<ClaimDetailsScreen {...props} />)
+
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
+      expect(api.get).toBeCalledWith('/v0/claim/600156928?type=lighthouse', {})
+    })
+
+    it('fetches claim without ?type query param when feature flag is off even if provider is given', async () => {
+      when(featureEnabled).calledWith('cstMultiClaimProvider').mockReturnValue(false)
+
+      const props = mockNavProps(
+        undefined,
+        { navigate: jest.fn(), addListener: jest.fn(), setOptions: jest.fn(), goBack: jest.fn() },
+        { params: { claimID: '600156928', claimType: ClaimTypeConstants.ACTIVE, provider: 'lighthouse' } },
+      )
+      render(<ClaimDetailsScreen {...props} />)
+
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
+      expect(api.get).toBeCalledWith('/v0/claim/600156928', {})
+    })
+
+    it('fetches without type param when flag is on but no provider in route params', async () => {
+      when(featureEnabled).calledWith('cstMultiClaimProvider').mockReturnValue(true)
+
+      const props = mockNavProps(
+        undefined,
+        { navigate: jest.fn(), addListener: jest.fn(), setOptions: jest.fn(), goBack: jest.fn() },
+        { params: { claimID: '600156928', claimType: ClaimTypeConstants.ACTIVE } },
+      )
+      render(<ClaimDetailsScreen {...props} />)
+
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
+      expect(api.get).toBeCalledWith('/v0/claim/600156928', {})
+    })
+  })
 })
