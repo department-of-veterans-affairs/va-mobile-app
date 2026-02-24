@@ -377,7 +377,7 @@ beforeAll(async () => {
   await openContactInfo()
 })
 
-describe.skip(':ios: Contact Info Screen', () => {
+describe(':ios: Contact Info Screen', () => {
   it('should match the Contact Info page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.MAILING_ADDRESS_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID))).toExist()

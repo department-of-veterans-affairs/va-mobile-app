@@ -492,7 +492,7 @@ const openTravelPayFlow = async (text: string, login: boolean = true) => {
   await openAppointmentInList(text)
 }
 
-describe.skip('Travel Pay', () => {
+describe('Travel Pay', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
