@@ -83,7 +83,7 @@ export const getMigrationForFacilityId = (
   migratingFacilitiesList: MigratingFacility[],
   facilityId: number | string | undefined,
 ): MigratingFacility | undefined => {
-  if (!facilityId) return undefined
+  if (!facilityId || (typeof facilityId === 'string' && facilityId.trim() === '')) return undefined
   return migratingFacilitiesList.find((migration) =>
     migration.facilities.some((facility) => String(facility.facilityId) === String(facilityId)),
   )
