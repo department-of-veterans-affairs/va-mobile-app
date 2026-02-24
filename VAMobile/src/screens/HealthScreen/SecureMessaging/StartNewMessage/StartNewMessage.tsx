@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   secureMessagingKeys,
   useAllMessageRecipients,
@@ -155,6 +156,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   // Ref for use in snackbar callbacks to ensure we have the latest messageData
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)
   messageDataRef.current = messageData
+
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -493,6 +497,20 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
               parentScreen={OHParentScreens.SecureMessaging}
             />
           ))}
+        {cernerFacilities.length > 0 && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertWithHaptics
+              variant="warning"
+              expandable={true}
+              initializeExpanded={true}
+              focusOnError={false}
+              header={t('secureMessaging.startNewMessage.nameChangeAlert.title')}>
+              <TextView accessible variant="MobileBody">
+                {t('secureMessaging.startNewMessage.nameChangeAlert.body')}
+              </TextView>
+            </AlertWithHaptics>
+          </Box>
+        )}
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
