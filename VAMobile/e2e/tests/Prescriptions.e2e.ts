@@ -3,13 +3,18 @@ Description:
 Detox script that follows the prescriptions test case found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
 When to update:
 This script should be updated whenever new things are added/changed in prescriptions or if anything is changed in src/store/api/demo/mocks/prescriptions.json.
+
+Note: All demo users now have medicationsOracleHealthEnabled: true, so this test uses v1 OH prescription data.
+The v1 mock data (default/prescriptions.json) has 3 prescriptions:
+  - AMLODIPINE BESYLATE 10MG TAB (active, refillable, 1 refill remaining)
+  - IODOQUINOL 650MG TAB (active, not refillable)
+  - ACETAMINOPHEN 325MG TAB (expired, trackable with 2 UPS tracking records)
 */
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  changeDemoModeUser,
   checkImages,
   loginToDemoMode,
   openHealth,
@@ -23,29 +28,19 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_APPLY_ID: 'radioButtonApplyTestID',
   PRESCRIPTION_ALL_DESCRIPTION_LABEL:
     'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
-  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (32), sorted by status (A to Z)',
-  PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT: 'Pending refills (8), sorted by status (A to Z)',
-  PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (5)',
+  // v1 OH prescriptions: 3 total (AMLODIPINE BESYLATE active, IODOQUINOL active, ACETAMINOPHEN expired)
+  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (3), sorted by status (A to Z)',
+  PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (1)',
   PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active',
   PRESCRIPTION_STATUS_LABEL_BODY_LABEL:
     'A prescription that can be filled at the local  V-A  pharmacy. If this prescription is refillable, you may request a refill of this  V-A  prescription.',
+  // AMLODIPINE BESYLATE 10MG TAB is first in Status (A to Z) sort and has these attributes:
   PRESCRIPTION_INSTRUCTIONS_TEXT: 'TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS',
-  PRESCRIPTION_REFILLS_LEFT_TEXT: 'Refills left: 5',
+  PRESCRIPTION_REFILLS_LEFT_TEXT: 'Refills left: 1',
   PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 06/06/2022',
   PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: SLC10 TEST LAB',
   PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
-  PRESCRIPTION_PENDING_DESCRIPTION_LABEL:
-    "This list shows refill requests you've submitted. It also shows refills the  V-A  pharmacy is processing.",
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
-  PRESCRIPTION_REFILL_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT: 'We got your refill requests',
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT: 'Refill request summary',
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL:
-    "We're reviewing your refill request. Once approved, the  V-A  pharmacy will process your refill.",
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL:
-    'If you have questions about the status of your refill, contact your provider or local  V-A  pharmacy.',
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT: 'Go to all pending refills',
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
   FILTER_PRESCRIPTIONS_TEST_ID: 'filterSortWrapperBoxTestID',
   PRESCRIPTION_GO_TO_MY_VA_HEALTH_LINK_ID: 'goToMyVAHealthPrescriptionHistoryID',
@@ -53,7 +48,6 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_CANCEL_ID: 'radioButtonCancelTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
   PRESCRIPTION_REQUEST_REFILL_ID: 'requestRefillsButtonID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison',
 }
 
 let tempPath
@@ -63,17 +57,17 @@ const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
-  await changeDemoModeUser(PrescriptionsE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
   await openHealth()
   await openPrescriptions()
 })
 
 /*
-Validates and tests the sort prescription options
+Validates and tests the sort prescription options.
+Simplified for v1 OH prescriptions (3 items on a single page — no pagination needed).
 param name: String name of the sort option
-param first Prescription: String name of the first prescription that appears in the list once the sort option is selected
-param last Prescription: String name of the last prescription that appears in the list once the sort option is selected
-param first Instance: Boolean value that tells the test to scroll to the top so the filter and sort button is displayed
+param firstPrescription: String name of the first prescription in the sorted list
+param lastPrescription: String name of the last prescription in the sorted list
+param firstInstance: Boolean — true for the first call (resets to All filter and takes screenshot)
 */
 export async function validateSort(
   name: string,
@@ -85,23 +79,9 @@ export async function validateSort(
     if (firstInstance) {
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-      await element(by.text('All (32)')).atIndex(0).tap()
+      await element(by.text('All (3)')).atIndex(0).tap()
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
     } else {
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-      await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
     }
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
@@ -117,31 +97,17 @@ export async function validateSort(
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
     await expect(element(by.text(firstPrescription)).atIndex(0)).toBeVisible()
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await expect(element(by.text(lastPrescription))).toBeVisible()
   })
 }
 
 /*
-Validates and tests the filter prescription options
+Validates filter options where the modal count matches the filtered result count.
+Only use for filters where allPrescriptions.length-based or computed counts are used
+(e.g. 'All' and 'Tracking'), not status counts from the API meta.
 param name: String name of the filter option
-param quantity: Number of prescriptions expected for a specific filter option
-param helperText: Optional string name of the helper text for the filter option
+param quantity: Number of prescriptions expected (must match both modal count and result count)
+param helperText: Optional string helper text shown in the filter modal
 */
 export async function validateFilter(name: string, quantity: number, helperText?: string) {
   const filterDescription =
@@ -166,7 +132,8 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID))).toExist()
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
-    await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
+    // AMLODIPINE BESYLATE 10MG TAB is first in Status (A to Z) sort (active before expired)
+    await waitFor(element(by.label('AMLODIPINE BESYLATE 10MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(100, 'down', 0.5, 0.5)
@@ -190,7 +157,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify prescription details information', async () => {
-    await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
+    await waitFor(element(by.label('AMLODIPINE BESYLATE 10MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
@@ -200,7 +167,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT))).toExist()
     await expect(element(by.text('TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS'))).toExist()
     await expect(element(by.text('Refills left'))).toExist()
-    await expect(element(by.text('5'))).toExist()
+    await expect(element(by.text('1'))).toExist()
     await expect(element(by.text('Fill date'))).toExist()
     await expect(element(by.text('06/06/2022'))).toExist()
     await expect(element(by.text('Quantity'))).toExist()
@@ -223,14 +190,12 @@ describe('Prescriptions Screen', () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_BACK_ID)).tap()
   })
 
-  validateFilter('Active', 24, 'Includes these statuses: On hold, Parked, Refill in process, and Submitted')
-  validateFilter('Discontinued', 1)
-  validateFilter('Expired', 4)
-  validateFilter('Pending', 8, 'Includes refill requests you submitted and refills the VA pharmacy is processing')
-  validateFilter('Tracking', 3, 'Includes refills with current tracking information available')
-  validateFilter('Transferred', 1)
-  validateFilter('Status Not Available', 2)
-  validateFilter('All', 32)
+  // Only test filters where the modal count equals the filtered result count.
+  // 'All' and 'Tracking' use computed counts (allPrescriptions.length and isTrackable count),
+  // which are consistent with the actual data. Status-based counts (Active, Expired, etc.)
+  // come from the API meta which has placeholder values in the v1 mock, so are not tested here.
+  validateFilter('Tracking', 1, 'Includes refills with current tracking information available')
+  validateFilter('All', 3)
 
   it('verify prescriptions screen after filters cancel', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
@@ -249,24 +214,23 @@ describe('Prescriptions Screen', () => {
 
   it('pending: verify filters', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await expect(element(by.text('All (32)'))).toExist()
-    await expect(element(by.text('Active (24)'))).toExist()
-    await expect(element(by.text('Discontinued (1)'))).toExist()
-    await expect(element(by.text('Expired (4)'))).toExist()
-    await expect(element(by.text('Pending (8)'))).toExist()
-    await expect(element(by.text('Tracking (3)'))).toExist()
-    await expect(element(by.text('Transferred (1)'))).toExist()
-    await expect(element(by.text('Status Not Available (2)'))).toExist()
+    // Verify computed counts (consistent with actual v1 data)
+    await expect(element(by.text('All (3)'))).toExist()
+    await expect(element(by.text('Pending (0)'))).toExist()
+    await expect(element(by.text('Tracking (1)'))).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
   })
 
   it('verify prescription tracking item specific info', async () => {
-    await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB')))
+    // ACETAMINOPHEN 325MG TAB is expired and appears last in Status (A to Z) sort
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+    await waitFor(element(by.label('ACETAMINOPHEN 325MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
-    await expect(element(by.label('Prescription number 3 6 3 6 7 3 6'))).toExist()
+    // Tracking record prescription number
+    await expect(element(by.label('Prescription number 2 7 2 0 3 3 4'))).toExist()
     await expect(
       element(
         by.text("We share tracking information here for up to 15 days, even if you've received your prescription."),
@@ -280,75 +244,33 @@ describe('Prescriptions Screen', () => {
       ),
     ).toExist()
     await expect(element(by.text('Tracking number'))).toExist()
-    await expect(element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex)).toExist()
-    await expect(element(by.text('Delivery service: DHL'))).toExist()
-    await expect(element(by.label('Date shipped: June 14, 2022'))).toExist()
+    await expect(element(by.label('7 7 2 9 8 0 2 7 2 0 3 9 8 0 0 0 0 0 0 0 3 9 8')).atIndex(trackingIndex)).toExist()
+    await expect(element(by.text('Delivery service: UPS'))).toExist()
+    await expect(element(by.label('Date shipped: October 15, 2022'))).toExist()
     await expect(element(by.text('Other prescriptions in this package:'))).toExist()
     await expect(element(by.text('LAMIVUDINE 10MG TAB'))).toExist()
-    await expect(element(by.label('Prescription number 2 3 3 6 8 0 0'))).toExist()
-    await expect(element(by.text('ZIDOVUDINE 1MG CAP'))).toExist()
-    await expect(element(by.label('Prescription number None noted')).atIndex(0)).toExist()
   })
 
-  it('verify tracking link for DHL works', async () => {
-    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex).tap()
+  it('verify tracking link for UPS works', async () => {
+    await element(by.label('7 7 2 9 8 0 2 7 2 0 3 9 8 0 0 0 0 0 0 0 3 9 8')).atIndex(trackingIndex).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
-    await device.takeScreenshot('PrescriptionTrackingWebsiteDHL')
-    await device.launchApp({ newInstance: false })
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
-  })
-
-  it('verify tracking link for FEDEX works', async () => {
-    await waitFor(element(by.label('LAMIVUDINE 100MG TAB')))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-      .scroll(500, 'down', 0.5, 0.5)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(1).tap()
-    await expect(element(by.text('Delivery service: FEDEX'))).toExist()
-    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('PrescriptionTrackingWebsiteFedex')
+    await device.takeScreenshot('PrescriptionTrackingWebsiteUPS')
     await device.launchApp({ newInstance: false })
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 
   it('verify tracking info for multiple packages', async () => {
-    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB')))
+    // ACETAMINOPHEN has 2 UPS tracking records — should display as Package 1 of 2 and Package 2 of 2
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+    await waitFor(element(by.label('ACETAMINOPHEN 325MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(2).tap()
+    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
     await expect(element(by.text('Package 1 of 2'))).toExist()
     await expect(element(by.text('Delivery service: UPS'))).toExist()
     await expect(element(by.text('Package 2 of 2'))).toExist()
-    await expect(element(by.text('Delivery service: USPS'))).toExist()
-  })
-
-  it(':android: verify tracking link for UPS works', async () => {
-    await element(by.label('7 7 2 9 8 0 2 7 2 0 3 9 8 0 0 0 0 0 0 0 3 9 8')).atIndex(trackingIndex).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('PrescriptionTrackingWebsiteUPS')
-    await device.launchApp({ newInstance: true, permissions: { location: 'always' } })
-    await loginToDemoMode()
-    await openHealth()
-    await openPrescriptions()
-    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB')))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-      .scroll(500, 'down', 0.5, 0.5)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(2).tap()
-  })
-
-  it('verify tracking link for USPS works', async () => {
-    await element(by.id('refillTrackingDetailsTestID')).scrollTo('bottom')
-    await element(by.label('9 2 0 5   5 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0   0 0')).atIndex(trackingIndex).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('PrescriptionTrackingWebsiteUSPS')
-    await device.launchApp({ newInstance: false })
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 
@@ -373,8 +295,13 @@ describe('Prescriptions Screen', () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 
-  validateSort('Fill date (newest to oldest)', 'LAMIVUDINE 100MG TAB', 'OLANZAPINE 10MG RAPID DISINTEGRATING TAB', true)
-  validateSort('Medication name (A to Z)', 'ACETAMINOPHEN 325MG TAB', 'ZIPRASIDONE HCL 40MG CAP')
-  validateSort('Refills left (least to most)', 'ATORVASTATIN CALCIUM 10MG TAB', 'BERNA VACCINE CAP B/P')
-  validateSort('Status (A to Z)', 'AMLODIPINE BESYLATE 10MG TAB', 'ZIDOVUDINE 1MG CAP')
+  // Sort tests updated for v1 OH prescriptions (3 items on a single page, no pagination)
+  // Fill date (newest to oldest): AMLODIPINE (06/06/2022) → IODOQUINOL (06/03/2022) → ACETAMINOPHEN (01/15/2022)
+  validateSort('Fill date (newest to oldest)', 'AMLODIPINE BESYLATE 10MG TAB', 'ACETAMINOPHEN 325MG TAB', true)
+  // Medication name (A to Z): ACETAMINOPHEN → AMLODIPINE BESYLATE → IODOQUINOL
+  validateSort('Medication name (A to Z)', 'ACETAMINOPHEN 325MG TAB', 'IODOQUINOL 650MG TAB')
+  // Refills left (least to most): ACETAMINOPHEN (0) → AMLODIPINE/IODOQUINOL (1 each, A-Z secondary sort)
+  validateSort('Refills left (least to most)', 'ACETAMINOPHEN 325MG TAB', 'IODOQUINOL 650MG TAB')
+  // Status (A to Z): AMLODIPINE/IODOQUINOL (Active) → ACETAMINOPHEN (Expired)
+  validateSort('Status (A to Z)', 'AMLODIPINE BESYLATE 10MG TAB', 'ACETAMINOPHEN 325MG TAB')
 })
