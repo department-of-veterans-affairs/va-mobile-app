@@ -1,6 +1,8 @@
 > NOTE! This is a holding file for the content related to QA that will be added to the PR template after review and approval.
 
 ## Pre-QA Artifacts
+<!-- This section should be completed by the PR filer. -->
+
 <!-- If your PR isn't flagged for QA approval you can skip this section.
      These are provided by the PR author to demonstrate baseline verification before QA picks up the PR. -->
 
@@ -26,7 +28,9 @@
 
 </details>
 
-## QA Test Context
+## Test Context for QA
+<!-- This section should be completed by the PR filer. -->
+
 <!-- If your PR isn't flagged for QA approval you can skip this section.
      This helps QA understand what you built and where to focus.
      You are NOT writing test cases — just providing context. -->
@@ -55,7 +59,7 @@
 ---
 
 ## Checklist for QA
-<!-- This checklist is for the QA to complete. -->
+<!-- This checklist is for the QA team. -->
   **QA Engineer:** Check off the items below as you test
 
 - [ ] [Shared Test Script](LINK-TBA) executed (post results as a PR comment)
