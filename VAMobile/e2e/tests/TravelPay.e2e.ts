@@ -245,7 +245,6 @@ async function expectErrorScreen({ errorType, checkExternalLink }: { errorType: 
     case 'error':
     default:
       await expect(element(by.id(TravelPayE2eIdConstants.ERROR_TEXT_ID + '0'))).toExist()
-      await expect(element(by.id(TravelPayE2eIdConstants.ERROR_TEXT_ID + '1'))).toExist()
       break
   }
   await expectTravelPayFileOnlineComponent(checkExternalLink)

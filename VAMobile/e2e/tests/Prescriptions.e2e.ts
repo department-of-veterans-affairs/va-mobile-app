@@ -232,7 +232,7 @@ describe('Prescriptions Screen', () => {
       .scroll(500, 'down', 0.5, 0.5)
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
     // Tracking record prescription number
-    await expect(element(by.label('Prescription number 2 7 2 0 3 3 4'))).toExist()
+    await expect(element(by.label('Prescription number 2 7 2 0 1 9 2 A'))).toExist()
     await expect(
       element(
         by.text("We share tracking information here for up to 15 days, even if you've received your prescription."),

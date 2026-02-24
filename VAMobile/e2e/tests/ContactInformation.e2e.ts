@@ -16,6 +16,7 @@ export async function updateAddress() {
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
