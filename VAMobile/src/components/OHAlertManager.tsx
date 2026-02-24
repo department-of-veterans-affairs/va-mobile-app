@@ -23,7 +23,7 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
   let alerts: JSX.Element[] = []
   if (authorizedServices.migratingFacilitiesList && authorizedServices.migratingFacilitiesList.length > 0) {
     alerts = authorizedServices.migratingFacilitiesList.map((migration, index) => (
-      <React.Fragment key={migration.migrationDate || index}>{alertsForScreen(migration)}</React.Fragment>
+      <React.Fragment key={migration.migrationDate}>{alertsForScreen(migration)}</React.Fragment>
     ))
   }
   return <>{alerts}</>

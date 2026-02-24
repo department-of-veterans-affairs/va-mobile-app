@@ -102,9 +102,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
 
   useEffect(() => {
     if (hasLoadedRecipients) {
-      setNoRecipientsError(!recipients || recipients.length === 0)
+      setNoRecipientsError((!recipients || recipients.length === 0) && !recipientsError)
     }
-  }, [recipients, hasLoadedRecipients])
+  }, [recipients, recipientsError, hasLoadedRecipients])
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
