@@ -145,25 +145,6 @@ export const MigrationWarningMessage = ({
   )
 }
 
-export const DuplicateRecordInfoMessage = () => {
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-  return (
-    <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertWithHaptics
-        expandable={true}
-        initializeExpanded={true}
-        variant="info"
-        header={t(`ohAlert.duplicatedRecord.title`)}
-        description={''}>
-        <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-          {t('ohAlert.duplicatedRecord.body')}
-        </TextView>
-      </AlertWithHaptics>
-    </Box>
-  )
-}
-
 export const MigrationErrorMessage = ({
   migration,
   parentScreen,

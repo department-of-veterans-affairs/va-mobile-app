@@ -6,6 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
+import DuplicateRecordAlert from 'components/DuplicateRecordAlert'
 import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,7 +17,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
-import { DuplicateRecordInfoMessage } from 'utils/ohMigration'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
@@ -49,7 +49,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
       {authorizedServices && (
         <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
       )}
-      {displayDuplicateRecordAlert && <DuplicateRecordInfoMessage />}
+      {displayDuplicateRecordAlert && <DuplicateRecordAlert />}
       <Box mb={theme.dimensions.standardMarginBetween}>
         {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton
