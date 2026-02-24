@@ -20,6 +20,7 @@ export type FeatureToggleType =
   | 'copayments'
   | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
+  | 'displayDuplicateRecordAlert'
   | 'hsScrollAnalytics'
   | 'inAppReview'
   | 'labsAndTests'
@@ -53,6 +54,7 @@ type FeatureToggleValues = {
   COEAvailable: boolean
   copayments: boolean
   decisionLettersWaygate: boolean
+  displayDuplicateRecordAlert: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
   labsAndTests: boolean
@@ -87,6 +89,7 @@ export const defaults: FeatureToggleValues = {
   COEAvailable: false,
   copayments: false,
   decisionLettersWaygate: true,
+  displayDuplicateRecordAlert: true,
   hsScrollAnalytics: false,
   inAppReview: true,
   labsAndTests: true,
