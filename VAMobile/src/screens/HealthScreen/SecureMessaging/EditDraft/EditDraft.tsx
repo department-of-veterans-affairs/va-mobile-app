@@ -162,7 +162,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
-  const { data: authorizedServicesData } = useAuthorizedServices()
   const replyDisabled = isReplyDraft && (!hasRecentMessages || migrationBlocksReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
@@ -843,7 +842,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         <Box mb={theme.dimensions.contentMarginBottom}>
           {replyDisabled && !migrationBlocksReply && renderAlert()}
           {migrationBlocksReply &&
-            authorizedServicesData &&
+            userAuthorizedServices &&
             allMigrationsInErrorState.length > 0 &&
             allMigrationsInErrorState.map((migration) => (
               <MigrationErrorMessage
