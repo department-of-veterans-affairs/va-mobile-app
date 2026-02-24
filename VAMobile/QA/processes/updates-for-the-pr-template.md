@@ -45,7 +45,7 @@
 <!-- Select 1 that best describes the risk potential of this work -->
 - [ ] **Low** (UI polish, copy change, isolated component)
 - [ ] **Medium** (New feature, non-core path)
-- [ ] **High** (Changes to Core Features: Login, Claims, Rx, Secure Messaging, etc.)
+- [ ] **High** (Changes to Core Features: Login, Claims, Rx, Secure Messaging, major updates to a backend service, etc.)
 
 **What should QA pay extra attention to?**
 <!-- Known risks, untested areas, upstream dependencies, offline behavior, anything unusual. "Nothing specific" is a valid answer. -->
