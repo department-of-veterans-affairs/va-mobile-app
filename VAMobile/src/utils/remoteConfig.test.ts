@@ -47,6 +47,7 @@ const mockOverrides = {
   overpayments: false,
   offlineMode: false,
   remoteConfigRefreshTest: false,
+  veteranStatusCardUpdate: false,
 }
 
 describe('activate', () => {
