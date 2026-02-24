@@ -3,11 +3,11 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { Facility, FacilityInfo, MigratingFacility, MigrationPhases } from 'api/types'
-import { OHParentScreens } from 'components/OHAlertManager'
 import { context, render } from 'testUtils'
 import {
   MigrationErrorMessage,
   MigrationWarningMessage,
+  OHParentScreens,
   allFacilitiesInMigrationErrorState,
   anyFacilitiesInMigrationErrorState,
   getMigrationEndDate,
