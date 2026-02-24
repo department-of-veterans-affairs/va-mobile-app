@@ -4,7 +4,7 @@ import { setTimeout } from 'timers/promises'
 import {
   CommonE2eIdConstants,
   checkImages,
-  dismissActionSheet,
+  dismissActionSheetByCancelText,
   loginToDemoMode,
   openHealth,
   openMessages,
@@ -109,16 +109,12 @@ describe.only('Messages Screen', () => {
   })
 
   it('should verify that the messages inbox is scrollable', async () => {
-    try {
-      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
-    } catch (e) {}
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_READ_ID))).toBeVisible()
   })
 
   it('verify message OLDER than 45 days information', async () => {
-    try {
-      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-    } catch (e) {}
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
     await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
 
@@ -130,9 +126,7 @@ describe.only('Messages Screen', () => {
 
   it('verify message NEWER than 45 days information', async () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
-    try {
-      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-    } catch (e) {}
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
@@ -254,9 +248,7 @@ describe.only('Messages Screen', () => {
   })
 
   it('should tap reply and verify the correct information is displayed', async () => {
-    try {
-      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    } catch (e) {}
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID)).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
@@ -302,14 +294,8 @@ describe.only('Messages Screen', () => {
   })
 
   it('should close the action sheet and tap cancel', async () => {
-    if (device.getPlatform() === 'android') {
-      await element(by.text('Cancel ')).tap()
-      await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
-    } else {
-      await dismissActionSheet()
-      await setTimeout(1000)
-      await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
-    }
+    await dismissActionSheetByCancelText('Cancel ')
+    await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
   })
 
   it('should input text into the message field', async () => {
@@ -328,12 +314,7 @@ describe.only('Messages Screen', () => {
   })
 
   it('should tap keep editing and send the message', async () => {
-    if (device.getPlatform() === 'ios') {
-      await dismissActionSheet()
-      await setTimeout(1000)
-    } else {
-      await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
-    }
+    await dismissActionSheetByCancelText(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)
     await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID)).tap()
     await expect(element(by.text('Message sent'))).toExist()
@@ -352,9 +333,7 @@ describe.only('Messages Screen', () => {
 
   //running on iOS only for the next few tests due to android wonkiness due to detox
   it(':ios: tap start new message and verify information', async () => {
-    try {
-      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-    } catch (e) {}
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CARE_SYSTEM_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
@@ -420,12 +399,7 @@ describe.only('Messages Screen', () => {
   })
 
   it(':ios: verify the previous made fields are filled on keep editing', async () => {
-    if (device.getPlatform() === 'ios') {
-      await dismissActionSheet()
-      await setTimeout(1000)
-    } else {
-      await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
-    }
+    await dismissActionSheetByCancelText(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)
     await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
     await expect(element(by.text('Medication'))).toExist()
   })
@@ -453,9 +427,7 @@ describe.only('Messages Screen', () => {
   it('verify a message threads', async () => {
     await expect(element(by.text('Opened by your care team'))).toExist()
     await element(by.text('Va Flagship Mobile Applications Interface 2_dayt29')).atIndex(0).tap()
-    try {
-      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    } catch (e) {}
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await expect(element(by.text('Opened by your care team'))).toExist()
     await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
     await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
@@ -471,9 +443,7 @@ describe.only('Messages Screen', () => {
   })
 
   it('verify message threads with more than two lines', async () => {
-    try {
-      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    } catch (e) {}
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     messageCollapsed = await device.takeScreenshot('MessageCollapsed')
     checkImages(messageCollapsed)
     await element(
@@ -481,9 +451,7 @@ describe.only('Messages Screen', () => {
         'Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.',
       ),
     ).tap()
-    try {
-      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    } catch (e) {}
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     messageExpanded = await device.takeScreenshot('MessageExpanded')
     await element(by.text('Back')).tap()
     await element(by.text('Back')).tap()
@@ -500,9 +468,7 @@ describe.only('Messages Screen', () => {
   })
 
   it('verify action sheet for edited drafts message', async () => {
-    try {
-      await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
-    } catch (e) {}
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
@@ -516,12 +482,7 @@ describe.only('Messages Screen', () => {
   })
 
   it('drafts: verify the previous made fields are filled on keep editing', async () => {
-    if (device.getPlatform() === 'ios') {
-      await dismissActionSheet()
-      await setTimeout(1000)
-    } else {
-      await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
-    }
+    await dismissActionSheetByCancelText(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)
     await expect(element(by.text('Testing'))).toExist()
   })
 
@@ -539,9 +500,7 @@ describe.only('Messages Screen', () => {
   })
 
   it('verify a draft can be saved and that a alert appears', async () => {
-    try {
-      await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
-    } catch (e) {}
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
@@ -588,13 +547,9 @@ describe.only('Messages Screen', () => {
     it('should show Reply button for recent messages from triage team', async () => {
       await openHealth()
       await openMessages()
-      try {
-        await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-      } catch (e) {}
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
       await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
-      try {
-        await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-      } catch (e) {}
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
       await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
       await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
 
@@ -605,18 +560,13 @@ describe.only('Messages Screen', () => {
     })
 
     it('should show expired alert for old messages from triage team', async () => {
-      try {
-        await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
-      } catch (e) {}
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
       await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_8_ID)))
         .toBeVisible()
         .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
         .scroll(100, 'down')
       await element(by.id(MessagesE2eIdConstants.MESSAGE_8_ID)).tap()
-
-      try {
-        await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-      } catch (e) {}
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
 
       await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
       await expect(element(by.text('This conversation is too old for new replies'))).toExist()
@@ -630,14 +580,9 @@ describe.only('Messages Screen', () => {
     })
 
     it('should show Start new message and alert when the message is recent and the user is NOT in triage team', async () => {
-      try {
-        await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-      } catch (e) {}
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
       await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
-
-      try {
-        await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-      } catch (e) {}
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
 
       await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).toExist()
       await expect(element(by.text('You can’t send messages to some of your care teams'))).toExist()
@@ -653,9 +598,7 @@ describe.only('Messages Screen', () => {
     })
 
     it('should show Start new message and alert for old message when user is NOT in triage team', async () => {
-      try {
-        await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
-      } catch (e) {}
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
       await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_10_READ_ID)))
         .toBeVisible()
         .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
