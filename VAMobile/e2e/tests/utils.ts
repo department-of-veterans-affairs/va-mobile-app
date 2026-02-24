@@ -30,10 +30,15 @@ const mockNotification = {
 
 export async function dismissActionSheet() {
   if (device.getPlatform() === 'ios') {
-    // Swipe down on the first UILabel in the action sheet.
-    await element(by.type('UILabel').withAncestor(by.type('_UIAlertControllerPhoneTVMacView')))
-      .atIndex(0)
-      .swipe('down', 'fast', 0.6)
+    // Tap at the top of the window (outside the action sheet) to dismiss it.
+    // iOS 26 action sheets dim the background, and tapping the background is the most reliable dismissal.
+    // We attempt to tap a few points at the top to ensure we hit the dismiss region.
+    try {
+      await element(by.type('UIWindow')).atIndex(0).tap({ x: 5, y: 100 })
+    } catch (e) {
+      // If UIWindow is not hittable, try tapping at a fixed coordinate
+      await device.tap({ x: 5, y: 100 })
+    }
   }
 }
 
