@@ -122,10 +122,18 @@ async function pressContinue() {
 }
 
 async function answerYes() {
+  await waitFor(element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)))
+    .toBeVisible()
+    .withTimeout(2000)
+    .catch(() => {}) // Catch if it can't scroll but is visible
   await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
 }
 
 async function answerNo() {
+  await waitFor(element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT)))
+    .toBeVisible()
+    .withTimeout(2000)
+    .catch(() => {}) // Catch if it can't scroll but is visible
   await element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
 }
 
