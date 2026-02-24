@@ -39,6 +39,7 @@ export type BenefitsStackParamList = {
   ClaimDetailsScreen: {
     claimID: string
     claimType: ClaimType
+    provider?: string
   }
   ClaimsHistoryScreen: undefined
   TravelPayClaims: undefined
