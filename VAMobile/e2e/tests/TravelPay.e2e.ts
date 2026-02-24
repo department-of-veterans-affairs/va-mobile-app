@@ -3,6 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
+  dismissActionSheet,
   loginToDemoMode,
   openAppointments,
   openDismissLeavingAppPopup,
@@ -122,15 +123,27 @@ async function pressContinue() {
 }
 
 async function answerYes() {
+  await waitFor(element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)))
+    .toBeVisible()
+    .withTimeout(2000)
+    .catch(() => {}) // Catch if it can't scroll but is visible
+
   await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
 }
 
 async function answerNo() {
+  await waitFor(element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT)))
+    .toBeVisible()
+    .withTimeout(2000)
   await element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
 }
 
 async function chooseKeepGoing() {
-  await element(by.text(KEEP)).atIndex(0).tap()
+  if (device.getPlatform() === 'android') {
+    await element(by.text(KEEP)).atIndex(0).tap()
+  } else {
+    await dismissActionSheet()
+  }
 }
 
 async function chooseCancel() {
@@ -252,7 +265,9 @@ async function expectCancelModal() {
     .withTimeout(2000)
 
   await expect(element(by.text(CANCEL))).toExist()
-  await expect(element(by.text(KEEP))).toExist()
+  if (device.getPlatform() === 'android') {
+    await expect(element(by.text(KEEP))).toExist()
+  }
 }
 
 async function expectInterstitialScreen({
@@ -492,7 +507,7 @@ const openTravelPayFlow = async (text: string, login: boolean = true) => {
   await openAppointmentInList(text)
 }
 
-describe.skip('Travel Pay', () => {
+describe('Travel Pay', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
