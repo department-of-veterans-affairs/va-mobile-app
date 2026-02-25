@@ -424,13 +424,11 @@ const fillHomeAddressFields = async ({
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
-  try {
-    await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
   await waitFor(element(by.id(CommonE2eIdConstants.STATE_ID)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
-    .scroll(50, 'up', NaN, 0.2)
+    .scroll(100, 'down', NaN, 0.8)
   await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await element(by.text(state)).tap()
@@ -451,13 +449,12 @@ const fillHomeAddressFields = async ({
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
-  try {
-    await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
-  await setTimeout(1000)
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
     .toBeVisible()
-    .withTimeout(4000)
+    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
+    .scroll(100, 'down', NaN, 0.8)
+  await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText(zipCode)
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
