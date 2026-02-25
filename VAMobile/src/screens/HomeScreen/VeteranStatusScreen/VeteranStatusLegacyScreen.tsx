@@ -186,6 +186,14 @@ function VeteranStatusLegacyScreen({ navigation }: VeteranStatusScreenProps) {
           displayedText={displayedTextPhoneNumber(t('8008271000'))}
           phone={t('8008271000')}
         />
+        <TextView variant="MobileBody" color="bodyText" mt={16} mb={16}>
+          {t('veteranStatus.fixAnError.3')}
+        </TextView>
+        <ClickToCallPhoneNumber
+          a11yLabel={a11yLabelID(t('8005389552'))}
+          displayedText={displayedTextPhoneNumber(t('8005389552'))}
+          phone={t('8005389552')}
+        />
       </Box>
     )
   }
