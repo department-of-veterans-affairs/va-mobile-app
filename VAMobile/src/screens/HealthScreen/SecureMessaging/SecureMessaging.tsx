@@ -44,10 +44,10 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const { activeTab } = route.params
   const [secureMessagingTab, setSecureMessagingTab] = useState(0)
   const [termsAndConditionError, setTermsAndConditionError] = useState(false)
-  const [noRecipientsError, setNoRecipientsError] = useState(true)
   const isFocused = useIsFocused()
   const {
     data: userAuthorizedServices,
+    isFetched: authorizedServicesFetched,
     error: getUserAuthorizedServicesError,
     refetch: refetchAuthServices,
     isFetching: fetchingAuthServices,
@@ -100,12 +100,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
   const controlIDs = ['inboxID', 'foldersID']
   const [scrollPage, setScrollPage] = useState(1)
-
-  useEffect(() => {
-    if (hasLoadedRecipients) {
-      setNoRecipientsError((!recipients || recipients.length === 0) && !recipientsError)
-    }
-  }, [recipients, recipientsError, hasLoadedRecipients])
+  const noRecipientsError = (!recipients || recipients.length === 0) && !recipientsError
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -172,7 +167,8 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       title={t('messages')}
       testID="messagesTestID"
       scrollViewProps={scrollViewProps}
-      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}>
+      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+      isLoading={smNotInDowntime && (!authorizedServicesFetched || !hasLoadedRecipients || !inboxFetched)}>
       {!smNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices && !refetchingFolders && !refetchingInbox ? (
