@@ -118,6 +118,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     }
 
     return (
+      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
       <TextView
         variant="MobileBody"
         accessibilityLabel={t('fileRequestDetails.requestDateBlurb.a11yLabel', {
@@ -222,6 +223,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
           header={<TextView variant="MobileBodyBold">{t('fileRequestDetails.needHelp')}</TextView>}
           expandedContent={
             <Box mt={lineItemSpacing}>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
               <TextView
                 variant="MobileBody"
                 mb={condensedMarginBetween}
