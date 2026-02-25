@@ -829,6 +829,7 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherSelector-${endpoint}`)).tap()
     await element(by.id('overrideAPITestID')).scroll(100, 'down')
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
+    await element(by.id(`otherStatus-${endpoint}`)).tapReturnKey()
   }
 
   await element(by.id('saveErrors')).tap()
