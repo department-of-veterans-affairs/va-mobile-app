@@ -122,18 +122,10 @@ async function pressContinue() {
 }
 
 async function answerYes() {
-  await waitFor(element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)))
-    .toBeVisible()
-    .withTimeout(2000)
-    .catch(() => {}) // Catch if it can't scroll but is visible
   await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
 }
 
 async function answerNo() {
-  await waitFor(element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT)))
-    .toBeVisible()
-    .withTimeout(2000)
-    .catch(() => {}) // Catch if it can't scroll but is visible
   await element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
 }
 
@@ -245,6 +237,7 @@ async function expectErrorScreen({ errorType, checkExternalLink }: { errorType: 
     case 'error':
     default:
       await expect(element(by.id(TravelPayE2eIdConstants.ERROR_TEXT_ID + '0'))).toExist()
+      await expect(element(by.id(TravelPayE2eIdConstants.ERROR_TEXT_ID + '1'))).toExist()
       break
   }
   await expectTravelPayFileOnlineComponent(checkExternalLink)
@@ -343,9 +336,6 @@ async function expectReviewClaimScreen({
 
   //Scroll down to the submit button
   await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scrollTo('bottom')
-  try {
-    await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
   await expect(element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.TRAVEL_AGREEMENT_HEADER_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.PENALTY_STATEMENT_ID))).toExist()
@@ -373,9 +363,7 @@ const expectSubmitSuccessScreen = async ({
   partialSuccess: boolean
   checkExternalLink: boolean
 }) => {
-  await waitFor(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID)))
-    .toBeVisible()
-    .withTimeout(6000)
+  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_DESCRIPTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_SECTION_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_INSTRUCTION_TEXT_ID))).toExist()
@@ -414,7 +402,7 @@ const fillHomeAddressFields = async ({
   country: string // Only supports the first countries in the list
   zipCode: string
 }) => {
-  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).replaceText(streetAddressLine2)
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText(streetAddressLine2)
   await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)))
     .toBeVisible()
@@ -429,9 +417,6 @@ const fillHomeAddressFields = async ({
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
-  try {
-    await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await element(by.text(state)).tap()
   await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
@@ -439,7 +424,7 @@ const fillHomeAddressFields = async ({
   await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
     .toBeVisible()
     .withTimeout(4000)
-  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).replaceText(streetAddressLine1)
+  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText(streetAddressLine1)
   await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
     .toBeVisible()
@@ -448,9 +433,6 @@ const fillHomeAddressFields = async ({
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
-  try {
-    await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText(zipCode)
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
