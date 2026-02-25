@@ -197,7 +197,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           <OHAlertManager parentScreen={OHParentScreens.Appointments} authorizedServices={userAuthorizedServices} />
           <Box
             mb={
-              featureEnabled('startScheduling')
+              featureEnabled('startScheduling') && !screenReaderEnabled
                 ? theme.dimensions.floatingButtonOffset
                 : theme.dimensions.contentMarginBottom
             }>
