@@ -497,6 +497,11 @@ const openTravelPayFlow = async (text: string, login: boolean = true) => {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
   await element(by.text('Past')).tap()
 
+  // Wait for the Past tab to render completely to prevent tapping the Upcoming appointment
+  await waitFor(element(by.text('Select a past date range')))
+    .toExist()
+    .withTimeout(2000)
+
   // Open the appointment in the list
   await openAppointmentInList(text)
 }
