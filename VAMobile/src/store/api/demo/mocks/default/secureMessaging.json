@@ -137,7 +137,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -159,7 +168,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
@@ -181,7 +199,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": true,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092789"
@@ -203,7 +230,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092775"
@@ -225,7 +261,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088259"
@@ -247,7 +292,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088250"
@@ -269,7 +323,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060125"
@@ -291,7 +354,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060114"
@@ -313,7 +385,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/9000003"
@@ -335,7 +416,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/9000002"
@@ -357,7 +447,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060047"
@@ -379,7 +478,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060025"
@@ -401,7 +509,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060013"
@@ -423,7 +540,16 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060006"
@@ -467,7 +593,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "UNREAD",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -502,7 +637,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -537,7 +681,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "UNREAD",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -590,7 +743,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
@@ -616,7 +778,16 @@
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -641,7 +812,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "UNREAD",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -695,7 +875,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "UNREAD",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": true,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -730,7 +919,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -765,7 +963,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -797,7 +1004,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -826,7 +1042,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -875,7 +1100,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2084703"
@@ -897,7 +1131,16 @@
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2069243"
@@ -922,7 +1165,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -954,7 +1206,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -986,7 +1247,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1018,7 +1288,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1050,7 +1329,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1082,7 +1370,16 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1132,7 +1429,16 @@
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
             "readReceipt": "READ",
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113100"
@@ -1154,7 +1460,16 @@
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
             "readReceipt": null,
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098942"
@@ -1176,7 +1491,16 @@
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
             "readReceipt": null,
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098929"
@@ -1198,7 +1522,16 @@
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
             "readReceipt": null,
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098888"
@@ -1220,7 +1553,16 @@
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
             "readReceipt": null,
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
@@ -1242,7 +1584,16 @@
             "recipientId": 7840123,
             "recipientName": "SHOULDNT_SHOW_IN_RECENTS",
             "readReceipt": null,
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
@@ -1264,7 +1615,16 @@
             "recipientId": 7840491,
             "recipientName": "Rajesh-PCMM-WEB_TST",
             "readReceipt": null,
-            "isOhMessage": true
+            "isOhMessage": true,
+            "migratedToOracleHealth": false,
+            "triageGroup": {
+              "triageTeamId": 1013155,
+              "name": "VA Flagship mobile applications interface 2_DAYT29",
+              "preferredTeam": true,
+              "active": true,
+              "stationNumber": "989",
+              "ohTriageGroup": false
+            }
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
@@ -1308,7 +1668,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1338,7 +1707,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2109451"
@@ -1360,7 +1738,16 @@
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088250"
@@ -1382,7 +1769,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2084703"
@@ -1404,7 +1800,16 @@
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2069243"
@@ -1429,7 +1834,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1459,7 +1873,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098903"
@@ -1481,7 +1904,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095725"
@@ -1503,7 +1935,16 @@
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -1528,7 +1969,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1579,7 +2029,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1630,7 +2089,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1679,7 +2147,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
@@ -1701,7 +2178,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
@@ -1723,7 +2209,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113020"
@@ -1877,7 +2372,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1909,7 +2413,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1939,7 +2452,16 @@
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
@@ -1964,7 +2486,16 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "migratedToOracleHealth": false,
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        }
       },
       "relationships": {
         "attachments": {
@@ -1994,7 +2525,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098942"
@@ -2016,7 +2556,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098903"
@@ -2038,7 +2587,16 @@
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
           "readReceipt": null,
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095725"
@@ -2060,7 +2618,16 @@
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
-          "isOhMessage": true
+          "isOhMessage": true,
+          "migratedToOracleHealth": false,
+          "triageGroup": {
+            "triageTeamId": 1013155,
+            "name": "VA Flagship mobile applications interface 2_DAYT29",
+            "preferredTeam": true,
+            "active": true,
+            "stationNumber": "989",
+            "ohTriageGroup": false
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
