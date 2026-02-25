@@ -195,7 +195,12 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           </Box>
           {serviceErrorAlert()}
           <OHAlertManager parentScreen={OHParentScreens.Appointments} authorizedServices={userAuthorizedServices} />
-          <Box>
+          <Box
+            mb={
+              featureEnabled('startScheduling')
+                ? theme.dimensions.floatingButtonOffset
+                : theme.dimensions.contentMarginBottom
+            }>
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}
