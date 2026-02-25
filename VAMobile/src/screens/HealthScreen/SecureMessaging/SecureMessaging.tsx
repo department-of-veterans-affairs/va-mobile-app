@@ -12,7 +12,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useAllMessageRecipients, useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
-import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
+import { OHAlertManager } from 'components/OHAlertManager'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
@@ -30,6 +30,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { OHParentScreens } from 'utils/ohMigration'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -102,9 +103,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
 
   useEffect(() => {
     if (hasLoadedRecipients) {
-      setNoRecipientsError(!recipients || recipients.length === 0)
+      setNoRecipientsError((!recipients || recipients.length === 0) && !recipientsError)
     }
-  }, [recipients, hasLoadedRecipients])
+  }, [recipients, recipientsError, hasLoadedRecipients])
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.

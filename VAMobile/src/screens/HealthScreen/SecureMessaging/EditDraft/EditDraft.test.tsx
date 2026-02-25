@@ -9,11 +9,14 @@ import {
   SecureMessagingFolderMessagesGetData,
   SecureMessagingMessageGetData,
   SecureMessagingRecipients,
+  SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import EditDraft from 'screens/HealthScreen/SecureMessaging/EditDraft/EditDraft'
 import { mockEditDraftEndpoints, mockSMAllRecipientsError } from 'screens/HealthScreen/SecureMessaging/smTestHelpers'
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
 
@@ -58,6 +61,68 @@ context('EditDraft', () => {
           recipientName: 'mock recipient name 1',
           readReceipt: 'mock read receipt 1',
           isOhMessage: false,
+        },
+      },
+      {
+        id: 2,
+        type: '1',
+        attributes: {
+          messageId: 2,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'test 2',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '2',
+          senderId: 2,
+          senderName: 'mock sender 2',
+          recipientId: 3,
+          recipientName: 'mock recipient name 2',
+          readReceipt: 'mock read receipt 2',
+          isOhMessage: false,
+        },
+      },
+      {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'Last accordion collapsible should be open, so the body text of this message should display',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: String(DateTime.now().toUTC()),
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+        },
+      },
+    ],
+  }
+  const cannotReplyThread: SecureMessagingThreadGetData = {
+    data: [
+      {
+        id: 1,
+        type: '1',
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'mock subject 1: The initial message sets the overall thread subject header',
+          body: 'message 1 body text',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1',
+          senderId: 2,
+          senderName: 'mock sender 1',
+          recipientId: 3,
+          recipientName: 'mock recipient name 1',
+          readReceipt: 'mock read receipt 1',
+          isOhMessage: false,
+          replyDisabled: true,
         },
       },
       {
@@ -361,6 +426,56 @@ context('EditDraft', () => {
       await waitFor(() =>
         expect(screen.getByRole('heading', { name: 'This conversation is too old for new replies' })).toBeTruthy(),
       )
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
+    })
+  })
+
+  describe('when there are no recent messages and provider does not allow reply', () => {
+    it('should display an alert and should hide the Add Files button and Send button', async () => {
+      const threadWithReplyDisabled = JSON.parse(JSON.stringify(oldThread))
+      threadWithReplyDisabled.data[2].attributes.replyDisabled = true
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(threadWithReplyDisabled)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'You can’t reply to this message' })).toBeTruthy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
+    })
+  })
+
+  describe('when provider does not allow reply', () => {
+    it('should display an alert and should hide the Add Files button and Send button', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(cannotReplyThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'You can’t reply to this message' })).toBeTruthy())
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
     })

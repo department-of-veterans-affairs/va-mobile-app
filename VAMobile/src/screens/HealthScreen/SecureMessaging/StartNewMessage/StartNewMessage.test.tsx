@@ -4,6 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   CategoryTypeFields,
   SecureMessagingCareSystemData,
@@ -586,6 +587,52 @@ context('StartNewMessage', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('Test VA Medical Center')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Different VA Medical Center')).toBeTruthy())
+    })
+  })
+
+  describe('name change alert', () => {
+    it('should show the name change alert when user has cerner facilities', async () => {
+      ;(useFacilitiesInfo as jest.Mock).mockReturnValue({
+        data: [
+          {
+            id: '528',
+            name: 'Test VA Medical Center',
+            city: 'Test City',
+            state: 'TS',
+            cerner: true,
+            miles: '10',
+          },
+        ],
+        isLoading: false,
+        isError: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText(t('secureMessaging.startNewMessage.nameChangeAlert.title'))).toBeTruthy(),
+      )
+    })
+
+    it('should not show the name change alert when user has no cerner facilities', async () => {
+      ;(useFacilitiesInfo as jest.Mock).mockReturnValue({
+        data: [
+          {
+            id: '528',
+            name: 'Test VA Medical Center',
+            city: 'Test City',
+            state: 'TS',
+            cerner: false,
+            miles: '10',
+          },
+        ],
+        isLoading: false,
+        isError: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByText(t('secureMessaging.startNewMessage.nameChangeAlert.title'))).toBeNull(),
+      )
     })
   })
 })

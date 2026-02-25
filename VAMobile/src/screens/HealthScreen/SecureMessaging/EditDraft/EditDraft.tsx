@@ -48,7 +48,6 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
-import { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -70,7 +69,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useAttachments, useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { MigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
+import { MigrationErrorMessage, OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -160,10 +159,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const hasRecentMessages = thread.some(
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
+  const providerAllowsReply = !thread.some((msg) => msg.attributes?.replyDisabled === true)
+  const replyIsStale = isReplyDraft && !hasRecentMessages
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
-  const { data: authorizedServicesData } = useAuthorizedServices()
-  const replyDisabled = isReplyDraft && (!hasRecentMessages || migrationBlocksReply)
+  const replyDisabled = isReplyDraft && (!hasRecentMessages || !providerAllowsReply || migrationBlocksReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -642,13 +642,24 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
-  function renderAlert() {
+  function renderStaleReplyAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="warning"
           header={t('secureMessaging.reply.tooOldForReplies')}
           description={t('secureMessaging.reply.olderThan45Days')}
+        />
+      </Box>
+    )
+  }
+  function renderCannotReplyAlert() {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('secureMessaging.reply.cannotReplyHeader')}
+          description={t('secureMessaging.reply.cannotReplyBody')}
         />
       </Box>
     )
@@ -841,9 +852,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {replyDisabled && !migrationBlocksReply && renderAlert()}
+          {replyIsStale && !migrationBlocksReply && providerAllowsReply && renderStaleReplyAlert()}
+          {!providerAllowsReply && !migrationBlocksReply && renderCannotReplyAlert()}
           {migrationBlocksReply &&
-            authorizedServicesData &&
+            userAuthorizedServices &&
             allMigrationsInErrorState.length > 0 &&
             allMigrationsInErrorState.map((migration) => (
               <MigrationErrorMessage

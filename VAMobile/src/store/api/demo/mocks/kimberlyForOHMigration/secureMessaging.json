@@ -620,7 +620,7 @@
           "recipientName": "FREEMAN, MELVIN  V",
           "readReceipt": "READ",
           "isOhMessage": true,
-          "ohMigrationPhase": "p2"
+          "ohMigrationPhase": "p5"
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"

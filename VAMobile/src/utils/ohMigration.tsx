@@ -83,7 +83,7 @@ export const getMigrationForFacilityId = (
   migratingFacilitiesList: MigratingFacility[],
   facilityId: number | string | undefined,
 ): MigratingFacility | undefined => {
-  if (!facilityId) return undefined
+  if (!facilityId || (typeof facilityId === 'string' && facilityId.trim() === '')) return undefined
   return migratingFacilitiesList.find((migration) =>
     migration.facilities.some((facility) => String(facility.facilityId) === String(facilityId)),
   )
@@ -119,10 +119,10 @@ export const MigrationWarningMessage = ({
         variant="warning"
         header={t(`ohAlert.warning.title`, { date: startDate })}
         description={''}>
-        <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+        <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
           <Trans
             i18nKey={`ohAlert.warning.${parentScreen}.body`}
-            components={{ bold: <TextView variant="MobileBodyBold" /> }}
+            components={{ bold: <TextView accessible={true} variant="MobileBodyBold" /> }}
             values={{
               startDate: startDate,
               endDate: endDate,
@@ -133,10 +133,10 @@ export const MigrationWarningMessage = ({
         <VABulletList listOfText={facilityNames} />
         <Box mb={theme.dimensions.standardMarginBetween} />
         {t(`ohAlert.warning.${parentScreen}.note`) !== `ohAlert.warning.${parentScreen}.note` && (
-          <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+          <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
             <Trans
               i18nKey={`ohAlert.warning.${parentScreen}.note`}
-              components={{ bold: <TextView variant="MobileBodyBold" /> }}
+              components={{ bold: <TextView accessible={true} variant="MobileBodyBold" /> }}
             />
           </TextView>
         )}
@@ -175,10 +175,10 @@ export const MigrationErrorMessage = ({
         variant="error"
         header={t(`ohAlert.error.${parentScreen}.title`, { endDate: endDate })}
         description={''}>
-        <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+        <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
           <Trans
             i18nKey={`ohAlert.error.${parentScreen}.body`}
-            components={{ bold: <TextView variant="MobileBodyBold" /> }}
+            components={{ bold: <TextView accessible={true} variant="MobileBodyBold" /> }}
             values={{
               transitionDate: startDate,
               endDate: endDate,
@@ -189,7 +189,7 @@ export const MigrationErrorMessage = ({
         <VABulletList listOfText={facilityNames} />
         <Box mb={theme.dimensions.standardMarginBetween} />
         {t(`ohAlert.error.${parentScreen}.note`) !== `ohAlert.error.${parentScreen}.note` && (
-          <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+          <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
             {t(`ohAlert.error.${parentScreen}.note`, { featureActions: t(`ohAlert.${parentScreen}.actions`) })}
           </TextView>
         )}
