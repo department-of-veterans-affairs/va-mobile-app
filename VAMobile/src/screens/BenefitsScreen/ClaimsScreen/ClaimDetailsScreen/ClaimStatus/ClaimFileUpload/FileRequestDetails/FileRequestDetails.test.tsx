@@ -1,13 +1,23 @@
 import React from 'react'
 
-import { screen } from '@testing-library/react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
+import { when } from 'jest-when'
 
 import { ClaimEventData } from 'api/types'
 import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import { context, mockNavProps, render } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
 
 context('FileRequestDetails', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
+
+  beforeEach(() => {
+    mockFeatureEnabled.mockReset()
+  })
+
   const requestWithoutFiles: ClaimEventData = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
@@ -16,6 +26,8 @@ context('FileRequestDetails', () => {
     uploadsAllowed: true,
     displayName: 'Request 1',
     description: 'Need DD214',
+    requestedDate: '2020-07-16',
+    suspenseDate: '2020-08-16',
   }
 
   const requestWithFilesAwaitingReview: ClaimEventData = {
@@ -79,238 +91,150 @@ context('FileRequestDetails', () => {
     date: '2021-06-04',
   }
 
-  const requestWithEnrichedFields: ClaimEventData = {
-    type: 'still_need_from_you_list',
-    trackedItemId: 12345,
-    date: '2026-01-21',
-    status: 'NEEDED',
-    uploaded: false,
-    uploadsAllowed: true,
-    displayName: '21-4142/21-4142a',
-    description: 'We need your authorization to disclose information to a third party.',
-    friendlyName: 'Authorization to disclose information',
-    shortDescription: 'We need your permission to request your records from a non-VA source.',
-    suspenseDate: '2026-02-20',
-    longDescription: {
-      blocks: [
-        {
-          type: 'paragraph',
-          content:
-            'This form authorizes VA to obtain information from a non-VA source on your behalf. You may need to complete and submit VA Form 21-4142 and 21-4142a.',
-        },
-        {
-          type: 'list',
-          style: 'bullet',
-          items: ['Medical records', 'Employment records', 'Insurance records'],
-        },
-      ],
-    },
-    nextSteps: {
-      blocks: [
-        { type: 'paragraph', content: 'To complete this request:' },
-        {
-          type: 'paragraph',
-          content: [
-            'You can complete and sign this form online, or use a PDF version and upload or mail it.',
-            { type: 'lineBreak' },
-            {
-              type: 'link',
-              text: 'Download VA Form 21-4142',
-              href: 'https://www.va.gov/find-forms/about-form-21-4142/',
-            },
-          ],
-        },
-      ],
-    },
-    canUploadFile: true,
-  }
-
-  const requestWithCanUploadFileFalse: ClaimEventData = {
-    type: 'still_need_from_you_list',
-    date: '2026-01-21',
-    status: 'NEEDED',
-    uploaded: false,
-    uploadsAllowed: true, // Should be overridden by canUploadFile
-    displayName: 'Request with no upload',
-    description: 'This request does not allow file uploads.',
-    canUploadFile: false,
-  }
-
-  const requestWithPastDueSuspenseDate: ClaimEventData = {
-    type: 'still_need_from_you_list',
-    date: '2024-01-21',
-    status: 'NEEDED',
-    uploaded: false,
-    uploadsAllowed: true,
-    displayName: 'Past due request',
-    description: 'This request has a past due suspense date.',
-    suspenseDate: '2024-06-01', // Past date
-    canUploadFile: true,
-  }
-
   const renderWithRequest = (request: ClaimEventData) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
     render(<FileRequestDetails {...props} />)
   }
 
-  describe("when the request hasn't had files uploaded", () => {
-    it('should display the select a file and take or select photos buttons', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
-      expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy()
+  describe("when the 'evidenceRequestsUpdatedUI' feature flag is enabled", () => {
+    beforeEach(() => {
+      when(mockFeatureEnabled).calledWith('evidenceRequestsUpdatedUI').mockReturnValue(true)
     })
 
-    it('should display request title and description', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.getAllByRole('header', { name: 'Request 1' })[0]).toBeTruthy()
-      expect(screen.getByText('Need DD214')).toBeTruthy()
-    })
-  })
+    describe("when the request hasn't had files uploaded", () => {
+      beforeEach(() => {
+        renderWithRequest(requestWithoutFiles)
+      })
 
-  describe('when the request has files uploaded awaiting review', () => {
-    it('should display headings and info', () => {
-      renderWithRequest(requestWithFilesAwaitingReview)
-      expect(screen.getAllByRole('header', { name: 'Request 4' })[0]).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('fileRequestDetails.submittedTitle') })).toBeTruthy()
-      expect(screen.getByText('May 13, 2021 (pending)')).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('fileRequestDetails.fileTitle') })).toBeTruthy()
-      expect(screen.getByText('post-deployment-document.pdf')).toBeTruthy()
-      expect(screen.getByText('DD214.pdf')).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('fileRequestDetails.typeTitle') })).toBeTruthy()
-      expect(screen.getByText('Military Personnel Record')).toBeTruthy()
-      expect(screen.getByText('Combat not verified')).toBeTruthy()
-    })
-  })
+      it('should display the select a file and take or select photos buttons', () => {
+        expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
+        expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy()
+      })
 
-  describe('when the request has files which are no longer required', () => {
-    it('should display special heading instead of submission date', () => {
-      renderWithRequest(requestWithFilesNoLongerRequired)
-      expect(screen.getByRole('header', { name: t('noLongerNeeded') })).toBeTruthy()
-      expect(screen.queryByRole('header', { name: 'Submitted' })).toBeFalsy()
-      expect(screen.queryByText('May 13, 2021 (pending)')).toBeFalsy()
-    })
-  })
+      it('should display the new title and respond by subtitle', () => {
+        expect(screen.getByText(t('fileRequestDetails.title'))).toBeTruthy()
+        expect(screen.getByText(/Respond by/)).toBeTruthy()
+      })
 
-  describe('when enriched fields are present', () => {
-    it('should display friendlyName instead of displayName for title', () => {
-      renderWithRequest(requestWithEnrichedFields)
-      expect(screen.getAllByRole('header', { name: 'Authorization to disclose information' })[0]).toBeTruthy()
-      expect(screen.queryByRole('header', { name: '21-4142/21-4142a' })).toBeFalsy()
-    })
+      it('should display the request date blurb with formatted date', () => {
+        expect(screen.getByText(/We requested this evidence from you on July 16, 2020/)).toBeTruthy()
+      })
 
-    it('should display "Respond by" with formatted suspenseDate', () => {
-      renderWithRequest(requestWithEnrichedFields)
-      expect(screen.getByText('Respond by February 20, 2026')).toBeTruthy()
-    })
+      it("should display the 'What we need from you' section with description", () => {
+        expect(screen.getByRole('header', { name: t('fileRequestDetails.whatWeNeedFromYou') })).toBeTruthy()
+        expect(screen.getByText('Need DD214')).toBeTruthy()
+      })
 
-    it('should display "What we need from you" heading with longDescription content', () => {
-      renderWithRequest(requestWithEnrichedFields)
-      expect(screen.getByRole('header', { name: t('fileRequestDetails.whatWeNeed') })).toBeTruthy()
-      expect(screen.getByTestId('longDescriptionContent')).toBeTruthy()
-      expect(
-        screen.getByText(
-          'This form authorizes VA to obtain information from a non-VA source on your behalf. You may need to complete and submit VA Form 21-4142 and 21-4142a.',
-        ),
-      ).toBeTruthy()
-      expect(screen.getByText('Medical records')).toBeTruthy()
-      expect(screen.getByText('Employment records')).toBeTruthy()
-      expect(screen.getByText('Insurance records')).toBeTruthy()
+      it("should display the 'How to submit this information' section with links", () => {
+        expect(screen.getByRole('header', { name: t('fileRequestDetails.nextSteps') })).toBeTruthy()
+        expect(screen.getByText(t('fileRequestDetails.nextSteps.toRespond'))).toBeTruthy()
+        expect(screen.getByText(t('fileRequestDetails.accessYourClaimLetters'))).toBeTruthy()
+        expect(screen.getByText(t('fileRequestDetails.findVAForm'))).toBeTruthy()
+      })
+
+      it("should display the 'Need help' accordion with phone number when expanded", () => {
+        expect(screen.getByRole('tab', { name: t('fileRequestDetails.needHelp') })).toBeTruthy()
+        fireEvent.press(screen.getByRole('tab', { name: t('fileRequestDetails.needHelp') }))
+        expect(screen.getByText('800-827-1000')).toBeTruthy()
+      })
+
+      it("should display 'More on submitting files' accordion with 'Find a VA location' when expanded", () => {
+        expect(screen.getByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeTruthy()
+        fireEvent.press(screen.getByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') }))
+        expect(screen.getByText(t('fileRequestDetails.moreOnSubmitting.findVALocation'))).toBeTruthy()
+      })
     })
 
-    it('should render "How to submit this information" section with nextSteps content', () => {
-      renderWithRequest(requestWithEnrichedFields)
-      expect(screen.getByRole('header', { name: t('fileRequestDetails.howToSubmit') })).toBeTruthy()
-      expect(screen.getByTestId('nextStepsContent')).toBeTruthy()
-      expect(screen.getByText('To complete this request:')).toBeTruthy()
+    describe('when request data is missing or restricted', () => {
+      it('should NOT display request date blurb when requestedDate is missing', () => {
+        renderWithRequest({ ...requestWithoutFiles, requestedDate: undefined })
+        expect(screen.queryByText(/We requested this evidence from you on/)).toBeFalsy()
+      })
+
+      it('should NOT display respond by subtitle when suspenseDate is null', () => {
+        renderWithRequest({ ...requestWithoutFiles, suspenseDate: null })
+        expect(screen.queryByText(/Respond by/)).toBeFalsy()
+      })
+
+      it("should NOT display 'More on submitting files' accordion when uploadsAllowed is false", () => {
+        renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: false })
+        expect(screen.queryByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeFalsy()
+      })
     })
 
-    it('should render clickable links in nextSteps', () => {
-      renderWithRequest(requestWithEnrichedFields)
-      expect(
-        screen.getByText('You can complete and sign this form online, or use a PDF version and upload or mail it.'),
-      ).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'Download VA Form 21-4142' })).toBeTruthy()
+    describe('when the request has files uploaded awaiting review', () => {
+      it('should display headings and info', () => {
+        renderWithRequest(requestWithFilesAwaitingReview)
+        expect(screen.getByRole('header', { name: t('fileRequestDetails.submittedTitle') })).toBeTruthy()
+        expect(screen.getByText('May 13, 2021 (pending)')).toBeTruthy()
+        expect(screen.getByRole('header', { name: t('fileRequestDetails.fileTitle') })).toBeTruthy()
+        expect(screen.getByText('post-deployment-document.pdf')).toBeTruthy()
+        expect(screen.getByText('DD214.pdf')).toBeTruthy()
+        expect(screen.getByRole('header', { name: t('fileRequestDetails.typeTitle') })).toBeTruthy()
+        expect(screen.getByText('Military Personnel Record')).toBeTruthy()
+        expect(screen.getByText('Combat not verified')).toBeTruthy()
+      })
     })
 
-    it('should show upload buttons when canUploadFile is true', () => {
-      renderWithRequest(requestWithEnrichedFields)
-      expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
-      expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy()
-    })
-  })
-
-  describe('when canUploadFile is false', () => {
-    it('should hide upload buttons even when uploadsAllowed is true', () => {
-      renderWithRequest(requestWithCanUploadFileFalse)
-      expect(screen.queryByRole('button', { name: t('fileUpload.selectAFile') })).toBeFalsy()
-      expect(screen.queryByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeFalsy()
+    describe('when the request has files which are no longer required', () => {
+      it('should display special heading instead of submission date', () => {
+        renderWithRequest(requestWithFilesNoLongerRequired)
+        expect(screen.getByRole('header', { name: t('noLongerNeeded') })).toBeTruthy()
+        expect(screen.queryByRole('header', { name: 'Submitted' })).toBeFalsy()
+        expect(screen.queryByText('May 13, 2021 (pending)')).toBeFalsy()
+      })
     })
   })
 
-  describe('when suspense date is past due', () => {
-    it('should display past due warning alert', () => {
-      renderWithRequest(requestWithPastDueSuspenseDate)
-      expect(screen.getByText(t('fileRequestDetails.pastDue.title'))).toBeTruthy()
-      expect(screen.getByText(t('fileRequestDetails.pastDue.body'))).toBeTruthy()
-      expect(screen.getByText(t('fileRequestDetails.pastDue.callText'))).toBeTruthy()
+  describe("when the 'evidenceRequestsUpdatedUI' feature flag is disabled", () => {
+    beforeEach(() => {
+      when(mockFeatureEnabled).calledWith('evidenceRequestsUpdatedUI').mockReturnValue(false)
     })
 
-    it('should still show upload buttons when past due', () => {
-      renderWithRequest(requestWithPastDueSuspenseDate)
-      expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
-      expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy()
+    describe("when the request hasn't had files uploaded", () => {
+      beforeEach(() => {
+        renderWithRequest(requestWithoutFiles)
+      })
+
+      it('should display the select a file and take or select photos buttons', () => {
+        expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
+        expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy()
+      })
+
+      it('should display displayName as the title and description', () => {
+        expect(screen.getAllByRole('header', { name: 'Request 1' })[0]).toBeTruthy()
+        expect(screen.getByText('Need DD214')).toBeTruthy()
+      })
+
+      it('should NOT display any of the new UI sections', () => {
+        expect(screen.queryByText(/Respond by/)).toBeFalsy()
+        expect(screen.queryByText(/We requested this evidence from you on/)).toBeFalsy()
+        expect(screen.queryByRole('header', { name: t('fileRequestDetails.nextSteps') })).toBeFalsy()
+        expect(screen.queryByRole('tab', { name: t('fileRequestDetails.needHelp') })).toBeFalsy()
+        expect(screen.queryByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeFalsy()
+        expect(screen.queryByText(t('fileRequestDetails.accessYourClaimLetters'))).toBeFalsy()
+        expect(screen.queryByText(t('fileRequestDetails.findVAForm'))).toBeFalsy()
+      })
     })
 
-    it('should not show past due alert when suspense date is in the future', () => {
-      renderWithRequest(requestWithEnrichedFields) // Has future suspenseDate
-      expect(screen.queryByText(t('fileRequestDetails.pastDue.title'))).toBeFalsy()
+    describe('when the request has files uploaded awaiting review', () => {
+      it('should display headings and info with displayName as title', () => {
+        renderWithRequest(requestWithFilesAwaitingReview)
+        expect(screen.getAllByRole('header', { name: 'Request 4' })[0]).toBeTruthy()
+        expect(screen.getByRole('header', { name: t('fileRequestDetails.submittedTitle') })).toBeTruthy()
+        expect(screen.getByText('May 13, 2021 (pending)')).toBeTruthy()
+        expect(screen.getByRole('header', { name: t('fileRequestDetails.fileTitle') })).toBeTruthy()
+        expect(screen.getByText('post-deployment-document.pdf')).toBeTruthy()
+        expect(screen.getByText('DD214.pdf')).toBeTruthy()
+      })
     })
 
-    it('should still show past due alert even after files have been uploaded', () => {
-      const pastDueWithUpload: ClaimEventData = {
-        ...requestWithPastDueSuspenseDate,
-        uploaded: true,
-        type: 'received_from_you_list',
-        status: 'SUBMITTED_AWAITING_REVIEW',
-        uploadDate: '2024-05-15',
-        documents: [{ filename: 'test.pdf', fileType: 'PDF' }],
-      }
-      renderWithRequest(pastDueWithUpload)
-      expect(screen.getByText(t('fileRequestDetails.pastDue.title'))).toBeTruthy()
-    })
-  })
-
-  describe('graceful fallback behavior', () => {
-    it('should fall back to displayName when friendlyName is not present', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.getAllByRole('header', { name: 'Request 1' })[0]).toBeTruthy()
-    })
-
-    it('should fall back to description when shortDescription is not present', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.getByText('Need DD214')).toBeTruthy()
-    })
-
-    it('should fall back to uploadsAllowed when canUploadFile is not present', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
-    })
-
-    it('should not render "What we need from you" section when longDescription not present', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.queryByTestId('longDescriptionContent')).toBeFalsy()
-      expect(screen.queryByRole('header', { name: t('fileRequestDetails.whatWeNeed') })).toBeFalsy()
-    })
-
-    it('should not render "How to submit" section when nextSteps not present', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.queryByTestId('nextStepsContent')).toBeFalsy()
-      expect(screen.queryByRole('header', { name: t('fileRequestDetails.howToSubmit') })).toBeFalsy()
-    })
-
-    it('should not show "Respond by" when suspenseDate is not present', () => {
-      renderWithRequest(requestWithoutFiles)
-      expect(screen.queryByText(/Respond by/)).toBeFalsy()
+    describe('when the request has files which are no longer required', () => {
+      it('should display special heading instead of submission date', () => {
+        renderWithRequest(requestWithFilesNoLongerRequired)
+        expect(screen.getByRole('header', { name: t('noLongerNeeded') })).toBeTruthy()
+        expect(screen.queryByRole('header', { name: 'Submitted' })).toBeFalsy()
+      })
     })
   })
 })

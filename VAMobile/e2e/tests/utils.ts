@@ -114,6 +114,7 @@ export const CommonE2eIdConstants = {
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
+  EVIDENCE_REQUESTS_UPDATED_UI_TEXT: 'evidenceRequestsUpdatedUI',
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
   CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',

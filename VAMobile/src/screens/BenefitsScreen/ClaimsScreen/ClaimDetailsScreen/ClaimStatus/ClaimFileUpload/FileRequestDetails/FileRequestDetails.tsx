@@ -4,17 +4,17 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { isBefore, parseISO } from 'date-fns'
 import { map } from 'underscore'
 
 import {
-  AlertWithHaptics,
+  AccordionCollapsible,
   Box,
-  BoxProps,
   ClickToCallPhoneNumber,
-  StructuredContentRenderer,
+  LinkWithAnalytics,
   TextArea,
   TextView,
+  VABulletList,
+  VABulletListText,
   VAScrollView,
 } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
@@ -25,40 +25,31 @@ import { NAMESPACE } from 'constants/namespaces'
 import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { hasUploadedOrReceived } from 'utils/claims'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import getEnv from 'utils/env'
+import { displayedTextPhoneNumber, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type FileRequestDetailsProps = StackScreenProps<FileRequestStackParams, 'FileRequestDetails'>
+
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { claimID, request } = route.params
-  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const {
-    displayName,
-    type,
-    status,
-    description,
-    uploadDate,
-    documents,
-    friendlyName,
-    shortDescription,
-    longDescription,
-    nextSteps,
-    canUploadFile,
-    uploadsAllowed,
-    suspenseDate,
-  } = request
-
-  // Use override content fields with graceful fallback
-  const title = friendlyName || displayName
-  const showUploadButtons = canUploadFile ?? uploadsAllowed ?? true
-  // Check if we have enriched content (longDescription indicates override content is present)
-  const hasEnrichedContent = !!longDescription?.blocks && longDescription.blocks.length > 0
-  // Check if suspense date is in the past
-  const isPastDue = suspenseDate ? isBefore(parseISO(suspenseDate), new Date()) : false
+    standardMarginBetween,
+    contentMarginBottom,
+    gutter,
+    lineItemSpacing,
+    attachmentIconTopMargin,
+    condensedMarginBetween,
+  } = theme.dimensions
+  const { displayName, type, status, description, uploadDate, documents, requestedDate, suspenseDate, uploadsAllowed } =
+    request
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -71,13 +62,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const isReviewed = type.startsWith('received_from') && status !== ClaimStatusConstants.SUBMITTED_AWAITING_REVIEW
   const isPending = !isClosed && !isReviewed
   const noneNoted = t('noneNoted')
-
-  const boxProps: BoxProps = {
-    borderStyle: 'solid',
-    borderTopWidth: 'default',
-    borderTopColor: 'primary',
-    mt: contentMarginTop,
-  }
+  const showUpdatedUI = featureEnabled('evidenceRequestsUpdatedUI')
 
   const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
     const uploadedFileNames = map(documents || [], (item, index) => {
@@ -110,38 +95,159 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     navigateTo('TakePhotos', { claimID, request })
   }
 
-  // Determine if action buttons should be shown
-  const shouldShowActionButtons = !hasUploaded && showUploadButtons
+  const onClaimLettersPress = () => {
+    navigateTo('ClaimLettersScreen')
+  }
+
+  const formattedRequestedDate = requestedDate ? formatDateMMMMDDYYYY(requestedDate) : null
+  const formattedSuspenseDate = suspenseDate ? formatDateMMMMDDYYYY(suspenseDate) : null
+
+  const nextStepsBullets: VABulletListText[] = [
+    {
+      text: t('fileRequestDetails.nextSteps.bullet1'),
+      boldedText: t('fileRequestDetails.nextSteps.bullet1.bold'),
+    },
+    {
+      text: t('fileRequestDetails.nextSteps.bullet2'),
+    },
+  ]
+
+  const renderRequestDateBlurb = () => {
+    if (!formattedRequestedDate) {
+      return null
+    }
+
+    return (
+      <TextView
+        variant="MobileBody"
+        accessibilityLabel={t('fileRequestDetails.requestDateBlurb.a11yLabel', {
+          requestedDate: formattedRequestedDate,
+        })}>
+        {t('fileRequestDetails.requestDateBlurb', { requestedDate: formattedRequestedDate })}
+      </TextView>
+    )
+  }
+
+  const renderWhatWeNeedFromYouSection = () => {
+    return (
+      <Box mt={condensedMarginBetween}>
+        <TextView mb={18} variant="MobileBodyBold" accessibilityRole="header">
+          {t('fileRequestDetails.whatWeNeedFromYou')}
+        </TextView>
+        <TextView variant="MobileBody">{description}</TextView>
+      </Box>
+    )
+  }
+
+  const renderNextStepsSection = () => {
+    return (
+      <Box mt={condensedMarginBetween}>
+        <TextView mb={18} variant="MobileBodyBold" accessibilityRole="header">
+          {t('fileRequestDetails.nextSteps')}
+        </TextView>
+        <TextView variant="MobileBody" mb={standardMarginBetween}>
+          {t('fileRequestDetails.nextSteps.toRespond')}
+        </TextView>
+        <VABulletList listOfText={nextStepsBullets} />
+        <TextView variant="MobileBody" mt={standardMarginBetween}>
+          {t('fileRequestDetails.nextSteps.needHelpUnderstanding')}
+        </TextView>
+        <LinkWithAnalytics
+          type="custom"
+          text={t('fileRequestDetails.accessYourClaimLetters')}
+          onPress={onClaimLettersPress}
+          testID="accessYourClaimLettersID"
+        />
+        <TextView variant="MobileBody">{t('fileRequestDetails.nextSteps.findBlankCopies')}</TextView>
+        <LinkWithAnalytics
+          type="url"
+          text={t('fileRequestDetails.findVAForm')}
+          url="https://www.va.gov/find-forms/"
+          testID="findVAFormID"
+        />
+      </Box>
+    )
+  }
+
+  const renderMoreOnSubmittingFilesSection = () => {
+    return (
+      <Box>
+        <AccordionCollapsible
+          header={<TextView variant="MobileBodyBold">{t('fileRequestDetails.moreOnSubmitting')}</TextView>}
+          expandedContent={
+            <Box mt={lineItemSpacing}>
+              <TextView variant="MobileBody" mb={condensedMarginBetween}>
+                <TextView variant="MobileBodyBold">{t('fileRequestDetails.moreOnSubmitting.submitInApp')}</TextView>{' '}
+                {t('fileRequestDetails.moreOnSubmitting.submitInApp.description')}
+              </TextView>
+              <TextView variant="MobileBody" mt={condensedMarginBetween} mb={condensedMarginBetween}>
+                <TextView variant="MobileBodyBold">{t('fileRequestDetails.moreOnSubmitting.deliverByMail')}</TextView>{' '}
+                {t('fileRequestDetails.moreOnSubmitting.deliverByMail.description')}
+              </TextView>
+              <TextView variant="MobileBody" mt={condensedMarginBetween} mb={standardMarginBetween}>
+                {t('fileRequestDetails.moreOnSubmitting.toMailFiles')}
+              </TextView>
+              <TextView variant="MobileBody">{t('fileRequestDetails.moreOnSubmitting.address.line1')}</TextView>
+              <TextView variant="MobileBody">{t('fileRequestDetails.moreOnSubmitting.address.line2')}</TextView>
+              <TextView variant="MobileBody">{t('fileRequestDetails.moreOnSubmitting.address.line3')}</TextView>
+              <TextView variant="MobileBody" mb={condensedMarginBetween}>
+                {t('fileRequestDetails.moreOnSubmitting.address.line4')}
+              </TextView>
+              <TextView variant="MobileBody" mt={condensedMarginBetween} mb={condensedMarginBetween}>
+                {t('fileRequestDetails.moreOnSubmitting.bringInPerson')}
+              </TextView>
+              <LinkWithAnalytics
+                type="custom"
+                text={t('fileRequestDetails.moreOnSubmitting.findVALocation')}
+                onPress={() => {
+                  navigateTo('Webview', {
+                    url: WEBVIEW_URL_FACILITY_LOCATOR,
+                    displayTitle: vaGovWebviewTitle(t),
+                    loadingMessage: t('webview.valocation.loading'),
+                  })
+                }}
+                testID="findVALocationID"
+              />
+            </Box>
+          }
+        />
+      </Box>
+    )
+  }
+
+  const renderNeedHelpSection = () => {
+    return (
+      <Box>
+        <AccordionCollapsible
+          header={<TextView variant="MobileBodyBold">{t('fileRequestDetails.needHelp')}</TextView>}
+          expandedContent={
+            <Box mt={lineItemSpacing}>
+              <TextView
+                variant="MobileBody"
+                mb={condensedMarginBetween}
+                accessibilityLabel={t('fileRequestDetails.needHelp.callVA.a11yLabel')}>
+                {t('fileRequestDetails.needHelp.callVA')}
+              </TextView>
+              <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
+            </Box>
+          }
+        />
+      </Box>
+    )
+  }
 
   return (
     <VAScrollView testID="fileRequestDetailsID">
-      <SubtaskTitle title={title || ''} />
+      <SubtaskTitle title={showUpdatedUI ? t('fileRequestDetails.title') : displayName || ''} />
+      {showUpdatedUI && formattedSuspenseDate && (
+        <Box mx={gutter} mt={attachmentIconTopMargin} mb={lineItemSpacing}>
+          <TextView variant="MobileBody">
+            {t('fileRequestDetails.respondByFor', { date: formattedSuspenseDate, displayName })}
+          </TextView>
+        </Box>
+      )}
 
       <Box mb={contentMarginBottom} flex={1}>
-        {/* Show due date when suspenseDate is present */}
-        {suspenseDate && (
-          <Box mx={gutter} mb={standardMarginBetween}>
-            <TextView variant="MobileBody">
-              {t('fileRequestDetails.respondBy', { date: formatDateMMMMDDYYYY(suspenseDate) })}
-            </TextView>
-          </Box>
-        )}
-
-        {/* Show past due warning alert when suspense date has passed */}
-        {isPastDue && (
-          <Box mx={gutter} mb={standardMarginBetween}>
-            <AlertWithHaptics
-              variant="warning"
-              header={t('fileRequestDetails.pastDue.title')}
-              description={t('fileRequestDetails.pastDue.body')}>
-              <Box mt={standardMarginBetween}>
-                <TextView variant="MobileBody">{t('fileRequestDetails.pastDue.callText')}</TextView>
-                <ClickToCallPhoneNumber phone={t('8008271000')} />
-              </Box>
-            </AlertWithHaptics>
-          </Box>
-        )}
-
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
             <TextArea>
@@ -171,57 +277,40 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
             </TextArea>
           </Box>
         )}
-
-        {/* Enriched content layout */}
-        {hasEnrichedContent ? (
-          <>
-            {/* "What we need from you" section with longDescription */}
-            <TextArea>
+        <TextArea>
+          {showUpdatedUI ? (
+            <>
+              {renderRequestDateBlurb()}
+              {renderWhatWeNeedFromYouSection()}
+              {renderNextStepsSection()}
+              {uploadsAllowed && renderMoreOnSubmittingFilesSection()}
+              {renderNeedHelpSection()}
+            </>
+          ) : (
+            <>
               <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-                {t('fileRequestDetails.whatWeNeed')}
+                {displayName}
               </TextView>
-              <StructuredContentRenderer content={longDescription} testID="longDescriptionContent" />
-            </TextArea>
-
-            {/* Render nextSteps as "How to submit this information" */}
-            {nextSteps?.blocks && nextSteps.blocks.length > 0 && (
-              <Box mt={standardMarginBetween}>
-                <TextArea>
-                  <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-                    {t('fileRequestDetails.howToSubmit')}
-                  </TextView>
-                  <StructuredContentRenderer content={nextSteps} testID="nextStepsContent" />
-                </TextArea>
-              </Box>
-            )}
-          </>
-        ) : (
-          /* Fallback: existing layout when enriched content is not present */
-          <TextArea>
-            <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-              {title}
-            </TextView>
-            <TextView variant="MobileBody">{shortDescription || description}</TextView>
-          </TextArea>
-        )}
+              <TextView variant="MobileBody">{description}</TextView>
+            </>
+          )}
+        </TextArea>
       </Box>
-      {shouldShowActionButtons && (
-        <Box {...boxProps}>
-          <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
+      {!hasUploaded && (
+        <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
+          <Button
+            onPress={onFilePress}
+            label={t('fileUpload.selectAFile')}
+            testID={t('fileUpload.selectAFile')}
+            buttonType={ButtonVariants.Secondary}
+          />
+          <Box mt={theme.dimensions.condensedMarginBetween}>
             <Button
-              onPress={onFilePress}
-              label={t('fileUpload.selectAFile')}
-              testID={t('fileUpload.selectAFile')}
+              onPress={onPhotoPress}
+              label={t('fileUpload.takePhotos')}
+              testID={t('fileUpload.takePhotos')}
               buttonType={ButtonVariants.Secondary}
             />
-            <Box mt={theme.dimensions.condensedMarginBetween}>
-              <Button
-                onPress={onPhotoPress}
-                label={t('fileUpload.takePhotos')}
-                testID={t('fileUpload.takePhotos')}
-                buttonType={ButtonVariants.Secondary}
-              />
-            </Box>
           </Box>
         </Box>
       )}

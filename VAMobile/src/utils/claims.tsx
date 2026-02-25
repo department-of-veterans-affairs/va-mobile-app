@@ -56,7 +56,7 @@ export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEve
       event.status === FILE_REQUEST_STATUS.NEEDED &&
       event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU &&
       !event.uploaded &&
-      (event.canUploadFile ?? event.uploadsAllowed),
+      event.uploadsAllowed,
   )
 }
 

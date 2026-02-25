@@ -22,6 +22,7 @@ export type FeatureToggleType =
   | 'appointmentsTestTime'
   | 'datePickerUpdate'
   | 'decisionLettersWaygate'
+  | 'evidenceRequestsUpdatedUI'
   | 'haptics'
   | 'hsScrollAnalytics'
   | 'inAppRecruitment'
@@ -59,6 +60,7 @@ type FeatureToggleValues = {
   COEAvailable: boolean
   copayments: boolean
   decisionLettersWaygate: boolean
+  evidenceRequestsUpdatedUI: boolean
   haptics: boolean
   hsScrollAnalytics: boolean
   inAppRecruitment: boolean
@@ -97,6 +99,7 @@ export const defaults: FeatureToggleValues = {
   COEAvailable: false,
   copayments: false,
   decisionLettersWaygate: true,
+  evidenceRequestsUpdatedUI: true,
   haptics: true,
   hsScrollAnalytics: false,
   inAppRecruitment: false,
