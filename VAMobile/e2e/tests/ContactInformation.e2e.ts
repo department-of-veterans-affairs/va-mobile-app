@@ -1,7 +1,14 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openContactInfo, openProfile, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  dismissActionSheet,
+  loginToDemoMode,
+  openContactInfo,
+  openProfile,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export async function updateAddress() {
   await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
@@ -71,7 +78,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it(addressType + ': verify fields are filled on keep editing', async () => {
-    await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
+    await dismissActionSheet(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)
     await expect(element(by.text('United States'))).toExist()
     await expect(element(by.text('3101 N Fort Valley Rd')).atIndex(0)).toExist()
     await expect(element(by.text('2'))).toExist()
@@ -82,7 +89,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
   it(addressType + ': verify contact info screen is displayed on delete', async () => {
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
+    await dismissActionSheet(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)
     await expect(element(by.id(addressID))).toExist()
   })
 
@@ -191,7 +198,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   })
 
   it(phoneType + ': verify fields are filled on keep editing', async () => {
-    await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
+    await dismissActionSheet(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)
     await expect(element(by.text('276-608-6180')).atIndex(0)).toExist()
     await expect(element(by.text('1234'))).toExist()
   })
@@ -199,7 +206,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it(phoneType + ': verify contact info screen is displayed on delete', async () => {
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
-    await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
+    await dismissActionSheet(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)
     await expect(element(by.id(phoneID))).toExist()
   })
 
@@ -280,7 +287,7 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
   })
 
   it('should tap keep and verify the ' + type + ' information appears', async () => {
-    await element(by.text(CommonE2eIdConstants.REMOVE_KEEP_TEXT)).tap()
+    await dismissActionSheet(CommonE2eIdConstants.REMOVE_KEEP_TEXT)
     if (type === 'mobile phone' || type === 'work phone' || type === 'home phone') {
       await expect(element(by.text('276-608-6180')).atIndex(1)).toExist()
     } else if (type === 'home address') {
@@ -293,7 +300,7 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
   it('should remove the ' + type + ' and verify it has been removed', async () => {
     await element(by.text('Remove ' + type)).tap()
     await setTimeout(2000)
-    await element(by.text(CommonE2eIdConstants.REMOVE_REMOVE_TEXT)).tap()
+    await dismissActionSheet(CommonE2eIdConstants.REMOVE_REMOVE_TEXT)
     try {
       await waitFor(element(by.text(CommonE2eIdConstants.DISMISS_TEXT)))
         .toBeVisible()

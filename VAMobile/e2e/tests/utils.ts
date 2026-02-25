@@ -845,3 +845,20 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
   )
   await loginToDemoMode()
 }
+
+/** Function to safely dismiss an action sheet on Android and iOS
+ * On iOS, the action sheet tap could fail due to view hittability from UI overlaps, so we tap with a coordinate offset.
+ * On Android, multiple buttons could have the same name, so we provide an optional index parameter.
+ */
+export async function dismissActionSheet(text: string, index?: number) {
+  if (device.getPlatform() === 'android') {
+    if (index !== undefined) {
+      await element(by.text(text)).atIndex(index).tap()
+    } else {
+      await element(by.text(text)).tap()
+    }
+  } else {
+    // Offset tap to reliably hit Action Sheet buttons in iOS 18+ without targeting the exact center
+    await element(by.text(text)).tap({ x: 50, y: 10 })
+  }
+}
