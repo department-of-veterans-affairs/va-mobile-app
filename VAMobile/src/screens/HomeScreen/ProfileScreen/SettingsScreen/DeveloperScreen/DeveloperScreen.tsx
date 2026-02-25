@@ -25,7 +25,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import {AnalyticsState, OfflineState, setOfflineDebugEnabled, toggleAnalyticsInDemoMode} from 'store/slices'
+import { AnalyticsState, OfflineState, setOfflineDebugEnabled, toggleAnalyticsInDemoMode } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'

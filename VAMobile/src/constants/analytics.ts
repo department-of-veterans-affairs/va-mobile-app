@@ -1356,7 +1356,7 @@ export const Events = {
       name: 'vama_test_metrics',
       params: {
         p1: num,
-        p2: '' + num
+        p2: '' + num,
       },
     }
   },
