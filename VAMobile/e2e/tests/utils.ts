@@ -380,10 +380,19 @@ export const testForOneOrManyOccurancesOf = async (text: string) => {
  * @param cancelPopUp - boolean to either cancel the popUp or leave the app
  */
 export async function openDismissLeavingAppPopup(matchString: string, findbyText = false) {
-  if (findbyText) {
-    await element(by.text(matchString)).tap()
+  if (device.getPlatform() === 'android') {
+    if (findbyText) {
+      await element(by.text(matchString)).tap()
+    } else {
+      await element(by.id(matchString)).tap()
+    }
   } else {
-    await element(by.id(matchString)).tap()
+    // Offset tap to reliably hit links in iOS 18+ without targeting the exact center
+    if (findbyText) {
+      await element(by.text(matchString)).tap({ x: 10, y: 10 })
+    } else {
+      await element(by.id(matchString)).tap({ x: 10, y: 10 })
+    }
   }
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
