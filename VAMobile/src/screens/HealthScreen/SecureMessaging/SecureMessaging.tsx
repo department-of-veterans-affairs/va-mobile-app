@@ -58,6 +58,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     error: foldersError,
     refetch: refetchFolder,
     isFetching: refetchingFolders,
+    isFetched: hasFetchedFolders,
   } = useFolders({
     enabled:
       isFocused &&
@@ -168,7 +169,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       testID="messagesTestID"
       scrollViewProps={scrollViewProps}
       screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
-      isLoading={smNotInDowntime && (!authorizedServicesFetched || !hasLoadedRecipients || !inboxFetched)}>
+      isLoading={!authorizedServicesFetched || !hasLoadedRecipients || !inboxFetched || !hasFetchedFolders}>
       {!smNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices && !refetchingFolders && !refetchingInbox ? (
