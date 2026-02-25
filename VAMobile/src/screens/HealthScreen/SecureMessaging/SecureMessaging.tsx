@@ -169,7 +169,10 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       testID="messagesTestID"
       scrollViewProps={scrollViewProps}
       screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
-      isLoading={!authorizedServicesFetched || !hasLoadedRecipients || !inboxFetched || !hasFetchedFolders}>
+      isLoading={
+        !authorizedServicesFetched ||
+        (userAuthorizedServices?.secureMessaging && (!hasLoadedRecipients || !inboxFetched || !hasFetchedFolders))
+      }>
       {!smNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices && !refetchingFolders && !refetchingInbox ? (
