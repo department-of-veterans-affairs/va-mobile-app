@@ -26,6 +26,7 @@ export async function updateAddress() {
   try {
     await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
   } catch (ex) {}
+  await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
@@ -49,6 +50,7 @@ export async function fillHomeAddressFields() {
   try {
     await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
   } catch (ex) {}
+  await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await element(by.text('Arizona')).tap()
   await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
