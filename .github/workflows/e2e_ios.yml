@@ -347,7 +347,7 @@ jobs:
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
             # Optimization: Navigation.e2e and AvailabilityFramework.e2e have dedicated matrix jobs
-            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 0 --headless" >> "$GITHUB_ENV"
           else
             # Targeted: Prepend prerequisites for safety
             echo "CMD=yarn e2e:ios-test /e2e/tests/Navigation.e2e.ts /e2e/tests/AvailabilityFramework.e2e.ts /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
