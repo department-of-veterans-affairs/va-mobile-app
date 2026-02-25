@@ -10,11 +10,12 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
 import {
   Box,
+  DefaultList,
+  DefaultListItemObj,
   ErrorComponent,
   LoadingComponent,
-  SimpleList,
-  SimpleListItemObj,
   TextArea,
+  TextLine,
   TextView,
   VAScrollView,
 } from 'components'
@@ -64,7 +65,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
 
-  const getRequests = (): Array<SimpleListItemObj> => {
+  const getRequests = (): Array<DefaultListItemObj> => {
     let requestNumber = 1
 
     const onDetailsPress = (request: ClaimEventData) => {
@@ -91,21 +92,24 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     }
 
     return map(requests, (request, index) => {
-      const { friendlyName, isSensitive, displayName } = request
-      // Display title logic (as of 2/23/2026):
-      // - Generic (no friendlyName) -> use API displayName
-      // - With friendlyName and isSensitive=true -> "Request for evidence"
-      // - With friendlyName and isSensitive=false -> friendlyName
+      const { friendlyName, displayName } = request
+      // Display title logic (as of 2/25/2026):
+      // - No overrides (no friendlyName) -> "Request for evidence" with displayName underneath
+      // - Has overrides (friendlyName exists) -> Show friendlyName
       const hasOverrides = friendlyName != null
-      const requestName = hasOverrides
-        ? isSensitive === false
-          ? friendlyName
-          : t('fileRequestDetails.requestForEvidence')
-        : displayName
+
+      const textLines: Array<TextLine> = hasOverrides
+        ? [{ text: friendlyName }]
+        : [
+            { text: t('fileRequestDetails.requestForEvidence') },
+            { text: displayName || '', variant: 'HelperText', color: 'bodyText' },
+          ]
+
+      const primaryText = hasOverrides ? friendlyName : t('fileRequestDetails.requestForEvidence')
       const hasUploaded = hasUploadedOrReceived(request)
-      const item: SimpleListItemObj = {
-        text: requestName || '',
-        testId: getA11yLabel(index + 1, requestName, hasUploaded),
+      const item: DefaultListItemObj = {
+        textLines,
+        testId: getA11yLabel(index + 1, primaryText, hasUploaded),
         onPress: () => {
           onDetailsPress(request)
         },
@@ -162,7 +166,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
             {t('claimPhase.youHaveFileRequestVA', { count })}
           </TextView>
           <Box>
-            <SimpleList items={getRequests()} />
+            <DefaultList items={getRequests()} />
           </Box>
           <TextView
             mt={condensedMarginBetween}

@@ -183,17 +183,15 @@ describe('Claims Screen', () => {
     await expect(element(by.text('You have 5 file requests from VA'))).toExist()
   })
 
-  it('should display friendlyName when provided and isSensitive is false', async () => {
+  it('should display friendlyName when provided', async () => {
     await expect(element(by.text('Clarify claimed condition'))).toExist()
+    await expect(element(by.text('Service information related to herbicide exposure'))).toExist()
     await expect(element(by.text('Dental disability - More information needed'))).not.toExist()
+    await expect(element(by.text('AO - Blue Water Notice'))).not.toExist()
   })
 
-  it('should display "Request for evidence" when friendlyName is provided and isSensitive is true', async () => {
+  it('should display "Request for evidence" with displayName underneath when no friendlyName is provided', async () => {
     await expect(element(by.text('Request for evidence'))).toExist()
-    await expect(element(by.text('Service information related to herbicide exposure'))).not.toExist()
-  })
-
-  it('should display displayName when no friendlyName is provided', async () => {
     await expect(element(by.text('Automated 5103 Notice Response'))).toExist()
     await expect(element(by.text('Documents relating to disability needed'))).toExist()
     await expect(element(by.text('Accidental injury - 21-4176 needed'))).toExist()

@@ -108,7 +108,7 @@ context('FileRequest', () => {
       renderWithData(request)
       await waitFor(() => expect(screen.getByText(t('claimPhase.youHaveFileRequestVA', { count: 1 }))).toBeTruthy())
       await waitFor(() => expect(screen.getByText(t('fileRequest.weSentYouALaterText'))).toBeTruthy())
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: /Request 1/ })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: /Request for evidence/ })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
           claimID: '600156928',
@@ -131,7 +131,7 @@ context('FileRequest', () => {
     })
   })
 
-  describe('display title logic based on overrides and sensitivity', () => {
+  describe('display title logic based on friendlyName overrides', () => {
     const createRequest = (overrides: Partial<ClaimEventData> = {}): ClaimEventData => ({
       type: 'still_need_from_you_list',
       date: '2020-07-16',
@@ -158,58 +158,50 @@ context('FileRequest', () => {
         })
     }
 
-    it('should display displayName when friendlyName is undefined', async () => {
-      const requests = [createRequest()]
-      mockApiResponse(requests)
-      renderWithData(requests)
-      await waitFor(() => expect(screen.getByText('API Display Name')).toBeTruthy())
+    describe('when friendlyName is not provided (no overrides)', () => {
+      it('should display "Request for evidence" with displayName underneath when friendlyName is undefined', async () => {
+        const requests = [createRequest()]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
+        expect(screen.getByText('API Display Name')).toBeTruthy()
+      })
+
+      it('should display "Request for evidence" with displayName underneath when friendlyName is null', async () => {
+        const requests = [createRequest({ friendlyName: null })]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
+        expect(screen.getByText('API Display Name')).toBeTruthy()
+      })
     })
 
-    it('should display displayName when friendlyName is null', async () => {
-      const requests = [createRequest({ friendlyName: null })]
-      mockApiResponse(requests)
-      renderWithData(requests)
-      await waitFor(() => expect(screen.getByText('API Display Name')).toBeTruthy())
-    })
+    describe('when friendlyName is provided (has overrides)', () => {
+      it('should display friendlyName instead of "Request for evidence"', async () => {
+        const requests = [
+          createRequest({
+            friendlyName: 'Authorization to disclose information',
+          }),
+        ]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() => expect(screen.getByText('Authorization to disclose information')).toBeTruthy())
+        expect(screen.queryByText(t('fileRequestDetails.requestForEvidence'))).toBeFalsy()
+        expect(screen.queryByText('API Display Name')).toBeFalsy()
+      })
 
-    it('should display "Request for evidence" when overrides exist but isSensitive=true', async () => {
-      const requests = [
-        createRequest({
-          friendlyName: 'Service information related to herbicide exposure',
-          isSensitive: true,
-        }),
-      ]
-      mockApiResponse(requests)
-      renderWithData(requests)
-      await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
-      expect(screen.queryByText('Service information related to herbicide exposure')).toBeFalsy()
-    })
-
-    it('should display friendlyName when overrides exist and isSensitive=false', async () => {
-      const requests = [
-        createRequest({
-          friendlyName: 'Authorization to disclose information',
-          isSensitive: false,
-        }),
-      ]
-      mockApiResponse(requests)
-      renderWithData(requests)
-      await waitFor(() => expect(screen.getByText('Authorization to disclose information')).toBeTruthy())
-      expect(screen.queryByText(t('fileRequestDetails.requestForEvidence'))).toBeFalsy()
-    })
-
-    it('should use friendlyName in accessibility label when isSensitive=false', async () => {
-      const requests = [
-        createRequest({
-          friendlyName: 'Authorization to disclose information',
-          isSensitive: false,
-        }),
-      ]
-      mockApiResponse(requests)
-      renderWithData(requests)
-      await waitFor(() =>
-        expect(screen.getByRole('link', { name: /Authorization to disclose information/ })).toBeTruthy(),
-      )
+      it('should use friendlyName in accessibility label', async () => {
+        const requests = [
+          createRequest({
+            friendlyName: 'Authorization to disclose information',
+          }),
+        ]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() =>
+          expect(screen.getByRole('link', { name: /Authorization to disclose information/ })).toBeTruthy(),
+        )
+      })
     })
   })
 
