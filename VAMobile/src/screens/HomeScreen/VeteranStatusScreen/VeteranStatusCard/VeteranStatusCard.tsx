@@ -4,7 +4,6 @@ import { View } from 'react-native'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { BranchOfService } from 'api/types'
 import { BackgroundVariant, Box, TextView } from 'components'
 import VASeal from 'components/VAIcon/svgs/VASeal.svg'
 import { NAMESPACE } from 'constants/namespaces'
@@ -26,14 +25,14 @@ type VeteranStatusCardProps = {
   /** DOD ID number (EDIPI) */
   edipi?: string | null | undefined
 
-  /** The user’s most recent branch (e.g., "Army") */
-  branch: BranchOfService | string
-
   /** Optional combined rating text (e.g. “50%”) */
   percentText?: string
 
   /** Function to get the "latest period of service" JSX */
-  getLatestPeriodOfService: () => React.ReactNode
+  getLatestPeriodOfService?: () => React.ReactNode
+
+  /** Hide the "Latest period of service" section (new VSC behavior) */
+  showLatestPeriodOfService?: boolean
 }
 
 /**
@@ -41,7 +40,13 @@ type VeteranStatusCardProps = {
  * Orientation- and platform-specific constants are defined within this file,
  * so you only need to pass the core data.
  */
-export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPeriodOfService }: VeteranStatusCardProps) {
+export function VeteranStatusCard({
+  fullName,
+  edipi,
+  percentText,
+  getLatestPeriodOfService,
+  showLatestPeriodOfService = true,
+}: VeteranStatusCardProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -143,12 +148,14 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           </TextView>
         </Box>
 
-        <Box>
-          <TextView color="primaryContrast" variant={headerVariant} mt={8}>
-            {t('veteranStatus.latestPeriodOfService')}
-          </TextView>
-          {getLatestPeriodOfService()}
-        </Box>
+        {showLatestPeriodOfService && getLatestPeriodOfService && (
+          <Box>
+            <TextView color="primaryContrast" variant={headerVariant} mt={8}>
+              {t('veteranStatus.latestPeriodOfService')}
+            </TextView>
+            {getLatestPeriodOfService()}
+          </Box>
+        )}
 
         <Box flexDirection={isLandscape ? 'row' : 'column'}>
           <Box flex={isLandscape ? 1 : undefined}>
