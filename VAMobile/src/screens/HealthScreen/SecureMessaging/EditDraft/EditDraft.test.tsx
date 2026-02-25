@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   CategoryTypeFields,
   SecureMessagingFolderMessagesGetData,
@@ -15,6 +16,8 @@ import { LARGE_PAGE_SIZE } from 'constants/common'
 import EditDraft from 'screens/HealthScreen/SecureMessaging/EditDraft/EditDraft'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
+jest.mock('api/authorizedServices/getAuthorizedServices')
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -57,6 +60,68 @@ context('EditDraft', () => {
           recipientName: 'mock recipient name 1',
           readReceipt: 'mock read receipt 1',
           isOhMessage: false,
+        },
+      },
+      {
+        id: 2,
+        type: '1',
+        attributes: {
+          messageId: 2,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'test 2',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '2',
+          senderId: 2,
+          senderName: 'mock sender 2',
+          recipientId: 3,
+          recipientName: 'mock recipient name 2',
+          readReceipt: 'mock read receipt 2',
+          isOhMessage: false,
+        },
+      },
+      {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'Last accordion collapsible should be open, so the body text of this message should display',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: String(DateTime.now().toUTC()),
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+        },
+      },
+    ],
+  }
+  const cannotReplyThread: SecureMessagingThreadGetData = {
+    data: [
+      {
+        id: 1,
+        type: '1',
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'mock subject 1: The initial message sets the overall thread subject header',
+          body: 'message 1 body text',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1',
+          senderId: 2,
+          senderName: 'mock sender 1',
+          recipientId: 3,
+          recipientName: 'mock recipient name 1',
+          readReceipt: 'mock read receipt 1',
+          isOhMessage: false,
+          replyDisabled: true,
         },
       },
       {
@@ -300,6 +365,14 @@ context('EditDraft', () => {
     },
   }
 
+  beforeEach(() => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {
+        migratingFacilitiesList: [],
+      },
+    })
+  })
+
   const initializeTestInstance = () => {
     goBack = jest.fn()
     const props = mockNavProps(
@@ -390,6 +463,56 @@ context('EditDraft', () => {
       await waitFor(() =>
         expect(screen.getByRole('heading', { name: 'This conversation is too old for new replies' })).toBeTruthy(),
       )
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
+    })
+  })
+
+  describe('when there are no recent messages and provider does not allow reply', () => {
+    it('should display an alert and should hide the Add Files button and Send button', async () => {
+      const threadWithReplyDisabled = JSON.parse(JSON.stringify(oldThread))
+      threadWithReplyDisabled.data[2].attributes.replyDisabled = true
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(threadWithReplyDisabled)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'You can’t reply to this message' })).toBeTruthy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
+    })
+  })
+
+  describe('when provider does not allow reply', () => {
+    it('should display an alert and should hide the Add Files button and Send button', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(cannotReplyThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'You can’t reply to this message' })).toBeTruthy())
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
     })
@@ -515,6 +638,187 @@ context('EditDraft', () => {
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Add Files' })))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
+    })
+  })
+
+  describe('when message has OH migration phase blocking replies', () => {
+    const migrationThread: SecureMessagingThreadGetData = {
+      data: [
+        {
+          id: 1,
+          type: '1',
+          attributes: {
+            messageId: 1,
+            category: CategoryTypeFields.other,
+            subject: 'mock subject 1',
+            body: 'message 1 body text',
+            hasAttachments: false,
+            attachment: false,
+            sentDate: String(DateTime.now().toUTC()),
+            senderId: 2,
+            senderName: 'mock sender 1',
+            recipientId: 3,
+            recipientName: 'mock recipient name 1',
+            readReceipt: 'mock read receipt 1',
+            isOhMessage: false,
+            ohMigrationPhase: 'p3',
+          },
+        },
+        {
+          id: 2,
+          type: '1',
+          attributes: {
+            messageId: 2,
+            category: CategoryTypeFields.other,
+            subject: '',
+            body: 'test 2',
+            hasAttachments: false,
+            attachment: false,
+            sentDate: String(DateTime.now().toUTC()),
+            senderId: 2,
+            senderName: 'mock sender 2',
+            recipientId: 3,
+            recipientName: 'mock recipient name 2',
+            readReceipt: 'mock read receipt 2',
+            isOhMessage: false,
+            ohMigrationPhase: 'p3',
+          },
+        },
+        {
+          id: 3,
+          type: '3',
+          attributes: {
+            messageId: 3,
+            category: CategoryTypeFields.other,
+            subject: '',
+            body: 'draft body',
+            hasAttachments: false,
+            attachment: false,
+            sentDate: String(DateTime.now().toUTC()),
+            senderId: 2,
+            senderName: 'mock sender 3',
+            recipientId: 3,
+            recipientName: 'mock recipient name 3',
+            readReceipt: 'mock read receipt',
+            isOhMessage: false,
+            ohMigrationPhase: 'p3',
+          },
+        },
+      ],
+    }
+
+    const migrationMessage: SecureMessagingMessageGetData = {
+      data: {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'draft body',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: String(DateTime.now().toUTC()),
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+          ohMigrationPhase: 'p3',
+        },
+      },
+      included: [],
+      meta: {
+        userInTriageTeam: true,
+      },
+    }
+
+    it('should hide the Send button and Add Files button when migration blocks replies', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: {
+                current: 'p3',
+                p0: 'March 1, 2026',
+                p1: 'March 15, 2026',
+                p2: 'April 1, 2026',
+                p3: 'April 24, 2026',
+                p4: 'April 27, 2026',
+                p5: 'May 1, 2026',
+                p6: 'May 3, 2026',
+                p7: 'May 8, 2026',
+              },
+            },
+          ],
+        },
+      })
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(migrationThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(migrationMessage)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
+    })
+
+    it('should not show "too old for replies" alert when migration blocks replies', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: {
+                current: 'p5',
+                p0: 'March 1, 2026',
+                p1: 'March 15, 2026',
+                p2: 'April 1, 2026',
+                p3: 'April 24, 2026',
+                p4: 'April 27, 2026',
+                p5: 'May 1, 2026',
+                p6: 'May 3, 2026',
+                p7: 'May 8, 2026',
+              },
+            },
+          ],
+        },
+      })
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(migrationThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(migrationMessage)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByRole('heading', { name: 'This conversation is too old for new replies' })).toBeFalsy(),
+      )
     })
   })
 })

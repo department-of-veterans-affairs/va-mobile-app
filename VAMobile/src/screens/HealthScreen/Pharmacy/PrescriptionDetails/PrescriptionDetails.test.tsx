@@ -6,7 +6,10 @@ import { t } from 'i18next'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { PrescriptionAttributeData, RefillStatusConstants } from 'api/types'
 import PrescriptionDetails from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionDetails'
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
 
@@ -33,7 +36,10 @@ context('PrescriptionDetails', () => {
     },
   ]
 
-  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}) => {
+  const initializeTestInstance = (
+    mockAttributeData: Partial<PrescriptionAttributeData> = {},
+    cutoverFlagValue = false,
+  ) => {
     const props = mockNavProps(undefined, undefined, {
       params: {
         prescription: {
@@ -43,6 +49,7 @@ context('PrescriptionDetails', () => {
             refillStatus: RefillStatusConstants.ACTIVE,
             refillSubmitDate: '2022-10-28T04:00:00.000Z',
             refillDate: '2022-10-28T04:00:00.000Z',
+            sortedDispensedDate: '2022-10-28T04:00:00.000Z',
             refillRemaining: 5,
             facilityName: 'DAYT29',
             facilityPhoneNumber: '(217) 636-6712',
@@ -61,7 +68,7 @@ context('PrescriptionDetails', () => {
         },
       },
     })
-
+    when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(cutoverFlagValue)
     render(<PrescriptionDetails {...props} />)
   }
 
@@ -110,91 +117,119 @@ context('PrescriptionDetails', () => {
     })
   })
 
-  describe('Go to My VA Health button', () => {
-    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
-      it('should display FooterButton', () => {
-        initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED,
-        })
-        expect(screen.getByRole('button', { name: t('goToMyVAHealth') })).toBeTruthy()
-      })
-    })
-
-    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
-      it('should not display FooterButton', () => {
-        initializeTestInstance()
-        expect(screen.queryByRole('button', { name: t('goToMyVAHealth') })).toBeFalsy()
-      })
-    })
-  })
-
-  describe('RequestRefillButton', () => {
-    describe('when isRefillable is true', () => {
-      it('should display FooterButton', () => {
-        initializeTestInstance({
-          isRefillable: true,
-        })
-        expect(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeTruthy()
-      })
-    })
-
-    describe('when isRefillable is false', () => {
-      it('should not display FooterButton', () => {
-        initializeTestInstance()
-        expect(screen.queryByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeFalsy()
-      })
-    })
-  })
-
-  describe('PrescriptionDetailsBanner', () => {
-    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
-      it('should display the PrescriptionsDetailsBanner', () => {
-        initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED,
-        })
-
-        expect(screen.getByText(t('prescription.details.banner.title'))).toBeTruthy()
-      })
-    })
-
-    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {})
-    it('should not display the PrescriptionsDetailsBanner', () => {
-      initializeTestInstance()
-      expect(screen.queryByText(t('prescription.details.banner.title'))).toBeFalsy()
-    })
-  })
-
-  describe('migrating facilities', () => {
-    describe('when prescription is at a migrating facility', () => {
-      beforeEach(() => {
-        mockUseAuthorizedServices.mockReturnValue({
-          data: {
-            migratingFacilitiesList: migratingFacilitiesList,
-          },
-        })
-      })
-
-      it('should show the PrescriptionsDetailsBanner', () => {
-        initializeTestInstance()
-        expect(screen.getByText(t('prescription.details.banner.title'))).toBeTruthy()
-      })
-
-      it('should hide the Request Refill button even when isRefillable is true', () => {
-        initializeTestInstance({
-          isRefillable: true,
-        })
+  // ============================================================
+  // cutover flag OFF (default) — shouldShowRefillButton is always false
+  // because shouldShowRefillButton = !isAtMigratingFacility && isOHCutoverFlagEnabled
+  // ============================================================
+  describe('when cutover flag is disabled (default)', () => {
+    describe('RequestRefillButton', () => {
+      it('should not display Request Refill button even when isRefillable is true', () => {
+        // shouldShowRefillButton = !false && false = false
+        initializeTestInstance({ isRefillable: true })
         expect(screen.queryByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeFalsy()
       })
 
-      it('should hide the Go to My VA Health button even when status is TRANSFERRED', () => {
-        initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED,
-        })
+      it('should not display Go to My VA Health button when status is TRANSFERRED', () => {
+        // shouldShowRefillButton = false, so getRefillVAHealthButton returns <></>
+        initializeTestInstance({ refillStatus: RefillStatusConstants.TRANSFERRED })
         expect(screen.queryByRole('button', { name: t('goToMyVAHealth') })).toBeFalsy()
       })
     })
 
-    describe('when prescription is not at a migrating facility', () => {
+    describe('PrescriptionDetailsBanner', () => {
+      it('should always display the error banner since shouldShowRefillButton is false', () => {
+        // getBanner: !shouldShowRefillButton is true, so error banner always shows
+        initializeTestInstance()
+        expect(screen.getByText("You can't refill this prescription online right now")).toBeTruthy()
+      })
+    })
+  })
+
+  // ============================================================
+  // cutover flag ON — shouldShowRefillButton depends on migrating facility
+  // ============================================================
+  describe('when cutover flag is enabled', () => {
+    describe('RequestRefillButton', () => {
+      describe('when prescription is NOT at a migrating facility', () => {
+        it('should display Request Refill button when isRefillable is true', () => {
+          // shouldShowRefillButton = !false && true = true
+          initializeTestInstance({ isRefillable: true }, true)
+          expect(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeTruthy()
+        })
+
+        it('should not display Request Refill button when isRefillable is false', () => {
+          initializeTestInstance({ isRefillable: false }, true)
+          expect(screen.queryByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeFalsy()
+        })
+      })
+
+      describe('when prescription IS at a migrating facility', () => {
+        beforeEach(() => {
+          mockUseAuthorizedServices.mockReturnValue({
+            data: {
+              migratingFacilitiesList: migratingFacilitiesList,
+            },
+          })
+        })
+
+        it('should hide Request Refill button even when isRefillable is true', () => {
+          // shouldShowRefillButton = !true && true = false
+          initializeTestInstance({ isRefillable: true }, true)
+          expect(screen.queryByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeFalsy()
+        })
+      })
+    })
+
+    describe('PrescriptionDetailsBanner', () => {
+      describe('when prescription is NOT at a migrating facility', () => {
+        it('should display banner when status is TRANSFERRED', () => {
+          // shouldShowRefillButton = true, refillStatus === TRANSFERRED
+          initializeTestInstance({ refillStatus: RefillStatusConstants.TRANSFERRED }, true)
+          expect(screen.getByText(t('prescription.details.banner.titleV2'))).toBeTruthy()
+        })
+
+        it('should not display banner when status is not TRANSFERRED', () => {
+          // shouldShowRefillButton = true, getBanner returns <></> since status is ACTIVE
+          initializeTestInstance({ refillStatus: RefillStatusConstants.ACTIVE }, true)
+          expect(screen.queryByText(t('prescription.details.banner.titleV2'))).toBeFalsy()
+          expect(screen.queryByText("You can't refill this prescription online right now")).toBeFalsy()
+        })
+      })
+
+      describe('when prescription IS at a migrating facility', () => {
+        beforeEach(() => {
+          mockUseAuthorizedServices.mockReturnValue({
+            data: {
+              migratingFacilitiesList: migratingFacilitiesList,
+            },
+          })
+        })
+
+        it('should display the error banner', () => {
+          // shouldShowRefillButton = false, getBanner shows error banner
+          initializeTestInstance({}, true)
+          expect(screen.getByText("You can't refill this prescription online right now")).toBeTruthy()
+        })
+
+        it('should display the error banner even when isRefillable is true', () => {
+          initializeTestInstance({ isRefillable: true }, true)
+          expect(screen.getByText("You can't refill this prescription online right now")).toBeTruthy()
+        })
+
+        it('should hide all action buttons', () => {
+          initializeTestInstance({ isRefillable: true, refillStatus: RefillStatusConstants.TRANSFERRED }, true)
+          expect(screen.queryByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeFalsy()
+          expect(screen.queryByRole('button', { name: t('goToMyVAHealth') })).toBeFalsy()
+        })
+      })
+    })
+  })
+
+  // ============================================================
+  // Edge cases for migrating facilities data
+  // ============================================================
+  describe('migrating facilities edge cases', () => {
+    describe('when prescription station does not match any migrating facility', () => {
       beforeEach(() => {
         mockUseAuthorizedServices.mockReturnValue({
           data: {
@@ -202,7 +237,7 @@ context('PrescriptionDetails', () => {
               {
                 migrationDate: '2026-05-01',
                 facilities: [
-                  { facilityId: 999, facilityName: 'Other VA Medical Center' }, // Does not match stationNumber
+                  { facilityId: 999, facilityName: 'Other VA Medical Center' }, // Does not match 989
                 ],
                 phases: {
                   current: 'p3',
@@ -221,31 +256,21 @@ context('PrescriptionDetails', () => {
         })
       })
 
-      it('should not show the PrescriptionsDetailsBanner', () => {
-        initializeTestInstance()
-        expect(screen.queryByText(t('prescription.details.banner.title'))).toBeFalsy()
-      })
-
-      it('should show the Request Refill button when isRefillable is true', () => {
-        initializeTestInstance({
-          isRefillable: true,
-        })
+      it('should show Request Refill button when cutover flag is enabled and isRefillable', () => {
+        // isAtMigratingFacility = false, shouldShowRefillButton = !false && true = true
+        initializeTestInstance({ isRefillable: true }, true)
         expect(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeTruthy()
       })
 
-      it('should show the Go to My VA Health button when status is TRANSFERRED', () => {
-        initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED,
-        })
-        expect(screen.getByRole('button', { name: t('goToMyVAHealth') })).toBeTruthy()
+      it('should not show error banner when cutover flag is enabled and status is ACTIVE', () => {
+        initializeTestInstance({ refillStatus: RefillStatusConstants.ACTIVE }, true)
+        expect(screen.queryByText("You can't refill this prescription online right now")).toBeFalsy()
       })
     })
 
     describe('when migratingFacilitiesList is empty', () => {
-      it('should show the Request Refill button when isRefillable is true', () => {
-        initializeTestInstance({
-          isRefillable: true,
-        })
+      it('should show Request Refill button when cutover flag is enabled and isRefillable', () => {
+        initializeTestInstance({ isRefillable: true }, true)
         expect(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeTruthy()
       })
     })
@@ -257,11 +282,15 @@ context('PrescriptionDetails', () => {
         })
       })
 
-      it('should show the Request Refill button when isRefillable is true', () => {
-        initializeTestInstance({
-          isRefillable: true,
-        })
+      it('should show Request Refill button when cutover flag is enabled and isRefillable', () => {
+        // migratingFacilitiesList is undefined → isAtMigratingFacility = false
+        initializeTestInstance({ isRefillable: true }, true)
         expect(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeTruthy()
+      })
+
+      it('should not show error banner when cutover flag is enabled and status is ACTIVE', () => {
+        initializeTestInstance({}, true)
+        expect(screen.queryByText("You can't refill this prescription online right now")).toBeFalsy()
       })
     })
   })

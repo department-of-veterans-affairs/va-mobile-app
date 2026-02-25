@@ -25,6 +25,7 @@ import getEnv from 'utils/env'
 import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -39,6 +40,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
 
   const { contentMarginBottom } = theme.dimensions
 
@@ -48,7 +50,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     isRefillable,
     instructions,
     refillRemaining,
-    refillDate,
+    sortedDispensedDate,
     quantity,
     facilityName,
     facilityPhoneNumber,
@@ -78,14 +80,14 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   }
 
   // Hide refill button if the prescription is at a migrating facility
-  const shouldShowRefillButton = !isAtMigratingFacility
+  const shouldShowRefillButton = !isAtMigratingFacility && isOHCutoverFlagEnabled
 
   const getRefillVAHealthButton = () => {
     if (!shouldShowRefillButton) {
       return <></>
     }
 
-    if (refillStatus === RefillStatusConstants.TRANSFERRED) {
+    if (refillStatus === RefillStatusConstants.TRANSFERRED && !isOHCutoverFlagEnabled) {
       return getGoToMyVAHealthButton()
     } else if (isRefillable) {
       return getRequestRefillButton()
@@ -176,7 +178,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [lastRefilledDateFormatted, lastRefilledDateFormattedA11yLabel] = getDateTextAndLabel(
     t,
-    refillDate,
+    sortedDispensedDate,
     t('prescription.details.fillDateNotAvailable'),
   )
   const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(

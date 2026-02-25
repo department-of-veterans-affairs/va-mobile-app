@@ -9,6 +9,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export type PrescriptionsDetailsBannerProps = {
   /** Optional variant for the alert. Default is 'warning' */
@@ -38,6 +39,7 @@ function PrescriptionsDetailsBanner({
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
 
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
@@ -47,7 +49,12 @@ function PrescriptionsDetailsBanner({
     logAnalyticsEvent(Events.vama_cerner_alert())
   }, [])
 
-  const header = customHeaderText ? customHeaderText : t('prescription.details.banner.title')
+  const getHeader = () => {
+    if (customHeaderText) {
+      return customHeaderText
+    }
+    return isOHCutoverFlagEnabled ? t('prescription.details.banner.titleV2') : t('prescription.details.banner.title')
+  }
 
   const getContent = () => {
     const bullets = [
@@ -67,6 +74,21 @@ function PrescriptionsDetailsBanner({
       },
       { text: t('prescription.details.banner.bullet4') },
     ]
+
+    if (isOHCutoverFlagEnabled) {
+      return (
+        <>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+          <TextView
+            accessible
+            variant="MobileBody"
+            accessibilityLabel={a11yLabelVA(t('prescription.details.banner.bodyV2'))}
+            mb={standardMarginBetween}>
+            {t('prescription.details.banner.bodyV2')}
+          </TextView>
+        </>
+      )
+    }
 
     return (
       <>
@@ -143,7 +165,7 @@ function PrescriptionsDetailsBanner({
           variant={variant}
           expandable={true}
           focusOnError={false}
-          header={header}
+          header={getHeader()}
           analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
           {getContent()}
         </AlertWithHaptics>

@@ -7,7 +7,7 @@ const importKimberlyForOHMigrationData = () => {
       : import('store/api/demo/mocks/default/appointments.json'),
     import('store/api/demo/mocks/default/claims.json'),
     import('store/api/demo/mocks/default/profile.json'),
-    import('store/api/demo/mocks/default/secureMessaging.json'),
+    import('store/api/demo/mocks/kimberlyForOHMigration/secureMessaging.json'),
     import('store/api/demo/mocks/default/vaccine.json'),
     import('store/api/demo/mocks/default/disabilityRating.json'),
     import('store/api/demo/mocks/default/decisionLetters.json'),

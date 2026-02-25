@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
   useAllMessageRecipients,
@@ -47,10 +48,16 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
+import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  FormHeaderTypeConstants,
+  REPLY_WINDOW_IN_DAYS,
+  isMigrationPhaseBlockingReplies,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import {
   useComposeCancelConfirmation,
@@ -145,7 +152,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const hasRecentMessages = thread.some(
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
-  const replyDisabled = isReplyDraft && !hasRecentMessages
+  const providerAllowsReply = !thread.some((msg) => msg.attributes?.replyDisabled === true)
+  const replyIsStale = isReplyDraft && !hasRecentMessages
+  const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
+  const { data: authorizedServicesData } = useAuthorizedServices()
+  const replyDisabled = isReplyDraft && (!hasRecentMessages || !providerAllowsReply || migrationBlocksReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -624,13 +636,24 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
-  function renderAlert() {
+  function renderStaleReplyAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="warning"
           header={t('secureMessaging.reply.tooOldForReplies')}
           description={t('secureMessaging.reply.olderThan45Days')}
+        />
+      </Box>
+    )
+  }
+  function renderCannotReplyAlert() {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('secureMessaging.reply.cannotReplyHeader')}
+          description={t('secureMessaging.reply.cannotReplyBody')}
         />
       </Box>
     )
@@ -812,7 +835,16 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {replyDisabled && renderAlert()}
+          {replyIsStale && !migrationBlocksReply && providerAllowsReply && renderStaleReplyAlert()}
+          {!providerAllowsReply && !migrationBlocksReply && renderCannotReplyAlert()}
+          {migrationBlocksReply && authorizedServicesData && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <OHAlertManager
+                parentScreen={OHParentScreens.SecureMessaging}
+                authorizedServices={authorizedServicesData}
+              />
+            </Box>
+          )}
           <Box>{renderForm()}</Box>
           <Box>{isReplyDraft && renderMessageThread()}</Box>
         </Box>

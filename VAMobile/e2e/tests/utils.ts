@@ -150,7 +150,6 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
-  IN_APP_FEEDBACK_TOGGLE_TEXT: 'inAppFeedback',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
@@ -830,8 +829,11 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
     CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID,
     CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID,
   )
-  waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
-  await element(by.id(testIdOfDesiredUser)).tap()
+  await waitFor(element(by.text(testIdOfDesiredUser)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID))
+    .scroll(200, 'down')
+  await element(by.text(testIdOfDesiredUser)).atIndex(0).tap()
   await scrollToIDThenTap(
     CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
     CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,

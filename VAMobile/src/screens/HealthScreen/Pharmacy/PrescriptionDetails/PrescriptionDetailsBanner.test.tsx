@@ -6,8 +6,11 @@ import { t } from 'i18next'
 import { MigratingFacility, PrescriptionData, RefillStatus } from 'api/types'
 import { getMigratingPrescriptions } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/prescriptionUtils'
 import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
-import { context, render } from 'testUtils'
+import { context, render, when } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
 
 context('PrescriptionsDetailsBanner', () => {
   const mockMigratingFacilitiesList: MigratingFacility[] = [
@@ -38,6 +41,7 @@ context('PrescriptionsDetailsBanner', () => {
         refillStatus: 'active' as RefillStatus,
         refillSubmitDate: '2021-09-08T18:28:22.000Z',
         refillDate: '2021-09-21T04:00:00.000Z',
+        sortedDispensedDate: '2021-09-06T04:00:00.000Z',
         refillRemaining: 1,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -60,6 +64,7 @@ context('PrescriptionsDetailsBanner', () => {
         refillStatus: 'active' as RefillStatus,
         refillSubmitDate: '2022-06-14T19:24:36.000Z',
         refillDate: '2022-05-15T04:00:00.000Z',
+        sortedDispensedDate: '2022-05-15T04:00:00.000Z',
         refillRemaining: 6,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -74,6 +79,10 @@ context('PrescriptionsDetailsBanner', () => {
       },
     },
   ]
+
+  beforeEach(() => {
+    when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(false)
+  })
 
   it('initializes correctly', () => {
     render(<PrescriptionsDetailsBanner />)
@@ -90,6 +99,13 @@ context('PrescriptionsDetailsBanner', () => {
     expect(screen.getByText(t('automatedPhoneSystem'))).toBeTruthy()
     expect(screen.getByText(displayedTextPhoneNumber(t('5418307563')))).toBeTruthy()
     expect(screen.getByText(t('contactVA.tty.displayText'))).toBeTruthy()
+  })
+
+  it('should show expanded content when mhvMedicationsOracleHealthCutover flag is enabled', () => {
+    when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
+    render(<PrescriptionsDetailsBanner />)
+    fireEvent.press(screen.getByText(t('prescription.details.banner.titleV2')))
+    expect(screen.getByText(`${t('prescription.details.banner.bodyV2')}`)).toBeTruthy()
   })
 
   describe('variant prop', () => {
@@ -161,6 +177,7 @@ context('PrescriptionsDetailsBanner', () => {
         refillStatus: 'active' as RefillStatus,
         refillSubmitDate: '2021-09-08T18:28:22.000Z',
         refillDate: '2021-09-21T04:00:00.000Z',
+        sortedDispensedDate: '2021-09-06T04:00:00.000Z',
         refillRemaining: 1,
         facilityName: 'Other Facility',
         facilityPhoneNumber: '(555) 555-5555',
@@ -170,7 +187,7 @@ context('PrescriptionsDetailsBanner', () => {
         quantity: 30,
         expirationDate: '2022-05-04T04:00:00.000Z',
         dispensedDate: '2021-09-06T04:00:00.000Z',
-        stationNumber: '999', // Does not match migrating facilities
+        stationNumber: '999',
         instructions: 'TAKE ONE TABLET EVERY DAY',
       },
     }
@@ -182,11 +199,8 @@ context('PrescriptionsDetailsBanner', () => {
       render(<PrescriptionsDetailsBanner migratingPrescriptions={filteredPrescriptions} />)
       fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
 
-      // Should show migrating prescriptions
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy()
-
-      // Should not show non-migrating prescription
       expect(screen.queryByText('NON-MIGRATING PRESCRIPTION')).toBeFalsy()
     })
 

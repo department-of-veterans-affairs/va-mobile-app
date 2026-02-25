@@ -25,6 +25,7 @@ import { HiddenA11yElement } from 'styles/common'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useDowntime, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
@@ -38,6 +39,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   const confirmAlert = useShowActionSheet()
 
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
 
   const [showAlert, setAlert] = useState(false)
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
@@ -216,7 +218,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
         <NoRefills />
       ) : (
         <>
-          {hasMigratingPrescriptions && (
+          {hasMigratingPrescriptions && isOHCutoverFlagEnabled && (
             <PrescriptionsDetailsBanner
               migratingPrescriptions={migratingPrescriptions}
               variant="error"
