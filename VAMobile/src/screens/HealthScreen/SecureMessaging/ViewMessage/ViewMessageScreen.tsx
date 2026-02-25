@@ -191,8 +191,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 
   // Derive OH migration phase from the first thread message or the current message
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
-  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
-  const stationNumber = messageData?.meta?.stationNumber
+  const migratedToOracleHealth = message?.migratedToOracleHealth || thread?.[0]?.attributes?.migratedToOracleHealth
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase) || migratedToOracleHealth
+  const stationNumber = messageData?.meta?.stationNumber || message?.triageGroup?.stationNumber || undefined
 
   useEffect(() => {
     if (threadFetched) {
@@ -445,6 +446,25 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               {t('secureMessaging.reply.youCantReplyMigrationMessage.note')}
             </TextView>
             <LinkWithAnalytics {...linkProps} />
+          </AlertWithHaptics>
+        </Box>
+      )
+    }
+
+    if (migratedToOracleHealth) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.yourMessageHasBeenMigrated')}
+            description={t('secureMessaging.reply.yourMessageHasBeenMigrated.description')}
+            descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.yourMessageHasBeenMigrated.description'))}
+            testID="secureMessagingYourMessageHasBeenMigratedAlertID">
+            <LinkWithAnalytics
+              type="custom"
+              text={t('upcomingAppointmentDetails.findYourVAFacility')}
+              onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+            />
           </AlertWithHaptics>
         </Box>
       )
