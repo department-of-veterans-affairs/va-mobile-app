@@ -343,6 +343,7 @@ async function expectReviewClaimScreen({
 
   //Scroll down to the submit button
   await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scrollTo('bottom')
+  await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scroll(200, 'down', NaN, 0.8)
   await expect(element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.TRAVEL_AGREEMENT_HEADER_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.PENALTY_STATEMENT_ID))).toExist()
@@ -370,7 +371,9 @@ const expectSubmitSuccessScreen = async ({
   partialSuccess: boolean
   checkExternalLink: boolean
 }) => {
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID))).toExist()
+  await waitFor(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID)))
+    .toBeVisible()
+    .withTimeout(6000)
   await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_DESCRIPTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_SECTION_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_INSTRUCTION_TEXT_ID))).toExist()
