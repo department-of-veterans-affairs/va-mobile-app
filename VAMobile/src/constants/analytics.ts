@@ -1351,6 +1351,15 @@ export const Events = {
       },
     }
   },
+  vama_test_metrics: (num: number): Event => {
+    return {
+      name: 'vama_test_metrics',
+      params: {
+        p1: num,
+        p2: '' + num
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {

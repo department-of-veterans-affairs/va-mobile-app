@@ -32,8 +32,9 @@ const LoadTimeRanges = [
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
   const demoMode = store.getState().demo.demoMode
+  const allowAnalyticsInDemo = store.getState().analytics.allowAnalyticsInDemo
 
-  if (demoMode) {
+  if (demoMode && !allowAnalyticsInDemo) {
     console.debug(`(analytics collection disabled in demo mode) triggered analytics event ${name}`, params)
   } else {
     console.debug(`logging analytics event ${name}`, params)

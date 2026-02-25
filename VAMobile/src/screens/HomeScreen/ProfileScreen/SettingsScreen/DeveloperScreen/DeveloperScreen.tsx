@@ -25,7 +25,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { AnalyticsState, OfflineState, setOfflineDebugEnabled } from 'store/slices'
+import {AnalyticsState, OfflineState, setOfflineDebugEnabled, toggleAnalyticsInDemoMode} from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
@@ -115,7 +115,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   // push data
-  const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { firebaseDebugMode, allowAnalyticsInDemo } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { offlineDebugEnabled } = useSelector<RootState, OfflineState>((state) => state.offline)
   const [hideWarnings, setHideWarnings] = useState<boolean>(true)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
@@ -210,6 +210,22 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       decorator: ButtonDecoratorType.Navigation,
       onPress: () => navigateTo('DemoModeUsers', { fromLogin: false }),
       testId: 'DemoModeUsers',
+    },
+    {
+      text: 'Fire analytics in demo mode',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: allowAnalyticsInDemo,
+      },
+      onPress: () => dispatch(toggleAnalyticsInDemoMode(!allowAnalyticsInDemo)),
+    },
+    {
+      text: 'RemoveMe!: send test event',
+      decorator: ButtonDecoratorType.Navigation,
+      decoratorProps: {
+        on: allowAnalyticsInDemo,
+      },
+      onPress: () => dispatch(toggleAnalyticsInDemoMode(!allowAnalyticsInDemo)),
     },
   ]
 
