@@ -582,6 +582,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             noProviderError={noProviderError}
             migrationBlocksReply={migrationBlocksReply}
             stationNumber={stationNumber}
+            migratedToOracleHealth={migratedToOracleHealth}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
