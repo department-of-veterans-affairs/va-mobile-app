@@ -222,7 +222,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       onPress: () => dispatch(toggleAnalyticsInDemoMode(!allowAnalyticsInDemo)),
     },
     {
-      text: 'RemoveMe!: send test event',
+      text: 'Send debug test event',
       decorator: ButtonDecoratorType.Navigation,
       onPress: async () => {
         await logAnalyticsEvent(Events.vama_test_metrics(1))
