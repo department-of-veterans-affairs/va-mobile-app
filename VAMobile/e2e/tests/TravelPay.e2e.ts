@@ -412,7 +412,7 @@ const fillHomeAddressFields = async ({
   country: string // Only supports the first countries in the list
   zipCode: string
 }) => {
-  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText(streetAddressLine2)
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).replaceText(streetAddressLine2)
   await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)))
     .toBeVisible()
@@ -435,7 +435,7 @@ const fillHomeAddressFields = async ({
   await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
     .toBeVisible()
     .withTimeout(4000)
-  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText(streetAddressLine1)
+  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).replaceText(streetAddressLine1)
   await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
     .toBeVisible()
