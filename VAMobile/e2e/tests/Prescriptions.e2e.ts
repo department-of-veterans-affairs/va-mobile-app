@@ -39,7 +39,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_REFILLS_LEFT_TEXT: 'Refills left: 1',
   PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 06/06/2022',
   PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: SLC10 TEST LAB',
-  PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
+  PRESCRIPTION_DETAILS_LABEL_ID: 'prescriptionDetailsTestID',
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
   FILTER_PRESCRIPTIONS_TEST_ID: 'filterSortWrapperBoxTestID',
@@ -134,7 +134,8 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
     // AMLODIPINE BESYLATE 10MG TAB is first in Status (A to Z) sort (active before expired)
     await expect(element(by.label('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
-    await waitFor(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0))
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+    await waitFor(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL_ID)).atIndex(0))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(100, 'down', 0.5, 0.5)
@@ -149,6 +150,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify status label information', async () => {
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
     await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
@@ -158,11 +160,12 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify prescription details information', async () => {
-    await waitFor(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0))
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+    await waitFor(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL_ID)).atIndex(0))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
-    await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
+    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL_ID)).atIndex(0).tap()
     await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A'))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT))).toExist()
@@ -182,6 +185,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('prescription details: verify status label information', async () => {
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(50, 'up') // Ensure the label is visible if partially tucked
     await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
@@ -210,7 +214,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toExist()
+    await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL_ID)).atIndex(0)).toExist()
   })
 
   it('pending: verify filters', async () => {
