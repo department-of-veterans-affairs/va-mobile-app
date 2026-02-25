@@ -155,7 +155,17 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
           : undefined
 
     if (!shouldShowRefillButton) {
-      return <PrescriptionsDetailsBanner variant="error" phoneNumber={phoneNumberString} />
+      return (
+        <PrescriptionsDetailsBanner
+          variant="error"
+          phoneNumber={phoneNumberString}
+          customBodyText={
+            "If you need a refill now, call your VA pharmacy's automated refill line. You can also find the phone number on your prescription label."
+          }
+          customHeaderText={"You can't refill this prescription online right now"}
+          showDefaultContent={false}
+        />
+      )
     }
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
       return <></>

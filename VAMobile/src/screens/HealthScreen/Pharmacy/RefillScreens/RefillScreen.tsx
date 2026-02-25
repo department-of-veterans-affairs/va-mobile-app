@@ -74,6 +74,10 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const refillable = refillablePrescriptions || []
 
+  // Filter out prescriptions that are at migrating facilities
+  const migratingPrescriptionIds = new Set(migratingPrescriptions.map((p) => p.id))
+  const filteredRefillable = refillable.filter((prescription) => !migratingPrescriptionIds.has(prescription.id))
+
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {
       setAllPrescriptions(prescriptionData.data)
@@ -115,14 +119,14 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     const prescriptionList: PrescriptionsList = []
     Object.values(selectedValues).forEach((isSelected, index) => {
       if (isSelected) {
-        prescriptionList.push(refillable[index])
+        prescriptionList.push(filteredRefillable[index])
       }
     })
     const prescriptionIds = prescriptionList.map((prescription) => prescription.id)
     logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
 
     const actionText =
-      selectedPrescriptionsCount === refillablePrescriptions?.length
+      selectedPrescriptionsCount === filteredRefillable?.length
         ? t('prescriptions.refill.RequestRefillButtonTitle.all')
         : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
 
@@ -131,7 +135,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       {
         options,
         title:
-          selectedPrescriptionsCount === refillablePrescriptions?.length
+          selectedPrescriptionsCount === filteredRefillable?.length
             ? t('prescriptions.refill.confirmationTitle.all')
             : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
         cancelButtonIndex: 1,
@@ -158,8 +162,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   }
 
   const getListItems = () => {
-    const total = refillablePrescriptions?.length
-    const listItems: Array<SelectionListItemObj> = refillable.map((prescription, idx) => {
+    const total = filteredRefillable?.length
+    const listItems: Array<SelectionListItemObj> = filteredRefillable.map((prescription, idx) => {
       const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total }) + '.' // Period to ensure pause w/ screen reader
       return {
         content: (
@@ -176,9 +180,9 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   }
 
   const hidePrimaryButton =
-    prescriptionInDowntime || refillable.length === 0 || loadingHistory || showLoadingScreenRequestRefills
+    prescriptionInDowntime || filteredRefillable.length === 0 || loadingHistory || showLoadingScreenRequestRefills
   const primaryButtonText =
-    selectedPrescriptionsCount === refillablePrescriptions?.length
+    selectedPrescriptionsCount === filteredRefillable?.length
       ? t('prescriptions.refill.RequestRefillButtonTitle.all')
       : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
 
@@ -208,12 +212,20 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
           error={prescriptionHasError}
           onTryAgain={refetchPrescriptions}
         />
-      ) : refillable.length === 0 ? (
+      ) : filteredRefillable.length === 0 ? (
         <NoRefills />
       ) : (
         <>
           {hasMigratingPrescriptions && (
-            <PrescriptionsDetailsBanner variant="warning" migratingPrescriptions={migratingPrescriptions} />
+            <PrescriptionsDetailsBanner
+              migratingPrescriptions={migratingPrescriptions}
+              variant="error"
+              customHeaderText={"You can't refill prescriptions online for some facilities right now"}
+              customFooterText={
+                "If you need a refill now, call your VA pharmacy's automated refill line. The phone number is on your prescription label or in your prescriptions details page."
+              }
+              showDefaultContent={false}
+            />
           )}
           {showAlert && (
             <Box mb={theme.dimensions.standardMarginBetween}>
@@ -257,7 +269,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
               mb={theme.dimensions.condensedMarginBetween}
               variant={'MobileBodyBold'}
               accessibilityRole="header">
-              {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
+              {t('prescriptions.refill.prescriptionsCount', { count: filteredRefillable?.length })}
             </TextView>
           </Box>
           <Box mb={theme.dimensions.contentMarginBottom}>

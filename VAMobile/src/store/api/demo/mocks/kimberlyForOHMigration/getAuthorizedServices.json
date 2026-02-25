@@ -29,7 +29,7 @@
     },
     "meta": {
       "isUserAtPretransitionedOhFacility": true,
-      "isUserFacilityReadyForInfoAlert": false,
+      "isUserFacilityReadyForInfoAlert": true,
       "migratingFacilitiesList": [
         {
           "migrationDate": "2026-04-01",

@@ -17,12 +17,23 @@ export type PrescriptionsDetailsBannerProps = {
   phoneNumber?: string
   /** Optional array of prescriptions at migrating facilities to display as links */
   migratingPrescriptions?: PrescriptionData[]
+  /** Optional boolean to show/hide the default body text and bullet list. Default is true */
+  showDefaultContent?: boolean
+  /** Optional custom text to display when showDefaultContent is false */
+  customBodyText?: string
+  /** Optional custom header text to display when showDefaultContent is false. Defaults to the standard banner title */
+  customHeaderText?: string
+  customFooterText?: string
 }
 
 function PrescriptionsDetailsBanner({
   variant = 'warning',
   phoneNumber,
   migratingPrescriptions,
+  showDefaultContent = true,
+  customBodyText,
+  customHeaderText,
+  customFooterText,
 }: PrescriptionsDetailsBannerProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -35,6 +46,8 @@ function PrescriptionsDetailsBanner({
   useEffect(() => {
     logAnalyticsEvent(Events.vama_cerner_alert())
   }, [])
+
+  const header = customHeaderText ? customHeaderText : t('prescription.details.banner.title')
 
   const getContent = () => {
     const bullets = [
@@ -57,58 +70,79 @@ function PrescriptionsDetailsBanner({
 
     return (
       <>
-        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-        <TextView
-          accessible
-          variant="MobileBody"
-          accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))}
-          mb={standardMarginBetween}>
-          {t('prescription.details.banner.body1')}
-        </TextView>
-        <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
-          {t('prescription.details.banner.body2')}
-        </TextView>
-        <Box>
-          <VABulletList listOfText={bullets} paragraphSpacing={true} />
-        </Box>
+        {showDefaultContent ? (
+          <>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+            <TextView
+              accessible
+              variant="MobileBody"
+              accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))}
+              mb={standardMarginBetween}>
+              {t('prescription.details.banner.body1')}
+            </TextView>
+            <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
+              {t('prescription.details.banner.body2')}
+            </TextView>
+            <Box>
+              <VABulletList listOfText={bullets} paragraphSpacing={true} />
+            </Box>
+          </>
+        ) : (
+          <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
+            {customBodyText}
+          </TextView>
+        )}
         {migratingPrescriptions && migratingPrescriptions.length > 0 && (
-          <Box mt={standardMarginBetween}>
-            <TextView accessible variant="MobileBodyBold" mb={standardMarginBetween}>
-              {t('prescription.details.banner.relatedMedications', { defaultValue: 'Affected medications:' })}
+          <Box>
+            <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
+              You cannot refill these prescriptions online right now:
             </TextView>
             {migratingPrescriptions.map((prescription) => (
-              <TextView
-                key={prescription.id}
-                variant="MobileBodyLink"
-                mb={standardMarginBetween}
-                onPress={() => navigateTo('PrescriptionDetails', { prescription })}
-                accessibilityRole="link">
-                {prescription.attributes.prescriptionName}
-              </TextView>
+              <Box key={prescription.id} flexDirection="row" mb={standardMarginBetween}>
+                <TextView variant="MobileBody" mr={8}>
+                  {'\u2022'}
+                </TextView>
+                <TextView
+                  variant="MobileBodyLink"
+                  onPress={() => navigateTo('PrescriptionDetails', { prescription })}
+                  accessibilityRole="link">
+                  {prescription.attributes.prescriptionName}
+                </TextView>
+              </Box>
             ))}
           </Box>
         )}
-        <TextView accessible variant="MobileBody">
-          {t('automatedPhoneSystem')}
-        </TextView>
-        <ClickToCallPhoneNumber
-          phone={displayPhone}
-          displayedText={`${displayedTextPhoneNumber(displayPhone)}`}
-          a11yLabel={`${getNumberAccessibilityLabelFromString(displayPhone)}`}
-          variant={'base'}
-        />
+        {customFooterText ? (
+          <>
+            <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
+              {customFooterText}
+            </TextView>
+          </>
+        ) : (
+          <>
+            <TextView accessible variant="MobileBody">
+              {t('automatedPhoneSystem')}
+            </TextView>
+            <ClickToCallPhoneNumber
+              phone={displayPhone}
+              displayedText={`${displayedTextPhoneNumber(displayPhone)}`}
+              a11yLabel={`${getNumberAccessibilityLabelFromString(displayPhone)}`}
+              variant={'base'}
+            />
+          </>
+        )}
       </>
     )
   }
 
   return (
     <VAScrollView>
-      <Box mb={contentMarginBottom}>
+      <Box mb={contentMarginBottom} mx={theme.dimensions.gutter}>
         <AlertWithHaptics
           variant={variant}
           expandable={true}
           focusOnError={false}
-          header={t('prescription.details.banner.title')}
+          header={header}
           analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
           {getContent()}
         </AlertWithHaptics>
