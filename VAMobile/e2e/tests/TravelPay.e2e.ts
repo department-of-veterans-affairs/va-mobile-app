@@ -771,7 +771,7 @@ describe('Travel Pay', () => {
   })
 
   describe('when the travel pay claim fails to submit due to an API error', () => {
-    it('shows the error screen', async () => {
+    it('should correctly display the error screen and continue to show the Travel Pay Alert after closing', async () => {
       await element(by.text('Back')).tap()
       await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
       await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
@@ -791,18 +791,19 @@ describe('Travel Pay', () => {
       await reviewClaimsScroll('bottom')
       await acceptTravelAgreement()
       await pressSubmitButton()
-      await setTimeout(4000)
 
+      // Wait for the error screen to appear instead of hardcoded timeout
+      await waitFor(element(by.id(TravelPayE2eIdConstants.ERROR_SCREEN_ID)))
+        .toExist()
+        .withTimeout(10000)
+
+      // Verify basic error screen content
       await expectErrorScreen({ errorType: 'error', checkExternalLink: false })
-    })
 
-    describe('Api Error Screen', () => {
-      it('correctly displays the Api Error Screen', async () => {
-        await expectErrorScreen({ errorType: 'error', checkExternalLink: true })
-      })
-    })
+      // Verify external links on error screen
+      await expectErrorScreen({ errorType: 'error', checkExternalLink: true })
 
-    it('continues to show the Travel Pay Alert to submit a claim after the error screen is closed', async () => {
+      // Close error screen and verify alert persists
       await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
       await expect(
         element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_PRIMARY_BUTTON_ID)),
