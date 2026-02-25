@@ -9,11 +9,14 @@ import {
   SecureMessagingFolderMessagesGetData,
   SecureMessagingMessageGetData,
   SecureMessagingRecipients,
+  SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import EditDraft from 'screens/HealthScreen/SecureMessaging/EditDraft/EditDraft'
 import { mockEditDraftEndpoints, mockSMAllRecipientsError } from 'screens/HealthScreen/SecureMessaging/smTestHelpers'
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
 

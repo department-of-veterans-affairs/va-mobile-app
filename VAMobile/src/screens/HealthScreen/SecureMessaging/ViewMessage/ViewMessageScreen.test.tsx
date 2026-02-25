@@ -9,11 +9,14 @@ import {
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
   SecureMessagingMessageGetData,
+  SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import { mockViewMessageEndpoints } from 'screens/HealthScreen/SecureMessaging/smTestHelpers'
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
 jest.mock('api/secureMessaging/getAllMessageRecipients')
