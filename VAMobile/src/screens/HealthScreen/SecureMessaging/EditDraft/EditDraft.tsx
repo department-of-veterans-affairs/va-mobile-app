@@ -69,8 +69,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useAttachments, useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { OHParentScreens } from 'utils/ohMigration'
-import { MigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
+import { MigrationErrorMessage, OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,

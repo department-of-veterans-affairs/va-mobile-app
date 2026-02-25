@@ -42,7 +42,6 @@ import {
   TextArea,
   TextView,
 } from 'components'
-import { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -63,7 +62,7 @@ import {
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
-import { MigrationErrorMessage, getMigrationsInErrorState } from 'utils/ohMigration'
+import { MigrationErrorMessage, OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
