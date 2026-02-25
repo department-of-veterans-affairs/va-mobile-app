@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
@@ -297,9 +297,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             accessibilityHint={a11yLabelVA(t('labsAndTests.medicalImages.linkText'))}
             testID="viewMedicalImagesNoteLinkID">
             <TextView variant="MobileBodyLink">{t('labsAndTests.medicalImages.linkText')}</TextView>
-            <Box ml={4}>
-              <Icon name="Launch" fill={theme.colors.icon.link} width={22} height={22} />
-            </Box>
           </Pressable>
         </Box>
       </Box>

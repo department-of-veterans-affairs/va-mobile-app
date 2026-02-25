@@ -3,8 +3,6 @@ import React from 'react'
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
 import { MigrationErrorMessage, MigrationWarningMessage, OHParentScreens, getAlertState } from 'utils/ohMigration'
 
-export { OHParentScreens, getAlertState }
-
 type OHAlertManagerProps = {
   parentScreen: OHParentScreens
   authorizedServices: UserAuthorizedServicesData

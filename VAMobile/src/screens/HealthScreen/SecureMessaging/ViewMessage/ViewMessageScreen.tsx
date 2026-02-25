@@ -46,7 +46,6 @@ import {
   VABulletList,
   VAModalPicker,
 } from 'components'
-import { OHParentScreens } from 'components/OHAlertManager'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import {
@@ -67,6 +66,7 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { OHParentScreens } from 'utils/ohMigration'
 import { getMigrationEndDate, getMigrationForFacilityId, getMigrationsInErrorState } from 'utils/ohMigration'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -297,6 +297,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     return filteredFolder
   }
 
+  const providerAllowsReply = !message?.replyDisabled
   const replyExpired =
     demoMode && (message?.messageId === 2092809 || message?.messageId === 2092803)
       ? false
@@ -471,6 +472,19 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
             />
           </AlertWithHaptics>
+        </Box>
+      )
+    }
+
+    if (!providerAllowsReply) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.cannotReplyHeader')}
+            description={t('secureMessaging.reply.cannotReplyBody')}
+            testID="secureMessagingCannotReplyAlertID"
+          />
         </Box>
       )
     }
