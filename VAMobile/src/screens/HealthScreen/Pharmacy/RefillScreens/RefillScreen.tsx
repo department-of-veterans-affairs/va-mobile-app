@@ -76,9 +76,12 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const refillable = refillablePrescriptions || []
 
-  // Filter out prescriptions that are at migrating facilities
+  // Only filter out migrating prescriptions when the cutover flag is enabled
   const migratingPrescriptionIds = new Set(migratingPrescriptions.map((p) => p.id))
-  const filteredRefillable = refillable.filter((prescription) => !migratingPrescriptionIds.has(prescription.id))
+  const filteredRefillable =
+    isOHCutoverFlagEnabled && hasMigratingPrescriptions
+      ? refillable.filter((prescription) => !migratingPrescriptionIds.has(prescription.id))
+      : refillable
 
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {

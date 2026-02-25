@@ -80,7 +80,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   }
 
   // Hide refill button if the prescription is at a migrating facility
-  const shouldShowRefillButton = !isAtMigratingFacility && isOHCutoverFlagEnabled
+  const shouldShowRefillButton = !(isAtMigratingFacility && isOHCutoverFlagEnabled)
 
   const getRefillVAHealthButton = () => {
     if (!shouldShowRefillButton) {
