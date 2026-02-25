@@ -264,7 +264,6 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
 
 export async function removeContactInfoFeature(contactInfoTypeText: string, type: string) {
   it('should tap remove ' + type + ' and verify remove pop up appears', async () => {
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID)).scrollTo('top')
     await waitFor(element(by.id(contactInfoTypeText)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
@@ -377,7 +376,7 @@ beforeAll(async () => {
   await openContactInfo()
 })
 
-describe.skip(':ios: Contact Info Screen', () => {
+describe(':ios: Contact Info Screen', () => {
   it('should match the Contact Info page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.MAILING_ADDRESS_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID))).toExist()
