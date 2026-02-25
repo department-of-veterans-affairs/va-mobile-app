@@ -208,13 +208,10 @@ export const CommonE2eIdConstants = {
  * */
 export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
-    await device.disableSynchronization()
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(60000)
-    await device.enableSynchronization()
+      .withTimeout(120000)
   } catch (ex) {
-    await device.enableSynchronization()
     await device.uninstallApp()
     await device.installApp()
     if (pushNotifications) {
@@ -227,11 +224,9 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     } else {
       await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     }
-    await device.disableSynchronization()
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(60000)
-    await device.enableSynchronization()
+      .withTimeout(120000)
   }
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toBeVisible()
@@ -380,19 +375,10 @@ export const testForOneOrManyOccurancesOf = async (text: string) => {
  * @param cancelPopUp - boolean to either cancel the popUp or leave the app
  */
 export async function openDismissLeavingAppPopup(matchString: string, findbyText = false) {
-  if (device.getPlatform() === 'android') {
-    if (findbyText) {
-      await element(by.text(matchString)).tap()
-    } else {
-      await element(by.id(matchString)).tap()
-    }
+  if (findbyText) {
+    await element(by.text(matchString)).tap()
   } else {
-    // Offset tap to reliably hit links in iOS 18+ without targeting the exact center
-    if (findbyText) {
-      await element(by.text(matchString)).tap({ x: 10, y: 10 })
-    } else {
-      await element(by.id(matchString)).tap({ x: 10, y: 10 })
-    }
+    await element(by.id(matchString)).tap()
   }
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
