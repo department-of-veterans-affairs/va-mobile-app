@@ -22,12 +22,14 @@ import {
   TextView,
   VATextInput,
 } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { AnalyticsState, OfflineState, setOfflineDebugEnabled, toggleAnalyticsInDemoMode } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
 import getEnv, { EnvVars } from 'utils/env'
 import {
@@ -222,10 +224,12 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     {
       text: 'RemoveMe!: send test event',
       decorator: ButtonDecoratorType.Navigation,
-      decoratorProps: {
-        on: allowAnalyticsInDemo,
+      onPress: async () => {
+        await logAnalyticsEvent(Events.vama_test_metrics(1))
+        await logAnalyticsEvent(Events.vama_test_metrics(2))
+        await logAnalyticsEvent(Events.vama_test_metrics(3))
+        await logAnalyticsEvent(Events.vama_pagination(10, 11, 'test'))
       },
-      onPress: () => dispatch(toggleAnalyticsInDemoMode(!allowAnalyticsInDemo)),
     },
   ]
 
