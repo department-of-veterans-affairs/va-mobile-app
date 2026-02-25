@@ -23,9 +23,6 @@ export async function updateAddress() {
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
-  try {
-    await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
   await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
@@ -47,9 +44,6 @@ export async function fillHomeAddressFields() {
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
-  try {
-    await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
   await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await element(by.text('Arizona')).tap()
@@ -64,7 +58,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
     await waitFor(element(by.id(addressID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
-      .scroll(50, 'down', NaN, 0.8)
+      .scroll(50, 'down')
     await element(by.id(addressID)).tap()
   })
 
@@ -106,7 +100,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
     await waitFor(element(by.id(addressID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
-      .scroll(100, 'down', NaN, 0.8)
+      .scroll(100, 'down')
     await element(by.id(addressID)).tap()
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
@@ -162,7 +156,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
-      .scroll(100, 'down', NaN, 0.8)
+      .scroll(100, 'down')
     await element(by.id(phoneID)).tap()
   })
 
@@ -222,7 +216,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
-      .scroll(100, 'down', NaN, 0.8)
+      .scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     if (phoneType === 'Work') {
       await element(by.id(CommonE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
@@ -258,7 +252,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
-      .scroll(100, 'down', NaN, 0.8)
+      .scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     await element(by.id(CommonE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
     await element(by.id(CommonE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
@@ -282,7 +276,7 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
     await waitFor(element(by.id(contactInfoTypeText)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
-      .scroll(100, 'down', NaN, 0.8)
+      .scroll(100, 'down')
     await element(by.id(contactInfoTypeText)).tap()
     await element(by.text('Remove ' + type)).tap()
     await setTimeout(2000)
@@ -339,9 +333,6 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
       .scroll(100, 'down', NaN, 0.8)
-    try {
-      await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-    } catch (ex) {}
     await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).typeText('Andorra la Vella')
     await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
     await element(by.id(CommonE2eIdConstants.STATE_ID)).typeText('Andorra la Vella')
@@ -371,9 +362,6 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
       .scroll(100, 'down', NaN, 0.8)
-    try {
-      await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scroll(200, 'down', NaN, 0.8)
-    } catch (ex) {}
     await element(by.id(CommonE2eIdConstants.MILITARY_POST_OFFICE_ID)).tap()
     await element(by.text('FPO')).tap()
     await element(by.id(CommonE2eIdConstants.MILITARY_POST_OFFICE_PICKER_CONFIRM_ID)).tap()
