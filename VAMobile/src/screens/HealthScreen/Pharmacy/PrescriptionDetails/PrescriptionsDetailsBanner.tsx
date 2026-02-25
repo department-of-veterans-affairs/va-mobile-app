@@ -70,7 +70,7 @@ function PrescriptionsDetailsBanner({
 
     return (
       <>
-        {showDefaultContent ? (
+        {showDefaultContent && (
           <>
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
@@ -87,7 +87,8 @@ function PrescriptionsDetailsBanner({
               <VABulletList listOfText={bullets} paragraphSpacing={true} />
             </Box>
           </>
-        ) : (
+        )}
+        {customBodyText && (
           <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
             {customBodyText}
           </TextView>
