@@ -124,12 +124,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const smNotInDowntime = !useDowntimeByScreenID(screenID)
   const isScreenContentAllowed = screenContentAllowed('WG_ViewMessage')
   const { mutate: moveMessage, isPending: loadingMoveMessage } = useMoveMessage()
-  const {
-    data: userAuthorizedServices,
-    error: getUserAuthorizedServicesError,
-    refetch: refetchAuthServices,
-    isFetching: fetchingAuthServices,
-  } = useAuthorizedServices()
+  const { data: userAuthorizedServices, isFetching: fetchingAuthServices } = useAuthorizedServices()
   const {
     data: messageData,
     error: messageError,
@@ -170,7 +165,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     data: recipientsResponse,
     isFetched: hasLoadedRecipients,
     error: recipientsError,
-    refetch: refetchRecipients,
     isFetching: refetchingRecipients,
   } = useAllMessageRecipients({
     enabled: isScreenContentAllowed && smNotInDowntime,
@@ -388,7 +382,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   // If error is caused by an individual message, we want the error alert to be
   // contained to that message, not to take over the entire screen
   const hasError = folderMessagesError || foldersError || messageError || threadError || !smNotInDowntime
-  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage || loadingFolderMessages
+  const isLoading =
+    loadingFolder ||
+    loadingThread ||
+    loadingMessage ||
+    loadingMoveMessage ||
+    loadingFolderMessages ||
+    refetchingRecipients ||
+    fetchingAuthServices
   const isEmpty = !message || !thread
   const loadingText = loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')
 
