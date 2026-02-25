@@ -191,7 +191,9 @@ describe('Claims Screen', () => {
   })
 
   it('should display "Request for evidence" with displayName underneath when no friendlyName is provided', async () => {
-    await expect(element(by.text('Request for evidence'))).toExist()
+    // Multiple "Request for evidence" elements exist, use atIndex to check first one
+    await expect(element(by.text('Request for evidence')).atIndex(0)).toExist()
+    // displayName appears as secondary text underneath
     await expect(element(by.text('Automated 5103 Notice Response'))).toExist()
     await expect(element(by.text('Documents relating to disability needed'))).toExist()
     await expect(element(by.text('Accidental injury - 21-4176 needed'))).toExist()
