@@ -1,16 +1,24 @@
 import React from 'react'
 
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
-import { MigrationErrorMessage, MigrationWarningMessage, OHParentScreens, getAlertState } from 'utils/ohMigration'
+import DuplicateRecordAlert from 'components/DuplicateRecordAlert'
+import {
+  MigrationErrorMessage,
+  MigrationWarningMessage,
+  OHParentScreens,
+  getAlertState,
+} from 'utils/ohMigration'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export { OHParentScreens, getAlertState }
 
 type OHAlertManagerProps = {
   parentScreen: OHParentScreens
   authorizedServices: UserAuthorizedServicesData
+  cernerExist?: boolean
 }
 
-export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertManagerProps) => {
+export const OHAlertManager = ({ parentScreen, authorizedServices, cernerExist }: OHAlertManagerProps) => {
   const alertsForScreen = (migration: MigratingFacility) => {
     const alertState = getAlertState(migration.phases.current, parentScreen)
     if (alertState === 'warning') {
@@ -20,13 +28,36 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
     }
     return <></>
   }
+
   let alerts: JSX.Element[] = []
-  if (authorizedServices.migratingFacilitiesList && authorizedServices.migratingFacilitiesList.length > 0) {
-    alerts = authorizedServices.migratingFacilitiesList.map((migration, index) => (
+  const migratingFacilitiesList = authorizedServices.migratingFacilitiesList || []
+
+  if (migratingFacilitiesList.length > 0) {
+    alerts = migratingFacilitiesList.map((migration, index) => (
       <React.Fragment key={migration.migrationDate || index}>{alertsForScreen(migration)}</React.Fragment>
     ))
   }
-  return <>{alerts}</>
+
+  const hasMigrationAlerts = migratingFacilitiesList.some(
+    (migration) => getAlertState(migration.phases.current, parentScreen) !== '',
+  )
+
+  const isInP6OrP7 = migratingFacilitiesList.some((migration) =>
+    ['p6', 'p7'].includes(migration.phases.current),
+  )
+
+  const showDuplicateRecordAlert =
+    parentScreen === OHParentScreens.MedicalRecords &&
+    featureEnabled('displayDuplicateRecordAlert') &&
+    !hasMigrationAlerts &&
+    (cernerExist || isInP6OrP7)
+
+  return (
+    <>
+      {alerts}
+      {showDuplicateRecordAlert && <DuplicateRecordAlert />}
+    </>
+  )
 }
 
 export default OHAlertManager

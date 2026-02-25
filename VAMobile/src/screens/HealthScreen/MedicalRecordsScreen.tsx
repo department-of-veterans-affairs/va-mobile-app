@@ -6,7 +6,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
-import DuplicateRecordAlert from 'components/DuplicateRecordAlert'
 import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -37,19 +36,16 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
   const cernerExist = cernerFacilities.length >= 1
-  const migratingFacilitiesList = authorizedServices?.migratingFacilitiesList || []
-  const isInMigration = migratingFacilitiesList.some((migration) =>
-    ['p6', 'p7'].includes(migration.phases.current),
-  )
-  const displayDuplicateRecordAlert =
-    featureEnabled('displayDuplicateRecordAlert') && (cernerExist || isInMigration)
 
   return (
     <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('vaMedicalRecords.title')}>
       {authorizedServices && (
-        <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
+        <OHAlertManager
+          parentScreen={OHParentScreens.MedicalRecords}
+          authorizedServices={authorizedServices}
+          cernerExist={cernerExist}
+        />
       )}
-      {displayDuplicateRecordAlert && <DuplicateRecordAlert />}
       <Box mb={theme.dimensions.standardMarginBetween}>
         {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton
