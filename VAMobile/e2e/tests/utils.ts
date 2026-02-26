@@ -581,11 +581,11 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
   await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
+    await waitFor(element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
       .scroll(600, 'up')
-    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
     if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
       await loginToDemoMode()
     }
