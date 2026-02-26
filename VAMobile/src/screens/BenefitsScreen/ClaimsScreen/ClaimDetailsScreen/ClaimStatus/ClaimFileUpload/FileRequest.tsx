@@ -105,11 +105,17 @@ function FileRequest({ navigation, route }: FileRequestProps) {
             { text: displayName || '', variant: 'HelperText', color: 'bodyText' },
           ]
 
-      const primaryText = hasOverrides ? friendlyName : t('fileRequestDetails.requestForEvidence')
+      // Include displayName in the label for non-override case so screen readers
+      // announce both the generic title AND the specific document name (matching what's visible)
+      const a11yText = hasOverrides
+        ? friendlyName
+        : displayName
+          ? `${t('fileRequestDetails.requestForEvidence')}. ${displayName}`
+          : t('fileRequestDetails.requestForEvidence')
       const hasUploaded = hasUploadedOrReceived(request)
       const item: DefaultListItemObj = {
         textLines,
-        testId: getA11yLabel(index + 1, primaryText, hasUploaded),
+        testId: getA11yLabel(index + 1, a11yText, hasUploaded),
         onPress: () => {
           onDetailsPress(request)
         },

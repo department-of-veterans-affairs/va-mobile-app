@@ -174,6 +174,16 @@ context('FileRequest', () => {
         await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
         expect(screen.getByText('API Display Name')).toBeTruthy()
       })
+
+      it('should include displayName in accessibility label for screen reader users', async () => {
+        const requests = [createRequest()]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        // Verify the a11y label includes both the generic title AND the specific displayName
+        await waitFor(() =>
+          expect(screen.getByRole('link', { name: /Request for evidence.*API Display Name/ })).toBeTruthy(),
+        )
+      })
     })
 
     describe('when friendlyName is provided (has overrides)', () => {
