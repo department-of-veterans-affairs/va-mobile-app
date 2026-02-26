@@ -148,7 +148,6 @@ export const CommonE2eIdConstants = {
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
-  APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
@@ -781,7 +780,7 @@ export async function toggleRemoteConfigFlag(flagName: string) {
 
   await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
   await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await element(by.id('applyOverridesTestID')).tap()
 }
 
 /**
