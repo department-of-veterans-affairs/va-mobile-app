@@ -151,6 +151,7 @@ export const CommonE2eIdConstants = {
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  EVIDENCE_REQUESTS_UPDATED_UI_TEXT: 'evidenceRequestsUpdatedUI',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
   AF_UPDATE_NOW_BUTTON_TEXT: 'Update now',
