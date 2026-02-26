@@ -36,7 +36,6 @@ function ResolveDebtButton({ debt, location }: ResolveDebtButtonProps) {
         options,
         title: t('debts.resolveOverpayment'),
         message: t('debts.resolveOverpayment.how'),
-        cancelButtonIndex: 3,
       },
       (buttonIndex) => {
         if (buttonIndex !== undefined && buttonIndex < 3) {

@@ -177,7 +177,6 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         options,
         title,
         destructiveButtonIndex: 0,
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {

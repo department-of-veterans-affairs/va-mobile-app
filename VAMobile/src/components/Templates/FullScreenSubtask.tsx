@@ -114,7 +114,6 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           options,
           title: '',
           message,
-          cancelButtonIndex: 1,
           destructiveButtonIndex: 0,
         },
         (buttonIndex) => {

@@ -100,7 +100,6 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
         {
           options: actionOptions,
           title: t('removePhoto'),
-          cancelButtonIndex: 1,
           destructiveButtonIndex: 0,
         },
         (buttonIndex) => {
@@ -116,7 +115,6 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
       confirmAlert(
         {
           options,
-          cancelButtonIndex: 2,
         },
         (buttonIndex) => {
           switch (buttonIndex) {
