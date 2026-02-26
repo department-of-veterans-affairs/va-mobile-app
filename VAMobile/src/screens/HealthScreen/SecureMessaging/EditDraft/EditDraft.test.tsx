@@ -565,6 +565,37 @@ context('EditDraft', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
+    it('should display To combobox with selected care system as header', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(nonReplyDraftThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
+      const careSystemPicker = await screen.findByTestId('care system field')
+      fireEvent.press(careSystemPicker)
+      const careSystemOptions = await screen.findAllByText('test_healthcare_system_name')
+      fireEvent.press(careSystemOptions[0])
+      const doneButton = await screen.findByText('Done')
+      fireEvent.press(doneButton)
+      const toField = await screen.findByTestId('editDraftToTestID')
+      fireEvent.press(toField)
+      const comboBoxScrollView = await screen.findByTestId('comboBoxScrollViewID')
+      expect(comboBoxScrollView).toBeTruthy()
+      expect(screen.getAllByText('test_healthcare_system_name').length).toBeGreaterThanOrEqual(1)
+      expect(screen.queryByText('All care teams')).toBeFalsy()
+    })
   })
 
   describe('when the user only has one facility on record', () => {
@@ -594,6 +625,39 @@ context('EditDraft', () => {
         .mockResolvedValue(folderMessages)
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
+    })
+    it('should display To combobox with selected care system as header', async () => {
+      const mockSingleCareSystemRecipientsResponse = recipients
+      mockSingleCareSystemRecipientsResponse.meta.careSystems = [
+        {
+          healthCareSystemName: 'station 357',
+          stationNumber: '357',
+        },
+      ]
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(nonReplyDraftThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(mockSingleCareSystemRecipientsResponse)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
+      const toField = await screen.findByTestId('editDraftToTestID')
+      fireEvent.press(toField)
+      const comboBoxScrollView = await screen.findByTestId('comboBoxScrollViewID')
+      expect(comboBoxScrollView).toBeTruthy()
+      expect(screen.getAllByText('station 357').length).toBeGreaterThanOrEqual(1)
+      expect(screen.queryByText('All care teams')).toBeFalsy()
     })
   })
 

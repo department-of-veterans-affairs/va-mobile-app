@@ -313,6 +313,21 @@ context('StartNewMessage', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
+
+    it('should display To combobox with selected care system as header', async () => {
+      initializeApiCalls(true)
+      ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+      initializeTestInstance()
+      const toField = await screen.findByTestId('to field')
+      const picker = await screen.findByTestId('picker')
+      fireEvent.press(picker)
+      const generalOption = await screen.findByTestId(t('secureMessaging.startNewMessage.general'))
+      fireEvent.press(generalOption)
+      const doneButton = await screen.findByLabelText(t('done'))
+      fireEvent.press(doneButton)
+      fireEvent.press(toField)
+      await screen.findByText('357')
+    })
   })
 
   describe('when user has only one facility on record', () => {
