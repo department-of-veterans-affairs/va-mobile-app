@@ -48,6 +48,7 @@ const mockOverrides = {
   offlineMode: false,
   remoteConfigRefreshTest: false,
   veteranStatusCardUpdate: false,
+  evidenceRequestsUpdatedUI: false,
 }
 
 describe('activate', () => {

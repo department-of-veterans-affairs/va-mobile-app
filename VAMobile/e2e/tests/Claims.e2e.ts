@@ -202,6 +202,9 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Request for evidence'))).toExist()
     // Should show "Respond by" subtitle with suspense date and displayName
     await expect(element(by.text('Respond by June 15, 2021 for: Accidental injury - 21-4176 needed'))).toExist()
+    // Should show upload buttons
+    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
   })
 
