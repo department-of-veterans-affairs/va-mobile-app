@@ -244,7 +244,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       const mainContent = (
         <>
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
-          <Pressable {...detailsPressableProps} testID="prescriptionDetailsTestID">
+          <Pressable {...detailsPressableProps}>
             <Box
               display={'flex'}
               flexDirection={'row'}
@@ -448,7 +448,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
-          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}>
+          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}
+          testID="nonVAMedsAlertTestID">
           <Pressable {...pressableProps}>
             <TextView>
               <TextView variant="MobileBody">{t('prescription.history.nonVAMeds.message')}</TextView>
