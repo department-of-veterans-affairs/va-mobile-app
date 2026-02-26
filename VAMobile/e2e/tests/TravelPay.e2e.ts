@@ -336,6 +336,10 @@ async function expectReviewClaimScreen({
 
   //Scroll down to the submit button
   await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scrollTo('bottom')
+  try {
+    await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scroll(200, 'down', NaN, 0.8)
+  } catch (ex) {}
+  await setTimeout(1000)
   await expect(element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.TRAVEL_AGREEMENT_HEADER_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.PENALTY_STATEMENT_ID))).toExist()
@@ -411,15 +415,19 @@ const fillHomeAddressFields = async ({
   await expect(element(by.text(country))).toExist()
   await element(by.text(country)).tap()
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
+  await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText(city)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
-    .toBeVisible()
-    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
-    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
+  await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await element(by.text(state)).tap()
   await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
+  await waitFor(element(by.id(CommonE2eIdConstants.STATE_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
   await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
   await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
     .toBeVisible()
@@ -429,10 +437,8 @@ const fillHomeAddressFields = async ({
   await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
     .toBeVisible()
     .withTimeout(4000)
-  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
-    .toBeVisible()
-    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
-    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
+  await setTimeout(1000)
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText(zipCode)
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
@@ -488,11 +494,16 @@ const openTravelPayFlow = async (text: string, login: boolean = true) => {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
   await element(by.text('Past')).tap()
 
+  // Wait for the Past tab to render completely to prevent tapping the Upcoming appointment
+  await waitFor(element(by.text('Select a past date range')))
+    .toExist()
+    .withTimeout(2000)
+
   // Open the appointment in the list
   await openAppointmentInList(text)
 }
 
-describe.skip('Travel Pay', () => {
+describe('Travel Pay', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
@@ -760,7 +771,7 @@ describe.skip('Travel Pay', () => {
   })
 
   describe('when the travel pay claim fails to submit due to an API error', () => {
-    it('shows the error screen', async () => {
+    it('should correctly display the error screen and continue to show the Travel Pay Alert after closing', async () => {
       await element(by.text('Back')).tap()
       await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
       await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
@@ -780,18 +791,19 @@ describe.skip('Travel Pay', () => {
       await reviewClaimsScroll('bottom')
       await acceptTravelAgreement()
       await pressSubmitButton()
-      await setTimeout(4000)
 
+      // Wait for the error screen to appear instead of hardcoded timeout
+      await waitFor(element(by.id(TravelPayE2eIdConstants.ERROR_SCREEN_ID)))
+        .toExist()
+        .withTimeout(10000)
+
+      // Verify basic error screen content
       await expectErrorScreen({ errorType: 'error', checkExternalLink: false })
-    })
 
-    describe('Api Error Screen', () => {
-      it('correctly displays the Api Error Screen', async () => {
-        await expectErrorScreen({ errorType: 'error', checkExternalLink: true })
-      })
-    })
+      // Verify external links on error screen
+      await expectErrorScreen({ errorType: 'error', checkExternalLink: true })
 
-    it('continues to show the Travel Pay Alert to submit a claim after the error screen is closed', async () => {
+      // Close error screen and verify alert persists
       await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
       await expect(
         element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_PRIMARY_BUTTON_ID)),
