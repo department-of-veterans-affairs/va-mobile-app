@@ -10,6 +10,8 @@ import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { waitFor } from 'testUtils'
 import { FeatureToggleDescriptions, devConfig, setDebugConfig } from 'utils/remoteConfig'
 
+import { CommonE2eIdConstants } from '../../../../../../e2e/tests/utils'
+
 const mockOverrides = {
   ...devConfig,
 }
@@ -42,7 +44,7 @@ context('RemoteConfigScreen', () => {
   it('shows a snackbar if no values changed', async () => {
     initializeTestInstance()
 
-    const applyOverridesButton = screen.getByTestId('applyOverridesTestID')
+    const applyOverridesButton = screen.getByTestId(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 
@@ -56,7 +58,7 @@ context('RemoteConfigScreen', () => {
     // Toggle an item to enable override button
     fireEvent.press(screen.getByText('useOldLinkComponent'))
 
-    const applyOverridesButton = screen.getByTestId('applyOverridesTestID')
+    const applyOverridesButton = screen.getByTestId(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 

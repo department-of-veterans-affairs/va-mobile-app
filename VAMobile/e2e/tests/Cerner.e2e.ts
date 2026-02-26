@@ -45,7 +45,7 @@ beforeAll(async () => {
       .scroll(200, 'down')
     await element(by.text('Remote Config')).tap()
     await scrollToIDThenTap('cernerTrueForDemo', CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-    await element(by.id('applyOverridesTestID')).tap()
+    await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
 
     //navigates to correct screen with cerner on
     await loginToDemoMode()
