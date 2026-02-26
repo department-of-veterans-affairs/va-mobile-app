@@ -22,45 +22,55 @@ import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsS
 export type FileRequestStackParams = {
   AskForClaimDecision: {
     claimID: string
+    provider?: string
   }
   FileRequest: {
     claimID: string
     claim: ClaimData | undefined
+    provider?: string
   }
   File5103RequestDetails: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   File5103ReviewWaiver: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   File5103SubmitEvidence: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   FileRequestDetails: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   SelectFile: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   TakePhotos: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   UploadFile: {
     claimID: string
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse
     request?: ClaimEventData
+    provider?: string
   }
   UploadOrAddPhotos: {
     claimID: string
     firstImageResponse: ImagePickerResponse
     request?: ClaimEventData
+    provider?: string
   }
 }
 const FileRequestStack = createStackNavigator<FileRequestStackParams>()
@@ -88,11 +98,11 @@ export const fileRequestSharedScreens = [
 type FileRequestSubtaskProps = StackScreenProps<RootNavStackParamList, 'FileRequestSubtask'>
 
 function FileRequestSubtask({ route }: FileRequestSubtaskProps) {
-  const { claimID, claim } = route.params
+  const { claimID, claim, provider } = route.params
 
   return (
     <MultiStepSubtask<FileRequestStackParams> stackNavigator={FileRequestStack}>
-      <FileRequestStack.Screen name="FileRequest" component={FileRequest} initialParams={{ claimID, claim }} />
+      <FileRequestStack.Screen name="FileRequest" component={FileRequest} initialParams={{ claimID, claim, provider }} />
       {fileRequestSharedScreens}
     </MultiStepSubtask>
   )

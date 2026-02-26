@@ -112,6 +112,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   FileRequestSubtask: {
     claimID: string
     claim: ClaimData | undefined
+    provider?: string
   }
   SubmitEvidenceSubtask: {
     claimID: string
