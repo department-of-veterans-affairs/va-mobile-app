@@ -169,11 +169,6 @@ context('FileRequestDetails', () => {
           renderWithRequest({ ...requestWithoutFiles, suspenseDate: null })
           expect(screen.queryByText(/Respond by/)).toBeFalsy()
         })
-
-        it("should NOT display 'More on submitting files' accordion when uploadsAllowed is false", () => {
-          renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: false })
-          expect(screen.queryByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeFalsy()
-        })
       })
 
       describe('when the request has files uploaded awaiting review', () => {

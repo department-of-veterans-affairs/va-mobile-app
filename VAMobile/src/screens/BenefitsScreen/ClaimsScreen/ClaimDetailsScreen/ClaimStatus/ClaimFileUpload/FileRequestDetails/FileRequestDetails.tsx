@@ -48,18 +48,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     attachmentIconTopMargin,
     condensedMarginBetween,
   } = theme.dimensions
-  const {
-    displayName,
-    type,
-    status,
-    description,
-    uploadDate,
-    documents,
-    requestedDate,
-    suspenseDate,
-    uploadsAllowed,
-    friendlyName,
-  } = request
+  const { displayName, type, status, description, uploadDate, documents, requestedDate, suspenseDate, friendlyName } =
+    request
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -299,7 +289,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
               {renderRequestDateBlurb()}
               {renderWhatWeNeedFromYouSection()}
               {renderNextStepsSection()}
-              {uploadsAllowed && renderMoreOnSubmittingFilesSection()}
+              {renderMoreOnSubmittingFilesSection()}
               {renderNeedHelpSection()}
             </>
           ) : (
