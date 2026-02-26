@@ -41,13 +41,13 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, claim } = route.params
+  const { claimID, claim, provider } = route.params
   const {
     data: claimFallBack,
     error: claimError,
     refetch: refetchClaim,
     isFetching: loadingClaim,
-  } = useClaim(claimID, { enabled: !claim })
+  } = useClaim(claimID, provider, { enabled: !claim })
   const requests = currentRequestsForVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
