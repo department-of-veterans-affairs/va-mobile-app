@@ -72,7 +72,9 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const isReviewed = type.startsWith('received_from') && status !== ClaimStatusConstants.SUBMITTED_AWAITING_REVIEW
   const isPending = !isClosed && !isReviewed
   const noneNoted = t('noneNoted')
-  const showUpdatedUI = featureEnabled('evidenceRequestsUpdatedUI')
+  const evidenceRequestsUpdatedUIEnabled = featureEnabled('evidenceRequestsUpdatedUI')
+  // Show updated UI only when feature flag is on AND friendlyName is missing
+  const showUpdatedUI = evidenceRequestsUpdatedUIEnabled && !friendlyName
 
   const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
     const uploadedFileNames = map(documents || [], (item, index) => {
@@ -184,6 +186,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     return (
       <Box>
         <AccordionCollapsible
+          testID="moreOnSubmittingFilesAccordionID"
           header={<TextView variant="MobileBodyBold">{t('fileRequestDetails.moreOnSubmitting')}</TextView>}
           expandedContent={
             <Box mt={lineItemSpacing}>
@@ -230,6 +233,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     return (
       <Box>
         <AccordionCollapsible
+          testID="needHelpAccordionID"
           header={<TextView variant="MobileBodyBold">{t('fileRequestDetails.needHelp')}</TextView>}
           expandedContent={
             <Box mt={lineItemSpacing}>
@@ -250,10 +254,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   return (
     <VAScrollView testID="fileRequestDetailsID">
-      <SubtaskTitle
-        title={showUpdatedUI ? (friendlyName ? displayName || '' : t('fileRequestDetails.title')) : displayName || ''}
-      />
-      {showUpdatedUI && !friendlyName && formattedSuspenseDate && (
+      <SubtaskTitle title={showUpdatedUI ? t('fileRequestDetails.title') : displayName || ''} />
+      {showUpdatedUI && formattedSuspenseDate && (
         <Box mx={gutter} mt={attachmentIconTopMargin} mb={lineItemSpacing}>
           <TextView variant="MobileBody">
             {t('fileRequestDetails.respondByFor', { date: formattedSuspenseDate, displayName })}
@@ -293,22 +295,13 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
         )}
         <TextArea>
           {showUpdatedUI ? (
-            friendlyName ? (
-              <>
-                <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-                  {displayName}
-                </TextView>
-                <TextView variant="MobileBody">{description}</TextView>
-              </>
-            ) : (
-              <>
-                {renderRequestDateBlurb()}
-                {renderWhatWeNeedFromYouSection()}
-                {renderNextStepsSection()}
-                {uploadsAllowed && renderMoreOnSubmittingFilesSection()}
-                {renderNeedHelpSection()}
-              </>
-            )
+            <>
+              {renderRequestDateBlurb()}
+              {renderWhatWeNeedFromYouSection()}
+              {renderNextStepsSection()}
+              {uploadsAllowed && renderMoreOnSubmittingFilesSection()}
+              {renderNeedHelpSection()}
+            </>
           ) : (
             <>
               <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">

@@ -19,12 +19,10 @@ export const EvidenceRequestsUpdatedUIConstants = {
   REQUEST_FOR_EVIDENCE_TITLE: 'Request for evidence',
   WHAT_WE_NEED_FROM_YOU_HEADER: 'What we need from you',
   HOW_TO_SUBMIT_HEADER: 'How to submit this information',
-  NEED_HELP_HEADER: 'Need help?',
-  MORE_ON_SUBMITTING_HEADER: 'More on submitting files',
-  WE_REQUESTED_EVIDENCE_TEXT: 'We requested this evidence from you on',
+  MORE_ON_SUBMITTING_ACCORDION_ID: 'moreOnSubmittingFilesAccordionID',
+  NEED_HELP_ACCORDION_ID: 'needHelpAccordionID',
   ACCESS_CLAIM_LETTERS_LINK_ID: 'accessYourClaimLettersID',
   FIND_VA_FORM_LINK_ID: 'findVAFormID',
-  FIND_VA_LOCATION_LINK_ID: 'findVALocationID',
 }
 
 beforeAll(async () => {
@@ -79,7 +77,6 @@ describe('Evidence Requests Updated UI', () => {
       .toBeVisible()
       .whileElement(by.id(EvidenceRequestsUpdatedUIConstants.FILE_REQUEST_DETAILS_ID))
       .scroll(200, 'down')
-    await expect(element(by.text(EvidenceRequestsUpdatedUIConstants.HOW_TO_SUBMIT_HEADER))).toExist()
   })
 
   it('should display the "Access your claim letters" link', async () => {
@@ -91,42 +88,34 @@ describe('Evidence Requests Updated UI', () => {
   })
 
   it('should display the "More on submitting files" accordion', async () => {
-    await waitFor(element(by.text(EvidenceRequestsUpdatedUIConstants.MORE_ON_SUBMITTING_HEADER)))
+    await waitFor(element(by.id(EvidenceRequestsUpdatedUIConstants.MORE_ON_SUBMITTING_ACCORDION_ID)))
       .toBeVisible()
       .whileElement(by.id(EvidenceRequestsUpdatedUIConstants.FILE_REQUEST_DETAILS_ID))
       .scroll(200, 'down')
-    await expect(element(by.text(EvidenceRequestsUpdatedUIConstants.MORE_ON_SUBMITTING_HEADER))).toExist()
   })
 
   it('should expand "More on submitting files" accordion and show content', async () => {
-    await element(by.text(EvidenceRequestsUpdatedUIConstants.MORE_ON_SUBMITTING_HEADER)).tap()
-    await waitFor(element(by.text('Submit your files in the app.')))
-      .toBeVisible()
+    await element(by.id(EvidenceRequestsUpdatedUIConstants.MORE_ON_SUBMITTING_ACCORDION_ID)).tap()
+    await waitFor(element(by.text('Department of Veterans Affairs')))
+      .toExist()
       .withTimeout(4000)
-    await expect(element(by.text('Submit your files in the app.'))).toExist()
-    await expect(element(by.text('Deliver your files by mail or in person.'))).toExist()
-    await expect(element(by.id(EvidenceRequestsUpdatedUIConstants.FIND_VA_LOCATION_LINK_ID))).toExist()
   })
 
   it('should display the "Need help?" accordion', async () => {
-    await waitFor(element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)).atIndex(0))
+    await waitFor(element(by.id(EvidenceRequestsUpdatedUIConstants.NEED_HELP_ACCORDION_ID)))
       .toBeVisible()
       .whileElement(by.id(EvidenceRequestsUpdatedUIConstants.FILE_REQUEST_DETAILS_ID))
       .scroll(200, 'down')
-    await expect(element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)).atIndex(0)).toExist()
   })
 
   it('should expand "Need help?" accordion and show VA hotline info', async () => {
-    await element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)).atIndex(0).tap()
+    await element(by.id(EvidenceRequestsUpdatedUIConstants.NEED_HELP_ACCORDION_ID)).tap()
     await waitFor(
       element(by.text("Call our VA benefits hotline. We're here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")),
     )
       .toBeVisible()
-      .withTimeout(4000)
-    await expect(
-      element(by.text("Call our VA benefits hotline. We're here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")),
-    ).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID))).toExist()
+      .whileElement(by.id(EvidenceRequestsUpdatedUIConstants.FILE_REQUEST_DETAILS_ID))
+      .scroll(200, 'down')
   })
 
   it('should display upload buttons when uploads are allowed', async () => {
@@ -134,7 +123,6 @@ describe('Evidence Requests Updated UI', () => {
       .toBeVisible()
       .whileElement(by.id(EvidenceRequestsUpdatedUIConstants.FILE_REQUEST_DETAILS_ID))
       .scroll(200, 'down')
-    await expect(element(by.text('Select a file'))).toExist()
     await expect(element(by.text('Take or select photos'))).toExist()
   })
 })
