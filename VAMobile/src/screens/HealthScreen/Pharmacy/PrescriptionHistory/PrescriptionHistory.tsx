@@ -53,7 +53,6 @@ import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
-import { isIOS } from 'utils/platform'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -449,8 +448,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
-          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}
-          testID="nonVAMedsAlertTestID">
+          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}>
           <Pressable {...pressableProps}>
             <TextView>
               <TextView variant="MobileBody">{t('prescription.history.nonVAMeds.message')}</TextView>
@@ -563,7 +561,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
           {filterModal()}
 
-          <Box mb={theme.dimensions.floatingButtonOffset + (isIOS() ? 0 : 50)} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.floatingButtonOffset} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>

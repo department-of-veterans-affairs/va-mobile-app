@@ -54,6 +54,9 @@ describe('Prescriptions', () => {
     // 2. View Prescription Details
     // View prescription details
     await element(by.text('ACETAMINOPHEN 325MG TAB')).swipe('up', 'fast')
+    await waitFor(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)))
+      .toBeVisible()
+      .withTimeout(5000)
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).tap()
 
     // Check for details
