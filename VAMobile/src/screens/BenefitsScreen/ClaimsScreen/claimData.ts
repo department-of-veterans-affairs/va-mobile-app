@@ -695,9 +695,14 @@ export const claim: ClaimData = {
           blocks: [
             { type: 'paragraph', content: 'To complete this request:' },
             {
-              type: 'link',
-              text: 'Download VA Form 21-4142',
-              href: 'https://www.va.gov/find-forms/about-form-21-4142/',
+              type: 'paragraph',
+              content: [
+                {
+                  type: 'link',
+                  text: 'Download VA Form 21-4142',
+                  href: 'https://www.va.gov/find-forms/about-form-21-4142/',
+                },
+              ],
             },
           ],
         },

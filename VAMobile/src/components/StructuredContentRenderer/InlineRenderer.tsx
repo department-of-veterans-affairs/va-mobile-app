@@ -4,8 +4,31 @@ import { TextStyle } from 'react-native'
 import { InlineContent } from 'api/types'
 import { ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import type { FontVariant } from 'components/TextView'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 const italicTextStyle: TextStyle = { fontStyle: 'italic' }
+
+/** Extracts plain text from InlineContent for use in accessibility labels. */
+export const getPlainText = (content: InlineContent): string => {
+  if (content == null) return ''
+  if (typeof content === 'string') return content
+  if (Array.isArray(content)) return content.map(getPlainText).join('')
+  switch (content.type) {
+    case 'bold':
+    case 'italic':
+      return getPlainText(content.content)
+    case 'link':
+      return content.text
+    case 'telephone':
+      return content.tty
+        ? `TTY: ${displayedTextPhoneNumber(content.contact)}`
+        : displayedTextPhoneNumber(content.contact)
+    case 'lineBreak':
+      return ' '
+    default:
+      return ''
+  }
+}
 
 type InlineRendererProps = {
   content: InlineContent
@@ -65,7 +88,17 @@ export const InlineRenderer = ({
         />
       )
     case 'telephone':
-      return <ClickToCallPhoneNumber phone={content.contact} ttyBypass={!!content.tty} />
+      return (
+        <ClickToCallPhoneNumber
+          phone={content.contact}
+          displayedText={
+            content.tty
+              ? `TTY: ${displayedTextPhoneNumber(content.contact)}`
+              : displayedTextPhoneNumber(content.contact)
+          }
+          ttyBypass={!!content.tty}
+        />
+      )
     case 'lineBreak':
       return <TextView variant="MobileBody">{'\n'}</TextView>
     default:

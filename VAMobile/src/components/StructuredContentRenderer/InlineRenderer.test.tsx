@@ -24,7 +24,9 @@ context('InlineRenderer', () => {
     render(<InlineRenderer content={['Visit ', { type: 'link', text: 'VA.gov', href: '/test' }, ' for more info']} />)
     expect(screen.getByText('Visit ')).toBeTruthy()
     expect(screen.getByText(' for more info')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'VA.gov' })).toBeTruthy()
+    const link = screen.getByRole('link', { name: 'VA.gov' })
+    expect(link).toBeTruthy()
+    expect(link.props.accessibilityLabel).toBe('VA.gov')
   })
 
   it('should render bold text', () => {
@@ -39,17 +41,25 @@ context('InlineRenderer', () => {
 
   it('should render link', () => {
     render(<InlineRenderer content={{ type: 'link', text: 'Test Link', href: '/test' }} />)
-    expect(screen.getByRole('link', { name: 'Test Link' })).toBeTruthy()
+    const link = screen.getByRole('link', { name: 'Test Link' })
+    expect(link).toBeTruthy()
+    expect(link.props.accessibilityLabel).toBe('Test Link')
   })
 
   it('should render telephone', () => {
     render(<InlineRenderer content={{ type: 'telephone', contact: '8008271000' }} />)
-    expect(screen.getByRole('link', { name: '8008271000' })).toBeTruthy()
+    const link = screen.getByRole('link', { name: '8 0 0 8 2 7 1 0 0 0' })
+    expect(link).toBeTruthy()
+    expect(link.props.accessibilityLabel).toBe('8 0 0 8 2 7 1 0 0 0')
+    expect(screen.getByText('800-827-1000')).toBeTruthy()
   })
 
   it('should render telephone with TTY', () => {
     render(<InlineRenderer content={{ type: 'telephone', contact: '711', tty: true }} />)
-    expect(screen.getByRole('link', { name: '711' })).toBeTruthy()
+    const link = screen.getByRole('link', { name: '7 1 1' })
+    expect(link).toBeTruthy()
+    expect(link.props.accessibilityLabel).toBe('7 1 1')
+    expect(screen.getByText('TTY: 711')).toBeTruthy()
   })
 
   it('should render line break', () => {

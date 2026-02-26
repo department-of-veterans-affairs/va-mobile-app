@@ -1,8 +1,10 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { InlineContent, StructuredContentBlock } from 'api/types'
 import { Box, TextView } from 'components'
-import { InlineRenderer } from 'components/StructuredContentRenderer/InlineRenderer'
+import { InlineRenderer, getPlainText } from 'components/StructuredContentRenderer/InlineRenderer'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 type BlockRendererProps = {
@@ -12,6 +14,7 @@ type BlockRendererProps = {
 /** Renders one block: paragraph, list, or line break. */
 export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement | null => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const marginBetween = theme.dimensions.standardMarginBetween
 
   if (!block || typeof block !== 'object') {
@@ -21,9 +24,9 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
   switch (block.type) {
     case 'paragraph':
       return (
-        <Box mb={marginBetween} display="flex" flexDirection="row" flexWrap="wrap">
+        <TextView variant="MobileBody" mb={marginBetween}>
           <InlineRenderer content={block.content} />
-        </Box>
+        </TextView>
       )
     case 'list': {
       const items = block.items || []
@@ -41,27 +44,33 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
 
       return (
         <Box mb={marginBetween} accessibilityRole="list">
-          {validItems.map((item, idx) => (
-            <Box
-              key={idx}
-              display="flex"
-              flexDirection="row"
-              alignItems="flex-start"
-              mb={block.style === 'numbered' ? 8 : undefined}>
-              {block.style === 'numbered' ? (
-                <Box mr={20} mt={12} minWidth={16}>
-                  <TextView variant="MobileBody">{idx + 1}.</TextView>
-                </Box>
-              ) : (
-                <Box mr={20} mt={12}>
-                  <Box backgroundColor="bullet" height={6} width={6} />
-                </Box>
-              )}
-              <Box flex={1} flexWrap="wrap">
-                <InlineRenderer content={item} />
+          {validItems.map((item, idx) => {
+            const a11yLabel = getPlainText(item)
+            return (
+              // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+              <Box
+                key={idx}
+                display="flex"
+                flexDirection="row"
+                alignItems="flex-start"
+                accessible={true}
+                accessibilityRole="text"
+                accessibilityLabel={`${a11yLabel}, ${t('listPosition', { position: idx + 1, total: validItems.length })}`}>
+                {block.style === 'numbered' ? (
+                  <Box mr={20} minWidth={16}>
+                    <TextView variant="MobileBody">{idx + 1}.</TextView>
+                  </Box>
+                ) : (
+                  <Box mr={20} mt={12}>
+                    <Box backgroundColor="bullet" height={6} width={6} />
+                  </Box>
+                )}
+                <TextView variant="MobileBody" flex={1}>
+                  <InlineRenderer content={item} />
+                </TextView>
               </Box>
-            </Box>
-          ))}
+            )
+          })}
         </Box>
       )
     }
