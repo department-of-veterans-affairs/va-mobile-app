@@ -22,7 +22,7 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_4_ID: 'Grass pollen (substance) allergy January 01, 2022',
   ALLERGY_5_ID: 'Dust allergy December 22, 2020',
   ALLERGY_6_ID: 'Penicillin allergy January 01, 2002',
-  ALLERGY_7_ID: 'ASPIRIN allergy',
+  ALLERGY_7_ID: 'ASPIRIN allergy ', // trailing space needed due to date being null
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
   DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison',
 }
