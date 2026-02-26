@@ -53,6 +53,7 @@ import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
+import { isIOS } from 'utils/platform'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -244,7 +245,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       const mainContent = (
         <>
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
-          <Pressable {...detailsPressableProps}>
+          <Pressable {...detailsPressableProps} testID="prescriptionDetailsTestID">
             <Box
               display={'flex'}
               flexDirection={'row'}
@@ -252,7 +253,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
               alignItems={'center'}
               minHeight={theme.dimensions.touchableMinHeight}
               pt={5}>
-              <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID="prescriptionDetailsTestID">
+              <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
               <Icon
@@ -562,7 +563,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
           {filterModal()}
 
-          <Box mb={theme.dimensions.floatingButtonOffset} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.floatingButtonOffset + (isIOS() ? 0 : 50)} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
