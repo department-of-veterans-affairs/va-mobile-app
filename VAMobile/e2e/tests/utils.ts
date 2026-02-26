@@ -355,6 +355,17 @@ export async function scrollToElement(text: string, containerID: string) {
     .scroll(200, 'down')
 }
 
+/**
+ * Scroll to the bottom of a container and wait for 1 second to allow animations to settle.
+ * Recommended for screens that have dynamic content or animations at the bottom.
+ *
+ * @param containerID - testID of the container to scroll in
+ */
+export async function scrollToBottomWithWait(containerID: string) {
+  await element(by.id(containerID)).scrollTo('bottom')
+  await setTimeout(1000)
+}
+
 /** Test for the presence of text 1 or more times
  *
  * @param text - string of the text to match

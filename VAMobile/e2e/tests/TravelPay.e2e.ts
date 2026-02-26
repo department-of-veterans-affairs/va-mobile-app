@@ -7,6 +7,7 @@ import {
   openAppointments,
   openDismissLeavingAppPopup,
   openHealth,
+  scrollToBottomWithWait,
   toggleOverrideApi,
   toggleRemoteConfigFlag,
 } from './utils'
@@ -335,11 +336,7 @@ async function expectReviewClaimScreen({
   await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_HELP_BUTTON_ID))).toExist()
 
   //Scroll down to the submit button
-  await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scrollTo('bottom')
-  try {
-    await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scroll(200, 'down', NaN, 0.8)
-  } catch (ex) {}
-  await setTimeout(1000)
+  await scrollToBottomWithWait(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.TRAVEL_AGREEMENT_HEADER_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.PENALTY_STATEMENT_ID))).toExist()
@@ -420,8 +417,7 @@ const fillHomeAddressFields = async ({
     .withTimeout(4000)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText(city)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
-  await setTimeout(1000)
+  await scrollToBottomWithWait(CommonE2eIdConstants.EDIT_ADDRESS_ID)
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await element(by.text(state)).tap()
   await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
@@ -437,8 +433,7 @@ const fillHomeAddressFields = async ({
   await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
     .toBeVisible()
     .withTimeout(4000)
-  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
-  await setTimeout(1000)
+  await scrollToBottomWithWait(CommonE2eIdConstants.EDIT_ADDRESS_ID)
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText(zipCode)
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
@@ -495,9 +490,7 @@ const openTravelPayFlow = async (text: string, login: boolean = true) => {
   await element(by.text('Past')).tap()
 
   // Wait for the Past tab to render completely to prevent tapping the Upcoming appointment
-  await waitFor(element(by.text('Select a past date range')))
-    .toExist()
-    .withTimeout(2000)
+  await expect(element(by.text('Select a past date range'))).toBeVisible()
 
   // Open the appointment in the list
   await openAppointmentInList(text)
@@ -701,7 +694,9 @@ describe('Travel Pay', () => {
   it('submits the travel pay claim when the user accepts the travel agreement and presses the Submit button', async () => {
     await acceptTravelAgreement()
     await pressSubmitButton()
-    await setTimeout(4000)
+    await waitFor(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID)))
+      .toExist()
+      .withTimeout(10000)
   })
 
   describe('when the travel claim submission is successful', () => {
@@ -756,7 +751,9 @@ describe('Travel Pay', () => {
       await reviewClaimsScroll('bottom')
       await acceptTravelAgreement()
       await pressSubmitButton()
-      await setTimeout(4000)
+      await waitFor(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID)))
+        .toExist()
+        .withTimeout(10000)
       await expectSubmitSuccessScreen({ partialSuccess: true, checkExternalLink: false })
     })
 

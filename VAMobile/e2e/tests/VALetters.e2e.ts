@@ -141,8 +141,9 @@ describe('VA Letters', () => {
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await element(by.id(LettersConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
 
-          // iOS 26: PDF viewer renders in a system layer inaccessible to Detox
-          // Verify View Letter button exists but skip opening the viewer
+          // iOS 26: PDF viewer renders in a system layer inaccessible to Detox.
+          // TODO: Restore full PDF viewer behavior testing (or add an alternative verification
+          // strategy) once Detox supports interacting with the iOS system PDF viewer.
           await expect(element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID))).toExist()
         }
       }

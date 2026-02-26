@@ -15,7 +15,6 @@ export const PrescriptionsE2eIdConstants = {
 
 describe('Prescriptions', () => {
   beforeAll(async () => {
-    // await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
     await loginToDemoMode()
     await openHealth()
     await openPrescriptions()
