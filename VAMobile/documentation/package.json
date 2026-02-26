@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "node utils/fetchGitHubData.js && node utils/fetchWhatsNewData.js",
+    "prebuild": "node utils/fetchGitHubData.js && node utils/fetchWhatsNewData.js && node utils/fetchWorkflowsData.js",
     "fetch-whats-new": "node utils/fetchWhatsNewData.js",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
@@ -30,6 +30,7 @@
     "docusaurus-plugin-react-docgen-typescript": "^1.0.0",
     "docusaurus-plugin-remote-content": "^4.0.0",
     "file-loader": "^6.2.0",
+    "js-yaml": "^4.1.0",
     "mdx-mermaid": "^2.0.0",
     "mermaid": "^11.10.1",
     "node-fetch": "2",

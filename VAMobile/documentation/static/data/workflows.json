@@ -1,0 +1,1408 @@
+[
+  {
+    "fileName": "add-pr-to-project.yml",
+    "name": "[Admin] Add pull request to project board",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "types": [
+          "opened",
+          "reopened",
+          "synchronize",
+          "ready_for_review"
+        ]
+      }
+    },
+    "jobs": [
+      "add-to-project"
+    ]
+  },
+  {
+    "fileName": "check-linked-issues.yml",
+    "name": "[Admin] Check for linked issues in PRs",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "types": [
+          "opened",
+          "edited",
+          "reopened",
+          "synchronize",
+          "labeled",
+          "unlabeled"
+        ]
+      }
+    },
+    "jobs": [
+      "check_pull_requests"
+    ]
+  },
+  {
+    "fileName": "team-check-alert.yml",
+    "name": "[Admin] Check if PR is from an experience team",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "types": [
+          "opened"
+        ],
+        "branches": [
+          "develop"
+        ]
+      }
+    },
+    "jobs": [
+      "check_team_and_alert",
+      "slack",
+      "send_message"
+    ]
+  },
+  {
+    "fileName": "rotate-flagship-oncall.yml",
+    "name": "[Admin] Flagship Mobile Alerts Weekly On-Call Assignment",
+    "description": null,
+    "on": {
+      "workflow_dispatch": null,
+      "schedule": [
+        {
+          "cron": "30 13 * * 1"
+        }
+      ]
+    },
+    "jobs": [
+      "assign-oncall"
+    ]
+  },
+  {
+    "fileName": "apply-milestone.yml",
+    "name": "[Admin] Milestone Linker",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "types": "closed",
+        "paths": [
+          "VAMobile/src/**"
+        ]
+      }
+    },
+    "jobs": [
+      "process_pr_and_issue"
+    ]
+  },
+  {
+    "fileName": "automation-issue-notification.yml",
+    "name": "[Admin] Notify Slack of DevOps issues",
+    "description": null,
+    "on": {
+      "issues": {
+        "types": [
+          "opened"
+        ]
+      }
+    },
+    "jobs": [
+      "set_project_status",
+      "notify_slack"
+    ]
+  },
+  {
+    "fileName": "user-onboarding-issue-notification.yml",
+    "name": "[Admin] Notify Slack of new Onboarding requests",
+    "description": null,
+    "on": {
+      "issues": {
+        "types": [
+          "opened"
+        ]
+      }
+    },
+    "jobs": [
+      "get_slack_id_user1",
+      "get_slack_id_user2",
+      "notify_slack"
+    ]
+  },
+  {
+    "fileName": "prune-stale-branches.yml",
+    "name": "[Admin] Prune Stale Branches",
+    "description": null,
+    "on": {
+      "schedule": [
+        {
+          "cron": "0 2 * * 0"
+        }
+      ],
+      "workflow_dispatch": {
+        "inputs": {
+          "dry_run": {
+            "description": "Dry run (list branches without deleting)",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    },
+    "jobs": [
+      "prune-branches",
+      "notify-slack"
+    ]
+  },
+  {
+    "fileName": "team-membership-alert.yml",
+    "name": "[Admin] Team Membership Alert",
+    "description": null,
+    "on": {
+      "schedule": [
+        {
+          "cron": "0 14 * * *"
+        }
+      ],
+      "workflow_dispatch": null
+    },
+    "jobs": [
+      "generate_token_job",
+      "check_and_notify_team_members"
+    ]
+  },
+  {
+    "fileName": "rotate-flagship-pr-reviewer.yml",
+    "name": "[Admin] Weekly Flagship Mobile PR Reviewer Assignment",
+    "description": null,
+    "on": {
+      "schedule": [
+        {
+          "cron": "33 13 * * 1"
+        }
+      ]
+    },
+    "jobs": [
+      "assign-reviewer"
+    ]
+  },
+  {
+    "fileName": "qa_build.yml",
+    "name": "[Build] Daily QA Build",
+    "description": null,
+    "on": {
+      "schedule": [
+        {
+          "cron": "0 4 * * 1,2,3,4,5"
+        }
+      ]
+    },
+    "jobs": [
+      "queue_build",
+      "start_slack_thread",
+      "ios",
+      "android"
+    ]
+  },
+  {
+    "fileName": "on_demand_build.yml",
+    "name": "[Build] On Demand Build",
+    "description": null,
+    "on": {
+      "workflow_dispatch": {
+        "inputs": {
+          "environment": {
+            "description": "Environment",
+            "required": true,
+            "default": "staging",
+            "type": "choice",
+            "options": [
+              "staging",
+              "production"
+            ]
+          },
+          "notes": {
+            "description": "Notes",
+            "required": true
+          }
+        }
+      }
+    },
+    "jobs": [
+      "queue_build",
+      "sanitize_inputs",
+      "start_slack_thread",
+      "ios",
+      "android"
+    ]
+  },
+  {
+    "fileName": "optimize-images.yml",
+    "name": "[Build] Optimize Image",
+    "description": null,
+    "on": {
+      "push": {
+        "branches": [
+          "release/v[0-9]+.[0-9]+.[0-9]+"
+        ]
+      }
+    },
+    "jobs": [
+      "optimize_images"
+    ]
+  },
+  {
+    "fileName": "queue_builds.yml",
+    "name": "[Build] Queue Build",
+    "description": null,
+    "on": {
+      "workflow_call": null
+    },
+    "jobs": [
+      "queue_builds"
+    ]
+  },
+  {
+    "fileName": "release_build.yml",
+    "name": "[Build] Release Build",
+    "description": null,
+    "on": {
+      "push": {
+        "tags": [
+          "v[0-9]+.[0-9]+.[0-9]+"
+        ]
+      }
+    },
+    "jobs": [
+      "queue_build",
+      "start_slack_thread",
+      "ios",
+      "notify_ios_failure",
+      "android",
+      "notify_android_failure"
+    ]
+  },
+  {
+    "fileName": "release_candidate_build.yml",
+    "name": "[Build] Release Candidate Build",
+    "description": null,
+    "on": {
+      "push": {
+        "tags": [
+          "RC-v[0-9]+.[0-9]+.[0-9]+-[0-9]+[0-9]+[0-9]+-[0-9]+[0-9]+"
+        ]
+      }
+    },
+    "jobs": [
+      "queue_build",
+      "start_slack_thread",
+      "ios",
+      "android"
+    ]
+  },
+  {
+    "fileName": "build_android.yml",
+    "name": "[Build] Reusable Android Workflow",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "environment": {
+            "type": "string",
+            "default": "staging"
+          },
+          "lane": {
+            "type": "string",
+            "default": "qa"
+          },
+          "notes": {
+            "type": "string",
+            "default": ""
+          },
+          "ps_track": {
+            "type": "string",
+            "default": ""
+          },
+          "ref": {
+            "type": "string",
+            "default": ""
+          },
+          "slack_thread_ts": {
+            "type": "string",
+            "default": ""
+          },
+          "version": {
+            "type": "string",
+            "default": "qa"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "build_android"
+    ]
+  },
+  {
+    "fileName": "build_ios.yml",
+    "name": "[Build] Reusable iOS Workflow",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "environment": {
+            "type": "string",
+            "default": "staging"
+          },
+          "lane": {
+            "type": "string",
+            "default": "qa"
+          },
+          "notes": {
+            "type": "string",
+            "default": ""
+          },
+          "ref": {
+            "type": "string",
+            "default": ""
+          },
+          "slack_thread_ts": {
+            "type": "string",
+            "default": ""
+          },
+          "tf_group": {
+            "type": "string",
+            "default": ""
+          },
+          "version": {
+            "type": "string",
+            "default": "qa"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "build_ios"
+    ]
+  },
+  {
+    "fileName": "native_build_check_android.yml",
+    "name": "[Code Quality] Check Native Android Builds",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "paths": [
+          "VAMobile/android/**"
+        ]
+      }
+    },
+    "jobs": [
+      "android_native_build"
+    ]
+  },
+  {
+    "fileName": "native_build_check_android_reusable.yml",
+    "name": "[Code Quality] Check Native Android Builds",
+    "description": null,
+    "on": {
+      "workflow_call": null
+    },
+    "jobs": [
+      "build_android"
+    ]
+  },
+  {
+    "fileName": "native_build_check_android_skip.yml",
+    "name": "[Code Quality] Check Native Android Builds",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "paths": [
+          "!VAMobile/android/**"
+        ]
+      }
+    },
+    "jobs": [
+      "android_native_build"
+    ]
+  },
+  {
+    "fileName": "native_build_check_ios.yml",
+    "name": "[Code Quality] Check Native iOs Builds",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "paths": [
+          "VAMobile/ios/**"
+        ]
+      }
+    },
+    "jobs": [
+      "ios_native_build"
+    ]
+  },
+  {
+    "fileName": "native_build_check_ios_reusable.yml",
+    "name": "[Code Quality] Check Native iOs Builds",
+    "description": null,
+    "on": {
+      "workflow_call": null
+    },
+    "jobs": [
+      "build_ios"
+    ]
+  },
+  {
+    "fileName": "native_build_check_ios_skip.yml",
+    "name": "[Code Quality] Check Native iOs Builds",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "paths": [
+          "!VAMobile/ios/**"
+        ]
+      }
+    },
+    "jobs": [
+      "ios_native_build"
+    ]
+  },
+  {
+    "fileName": "code_checks.yml",
+    "name": "[Code Quality] Code Checks",
+    "description": null,
+    "on": {
+      "pull_request": null,
+      "push": {
+        "branches": [
+          "main",
+          "develop",
+          "release/v**"
+        ]
+      }
+    },
+    "jobs": [
+      "lint",
+      "super-linter",
+      "test",
+      "bundle_android",
+      "bundle_ios"
+    ]
+  },
+  {
+    "fileName": "codeql.yml",
+    "name": "[Code Quality] CodeQL",
+    "description": null,
+    "on": {
+      "push": {
+        "branches": [
+          "develop"
+        ]
+      },
+      "pull_request": {
+        "branches": [
+          "develop"
+        ]
+      },
+      "schedule": [
+        {
+          "cron": "27 2 * * 1"
+        }
+      ]
+    },
+    "jobs": [
+      "analyze"
+    ]
+  },
+  {
+    "fileName": "bundler_updates.yml",
+    "name": "[Code Quality] Update Bundler",
+    "description": null,
+    "on": {
+      "schedule": [
+        {
+          "cron": "0 7 * * 3"
+        }
+      ],
+      "workflow_dispatch": null
+    },
+    "jobs": [
+      "update_bundler"
+    ]
+  },
+  {
+    "fileName": "documentation_accessibility_checks.yml",
+    "name": "[Documentation] Accessibility Check",
+    "description": null,
+    "on": {
+      "workflow_dispatch": null,
+      "schedule": [
+        {
+          "cron": "0 9 * * 1,2,3,4,5"
+        }
+      ]
+    },
+    "jobs": [
+      "axe-scan",
+      "start_slack_thread"
+    ]
+  },
+  {
+    "fileName": "documentation_deploy.yml",
+    "name": "[Documentation] Deploy Site",
+    "description": null,
+    "on": {
+      "push": {
+        "branches": [
+          "develop"
+        ],
+        "paths": "VAMobile/documentation/**"
+      },
+      "workflow_dispatch": null,
+      "schedule": [
+        {
+          "cron": "0 3 * * *"
+        }
+      ]
+    },
+    "jobs": [
+      "deploy"
+    ]
+  },
+  {
+    "fileName": "documentation_test_build.yml",
+    "name": "[Documentation] Test Build",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "branches": [
+          "develop"
+        ],
+        "paths": [
+          "VAMobile/src/components/**",
+          "VAMobile/documentation/**",
+          "VAMobile/src/utils/hooks.tsx"
+        ]
+      }
+    },
+    "jobs": [
+      "test-deploy"
+    ]
+  },
+  {
+    "fileName": "e2e_android.yml",
+    "name": "[e2e] Android Detox Test Run",
+    "description": "Runs Detox e2e tests on Android emulator in CI. It bundles the Android app, determines which tests to run, executes them across a matrix, and reports failures to Slack and TestRail.",
+    "on": {
+      "push": {
+        "branches": [
+          "dependabot/**"
+        ]
+      },
+      "pull_request": {
+        "types": [
+          "synchronize",
+          "opened"
+        ],
+        "paths": [
+          "VAMobile/src/**",
+          "VAMobile/e2e/**",
+          "VAMobile/package.json",
+          ".github/workflows/e2e_android.yml",
+          ".github/workflows/e2e_ios.yml",
+          ".github/workflows/e2e_detox_mapping.yml"
+        ]
+      },
+      "workflow_dispatch": {
+        "inputs": {
+          "run_full_test": {
+            "description": "Run full e2e test?",
+            "type": "boolean",
+            "required": false
+          },
+          "skip_cache": {
+            "description": "Skip caches?",
+            "type": "boolean",
+            "required": false
+          },
+          "tests_to_run": {
+            "description": "List tests to test in [\"test name\", \"test name\"] format.  Leave blank if running full e2e test.",
+            "type": "string",
+            "required": false
+          },
+          "testRail_name": {
+            "description": "Name testRail run (will default to date if blank)",
+            "type": "string",
+            "required": false
+          },
+          "run_testRail": {
+            "description": "Add results to testRail?",
+            "type": "boolean",
+            "required": false
+          }
+        }
+      },
+      "schedule": [
+        {
+          "cron": "0 4 * * 1,2,3,4,5"
+        }
+      ],
+      "workflow_run": {
+        "workflows": [
+          "[Release] New Release Issue"
+        ],
+        "types": [
+          "in_progress"
+        ]
+      },
+      "workflow_call": {
+        "secrets": {
+          "TEST_RAIL_USER": {
+            "description": "TestRail robot userid",
+            "required": true
+          },
+          "TEST_RAIL_KEY": {
+            "description": "TestRail api key",
+            "required": true
+          },
+          "FLAGSHIP_MOBILE_APP_ID": {
+            "required": true
+          },
+          "FLAGSHIP_MOBILE_APP_PRIVATE_KEY": {
+            "required": true
+          }
+        }
+      }
+    },
+    "jobs": [
+      "start_slack_thread",
+      "find_detox_tests_to_run",
+      "output_detox_tests_to_run",
+      "build-e2e-android",
+      "matrix-e2e-android",
+      "output-slack-results-and-update-detox-failure-ticket",
+      "matrix_send_test_results_to_testrail",
+      "update-test-names"
+    ]
+  },
+  {
+    "fileName": "e2e_detox_mapping.yml",
+    "name": "[e2e] Detox Mapping",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "outputs": {
+          "test_matrix": {
+            "description": "The matrix output for the e2e tests",
+            "value": "${{ jobs.find_detox_tests_to_run.outputs.output1 }}"
+          },
+          "test_run": {
+            "description": "String saying test has been run",
+            "value": "${{ jobs.find_detox_tests_to_run.outputs.output2}}"
+          }
+        },
+        "secrets": {
+          "FLAGSHIP_MOBILE_APP_ID": {
+            "required": true
+          },
+          "FLAGSHIP_MOBILE_APP_PRIVATE_KEY": {
+            "required": true
+          }
+        }
+      }
+    },
+    "jobs": [
+      "find_detox_tests_to_run"
+    ]
+  },
+  {
+    "fileName": "e2e_ios.yml",
+    "name": "[e2e] iOS Detox Test Run",
+    "description": null,
+    "on": {
+      "push": {
+        "branches": [
+          "dependabot/**"
+        ]
+      },
+      "pull_request": {
+        "types": [
+          "synchronize",
+          "opened"
+        ],
+        "paths": [
+          "VAMobile/src/**",
+          "VAMobile/e2e/**",
+          "VAMobile/package.json",
+          ".github/workflows/e2e_android.yml",
+          ".github/workflows/e2e_ios.yml",
+          ".github/workflows/e2e_detox_mapping.yml"
+        ]
+      },
+      "workflow_dispatch": {
+        "inputs": {
+          "run_full_test": {
+            "description": "Run full e2e test?",
+            "type": "boolean",
+            "required": false
+          },
+          "skip_cache": {
+            "description": "Skip caches?",
+            "type": "boolean",
+            "required": false
+          },
+          "tests_to_run": {
+            "description": "List tests to test in [\"test name\", \"test name\"] format.  Leave blank if running full e2e test.",
+            "type": "string",
+            "required": false
+          },
+          "testRail_name": {
+            "description": "Name testRail run (will default to date if blank)",
+            "type": "string",
+            "required": false
+          },
+          "run_testRail": {
+            "description": "Add results to testRail?",
+            "type": "boolean",
+            "required": false
+          }
+        }
+      },
+      "schedule": [
+        {
+          "cron": "0 4 * * 1,2,3,4,5"
+        }
+      ],
+      "workflow_run": {
+        "workflows": [
+          "[Release] New Release Issue"
+        ],
+        "types": [
+          "in_progress"
+        ]
+      },
+      "workflow_call": {
+        "secrets": {
+          "TEST_RAIL_USER": {
+            "description": "TestRail robot userid",
+            "required": true
+          },
+          "TEST_RAIL_KEY": {
+            "description": "TestRail api key",
+            "required": true
+          },
+          "FLAGSHIP_MOBILE_APP_ID": {
+            "required": true
+          },
+          "FLAGSHIP_MOBILE_APP_PRIVATE_KEY": {
+            "required": true
+          }
+        }
+      }
+    },
+    "jobs": [
+      "start_slack_thread",
+      "find_detox_tests_to_run",
+      "output_detox_tests_to_run",
+      "build-e2e-ios",
+      "matrix-e2e-ios",
+      "output-slack-results-and-update-detox-failure-ticket",
+      "matrix_send_test_results_to_testrail",
+      "update-test-names"
+    ]
+  },
+  {
+    "fileName": "update_testrail_results.yml",
+    "name": "[e2e] Update TestRail Results",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "secrets": {
+          "TEST_RAIL_USER": {
+            "description": "TestRail robot userid",
+            "required": true
+          },
+          "TEST_RAIL_KEY": {
+            "description": "TestRail api key",
+            "required": true
+          }
+        },
+        "inputs": {
+          "testRail_name": {
+            "type": "string",
+            "default": ""
+          },
+          "test_OS_name": {
+            "type": "string",
+            "default": ""
+          }
+        },
+        "outputs": {
+          "test_run_id_number": {
+            "description": "The id number for the test run",
+            "value": "${{ jobs.send_test_results_to_testrail.outputs.output1 }}"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "send_test_results_to_testrail"
+    ]
+  },
+  {
+    "fileName": "approve_command.yml",
+    "name": "[Release] Approve Slash Command",
+    "description": null,
+    "on": {
+      "repository_dispatch": {
+        "types": [
+          "approve-command"
+        ]
+      }
+    },
+    "jobs": [
+      "indicate_start",
+      "run_prs",
+      "comment_complete",
+      "start_slack_thread"
+    ]
+  },
+  {
+    "fileName": "go_live.yml",
+    "name": "[Release] Go Live",
+    "description": null,
+    "on": {
+      "workflow_dispatch": null,
+      "schedule": [
+        {
+          "cron": "0 12 * * 2"
+        }
+      ]
+    },
+    "jobs": [
+      "get_workflow_environment",
+      "check_environment",
+      "ios",
+      "android"
+    ]
+  },
+  {
+    "fileName": "release_pull_request.yml",
+    "name": "[Release] Merge to main and Create PR to develop",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "version": {
+            "description": "Version Number (eg. v1.1.0)",
+            "type": "string",
+            "required": true
+          }
+        },
+        "outputs": {
+          "devPrUrl": {
+            "value": "${{jobs.create_prs.outputs.devPrUrl}}"
+          },
+          "releaseHash": {
+            "value": "${{jobs.create_prs.outputs.releaseHash}}"
+          }
+        }
+      },
+      "workflow_dispatch": {
+        "inputs": {
+          "version": {
+            "description": "Version Number (eg. v1.1.0)",
+            "required": true,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "create_prs"
+    ]
+  },
+  {
+    "fileName": "new_release_branch.yml",
+    "name": "[Release] New Release Branch",
+    "description": null,
+    "on": {
+      "workflow_dispatch": null,
+      "schedule": [
+        {
+          "cron": "00 6 * * 3"
+        }
+      ]
+    },
+    "jobs": [
+      "get-workflow-environment",
+      "cut_release_branch"
+    ]
+  },
+  {
+    "fileName": "release_branch_issue.yml",
+    "name": "[Release] New Release Issue",
+    "description": null,
+    "on": {
+      "create": null
+    },
+    "jobs": [
+      "release_ticket",
+      "create_testrail_milestone",
+      "start_testrail_run",
+      "close_milestone",
+      "start_slack_thread",
+      "release_coordination",
+      "approval",
+      "run_approval_workflow"
+    ]
+  },
+  {
+    "fileName": "run_approval.yml",
+    "name": "[Release] Run approval Workflow",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "version": {
+            "description": "Version Number (eg. v1.1.0)",
+            "type": "string",
+            "required": true
+          },
+          "issue_number": {
+            "description": "Issue number to comment on",
+            "type": "string",
+            "required": false
+          },
+          "comment_id": {
+            "description": "Comment ID to react to (for slash commands)",
+            "type": "string",
+            "required": false
+          }
+        }
+      }
+    },
+    "jobs": [
+      "indicate_start",
+      "run_prs",
+      "comment_complete"
+    ]
+  },
+  {
+    "fileName": "security-scan.yml",
+    "name": "[Security] Package Dependency Security Check",
+    "description": null,
+    "on": {
+      "pull_request": null
+    },
+    "jobs": [
+      "check_approval_label",
+      "check_for_locked_file_changes",
+      "remove_stale_approval_label",
+      "request_bypass_approval",
+      "notify_package_change",
+      "security-check",
+      "security-check-with-approval"
+    ]
+  },
+  {
+    "fileName": "create_testrail_milestone.yml",
+    "name": "[TestRail] Create TestRail Milestone",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "outputs": {
+          "milestoneId": {
+            "value": "${{ jobs.create_milestone.outputs.milestoneId }}"
+          }
+        },
+        "secrets": {
+          "TEST_RAIL_USER": {
+            "description": "TestRail robot userid",
+            "required": true
+          },
+          "TEST_RAIL_KEY": {
+            "description": "TestRail api key",
+            "required": true
+          }
+        }
+      }
+    },
+    "jobs": [
+      "create_milestone"
+    ]
+  },
+  {
+    "fileName": "start_test_rail_run.yml",
+    "name": "[TestRail] Start RC Run",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "version": {
+            "description": "Version Number (eg. v1.1.0)",
+            "type": "string",
+            "required": true
+          },
+          "releaseDate": {
+            "description": "Go-live date for release (eg. 06/21/2022)",
+            "type": "string",
+            "required": true
+          },
+          "ticketNumber": {
+            "description": "Issue number for release ticket (eg. 3333)",
+            "type": "string",
+            "required": true
+          },
+          "milestoneId": {
+            "description": "Milestone id for the run to be associated with",
+            "type": "string",
+            "required": true
+          }
+        },
+        "secrets": {
+          "TEST_RAIL_USER": {
+            "description": "Testrail robot userid",
+            "required": true
+          },
+          "TEST_RAIL_KEY": {
+            "description": "Testrail api key",
+            "required": true
+          }
+        },
+        "outputs": {
+          "testrailUrl": {
+            "value": "${{jobs.start_run.outputs.testrailUrl}}"
+          }
+        }
+      },
+      "workflow_dispatch": {
+        "inputs": {
+          "version": {
+            "description": "Version Number (eg. v1.1.0)",
+            "required": true,
+            "type": "string"
+          },
+          "releaseDate": {
+            "description": "Go-live date for release (eg. 06/21/2022)",
+            "type": "string",
+            "required": true
+          },
+          "ticketNumber": {
+            "description": "Issue number for release ticket (eg. 3333)",
+            "type": "string",
+            "required": true
+          },
+          "milestoneId": {
+            "description": "Milestone id for the run to be associated with",
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    },
+    "jobs": [
+      "start_run"
+    ]
+  },
+  {
+    "fileName": "update_testrail_run.yml",
+    "name": "[TestRail] Update Run",
+    "description": null,
+    "on": {
+      "repository_dispatch": {
+        "types": [
+          "update_testrail_run"
+        ]
+      }
+    },
+    "jobs": [
+      "update_run"
+    ]
+  },
+  {
+    "fileName": "check_maintenance_windows.yml",
+    "name": "[Utils] Check Maintenance Windows",
+    "description": null,
+    "on": {
+      "workflow_dispatch": null,
+      "schedule": [
+        {
+          "cron": "00 4 * * *"
+        }
+      ]
+    },
+    "jobs": [
+      "check_maintenance_windows",
+      "start_slack_thread_success",
+      "start_slack_thread_failure"
+    ]
+  },
+  {
+    "fileName": "pr_needs_review_reminder.yml",
+    "name": "[Utils] FE PR Needs Review Reminder",
+    "description": null,
+    "on": "workflow_dispatch",
+    "jobs": [
+      "send_pr_reminder"
+    ]
+  },
+  {
+    "fileName": "screenshot_e2e.yml",
+    "name": "[Utils] Gather iOS and Android screenshots",
+    "description": null,
+    "on": {
+      "workflow_dispatch": null
+    },
+    "jobs": [
+      "start_slack_message",
+      "generate-iphone-screenshots",
+      "generate-ipad-screenshots",
+      "generate-android-screenshots",
+      "combine-and-frame-images",
+      "commit-screenshots",
+      "success-slack-message",
+      "failure-slack-message"
+    ]
+  },
+  {
+    "fileName": "onboarding.yml",
+    "name": "[Utils] Onboarding",
+    "description": null,
+    "on": {
+      "issues": {
+        "types": [
+          "labeled"
+        ]
+      }
+    },
+    "jobs": [
+      "start-worlflow"
+    ]
+  },
+  {
+    "fileName": "qa_required_approvals.yml",
+    "name": "[Utils] QA required approval",
+    "description": null,
+    "on": "pull_request",
+    "jobs": [
+      "check_for_qa_approval"
+    ]
+  },
+  {
+    "fileName": "slash_commands.yml",
+    "name": "[Utils] Slash Command Dispatch",
+    "description": null,
+    "on": {
+      "issue_comment": {
+        "types": [
+          "created"
+        ]
+      }
+    },
+    "jobs": [
+      "slashCommandDispatch"
+    ]
+  },
+  {
+    "fileName": "start_slack_thread.yml",
+    "name": "[Utils] Start Slack Thread",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "channel_name": {
+            "description": "Name of the Slack channel where the thread should be started.",
+            "type": "string",
+            "default": "va-mobile-build-alerts"
+          },
+          "message": {
+            "description": "Text to display for the message starting the thread.",
+            "type": "string",
+            "required": true
+          }
+        },
+        "outputs": {
+          "thread_ts": {
+            "description": "Timestamp of the Slack thread that was created.",
+            "value": "${{ jobs.start_thread.outputs.thread_ts }}"
+          },
+          "channel_id": {
+            "description": "Channel ID in Slack where thread that was created.",
+            "value": "${{ jobs.get_channel_id.outputs.channel_id }}"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "get_channel_id",
+      "start_thread"
+    ]
+  },
+  {
+    "fileName": "app_store_checks_apple.yml",
+    "name": "App Store requirement checks",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "branches": [
+          "main",
+          "develop",
+          "release/v**"
+        ],
+        "paths": [
+          "VAMobile/ios/fastlane/metadata/en-US/**",
+          "VAMobile/ios/fastlane/screenshots/**"
+        ]
+      }
+    },
+    "jobs": [
+      "check_ios_ipad_pro2_images",
+      "check_ios_ipad_pro13_images",
+      "check_ios_ipad_pro129_images",
+      "check_ios_iphone55_images",
+      "check_ios_iphone67_images",
+      "check_ios_description",
+      "check_ios_release_notes",
+      "check_ios_keyword",
+      "check_ios_title"
+    ]
+  },
+  {
+    "fileName": "app_store_checks_google.yml",
+    "name": "App Store requirement checks",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "branches": [
+          "main",
+          "develop",
+          "release/v**"
+        ],
+        "paths": [
+          "VAMobile/android/fastlane/metadata/android/en-US/**"
+        ]
+      }
+    },
+    "jobs": [
+      "check_max_android_phone_screenshots",
+      "check_max_android_seven_inch_screenshots",
+      "check_android_long_description",
+      "check_android_short_description",
+      "check_android_change_log",
+      "check_android_release_name"
+    ]
+  },
+  {
+    "fileName": "check_max_size.yml",
+    "name": "check_max_size.yml",
+    "description": null,
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "working_dir": {
+            "required": true,
+            "type": "string"
+          },
+          "max_size": {
+            "required": true,
+            "type": "string"
+          },
+          "counting_function": {
+            "required": true,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "check_max_files"
+    ]
+  },
+  {
+    "fileName": "codeql-analysis.yml",
+    "name": "CodeQL",
+    "description": null,
+    "on": {
+      "push": {
+        "branches": [
+          "develop"
+        ]
+      },
+      "pull_request": {
+        "branches": [
+          "develop"
+        ]
+      },
+      "schedule": [
+        {
+          "cron": "47 14 * * 1"
+        }
+      ],
+      "workflow_dispatch": null
+    },
+    "jobs": [
+      "analyze"
+    ]
+  },
+  {
+    "fileName": "get-slack-user-id.yml",
+    "name": "Lookup Slack Username",
+    "description": null,
+    "on": {
+      "workflow_dispatch": {
+        "inputs": {
+          "va_email": {
+            "description": "VA Email address to lookup Slack ID for",
+            "required": false,
+            "type": "string"
+          },
+          "git_handle": {
+            "description": "Git handle to lookup email and then Slack ID for",
+            "required": false,
+            "type": "string"
+          }
+        }
+      },
+      "workflow_call": {
+        "inputs": {
+          "va_email": {
+            "description": "VA Email address to lookup Slack ID for",
+            "required": false,
+            "type": "string"
+          },
+          "git_handle": {
+            "description": "Git handle to lookup email and then Slack ID for",
+            "required": false,
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "slackId": {
+            "description": "The Slack user ID found for the given input.",
+            "value": "${{ jobs.get-slack-name.outputs.slackId }}"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "get-slack-name"
+    ]
+  },
+  {
+    "fileName": "ui-change-check.yml",
+    "name": "UI Approval Check",
+    "description": null,
+    "on": {
+      "pull_request": {
+        "types": [
+          "opened",
+          "edited",
+          "synchronize",
+          "reopened"
+        ]
+      },
+      "pull_request_review": {
+        "types": [
+          "submitted"
+        ]
+      }
+    },
+    "jobs": [
+      "check-ui-approval"
+    ]
+  }
+]
