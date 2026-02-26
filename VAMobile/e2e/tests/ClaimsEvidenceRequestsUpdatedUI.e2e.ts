@@ -57,11 +57,17 @@ describe('Evidence Requests Updated UI', () => {
   })
 
   it('should display the "respond by" subtitle with date and display name', async () => {
-    await expect(element(by.text(/Respond by .* for:/))).toExist()
+    await expect(element(by.text('Respond by June 15, 2021 for: Accidental injury - 21-4176 needed'))).toExist()
   })
 
   it('should display the "We requested this evidence" blurb', async () => {
-    await expect(element(by.text(/We requested this evidence from you on/))).toExist()
+    await expect(
+      element(
+        by.text(
+          'We requested this evidence from you on May 05, 2021. You can send the evidence after the "respond by" date, but it may delay your claim.',
+        ),
+      ),
+    ).toExist()
   })
 
   it('should display the "What we need from you" section', async () => {
@@ -94,21 +100,29 @@ describe('Evidence Requests Updated UI', () => {
 
   it('should expand "More on submitting files" accordion and show content', async () => {
     await element(by.text(EvidenceRequestsUpdatedUIConstants.MORE_ON_SUBMITTING_HEADER)).tap()
+    await waitFor(element(by.text('Submit your files in the app.')))
+      .toBeVisible()
+      .withTimeout(4000)
     await expect(element(by.text('Submit your files in the app.'))).toExist()
     await expect(element(by.text('Deliver your files by mail or in person.'))).toExist()
     await expect(element(by.id(EvidenceRequestsUpdatedUIConstants.FIND_VA_LOCATION_LINK_ID))).toExist()
   })
 
   it('should display the "Need help?" accordion', async () => {
-    await waitFor(element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)))
+    await waitFor(element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)).atIndex(0))
       .toBeVisible()
       .whileElement(by.id(EvidenceRequestsUpdatedUIConstants.FILE_REQUEST_DETAILS_ID))
       .scroll(200, 'down')
-    await expect(element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER))).toExist()
+    await expect(element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)).atIndex(0)).toExist()
   })
 
   it('should expand "Need help?" accordion and show VA hotline info', async () => {
-    await element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)).tap()
+    await element(by.text(EvidenceRequestsUpdatedUIConstants.NEED_HELP_HEADER)).atIndex(0).tap()
+    await waitFor(
+      element(by.text("Call our VA benefits hotline. We're here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")),
+    )
+      .toBeVisible()
+      .withTimeout(4000)
     await expect(
       element(by.text("Call our VA benefits hotline. We're here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")),
     ).toExist()

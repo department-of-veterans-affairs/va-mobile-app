@@ -141,7 +141,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   const renderWhatWeNeedFromYouSection = () => {
     return (
-      <Box mt={condensedMarginBetween}>
+      <Box mt={formattedRequestedDate ? 14 : 0}>
         <TextView mb={18} variant="MobileBodyBold" accessibilityRole="header">
           {t('fileRequestDetails.whatWeNeedFromYou')}
         </TextView>
