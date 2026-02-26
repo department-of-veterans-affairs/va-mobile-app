@@ -2,7 +2,7 @@
   {
     "fileName": "add-pr-to-project.yml",
     "name": "[Admin] Add pull request to project board",
-    "description": null,
+    "description": "Automatically adds non-draft PRs targeting the develop branch to the GitHub project board. Triggers when PRs are opened, reopened, synchronized, or marked as ready for review.",
     "on": {
       "pull_request": {
         "types": [
@@ -20,7 +20,7 @@
   {
     "fileName": "check-linked-issues.yml",
     "name": "[Admin] Check for linked issues in PRs",
-    "description": null,
+    "description": "Checks that every PR has a linked issue. If no linked issue is found, it posts a comment asking the author to link one. PRs targeting release, dependabot, and main branches are excluded from this requirement.",
     "on": {
       "pull_request": {
         "types": [
@@ -40,7 +40,7 @@
   {
     "fileName": "team-check-alert.yml",
     "name": "[Admin] Check if PR is from an experience team",
-    "description": null,
+    "description": "Checks whether a PR author is a member of the flagship-mobile-team. If the author is not a team member (i.e., from an experience team), sends a Slack notification to va-mobile-app alerting designated contacts.",
     "on": {
       "pull_request": {
         "types": [
@@ -60,7 +60,7 @@
   {
     "fileName": "rotate-flagship-oncall.yml",
     "name": "[Admin] Flagship Mobile Alerts Weekly On-Call Assignment",
-    "description": null,
+    "description": "Posts the weekly on-call assignment to the va-mobile-app-alerts Slack channel every Monday. Fetches the current on-call person from PagerDuty, sends a Slack notification, and updates the channel topic.",
     "on": {
       "workflow_dispatch": null,
       "schedule": [
@@ -76,7 +76,7 @@
   {
     "fileName": "apply-milestone.yml",
     "name": "[Admin] Milestone Linker",
-    "description": null,
+    "description": "Automatically links the nearest upcoming milestone to a PR's linked issue (or the PR itself) when a PR touching app source code is merged. Ensures all merged work is tracked under the correct release milestone.",
     "on": {
       "pull_request": {
         "types": "closed",
@@ -92,7 +92,7 @@
   {
     "fileName": "automation-issue-notification.yml",
     "name": "[Admin] Notify Slack of DevOps issues",
-    "description": null,
+    "description": "When a new issue with the 'devops' label is opened, adds it to the DevOps project board with \"Ready to Work\" status and sends a Slack notification to the va-mobile-devops channel.",
     "on": {
       "issues": {
         "types": [
@@ -108,7 +108,7 @@
   {
     "fileName": "user-onboarding-issue-notification.yml",
     "name": "[Admin] Notify Slack of new Onboarding requests",
-    "description": null,
+    "description": "Sends a Slack notification when a new issue with the 'user-onboarding' label is opened. Looks up Slack IDs for the designated onboarding contacts and posts a message with a link to the issue.",
     "on": {
       "issues": {
         "types": [
@@ -125,7 +125,7 @@
   {
     "fileName": "prune-stale-branches.yml",
     "name": "[Admin] Prune Stale Branches",
-    "description": null,
+    "description": "Deletes remote branches whose last commit is older than 365 days and that have no open PRs. Runs weekly on a schedule (dry-run by default) or manually, uploads a CSV of affected branches, and notifies Slack with a summary.",
     "on": {
       "schedule": [
         {
@@ -151,7 +151,7 @@
   {
     "fileName": "team-membership-alert.yml",
     "name": "[Admin] Team Membership Alert",
-    "description": null,
+    "description": "Monitors the flagship-mobile-team GitHub team for new members. Runs daily, compares current members against a stored list, and notifies Slack when new members are detected. Updates the stored member list accordingly.",
     "on": {
       "schedule": [
         {
@@ -168,7 +168,7 @@
   {
     "fileName": "rotate-flagship-pr-reviewer.yml",
     "name": "[Admin] Weekly Flagship Mobile PR Reviewer Assignment",
-    "description": null,
+    "description": "Rotates the primary PR reviewer assignment biweekly on Mondays. Updates Slack channel topics for va-mobile-app and va-mobile-app-engineering with the current reviewer and backup, and posts a notification message.",
     "on": {
       "schedule": [
         {
@@ -183,7 +183,7 @@
   {
     "fileName": "qa_build.yml",
     "name": "[Build] Daily QA Build",
-    "description": null,
+    "description": "Runs daily QA builds for iOS and Android on weekday mornings. Queues the build, notifies Slack, and triggers the reusable build_ios and build_android workflows with default QA settings.",
     "on": {
       "schedule": [
         {
@@ -201,7 +201,7 @@
   {
     "fileName": "on_demand_build.yml",
     "name": "[Build] On Demand Build",
-    "description": null,
+    "description": "Manually triggered on-demand builds for iOS and Android. Accepts environment (staging/production) and notes as inputs, queues the build, notifies Slack, and runs both platform builds from the triggering branch.",
     "on": {
       "workflow_dispatch": {
         "inputs": {
@@ -233,7 +233,7 @@
   {
     "fileName": "optimize-images.yml",
     "name": "[Build] Optimize Image",
-    "description": null,
+    "description": "Optimizes App Store screenshots for iOS and Android on pushes to release branches. Uses imagemin to compress images in-place, then commits the optimized files back to the release branch.",
     "on": {
       "push": {
         "branches": [
@@ -248,7 +248,7 @@
   {
     "fileName": "queue_builds.yml",
     "name": "[Build] Queue Build",
-    "description": null,
+    "description": "Reusable workflow that queues builds by waiting for any older in-progress build workflows (QA, On Demand, Release, RC) to finish before allowing the current build to proceed. Prevents concurrent build conflicts.",
     "on": {
       "workflow_call": null
     },
@@ -259,7 +259,7 @@
   {
     "fileName": "release_build.yml",
     "name": "[Build] Release Build",
-    "description": null,
+    "description": "Builds production release builds for iOS and Android, triggered by a v*.*.* tag (created when /approve is commented on the release ticket). Queues the build, notifies Slack, runs both platform builds, and alerts on failure.",
     "on": {
       "push": {
         "tags": [
@@ -279,7 +279,7 @@
   {
     "fileName": "release_candidate_build.yml",
     "name": "[Build] Release Candidate Build",
-    "description": null,
+    "description": "Builds release candidate (RC) staging builds for iOS and Android, triggered by an RC-v*.*.* tag pushed from new_release_branch.yml at the end of each sprint. Queues the build, notifies Slack, and runs iOS and Android RC builds in parallel for QA validation and regression testing.",
     "on": {
       "push": {
         "tags": [
@@ -297,35 +297,42 @@
   {
     "fileName": "build_android.yml",
     "name": "[Build] Reusable Android Workflow",
-    "description": null,
+    "description": "Reusable Android build workflow. Sets up the Linux environment, installs dependencies, decodes signing keys, bundles the app, and runs the specified Fastlane lane (qa, rc, review, release, on_demand) to build and distribute.",
     "on": {
       "workflow_call": {
         "inputs": {
           "environment": {
+            "description": "App environment variables to use (test, staging, production)",
             "type": "string",
             "default": "staging"
           },
           "lane": {
+            "description": "Fastlane lane to run (qa, rc, review, release, on_demand)",
             "type": "string",
             "default": "qa"
           },
           "notes": {
+            "description": "Release notes for Firebase (defaults to \"New QA version for {{DATE_TIME}}\")",
             "type": "string",
             "default": ""
           },
           "ps_track": {
+            "description": "Google Play Console track to distribute to (defaults to \"Development Team\")",
             "type": "string",
             "default": ""
           },
           "ref": {
+            "description": "Branch or tag to build from (defaults to triggering ref)",
             "type": "string",
             "default": ""
           },
           "slack_thread_ts": {
+            "description": "Slack thread timestamp for build status messages",
             "type": "string",
             "default": ""
           },
           "version": {
+            "description": "Version for production release (QA/on-demand builds auto-increment)",
             "type": "string",
             "default": "qa"
           }
@@ -339,35 +346,42 @@
   {
     "fileName": "build_ios.yml",
     "name": "[Build] Reusable iOS Workflow",
-    "description": null,
+    "description": "Reusable iOS build workflow. Sets up the macOS environment, installs dependencies, decodes signing keys, bundles the app, and runs the specified Fastlane lane (qa, rc, review, release, on_demand) to build and distribute.",
     "on": {
       "workflow_call": {
         "inputs": {
           "environment": {
+            "description": "App environment variables to use (test, staging, production)",
             "type": "string",
             "default": "staging"
           },
           "lane": {
+            "description": "Fastlane lane to run (qa, rc, review, release, on_demand)",
             "type": "string",
             "default": "qa"
           },
           "notes": {
+            "description": "Release notes for TestFlight (defaults to \"New QA version for {{DATE_TIME}}\")",
             "type": "string",
             "default": ""
           },
           "ref": {
+            "description": "Branch or tag to build from (defaults to triggering ref)",
             "type": "string",
             "default": ""
           },
           "slack_thread_ts": {
+            "description": "Slack thread timestamp for build status messages",
             "type": "string",
             "default": ""
           },
           "tf_group": {
+            "description": "TestFlight group to distribute to (defaults to \"Development Team\")",
             "type": "string",
             "default": ""
           },
           "version": {
+            "description": "Version for production release (QA/on-demand builds auto-increment)",
             "type": "string",
             "default": "qa"
           }
@@ -381,7 +395,7 @@
   {
     "fileName": "native_build_check_android.yml",
     "name": "[Code Quality] Check Native Android Builds",
-    "description": null,
+    "description": "Verifies that changes to native Android files do not break the Android build process. Triggers on PRs that modify files under VAMobile/android/ and runs a test-only Android build via the reusable build_android workflow.",
     "on": {
       "pull_request": {
         "paths": [
@@ -394,35 +408,9 @@
     ]
   },
   {
-    "fileName": "native_build_check_android_reusable.yml",
-    "name": "[Code Quality] Check Native Android Builds",
-    "description": null,
-    "on": {
-      "workflow_call": null
-    },
-    "jobs": [
-      "build_android"
-    ]
-  },
-  {
-    "fileName": "native_build_check_android_skip.yml",
-    "name": "[Code Quality] Check Native Android Builds",
-    "description": null,
-    "on": {
-      "pull_request": {
-        "paths": [
-          "!VAMobile/android/**"
-        ]
-      }
-    },
-    "jobs": [
-      "android_native_build"
-    ]
-  },
-  {
     "fileName": "native_build_check_ios.yml",
-    "name": "[Code Quality] Check Native iOs Builds",
-    "description": null,
+    "name": "[Code Quality] Check Native iOS Builds",
+    "description": "Verifies that changes to native iOS files do not break the iOS build process. Triggers on PRs that modify files under VAMobile/ios/ and runs a test-only iOS build via the reusable build_ios workflow.",
     "on": {
       "pull_request": {
         "paths": [
@@ -435,35 +423,9 @@
     ]
   },
   {
-    "fileName": "native_build_check_ios_reusable.yml",
-    "name": "[Code Quality] Check Native iOs Builds",
-    "description": null,
-    "on": {
-      "workflow_call": null
-    },
-    "jobs": [
-      "build_ios"
-    ]
-  },
-  {
-    "fileName": "native_build_check_ios_skip.yml",
-    "name": "[Code Quality] Check Native iOs Builds",
-    "description": null,
-    "on": {
-      "pull_request": {
-        "paths": [
-          "!VAMobile/ios/**"
-        ]
-      }
-    },
-    "jobs": [
-      "ios_native_build"
-    ]
-  },
-  {
     "fileName": "code_checks.yml",
     "name": "[Code Quality] Code Checks",
-    "description": null,
+    "description": "Runs code quality checks on every PR and push to main/develop/release branches. Includes ESLint, Super-Linter, Jest unit tests (split across 5 matrix chunks), and Android/iOS bundle verification.",
     "on": {
       "pull_request": null,
       "push": {
@@ -485,7 +447,7 @@
   {
     "fileName": "codeql.yml",
     "name": "[Code Quality] CodeQL",
-    "description": null,
+    "description": "Runs GitHub CodeQL security analysis on JavaScript code. Triggers on pushes and PRs to develop and weekly on a schedule. Initializes CodeQL, autobuilds the project, and performs the analysis.",
     "on": {
       "push": {
         "branches": [
@@ -510,7 +472,7 @@
   {
     "fileName": "bundler_updates.yml",
     "name": "[Code Quality] Update Bundler",
-    "description": null,
+    "description": "Updates Ruby bundler dependencies and Fastlane plugins for both Android and iOS every Wednesday. If any lock files change, commits and pushes them automatically.",
     "on": {
       "schedule": [
         {
@@ -526,7 +488,7 @@
   {
     "fileName": "documentation_accessibility_checks.yml",
     "name": "[Documentation] Accessibility Check",
-    "description": null,
+    "description": "Runs axe-core accessibility scans against every page of the documentation site on weekday mornings. Builds the Docusaurus site, crawls the sitemap, checks each URL for accessibility issues, and notifies Slack with the count of pages and errors found.",
     "on": {
       "workflow_dispatch": null,
       "schedule": [
@@ -543,7 +505,7 @@
   {
     "fileName": "documentation_deploy.yml",
     "name": "[Documentation] Deploy Site",
-    "description": null,
+    "description": "Deploys the Docusaurus documentation site to GitHub Pages. Triggers on pushes to develop that touch documentation files, daily on a schedule, or manually. Builds the site and publishes to the gh-pages branch.",
     "on": {
       "push": {
         "branches": [
@@ -565,7 +527,7 @@
   {
     "fileName": "documentation_test_build.yml",
     "name": "[Documentation] Test Build",
-    "description": null,
+    "description": "Runs a test build of the Docusaurus documentation site on PRs targeting develop that touch components, documentation, or hooks. Verifies the documentation builds successfully without deploying.",
     "on": {
       "pull_request": {
         "branches": [
@@ -584,7 +546,7 @@
   },
   {
     "fileName": "e2e_android.yml",
-    "name": "[e2e] Android Detox Test Run",
+    "name": "[E2E] Android Detox Test Run",
     "description": "Runs Detox e2e tests on Android emulator in CI. It bundles the Android app, determines which tests to run, executes them across a matrix, and reports failures to Slack and TestRail.",
     "on": {
       "push": {
@@ -648,24 +610,7 @@
           "in_progress"
         ]
       },
-      "workflow_call": {
-        "secrets": {
-          "TEST_RAIL_USER": {
-            "description": "TestRail robot userid",
-            "required": true
-          },
-          "TEST_RAIL_KEY": {
-            "description": "TestRail api key",
-            "required": true
-          },
-          "FLAGSHIP_MOBILE_APP_ID": {
-            "required": true
-          },
-          "FLAGSHIP_MOBILE_APP_PRIVATE_KEY": {
-            "required": true
-          }
-        }
-      }
+      "workflow_call": {}
     },
     "jobs": [
       "start_slack_thread",
@@ -680,29 +625,10 @@
   },
   {
     "fileName": "e2e_detox_mapping.yml",
-    "name": "[e2e] Detox Mapping",
-    "description": null,
+    "name": "[E2E] Detox Mapping",
+    "description": "Reusable workflow that determines which Detox e2e tests to run based on changed files in the PR. Reads the detoxMapping.js config to map source file and directory changes to their associated e2e test suites.",
     "on": {
-      "workflow_call": {
-        "outputs": {
-          "test_matrix": {
-            "description": "The matrix output for the e2e tests",
-            "value": "${{ jobs.find_detox_tests_to_run.outputs.output1 }}"
-          },
-          "test_run": {
-            "description": "String saying test has been run",
-            "value": "${{ jobs.find_detox_tests_to_run.outputs.output2}}"
-          }
-        },
-        "secrets": {
-          "FLAGSHIP_MOBILE_APP_ID": {
-            "required": true
-          },
-          "FLAGSHIP_MOBILE_APP_PRIVATE_KEY": {
-            "required": true
-          }
-        }
-      }
+      "workflow_call": {}
     },
     "jobs": [
       "find_detox_tests_to_run"
@@ -710,8 +636,8 @@
   },
   {
     "fileName": "e2e_ios.yml",
-    "name": "[e2e] iOS Detox Test Run",
-    "description": null,
+    "name": "[E2E] iOS Detox Test Run",
+    "description": "Runs Detox e2e tests on an iOS simulator in CI. It bundles the iOS app, determines which tests to run, executes them across a matrix, and reports failures to Slack and TestRail.",
     "on": {
       "push": {
         "branches": [
@@ -774,24 +700,7 @@
           "in_progress"
         ]
       },
-      "workflow_call": {
-        "secrets": {
-          "TEST_RAIL_USER": {
-            "description": "TestRail robot userid",
-            "required": true
-          },
-          "TEST_RAIL_KEY": {
-            "description": "TestRail api key",
-            "required": true
-          },
-          "FLAGSHIP_MOBILE_APP_ID": {
-            "required": true
-          },
-          "FLAGSHIP_MOBILE_APP_PRIVATE_KEY": {
-            "required": true
-          }
-        }
-      }
+      "workflow_call": {}
     },
     "jobs": [
       "start_slack_thread",
@@ -806,34 +715,20 @@
   },
   {
     "fileName": "update_testrail_results.yml",
-    "name": "[e2e] Update TestRail Results",
-    "description": null,
+    "name": "[E2E] Update TestRail Results",
+    "description": "Reusable workflow that uploads e2e Detox test results (JUnit XML) to TestRail. Finds or creates the appropriate test run, then uses the trcli tool to parse and upload results for each test suite.",
     "on": {
       "workflow_call": {
-        "secrets": {
-          "TEST_RAIL_USER": {
-            "description": "TestRail robot userid",
-            "required": true
-          },
-          "TEST_RAIL_KEY": {
-            "description": "TestRail api key",
-            "required": true
-          }
-        },
         "inputs": {
           "testRail_name": {
+            "description": "Name for the TestRail run (defaults to current date if blank)",
             "type": "string",
             "default": ""
           },
           "test_OS_name": {
+            "description": "OS name for the test run (e.g. iOS or Android)",
             "type": "string",
             "default": ""
-          }
-        },
-        "outputs": {
-          "test_run_id_number": {
-            "description": "The id number for the test run",
-            "value": "${{ jobs.send_test_results_to_testrail.outputs.output1 }}"
           }
         }
       }
@@ -843,9 +738,38 @@
     ]
   },
   {
+    "fileName": "app_store_checks_apple.yml",
+    "name": "[Release] App Store Requirement Checks (Apple)",
+    "description": "Validates that PRs do not exceed Apple App Store limits for screenshot counts (iPhone, iPad), description length, release notes, keywords, and title. Runs on PRs targeting main/develop/release that touch iOS metadata.",
+    "on": {
+      "pull_request": {
+        "branches": [
+          "main",
+          "develop",
+          "release/v**"
+        ],
+        "paths": [
+          "VAMobile/ios/fastlane/metadata/en-US/**",
+          "VAMobile/ios/fastlane/screenshots/**"
+        ]
+      }
+    },
+    "jobs": [
+      "check_ios_ipad_pro2_images",
+      "check_ios_ipad_pro13_images",
+      "check_ios_ipad_pro129_images",
+      "check_ios_iphone55_images",
+      "check_ios_iphone67_images",
+      "check_ios_description",
+      "check_ios_release_notes",
+      "check_ios_keyword",
+      "check_ios_title"
+    ]
+  },
+  {
     "fileName": "approve_command.yml",
     "name": "[Release] Approve Slash Command",
-    "description": null,
+    "description": "Handles the /approve slash command dispatched from issue comments. Triggers the release PR creation process, comments on the release issue with PR links, closes the issue, and notifies Slack on failure.",
     "on": {
       "repository_dispatch": {
         "types": [
@@ -861,9 +785,38 @@
     ]
   },
   {
+    "fileName": "check_max_size.yml",
+    "name": "[Release] Check Max File/Character Size",
+    "description": "Reusable workflow that checks whether a file count or character count exceeds an app store limit. Called by app_store_checks_apple and app_store_checks_google to validate screenshots and metadata sizes.",
+    "on": {
+      "workflow_call": {
+        "inputs": {
+          "working_dir": {
+            "description": "Directory to run the counting function in",
+            "required": true,
+            "type": "string"
+          },
+          "max_size": {
+            "description": "Maximum allowed count (files or characters)",
+            "required": true,
+            "type": "string"
+          },
+          "counting_function": {
+            "description": "Shell command that outputs the count to check against max_size",
+            "required": true,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "jobs": [
+      "check_max_files"
+    ]
+  },
+  {
     "fileName": "go_live.yml",
     "name": "[Release] Go Live",
-    "description": null,
+    "description": "Promotes release builds to production in the App Store and Google Play Store. Runs weekly on Tuesdays or manually. Checks environment protections, then triggers the iOS and Android Fastlane release lanes from the main branch.",
     "on": {
       "workflow_dispatch": null,
       "schedule": [
@@ -882,29 +835,21 @@
   {
     "fileName": "release_pull_request.yml",
     "name": "[Release] Merge to main and Create PR to develop",
-    "description": null,
+    "description": "Reusable release workflow that merges the release branch to main (squash merge), tags the release version, and creates a PR to merge release changes back into develop. Outputs the develop PR URL and release commit hash.",
     "on": {
       "workflow_call": {
         "inputs": {
           "version": {
-            "description": "Version Number (eg. v1.1.0)",
+            "description": "Release version number (eg. v1.1.0)",
             "type": "string",
             "required": true
-          }
-        },
-        "outputs": {
-          "devPrUrl": {
-            "value": "${{jobs.create_prs.outputs.devPrUrl}}"
-          },
-          "releaseHash": {
-            "value": "${{jobs.create_prs.outputs.releaseHash}}"
           }
         }
       },
       "workflow_dispatch": {
         "inputs": {
           "version": {
-            "description": "Version Number (eg. v1.1.0)",
+            "description": "Release version number (eg. v1.1.0)",
             "required": true,
             "type": "string"
           }
@@ -918,7 +863,7 @@
   {
     "fileName": "new_release_branch.yml",
     "name": "[Release] New Release Branch",
-    "description": null,
+    "description": "Cuts a new release branch from develop at the end of each sprint. Runs on a weekly schedule (Wednesdays) or manually. Executes the release_branch.sh script which creates the branch and tags it to trigger the RC build.",
     "on": {
       "workflow_dispatch": null,
       "schedule": [
@@ -935,7 +880,7 @@
   {
     "fileName": "release_branch_issue.yml",
     "name": "[Release] New Release Issue",
-    "description": null,
+    "description": "Creates a release tracking issue when a new release branch is created. Generates the release ticket with due dates, assigns release approvers, creates a TestRail milestone and RC test run, closes the previous milestone, posts release coordination details to Slack, and waits for manual approval to trigger the release.",
     "on": {
       "create": null
     },
@@ -951,24 +896,49 @@
     ]
   },
   {
+    "fileName": "app_store_checks_google.yml",
+    "name": "[Release] Play Store Requirement Checks (Google)",
+    "description": "Validates that PRs do not exceed Google Play Store limits for screenshot counts (phone, 7-inch tablet), description length, short description, changelog, and title. Runs on PRs targeting main/develop/release that touch Android metadata.",
+    "on": {
+      "pull_request": {
+        "branches": [
+          "main",
+          "develop",
+          "release/v**"
+        ],
+        "paths": [
+          "VAMobile/android/fastlane/metadata/android/en-US/**"
+        ]
+      }
+    },
+    "jobs": [
+      "check_max_android_phone_screenshots",
+      "check_max_android_seven_inch_screenshots",
+      "check_android_long_description",
+      "check_android_short_description",
+      "check_android_change_log",
+      "check_android_release_name"
+    ]
+  },
+  {
     "fileName": "run_approval.yml",
     "name": "[Release] Run approval Workflow",
-    "description": null,
+    "description": "Reusable release approval workflow. Triggers the release PR creation process, adds a rocket reaction to the slash command comment, and comments on the release issue with the created PR links upon completion.",
     "on": {
       "workflow_call": {
         "inputs": {
           "version": {
-            "description": "Version Number (eg. v1.1.0)",
+            "description": "Version number for the release (eg. v1.1.0)",
             "type": "string",
             "required": true
           },
           "issue_number": {
-            "description": "Issue number to comment on",
+            "description": "Release issue number to comment on with PR links",
             "type": "string",
             "required": false
           },
           "comment_id": {
-            "description": "Comment ID to react to (for slash commands)",
+            "description": "Comment ID to add a reaction to (for slash command feedback)",
             "type": "string",
             "required": false
           }
@@ -984,7 +954,7 @@
   {
     "fileName": "security-scan.yml",
     "name": "[Security] Package Dependency Security Check",
-    "description": null,
+    "description": "Scans PRs for package.json dependency changes. Detects added, changed, or removed packages, runs GuardDog security analysis, generates a detailed review summary, and requires manual approval for dependency changes via the bypass-package-lock environment protection.",
     "on": {
       "pull_request": null
     },
@@ -1001,25 +971,9 @@
   {
     "fileName": "create_testrail_milestone.yml",
     "name": "[TestRail] Create TestRail Milestone",
-    "description": null,
+    "description": "Reusable workflow that creates a new sprint milestone in TestRail. Sets the milestone name to the current two-week sprint date range, marks it as started, and outputs the milestone ID for use by downstream workflows.",
     "on": {
-      "workflow_call": {
-        "outputs": {
-          "milestoneId": {
-            "value": "${{ jobs.create_milestone.outputs.milestoneId }}"
-          }
-        },
-        "secrets": {
-          "TEST_RAIL_USER": {
-            "description": "TestRail robot userid",
-            "required": true
-          },
-          "TEST_RAIL_KEY": {
-            "description": "TestRail api key",
-            "required": true
-          }
-        }
-      }
+      "workflow_call": {}
     },
     "jobs": [
       "create_milestone"
@@ -1028,7 +982,7 @@
   {
     "fileName": "start_test_rail_run.yml",
     "name": "[TestRail] Start RC Run",
-    "description": null,
+    "description": "Reusable workflow that creates a new regression test run in TestRail for a release candidate. Fetches RC test cases, creates the run under the specified milestone, and outputs the TestRail run URL.",
     "on": {
       "workflow_call": {
         "inputs": {
@@ -1051,21 +1005,6 @@
             "description": "Milestone id for the run to be associated with",
             "type": "string",
             "required": true
-          }
-        },
-        "secrets": {
-          "TEST_RAIL_USER": {
-            "description": "Testrail robot userid",
-            "required": true
-          },
-          "TEST_RAIL_KEY": {
-            "description": "Testrail api key",
-            "required": true
-          }
-        },
-        "outputs": {
-          "testrailUrl": {
-            "value": "${{jobs.start_run.outputs.testrailUrl}}"
           }
         }
       },
@@ -1101,7 +1040,7 @@
   {
     "fileName": "update_testrail_run.yml",
     "name": "[TestRail] Update Run",
-    "description": null,
+    "description": "Receives a repository_dispatch webhook from TestRail and updates the associated release issue's body with a pie chart showing test run results (passed, blocked, retest, failed, untested).",
     "on": {
       "repository_dispatch": {
         "types": [
@@ -1116,7 +1055,7 @@
   {
     "fileName": "check_maintenance_windows.yml",
     "name": "[Utils] Check Maintenance Windows",
-    "description": null,
+    "description": "Checks PagerDuty maintenance windows daily and updates them via a Python script. Notifies Slack on success or failure. Can also be triggered manually.",
     "on": {
       "workflow_dispatch": null,
       "schedule": [
@@ -1134,7 +1073,7 @@
   {
     "fileName": "pr_needs_review_reminder.yml",
     "name": "[Utils] FE PR Needs Review Reminder",
-    "description": null,
+    "description": "Manually triggered workflow that counts open PRs labeled 'FE-Needs Review' and posts the count to a Slack channel as a reminder for the team to review pending frontend PRs.",
     "on": "workflow_dispatch",
     "jobs": [
       "send_pr_reminder"
@@ -1142,8 +1081,8 @@
   },
   {
     "fileName": "screenshot_e2e.yml",
-    "name": "[Utils] Gather iOS and Android screenshots",
-    "description": null,
+    "name": "[Release] Gather iOS and Android screenshots",
+    "description": "Generates App Store screenshots for iOS (iPhone and iPad) and Android using Detox e2e tests in CI. It builds and runs screenshot tests on each platform, combines and frames the images, commits them to the PR branch, and notifies Slack of success or failure.",
     "on": {
       "workflow_dispatch": null
     },
@@ -1161,7 +1100,7 @@
   {
     "fileName": "onboarding.yml",
     "name": "[Utils] Onboarding",
-    "description": null,
+    "description": "Placeholder onboarding workflow that triggers when an issue is labeled with 'onboarding'. Currently logs the issue event; Slack notification logic is commented out pending future implementation.",
     "on": {
       "issues": {
         "types": [
@@ -1176,7 +1115,7 @@
   {
     "fileName": "qa_required_approvals.yml",
     "name": "[Utils] QA required approval",
-    "description": null,
+    "description": "Enforces that PRs modifying app source code have at least one engineer approval and one QA team approval before merging. Checks changed files against inclusion/exclusion patterns and validates review approvals.",
     "on": "pull_request",
     "jobs": [
       "check_for_qa_approval"
@@ -1185,7 +1124,7 @@
   {
     "fileName": "slash_commands.yml",
     "name": "[Utils] Slash Command Dispatch",
-    "description": null,
+    "description": "Listens for issue comments and dispatches recognized slash commands (currently /approve) to their corresponding workflow handlers. Uses the peter-evans/slash-command-dispatch action for parsing and dispatching.",
     "on": {
       "issue_comment": {
         "types": [
@@ -1200,7 +1139,7 @@
   {
     "fileName": "start_slack_thread.yml",
     "name": "[Utils] Start Slack Thread",
-    "description": null,
+    "description": "Reusable workflow that posts a message to a Slack channel to start a thread. Looks up the channel ID by name, posts the message, and outputs the thread timestamp and channel ID for downstream workflows to reply to.",
     "on": {
       "workflow_call": {
         "inputs": {
@@ -1214,16 +1153,6 @@
             "type": "string",
             "required": true
           }
-        },
-        "outputs": {
-          "thread_ts": {
-            "description": "Timestamp of the Slack thread that was created.",
-            "value": "${{ jobs.start_thread.outputs.thread_ts }}"
-          },
-          "channel_id": {
-            "description": "Channel ID in Slack where thread that was created.",
-            "value": "${{ jobs.get_channel_id.outputs.channel_id }}"
-          }
         }
       }
     },
@@ -1233,89 +1162,9 @@
     ]
   },
   {
-    "fileName": "app_store_checks_apple.yml",
-    "name": "App Store requirement checks",
-    "description": null,
-    "on": {
-      "pull_request": {
-        "branches": [
-          "main",
-          "develop",
-          "release/v**"
-        ],
-        "paths": [
-          "VAMobile/ios/fastlane/metadata/en-US/**",
-          "VAMobile/ios/fastlane/screenshots/**"
-        ]
-      }
-    },
-    "jobs": [
-      "check_ios_ipad_pro2_images",
-      "check_ios_ipad_pro13_images",
-      "check_ios_ipad_pro129_images",
-      "check_ios_iphone55_images",
-      "check_ios_iphone67_images",
-      "check_ios_description",
-      "check_ios_release_notes",
-      "check_ios_keyword",
-      "check_ios_title"
-    ]
-  },
-  {
-    "fileName": "app_store_checks_google.yml",
-    "name": "App Store requirement checks",
-    "description": null,
-    "on": {
-      "pull_request": {
-        "branches": [
-          "main",
-          "develop",
-          "release/v**"
-        ],
-        "paths": [
-          "VAMobile/android/fastlane/metadata/android/en-US/**"
-        ]
-      }
-    },
-    "jobs": [
-      "check_max_android_phone_screenshots",
-      "check_max_android_seven_inch_screenshots",
-      "check_android_long_description",
-      "check_android_short_description",
-      "check_android_change_log",
-      "check_android_release_name"
-    ]
-  },
-  {
-    "fileName": "check_max_size.yml",
-    "name": "check_max_size.yml",
-    "description": null,
-    "on": {
-      "workflow_call": {
-        "inputs": {
-          "working_dir": {
-            "required": true,
-            "type": "string"
-          },
-          "max_size": {
-            "required": true,
-            "type": "string"
-          },
-          "counting_function": {
-            "required": true,
-            "type": "string"
-          }
-        }
-      }
-    },
-    "jobs": [
-      "check_max_files"
-    ]
-  },
-  {
     "fileName": "codeql-analysis.yml",
     "name": "CodeQL",
-    "description": null,
+    "description": "Runs GitHub CodeQL static analysis on Ruby, JavaScript, and Python code. Triggers on pushes and PRs to develop, weekly on a schedule, and manually. Uses the VA's shared codeql-tools action for scanning.",
     "on": {
       "push": {
         "branches": [
@@ -1341,7 +1190,7 @@
   {
     "fileName": "get-slack-user-id.yml",
     "name": "Lookup Slack Username",
-    "description": null,
+    "description": "Reusable workflow that looks up a Slack user ID from a VA email address or GitHub handle. Maps git handles to emails via a repository variable, validates the @va.gov domain, and queries the Slack API to find the user ID.",
     "on": {
       "workflow_dispatch": {
         "inputs": {
@@ -1369,12 +1218,6 @@
             "required": false,
             "type": "string"
           }
-        },
-        "outputs": {
-          "slackId": {
-            "description": "The Slack user ID found for the given input.",
-            "value": "${{ jobs.get-slack-name.outputs.slackId }}"
-          }
         }
       }
     },
@@ -1385,7 +1228,7 @@
   {
     "fileName": "ui-change-check.yml",
     "name": "UI Approval Check",
-    "description": null,
+    "description": "Checks PRs for a \"UI changes\" checkbox in the description. If checked, automatically requests reviews from designated UI reviewers and blocks the PR until one of them approves.",
     "on": {
       "pull_request": {
         "types": [

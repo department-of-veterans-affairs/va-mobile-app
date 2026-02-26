@@ -41,11 +41,21 @@ function parseWorkflow(fileName) {
 
   if (!data) return null;
 
+  const on = data.on || {};
+  if (on) {
+    Object.keys(on).forEach(trigger => {
+      if (on[trigger] && typeof on[trigger] === 'object') {
+        delete on[trigger].secrets;
+        delete on[trigger].outputs;
+      }
+    });
+  }
+
   return {
     fileName,
     name: data.name || fileName,
     description,
-    on: data.on || {},
+    on,
     jobs: data.jobs ? Object.keys(data.jobs) : [],
   };
 }
