@@ -67,6 +67,7 @@ export const ClaimsE2eIdConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.EVIDENCE_REQUESTS_UPDATED_UI_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -184,15 +185,23 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Dental disability - More information needed'))).toExist()
   })
 
-  it('verify that the user is sent to the file upload page', async () => {
+  it('verify file request with friendlyName shows old UI (displayName as title)', async () => {
     await element(by.text('Dental disability - More information needed')).tap()
+    // When friendlyName exists, should show displayName as title (old UI)
+    await expect(element(by.text('Dental disability - More information needed'))).toExist()
+    // Should NOT show new UI elements
+    await expect(element(by.text('Request for evidence'))).not.toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
   })
 
-  it('should back out of the file request screen and reenter a new file request screen', async () => {
+  it('verify file request without friendlyName shows updated UI', async () => {
     await element(by.text('Back')).atIndex(0).tap()
     await element(by.text('Accidental injury - 21-4176 needed')).tap()
+    // When no friendlyName, should show updated UI with "Request for evidence" title
+    await expect(element(by.text('Request for evidence'))).toExist()
+    // Should show "Respond by" subtitle with suspense date and displayName
+    await expect(element(by.text('Respond by June 15, 2021 for: Accidental injury - 21-4176 needed'))).toExist()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
   })
 

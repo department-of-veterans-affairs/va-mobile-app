@@ -48,8 +48,18 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     attachmentIconTopMargin,
     condensedMarginBetween,
   } = theme.dimensions
-  const { displayName, type, status, description, uploadDate, documents, requestedDate, suspenseDate, uploadsAllowed } =
-    request
+  const {
+    displayName,
+    type,
+    status,
+    description,
+    uploadDate,
+    documents,
+    requestedDate,
+    suspenseDate,
+    uploadsAllowed,
+    friendlyName,
+  } = request
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -240,8 +250,10 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   return (
     <VAScrollView testID="fileRequestDetailsID">
-      <SubtaskTitle title={showUpdatedUI ? t('fileRequestDetails.title') : displayName || ''} />
-      {showUpdatedUI && formattedSuspenseDate && (
+      <SubtaskTitle
+        title={showUpdatedUI ? (friendlyName ? displayName || '' : t('fileRequestDetails.title')) : displayName || ''}
+      />
+      {showUpdatedUI && !friendlyName && formattedSuspenseDate && (
         <Box mx={gutter} mt={attachmentIconTopMargin} mb={lineItemSpacing}>
           <TextView variant="MobileBody">
             {t('fileRequestDetails.respondByFor', { date: formattedSuspenseDate, displayName })}
@@ -281,13 +293,22 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
         )}
         <TextArea>
           {showUpdatedUI ? (
-            <>
-              {renderRequestDateBlurb()}
-              {renderWhatWeNeedFromYouSection()}
-              {renderNextStepsSection()}
-              {uploadsAllowed && renderMoreOnSubmittingFilesSection()}
-              {renderNeedHelpSection()}
-            </>
+            friendlyName ? (
+              <>
+                <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+                  {displayName}
+                </TextView>
+                <TextView variant="MobileBody">{description}</TextView>
+              </>
+            ) : (
+              <>
+                {renderRequestDateBlurb()}
+                {renderWhatWeNeedFromYouSection()}
+                {renderNextStepsSection()}
+                {uploadsAllowed && renderMoreOnSubmittingFilesSection()}
+                {renderNeedHelpSection()}
+              </>
+            )
           ) : (
             <>
               <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">

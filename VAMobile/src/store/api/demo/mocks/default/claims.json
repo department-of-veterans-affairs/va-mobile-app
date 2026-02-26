@@ -867,6 +867,7 @@
             "trackedItemId": 293442,
             "description": "Tell us the specific dental disability you are claiming and describe the circumstances of your dental injury.",
             "displayName": "Dental disability - More information needed",
+            "friendlyName": "Clarify claimed condition",
             "overdue": false,
             "status": "NEEDED",
             "uploaded": false,
@@ -904,10 +905,10 @@
             "uploaded": false,
             "uploadsAllowed": true,
             "openedDate": "2021-05-05",
-            "requestedDate": null,
+            "requestedDate": "2021-05-05",
             "receivedDate": null,
             "closedDate": null,
-            "suspenseDate": null,
+            "suspenseDate": "2021-06-15",
             "documents": []
           },
           {
@@ -1271,10 +1272,10 @@
             "uploaded": false,
             "uploadsAllowed": true,
             "openedDate": "2021-05-05",
-            "requestedDate": null,
+            "requestedDate": "2021-05-05",
             "receivedDate": null,
             "closedDate": null,
-            "suspenseDate": null,
+            "suspenseDate": "2021-06-15",
             "documents": []
           },
           {
