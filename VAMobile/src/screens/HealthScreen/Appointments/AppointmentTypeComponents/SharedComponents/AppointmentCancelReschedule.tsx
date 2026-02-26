@@ -102,7 +102,6 @@ const cancelButton = (
       {
         options,
         title: pendingAppointment ? t('appointments.cancelRequest') : t('appointments.cancelThisAppointment'),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {
