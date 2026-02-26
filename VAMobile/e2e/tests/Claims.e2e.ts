@@ -67,6 +67,7 @@ export const ClaimsE2eIdConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.EVIDENCE_REQUESTS_UPDATED_UI_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()

@@ -22,6 +22,7 @@ const mockOverrides = {
   COEAvailable: false,
   copayments: false,
   decisionLettersWaygate: false,
+  evidenceRequestsUpdatedUI: false,
   hsScrollAnalytics: false,
   inAppReview: true,
   labsAndTests: true,
