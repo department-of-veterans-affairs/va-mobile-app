@@ -48,6 +48,7 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
+import { MigrationErrorMessage } from 'components/MigrationErrorMessage'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -69,7 +70,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useAttachments, useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { MigrationErrorMessage, OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
+import { OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,

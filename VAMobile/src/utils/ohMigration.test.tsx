@@ -3,10 +3,10 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { Facility, FacilityInfo, MigratingFacility, MigrationPhases } from 'api/types'
+import { MigrationErrorMessage } from 'components/MigrationErrorMessage'
+import { MigrationWarningMessage } from 'components/MigrationWarningMessage'
 import { context, render } from 'testUtils'
 import {
-  MigrationErrorMessage,
-  MigrationWarningMessage,
   OHParentScreens,
   allFacilitiesInMigrationErrorState,
   anyFacilitiesInMigrationErrorState,
