@@ -128,7 +128,8 @@ jobs:
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
+                echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
               else
                 echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -144,7 +145,8 @@ jobs:
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
                   if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                    echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                    matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
+                    echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
                     echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
                   else
                     echo "matrix=" >> "$GITHUB_OUTPUT" 
