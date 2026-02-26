@@ -42,7 +42,7 @@ context('RemoteConfigScreen', () => {
   it('shows a snackbar if no values changed', async () => {
     initializeTestInstance()
 
-    const applyOverridesButton = screen.getByRole('button', { name: 'Apply Overrides' })
+    const applyOverridesButton = screen.getByTestId('applyOverridesTestID')
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 
@@ -56,7 +56,7 @@ context('RemoteConfigScreen', () => {
     // Toggle an item to enable override button
     fireEvent.press(screen.getByText('useOldLinkComponent'))
 
-    const applyOverridesButton = screen.getByRole('button', { name: 'Apply Overrides' })
+    const applyOverridesButton = screen.getByTestId('applyOverridesTestID')
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 
