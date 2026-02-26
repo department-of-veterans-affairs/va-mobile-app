@@ -1,5 +1,137 @@
 [
   {
+    "title": "v2.70.0",
+    "due_on": "2026-03-10T00:00:00Z",
+    "issues": [
+      {
+        "title": "133503: Fix issue when navigating to travel claim details",
+        "number": 12715,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12715",
+        "isPR": true
+      },
+      {
+        "title": "BUG - Sev-3 - All - Web view link in Labs and tests page has an external link icon when it shouldn't",
+        "number": 12698,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12698",
+        "isPR": false
+      },
+      {
+        "title": "COE Demo Mode changes",
+        "number": 12683,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12683",
+        "isPR": false
+      },
+      {
+        "title": "MHV / update link on labs list screen",
+        "number": 12682,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12682",
+        "isPR": true
+      },
+      {
+        "title": "PastAppointments.test.tsx – Update mock date to use utc date instead of local",
+        "number": 12672,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12672",
+        "isPR": true
+      },
+      {
+        "title": "131693: Updating Definition for `transferred` Status",
+        "number": 12655,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12655",
+        "isPR": true
+      },
+      {
+        "title": "Fix Cerner e2e and Skip Prescriptions",
+        "number": 12634,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12634",
+        "isPR": true
+      },
+      {
+        "title": "132302: Remove timezone from travel claims list",
+        "number": 12616,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12616",
+        "isPR": true
+      },
+      {
+        "title": "MHV SM - OH migration - block replies at T-6",
+        "number": 12608,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12608",
+        "isPR": true
+      },
+      {
+        "title": "BUG - iOS - LargePanel screens only display in portrait mode",
+        "number": 12597,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12597",
+        "isPR": false
+      },
+      {
+        "title": "Content changes for OH migration alerts for SM and Appts",
+        "number": 12593,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12593",
+        "isPR": true
+      },
+      {
+        "title": "Origin/oh tg name change alert v1",
+        "number": 12586,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12586",
+        "isPR": true
+      },
+      {
+        "title": "Enhance Claims and Appeals Data Types with Structured Content and New Claim Event Fields",
+        "number": 12578,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12578",
+        "isPR": true
+      },
+      {
+        "title": "Add station number to API payload when sending a message",
+        "number": 12573,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12573",
+        "isPR": false
+      },
+      {
+        "title": "BUG - Sev 3 - All - appt_view_details event triggering multiple times",
+        "number": 12557,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12557",
+        "isPR": false
+      },
+      {
+        "title": "12898: Fix double logging of screen events on cross-tab navigation to Travel Claims",
+        "number": 12549,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12549",
+        "isPR": true
+      },
+      {
+        "title": "950 - VSC Integrate New Endpoint",
+        "number": 12531,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12531",
+        "isPR": true
+      },
+      {
+        "title": "Referencing `sortedDispensedDate` field to match Web",
+        "number": 12475,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12475",
+        "isPR": true
+      },
+      {
+        "title": "Remove Long Outdated Remote Config options",
+        "number": 12394,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12394",
+        "isPR": false
+      },
+      {
+        "title": "Demo Mode User selection on log in",
+        "number": 12387,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12387",
+        "isPR": false
+      },
+      {
+        "title": "Spike - Automate the creation of app store images",
+        "number": 4947,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/4947",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.69.0",
     "due_on": "2026-02-24T00:00:00Z",
     "issues": [
