@@ -1,42 +1,37 @@
-# Reusable workflow that sets up environment, installs depdendencies, and
-# runs iOS fastlane using provided inputs
+# DESCRIPTION: Reusable iOS build workflow. Sets up the macOS environment, installs
+# dependencies, decodes signing keys, bundles the app, and runs the specified
+# Fastlane lane (qa, rc, review, release, on_demand) to build and distribute.
 name: '[Build] Reusable iOS Workflow'
 
 on:
   workflow_call:
     inputs:
-      # Used to determine the environment variables to build the app with
-      # Options: test, staging, production
       environment:
+        description: 'App environment variables to use (test, staging, production)'
         type: string
         default: staging
-      # Specifies which fastlane lane to run
-      # Options: qa, rc, review, release, on_demand
       lane:
+        description: 'Fastlane lane to run (qa, rc, review, release, on_demand)'
         type: string
         default: qa
-      # Release notes that will show next to the version in TestFlight
-      # Fastlane will default to "New QA version for {{DATE_TIME}}"
       notes:
+        description: 'Release notes for TestFlight (defaults to "New QA version for {{DATE_TIME}}")'
         type: string
         default: ''
-      # The branch or tag that we want to build from.  Defaults to the branch/tag that triggered
-      # the automation, otherwise uses develop
       ref:
+        description: 'Branch or tag to build from (defaults to triggering ref)'
         type: string
         default: ''
-      # Timestamp of the Slack thread where build related messages should be sent.
-      # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
+        description: 'Slack thread timestamp for build status messages'
         type: string
         default: ''
-      # TestFlight group to distribute to. Fastlane defaults to "Development Team"
       tf_group:
+        description: 'TestFlight group to distribute to (defaults to "Development Team")'
         type: string
         default: ''
-      # Version to use for production release. QA/On-demand builds will increment
-      # upon the latest version in TestFlight
       version:
+        description: 'Version for production release (QA/on-demand builds auto-increment)'
         type: string
         default: qa
 

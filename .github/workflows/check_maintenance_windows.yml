@@ -1,3 +1,7 @@
+# DESCRIPTION: Checks PagerDuty maintenance windows daily and updates them via
+# a Python script. Notifies Slack on success or failure. Can also be triggered
+# manually.
+
 name: '[Utils] Check Maintenance Windows'
 
 on:

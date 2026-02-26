@@ -1,4 +1,6 @@
-# Promotes builds in App Store and Google Play to production
+# DESCRIPTION: Promotes release builds to production in the App Store and Google
+# Play Store. Runs weekly on Tuesdays or manually. Checks environment protections,
+# then triggers the iOS and Android Fastlane release lanes from the main branch.
 
 name: "[Release] Go Live"
 

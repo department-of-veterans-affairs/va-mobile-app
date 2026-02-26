@@ -1,3 +1,7 @@
+# DESCRIPTION: Reusable workflow that creates a new sprint milestone in TestRail.
+# Sets the milestone name to the current two-week sprint date range, marks it as
+# started, and outputs the milestone ID for use by downstream workflows.
+
 name: "[TestRail] Create TestRail Milestone"
 
 on:

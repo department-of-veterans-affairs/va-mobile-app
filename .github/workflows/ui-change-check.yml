@@ -1,3 +1,7 @@
+# DESCRIPTION: Checks PRs for a "UI changes" checkbox in the description. If
+# checked, automatically requests reviews from designated UI reviewers and
+# blocks the PR until one of them approves.
+
 name: UI Approval Check
 
 on:

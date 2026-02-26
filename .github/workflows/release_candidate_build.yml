@@ -1,6 +1,7 @@
-# Release candidate builds that are triggered by the RC-v*.*.* tag. The new_release_branch.yml
-# branches off of develop at the end of every sprint and tags the newly created release
-# branch, which should trigger this build
+# DESCRIPTION: Builds release candidate (RC) staging builds for iOS and Android,
+# triggered by an RC-v*.*.* tag pushed from new_release_branch.yml at the end of
+# each sprint. Queues the build, notifies Slack, and runs iOS and Android RC builds
+# in parallel for QA validation and regression testing.
 
 name: '[Build] Release Candidate Build'
 

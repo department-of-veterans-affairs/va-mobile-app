@@ -2,7 +2,7 @@
 # It bundles the Android app, determines which tests to run, executes
 # them across a matrix, and reports failures to Slack and TestRail.
 
-name: '[e2e] Android Detox Test Run'
+name: '[E2E] Android Detox Test Run'
 
 on:
   push:

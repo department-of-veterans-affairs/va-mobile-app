@@ -1,5 +1,8 @@
-# workflow to check that PR does not break any Google Play Store max file or max character limits
-name: 'App Store requirement checks'
+# DESCRIPTION: Validates that PRs do not exceed Google Play Store limits for
+# screenshot counts (phone, 7-inch tablet), description length, short description,
+# changelog, and title. Runs on PRs targeting main/develop/release that touch
+# Android metadata.
+name: '[Release] Play Store Requirement Checks (Google)'
 
 on:
   pull_request:

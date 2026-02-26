@@ -1,3 +1,7 @@
+# DESCRIPTION: Receives a repository_dispatch webhook from TestRail and updates
+# the associated release issue's body with a pie chart showing test run results
+# (passed, blocked, retest, failed, untested).
+
 name: "[TestRail] Update Run"
 
 on:

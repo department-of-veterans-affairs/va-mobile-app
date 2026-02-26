@@ -1,4 +1,6 @@
-# Reusable workflow that waits for older in progress builds to finish
+# DESCRIPTION: Reusable workflow that queues builds by waiting for any older
+# in-progress build workflows (QA, On Demand, Release, RC) to finish before
+# allowing the current build to proceed. Prevents concurrent build conflicts.
 name: '[Build] Queue Build'
 
 on:

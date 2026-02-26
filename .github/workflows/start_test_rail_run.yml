@@ -1,3 +1,7 @@
+# DESCRIPTION: Reusable workflow that creates a new regression test run in TestRail
+# for a release candidate. Fetches RC test cases, creates the run under the
+# specified milestone, and outputs the TestRail run URL.
+
 name: "[TestRail] Start RC Run"
 
 on:

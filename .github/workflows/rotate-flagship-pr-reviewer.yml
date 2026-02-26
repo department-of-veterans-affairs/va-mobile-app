@@ -1,3 +1,7 @@
+# DESCRIPTION: Rotates the primary PR reviewer assignment biweekly on Mondays.
+# Updates Slack channel topics for va-mobile-app and va-mobile-app-engineering
+# with the current reviewer and backup, and posts a notification message.
+
 name: '[Admin] Weekly Flagship Mobile PR Reviewer Assignment'
 
 on:

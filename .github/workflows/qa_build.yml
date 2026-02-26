@@ -1,5 +1,6 @@
-# Daily QA Build workflow that runs the reusable build_ios and build_android workflows
-# with default inputs for QA builds
+# DESCRIPTION: Runs daily QA builds for iOS and Android on weekday mornings.
+# Queues the build, notifies Slack, and triggers the reusable build_ios and
+# build_android workflows with default QA settings.
 
 name: '[Build] Daily QA Build'
 

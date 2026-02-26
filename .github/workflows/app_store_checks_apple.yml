@@ -1,5 +1,7 @@
-# workflow to check that PR does not break any Apple App Store max file or max character limits
-name: "App Store requirement checks"
+# DESCRIPTION: Validates that PRs do not exceed Apple App Store limits for
+# screenshot counts (iPhone, iPad), description length, release notes, keywords,
+# and title. Runs on PRs targeting main/develop/release that touch iOS metadata.
+name: '[Release] App Store Requirement Checks (Apple)'
 
 on:
   pull_request:
@@ -8,8 +10,8 @@ on:
       - develop
       - 'release/v**'
     paths:
-      - "VAMobile/ios/fastlane/metadata/en-US/**"
-      - "VAMobile/ios/fastlane/screenshots/**"
+      - 'VAMobile/ios/fastlane/metadata/en-US/**'
+      - 'VAMobile/ios/fastlane/screenshots/**'
 
 jobs:
   check_ios_ipad_pro2_images:

@@ -1,3 +1,7 @@
+# DESCRIPTION: When a new issue with the 'devops' label is opened, adds it to the
+# DevOps project board with "Ready to Work" status and sends a Slack notification
+# to the va-mobile-devops channel.
+
 name: '[Admin] Notify Slack of DevOps issues'
 
 on:

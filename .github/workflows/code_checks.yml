@@ -1,6 +1,6 @@
-#
-# Lint and Unit Test jobs that runs our lint:ci and test npm scripts
-#
+# DESCRIPTION: Runs code quality checks on every PR and push to main/develop/release
+# branches. Includes ESLint, Super-Linter, Jest unit tests (split across 5 matrix
+# chunks), and Android/iOS bundle verification.
 
 name: '[Code Quality] Code Checks'
 

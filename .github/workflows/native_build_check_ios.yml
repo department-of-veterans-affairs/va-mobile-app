@@ -1,10 +1,12 @@
-# Tests to see that changes to native files do not break the iOs build process
-name: '[Code Quality] Check Native iOs Builds'
+# DESCRIPTION: Verifies that changes to native iOS files do not break the iOS
+# build process. Triggers on PRs that modify files under VAMobile/ios/ and runs
+# a test-only iOS build via the reusable build_ios workflow.
+name: '[Code Quality] Check Native iOS Builds'
 
 on:
   pull_request:
     paths:
-      - "VAMobile/ios/**"
+      - 'VAMobile/ios/**'
 
 jobs:
   ios_native_build:

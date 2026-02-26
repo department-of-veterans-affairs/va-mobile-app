@@ -1,8 +1,8 @@
-#
-# Detox e2e tests in CI
-#
+# DESCRIPTION: Runs Detox e2e tests on an iOS simulator in CI.
+# It bundles the iOS app, determines which tests to run, executes
+# them across a matrix, and reports failures to Slack and TestRail.
 
-name: '[e2e] iOS Detox Test Run'
+name: '[E2E] iOS Detox Test Run'
 
 on:
   push:

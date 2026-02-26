@@ -1,5 +1,6 @@
-# Release builds that are triggered by the v*.*.* tag. Release tags occur when
-# someone comments /approve on the associated release ticket
+# DESCRIPTION: Builds production release builds for iOS and Android, triggered by
+# a v*.*.* tag (created when /approve is commented on the release ticket). Queues
+# the build, notifies Slack, runs both platform builds, and alerts on failure.
 
 name: '[Build] Release Build'
 
