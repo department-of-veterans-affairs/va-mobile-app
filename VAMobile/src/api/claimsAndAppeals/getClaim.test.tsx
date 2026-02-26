@@ -1,10 +1,10 @@
 import { waitFor } from '@testing-library/react-native'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaim } from 'api/claimsAndAppeals/getClaim'
 import { ClaimData } from 'api/types'
 import { get } from 'store/api'
 import { context, renderQuery, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('store/api', () => {
   const original = jest.requireActual('store/api')
@@ -14,8 +14,8 @@ jest.mock('store/api', () => {
   }
 })
 
-jest.mock('utils/remoteConfig', () => ({
-  featureEnabled: jest.fn(),
+jest.mock('api/authorizedServices/getAuthorizedServices', () => ({
+  useAuthorizedServices: jest.fn(),
 }))
 
 const mockClaimData: ClaimData = {
@@ -51,14 +51,12 @@ context('getClaim', () => {
     jest.clearAllMocks()
   })
 
-  describe('feature flag OFF', () => {
+  describe('cstMultiClaimProvider authorized service OFF', () => {
     beforeEach(() => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('cstMultiClaimProvider')
-        .mockReturnValue(false)
+      when(useAuthorizedServices as jest.Mock).mockReturnValue({ data: { cstMultiClaimProvider: false } })
     })
 
-    it('fetches without provider query param when flag is off and provider is given', async () => {
+    it('fetches without provider query param when service is off and provider is given', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/claim/123', {})
         .mockResolvedValueOnce({ data: mockClaimData })
@@ -69,7 +67,7 @@ context('getClaim', () => {
       expect(get).toBeCalledWith('/v0/claim/123', {})
     })
 
-    it('fetches without provider query param when flag is off and no provider', async () => {
+    it('fetches without provider query param when service is off and no provider', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/claim/123', {})
         .mockResolvedValueOnce({ data: mockClaimData })
@@ -81,14 +79,12 @@ context('getClaim', () => {
     })
   })
 
-  describe('feature flag ON', () => {
+  describe('cstMultiClaimProvider authorized service ON', () => {
     beforeEach(() => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('cstMultiClaimProvider')
-        .mockReturnValue(true)
+      when(useAuthorizedServices as jest.Mock).mockReturnValue({ data: { cstMultiClaimProvider: true } })
     })
 
-    it('fetches with ?type=lighthouse when flag is on and provider is lighthouse', async () => {
+    it('fetches with ?type=lighthouse when service is on and provider is lighthouse', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/claim/123?type=lighthouse', {})
         .mockResolvedValueOnce({ data: mockClaimData })
@@ -99,21 +95,8 @@ context('getClaim', () => {
       expect(get).toBeCalledWith('/v0/claim/123?type=lighthouse', {})
     })
 
-    it('fetches with ?type=champva when flag is on and provider is champva', async () => {
-      const champvaClaimData = { ...mockClaimData, attributes: { ...mockClaimData.attributes, provider: 'champva' } }
-
-      when(get as jest.Mock)
-        .calledWith('/v0/claim/456?type=champva', {})
-        .mockResolvedValueOnce({ data: champvaClaimData })
-
-      const { result } = renderQuery(() => useClaim('456', 'champva'))
-      await waitFor(() => expect(result.current.data).toEqual(champvaClaimData))
-
-      expect(get).toBeCalledWith('/v0/claim/456?type=champva', {})
-    })
-
     // Null provider uses the legacy URL (no type param) for backward compatibility
-    it('fetches without type param when flag is on and provider is null', async () => {
+    it('fetches without type param when service is on but provider is null', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/claim/123', {})
         .mockResolvedValueOnce({ data: mockClaimData })

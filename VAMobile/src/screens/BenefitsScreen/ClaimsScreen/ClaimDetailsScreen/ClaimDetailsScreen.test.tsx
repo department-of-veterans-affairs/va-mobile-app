@@ -4,6 +4,7 @@ import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
@@ -241,8 +242,7 @@ context('ClaimDetailsScreen', () => {
   })
 
   describe('multi-provider claim routing', () => {
-    it('fetches claim with ?type query param when feature flag is on and provider is given', async () => {
-      when(featureEnabled).calledWith('cstMultiClaimProvider').mockReturnValue(true)
+    it('fetches claim with ?type query param when authorized service is on and provider is given', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claim/600156928?type=lighthouse`, {})
         .mockResolvedValue({ data: { ...claimData } })
@@ -252,35 +252,37 @@ context('ClaimDetailsScreen', () => {
         { navigate: jest.fn(), addListener: jest.fn(), setOptions: jest.fn(), goBack: jest.fn() },
         { params: { claimID: '600156928', claimType: ClaimTypeConstants.ACTIVE, provider: 'lighthouse' } },
       )
-      render(<ClaimDetailsScreen {...props} />)
+      render(<ClaimDetailsScreen {...props} />, {
+        queriesData: [{ queryKey: authorizedServicesKeys.authorizedServices, data: { cstMultiClaimProvider: true } }],
+      })
 
       await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
       expect(api.get).toBeCalledWith('/v0/claim/600156928?type=lighthouse', {})
     })
 
-    it('fetches claim without ?type query param when feature flag is off even if provider is given', async () => {
-      when(featureEnabled).calledWith('cstMultiClaimProvider').mockReturnValue(false)
-
+    it('fetches claim without ?type query param when authorized service is off even if provider is given', async () => {
       const props = mockNavProps(
         undefined,
         { navigate: jest.fn(), addListener: jest.fn(), setOptions: jest.fn(), goBack: jest.fn() },
         { params: { claimID: '600156928', claimType: ClaimTypeConstants.ACTIVE, provider: 'lighthouse' } },
       )
-      render(<ClaimDetailsScreen {...props} />)
+      render(<ClaimDetailsScreen {...props} />, {
+        queriesData: [{ queryKey: authorizedServicesKeys.authorizedServices, data: { cstMultiClaimProvider: false } }],
+      })
 
       await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
       expect(api.get).toBeCalledWith('/v0/claim/600156928', {})
     })
 
-    it('fetches without type param when flag is on but no provider in route params', async () => {
-      when(featureEnabled).calledWith('cstMultiClaimProvider').mockReturnValue(true)
-
+    it('fetches without type param when authorized service is on but no provider in route params', async () => {
       const props = mockNavProps(
         undefined,
         { navigate: jest.fn(), addListener: jest.fn(), setOptions: jest.fn(), goBack: jest.fn() },
         { params: { claimID: '600156928', claimType: ClaimTypeConstants.ACTIVE } },
       )
-      render(<ClaimDetailsScreen {...props} />)
+      render(<ClaimDetailsScreen {...props} />, {
+        queriesData: [{ queryKey: authorizedServicesKeys.authorizedServices, data: { cstMultiClaimProvider: true } }],
+      })
 
       await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
       expect(api.get).toBeCalledWith('/v0/claim/600156928', {})

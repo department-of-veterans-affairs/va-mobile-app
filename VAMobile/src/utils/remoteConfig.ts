@@ -44,7 +44,6 @@ export type FeatureToggleType =
   | 'overpayments'
   | 'offlineMode'
   | 'remoteConfigRefreshTest'
-  | 'cstMultiClaimProvider'
 
 type FeatureToggleValues = {
   appointmentsTestTime: boolean
@@ -76,7 +75,6 @@ type FeatureToggleValues = {
   overpayments: boolean
   offlineMode: boolean
   remoteConfigRefreshTest: boolean
-  cstMultiClaimProvider: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -109,7 +107,6 @@ export const defaults: FeatureToggleValues = {
   overpayments: false,
   remoteConfigRefreshTest: false,
   offlineMode: false,
-  cstMultiClaimProvider: false,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {
   offlineMode: '(Restart required)',

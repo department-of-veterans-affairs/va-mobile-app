@@ -47,6 +47,7 @@ export type AuthorizedServicesPayload = {
         secureMessagingOracleHealthEnabled: boolean
         userProfileUpdate: boolean
         benefitsPushNotification: boolean
+        cstMultiClaimProvider: boolean
       }
     }
   }
@@ -80,5 +81,6 @@ export type UserAuthorizedServicesData = {
   isUserAtPretransitionedOhFacility: boolean
   isUserFacilityReadyForInfoAlert: boolean
   benefitsPushNotification: boolean
+  cstMultiClaimProvider: boolean
   migratingFacilitiesList: MigratingFacility[]
 }
