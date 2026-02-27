@@ -2,7 +2,6 @@
 # on pushes and PRs to develop and weekly on a schedule. Initializes CodeQL,
 # autobuilds the project, and performs the analysis.
 
----
 name: "[Code Quality] CodeQL (JavaScript)"
 on:
   push:
