@@ -122,6 +122,7 @@ export const ScreenIDToDowntimeFeatures = {
   [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.payments],
   [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: [DowntimeFeatureTypeConstants.rx],
   [ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID]: [DowntimeFeatureTypeConstants.travelPayFeatures],
+  [ScreenIDTypesConstants.TRAVEL_PAY_CLAIMS_SCREEN_ID]: [DowntimeFeatureTypeConstants.travelPayFeatures],
   [ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID]: [DowntimeFeatureTypeConstants.travelPayFeatures],
 }
 

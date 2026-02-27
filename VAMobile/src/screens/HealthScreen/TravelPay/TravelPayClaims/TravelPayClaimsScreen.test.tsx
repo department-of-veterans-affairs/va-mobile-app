@@ -7,6 +7,7 @@ import { GetTravelPayClaimsResponse } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { context, mockNavProps, render } from 'testUtils'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { createTimeFrameDateRangeMap } from 'utils/dateUtils'
 import { formatDateRangeMMMyyyy } from 'utils/formattingUtils'
 
@@ -357,6 +358,16 @@ context('TravelPayClaims', () => {
       expect(screen.getByText(t(`errors.callHelpCenter.sorry`))).toBeTruthy()
       expect(screen.getByText(t(`errors.callHelpCenter.informationLine`))).toBeTruthy()
       expect(screen.getByTestId('CallVATestID')).toBeTruthy()
+    })
+  })
+
+  describe('when in downtime', () => {
+    it('should show the downtime message when travel pay is in downtime', async () => {
+      mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
+
+      initializeTestInstance()
+
+      expect(screen.getByText(/We're working on the mobile app\./i)).toBeTruthy()
     })
   })
 })

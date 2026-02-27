@@ -6,7 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useTravelPayClaims } from 'api/travelPay'
 import { TravelPayClaimData } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
+import { Box, FeatureLandingTemplate, LoadingComponent, ScreenError, TextView } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,8 +16,8 @@ import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayC
 import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
 import NoTravelClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/NoTravelClaims'
-import { ScreenIDTypesConstants } from 'store/api'
-import { useTheme } from 'utils/hooks'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api'
+import { useDowntime, useTheme } from 'utils/hooks'
 import { SortOption, SortOptionType, filteredClaims, sortedClaims } from 'utils/travelPay'
 
 type TravelPayClaimsProps = StackScreenProps<BenefitsStackParamList, 'TravelPayClaims'>
@@ -27,6 +27,8 @@ const emptyClaims: Array<TravelPayClaimData> = []
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -105,6 +107,14 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     setCurrentPage(prevPage)
   }
 
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck: !!error || travelPayInDowntime,
+      onTryAgain: refetch,
+      error: error,
+    },
+  ]
+
   return (
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
@@ -112,14 +122,9 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
       title={t('travelPay.claims.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}
-      screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIMS_SCREEN_ID}>
-      {error ? (
-        <ErrorComponent
-          onTryAgain={refetch}
-          screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIMS_SCREEN_ID}
-          error={error}
-        />
-      ) : loading ? (
+      screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIMS_SCREEN_ID}
+      errors={screenErrors}>
+      {loading ? (
         <LoadingComponent text={t('travelPay.statusList.loading')} />
       ) : (
         <Box>
