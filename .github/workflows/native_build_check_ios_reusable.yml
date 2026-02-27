@@ -1,0 +1,16 @@
+# A reusable no-op workflow for iOS native checks.
+# This exists to satisfy "Required" GitHub status checks when no iOS native files are updated.
+# Without this, PRs that do not touch VAMobile/ios/** would hang because branch protection
+# requires a successful status for this check name.
+# see https://github.com/orgs/community/discussions/36680
+
+name: '[Code Quality] Check Native iOS Builds'
+
+on:
+  workflow_call:
+
+jobs:
+  build_ios:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "PASS -- No native ios files updated."

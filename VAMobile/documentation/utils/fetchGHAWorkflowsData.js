@@ -26,6 +26,18 @@ const WORKFLOWS_DIR = path.resolve(__dirname, '../../../.github/workflows')
  */
 const OUTPUT_PATH = path.resolve(__dirname, '../static/data/workflows.json')
 
+/**
+ * List of workflow filenames to exclude from the documentation.
+ * These are technical workarounds or implementation details that do not
+ * represent high-level architectural flows.
+ */
+const EXCLUDED_WORKFLOWS = [
+  'native_build_check_android_reusable.yml',
+  'native_build_check_android_skip.yml',
+  'native_build_check_ios_reusable.yml',
+  'native_build_check_ios_skip.yml',
+]
+
 // --- Extraction Utilities ---
 
 /**
@@ -185,8 +197,12 @@ function main() {
     process.exit(1)
   }
 
-  // 1. Find all YAML files in the directory
-  const files = fs.readdirSync(WORKFLOWS_DIR).filter((file) => file.endsWith('.yml') || file.endsWith('.yaml'))
+  // 1. Find all YAML files in the directory, excluding technical workarounds
+  const files = fs.readdirSync(WORKFLOWS_DIR).filter((file) => {
+    const isYaml = file.endsWith('.yml') || file.endsWith('.yaml')
+    const isExcluded = EXCLUDED_WORKFLOWS.includes(file)
+    return isYaml && !isExcluded
+  })
 
   // 2. Perform a pre-scan to build the "Used By" relationship map
   const userMap = buildUsedByMap(files)

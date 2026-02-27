@@ -1,0 +1,16 @@
+# A reusable no-op workflow for Android native checks.
+# This exists to satisfy "Required" GitHub status checks when no Android native files are updated.
+# Without this, PRs that do not touch VAMobile/android/** would hang because branch protection
+# requires a successful status for this check name.
+# see https://github.com/orgs/community/discussions/36680
+
+name: '[Code Quality] Check Native Android Builds'
+
+on:
+  workflow_call:
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "PASS -- No native android files updated."

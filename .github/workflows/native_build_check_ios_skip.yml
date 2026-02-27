@@ -1,7 +1,7 @@
 # A skip workflow for iOS native checks.
 # This workflow triggers when VAMobile/ios/** files are NOT modified.
-# It reports success immediately to ensure that PRs do not hang if this
-# status check is marked as "Required" in branch protection rules.
+# It calls a reusable no-op workflow to immediately report success, ensuring that
+# PRs do not hang if this status check is marked as "Required" in branch protection rules.
 
 name: '[Code Quality] Check Native iOS Builds'
 
@@ -13,6 +13,4 @@ on:
 jobs:
   ios_native_build:
     name: iOS Test Build
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "PASS -- No native ios files updated."
+    uses: ./.github/workflows/native_build_check_ios_reusable.yml
