@@ -174,25 +174,40 @@ describe('Claims Screen', () => {
   })
 
   it('should verify that the review file request alert is visible', async () => {
-    await expect(element(by.label('You have 4 file requests')).atIndex(1)).toExist()
+    await expect(element(by.label('You have 5 file requests')).atIndex(1)).toExist()
     await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
   })
 
   it('should verify that user is sent to File requests screen', async () => {
     await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
-    await expect(element(by.text('You have 4 file requests from VA'))).toExist()
-    await expect(element(by.text('Dental disability - More information needed'))).toExist()
+    await expect(element(by.text('You have 5 file requests from VA'))).toExist()
+  })
+
+  it('should display friendlyName when provided', async () => {
+    await expect(element(by.text('Clarify claimed condition'))).toExist()
+    await expect(element(by.text('Service information related to herbicide exposure'))).toExist()
+    await expect(element(by.text('Dental disability - More information needed'))).not.toExist()
+    await expect(element(by.text('AO - Blue Water Notice'))).not.toExist()
+  })
+
+  it('should display "Request for evidence" with displayName underneath when no friendlyName is provided', async () => {
+    // Multiple "Request for evidence" elements exist, use atIndex to check first one
+    await expect(element(by.text('Request for evidence')).atIndex(0)).toExist()
+    // displayName appears as secondary text underneath
+    await expect(element(by.text('Automated 5103 Notice Response'))).toExist()
+    await expect(element(by.text('Documents relating to disability needed'))).toExist()
+    await expect(element(by.text('Accidental injury - 21-4176 needed'))).toExist()
   })
 
   it('verify that the user is sent to the file upload page', async () => {
-    await element(by.text('Dental disability - More information needed')).tap()
+    await element(by.text('Clarify claimed condition')).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
   })
 
   it('should back out of the file request screen and reenter a new file request screen', async () => {
     await element(by.text('Back')).atIndex(0).tap()
-    await element(by.text('Accidental injury - 21-4176 needed')).tap()
+    await element(by.text('Documents relating to disability needed')).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
   })
 
