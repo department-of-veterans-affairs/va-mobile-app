@@ -52,6 +52,7 @@ export const ClaimsE2eIdConstants = {
   CLAIMS_WHY_COMBINE_CLOSE_ID: 'claimsWhyCombineCloseID',
   FILE_REQUEST_DETAILS_BACK: 'fileRequestDetailsBackID',
   FILE_REQUEST_DETAILS_PAGE: 'fileRequestPageTestID',
+  FILE_REQUEST_DETAILS_ID: 'fileRequestDetailsID',
   ASK_FOR_CLAIM_DECISION_PAGE: 'askForClaimDecisionPageTestID',
   ASK_FOR_CLAIM_DECISION_BACK: 'askForClaimDecisionBackID',
   FILE_REQUEST_BACK: 'fileRequestPageBackID',
@@ -63,6 +64,11 @@ export const ClaimsE2eIdConstants = {
   NOTICE_5103_SUBMIT_WAIVER_ERROR: 'You must confirm you’re done adding evidence for now before submitting the waiver',
   NOTICE_5103_SUBMIT_EVIDENCE: 'Submit evidence',
   NOTICE_5103_REQUEST_DETAILS_ID: 'file5103RequestDetailsID',
+  // Evidence Requests Updated UI constants
+  MORE_ON_SUBMITTING_ACCORDION_ID: 'moreOnSubmittingFilesAccordionID',
+  NEED_HELP_ACCORDION_ID: 'needHelpAccordionID',
+  ACCESS_CLAIM_LETTERS_LINK_ID: 'accessYourClaimLettersID',
+  FIND_VA_FORM_LINK_ID: 'findVAFormID',
 }
 
 beforeAll(async () => {
@@ -210,6 +216,136 @@ describe('Claims Screen', () => {
     await element(by.text('Back')).atIndex(0).tap()
     await element(by.text('Documents relating to disability needed')).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
+  })
+
+  describe("Evidence Requests Updated UI - 'updatedEvidenceRequests' feature flag ON", () => {
+    it('should navigate to file request with enriched UI content', async () => {
+      await element(by.text('Accidental injury - 21-4176 needed')).tap()
+    })
+
+    it('should display the new "Request for evidence" title', async () => {
+      await expect(element(by.text('Request for evidence'))).toExist()
+    })
+
+    it('should display the "respond by" subtitle with date and display name', async () => {
+      await expect(element(by.text('Respond by June 15, 2021 for: Accidental injury - 21-4176 needed'))).toExist()
+    })
+
+    it('should display the "We requested this evidence" blurb', async () => {
+      await expect(
+        element(
+          by.text(
+            'We requested this evidence from you on May 05, 2021. You can send the evidence after the "respond by" date, but it may delay your claim.',
+          ),
+        ),
+      ).toExist()
+    })
+
+    it('should display the "What we need from you" section', async () => {
+      await expect(element(by.text('What we need from you'))).toExist()
+    })
+
+    it('should display the "How to submit this information" section', async () => {
+      await waitFor(element(by.text('How to submit this information')))
+        .toBeVisible()
+        .whileElement(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_ID))
+        .scroll(200, 'down')
+    })
+
+    it('should display the "Access your claim letters" link', async () => {
+      await expect(element(by.id(ClaimsE2eIdConstants.ACCESS_CLAIM_LETTERS_LINK_ID))).toExist()
+    })
+
+    it('should display the "Find a VA form" link', async () => {
+      await expect(element(by.id(ClaimsE2eIdConstants.FIND_VA_FORM_LINK_ID))).toExist()
+    })
+
+    it('should display and expand "More on submitting files" accordion', async () => {
+      await waitFor(element(by.id(ClaimsE2eIdConstants.MORE_ON_SUBMITTING_ACCORDION_ID)))
+        .toBeVisible()
+        .whileElement(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_ID))
+        .scroll(200, 'down')
+      await element(by.id(ClaimsE2eIdConstants.MORE_ON_SUBMITTING_ACCORDION_ID)).tap()
+      await waitFor(element(by.text('Department of Veterans Affairs')))
+        .toExist()
+        .withTimeout(4000)
+    })
+
+    it('should display and expand "Need help?" accordion', async () => {
+      await waitFor(element(by.id(ClaimsE2eIdConstants.NEED_HELP_ACCORDION_ID)))
+        .toBeVisible()
+        .whileElement(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_ID))
+        .scroll(200, 'down')
+      await element(by.id(ClaimsE2eIdConstants.NEED_HELP_ACCORDION_ID)).tap()
+      await waitFor(
+        element(by.text("Call our VA benefits hotline. We're here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")),
+      )
+        .toBeVisible()
+        .whileElement(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_ID))
+        .scroll(200, 'down')
+    })
+
+    it('should display upload buttons in enriched UI when uploads are allowed', async () => {
+      await waitFor(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)))
+        .toBeVisible()
+        .whileElement(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_ID))
+        .scroll(200, 'down')
+      await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
+    })
+
+    it('should navigate back from enriched UI file request', async () => {
+      await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
+    })
+  })
+
+  describe("Evidence Requests Updated UI - 'updatedEvidenceRequests' feature flag OFF", () => {
+    beforeAll(async () => {
+      // Restart app to get to login screen (preserves AsyncStorage, unlike uninstall)
+      await device.launchApp({ newInstance: true })
+      // Toggle the flag OFF
+      await toggleRemoteConfigFlag(CommonE2eIdConstants.EVIDENCE_REQUESTS_UPDATED_UI_TEXT)
+      // Login again to get to Home screen (toggle ends on Remote Config screen)
+      await loginToDemoMode()
+      // Navigate from Home to file requests
+      await openBenefits()
+      await openClaims()
+      await openClaimsHistory()
+      await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_4_ID, CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)
+      await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
+      await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
+      // Navigate to the same file request (no friendlyName)
+      await element(by.text('Accidental injury - 21-4176 needed')).tap()
+    })
+
+    it('should display the old UI with displayName as header when flag is OFF', async () => {
+      await expect(element(by.text('Accidental injury - 21-4176 needed')).atIndex(0)).toExist()
+    })
+
+    it('should NOT display the "Request for evidence" title', async () => {
+      await expect(element(by.text('What we need from you'))).not.toExist()
+    })
+
+    it('should NOT display the enriched UI sections', async () => {
+      await expect(element(by.text('How to submit this information'))).not.toExist()
+      await expect(element(by.id(ClaimsE2eIdConstants.MORE_ON_SUBMITTING_ACCORDION_ID))).not.toExist()
+      await expect(element(by.id(ClaimsE2eIdConstants.NEED_HELP_ACCORDION_ID))).not.toExist()
+    })
+
+    afterAll(async () => {
+      // Restart app to get to login screen (preserves AsyncStorage, unlike uninstall)
+      await device.launchApp({ newInstance: true })
+      // Toggle flag back ON for remaining tests
+      await toggleRemoteConfigFlag(CommonE2eIdConstants.EVIDENCE_REQUESTS_UPDATED_UI_TEXT)
+      // Login again to get to Home screen (toggle ends on Remote Config screen)
+      await loginToDemoMode()
+      // Navigate from Home to file requests for subsequent tests
+      await openBenefits()
+      await openClaims()
+      await openClaimsHistory()
+      await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_4_ID, CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)
+      await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
+      await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
+    })
   })
 
   it('should be able to open the 5103 notice', async () => {
