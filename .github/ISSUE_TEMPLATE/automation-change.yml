@@ -12,6 +12,7 @@ body:
       description: What type of change are you completing
       options:
         - Update Existing Automation
+        - Testing the change to see if it triggers a devops review
         - Documentation Change
         - Template Change
         - Add new automation functionality
