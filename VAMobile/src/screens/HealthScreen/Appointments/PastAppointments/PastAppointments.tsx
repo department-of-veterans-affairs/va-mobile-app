@@ -24,7 +24,6 @@ import {
 } from 'utils/appointments'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
-import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -56,7 +55,6 @@ function PastAppointments({
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { maintenanceWindows } = useMaintenanceWindows()
   const endTime = maintenanceWindows?.[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
-  const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
   const filteredAppointments = useMemo(
     () => filterAppointments(appointmentsData?.data || [], true, datePickerRange),
@@ -161,7 +159,7 @@ function PastAppointments({
         onApply={handleDatePickerApply}
         onReset={handleDatePickerReset}
       />
-      {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
+      {travelPayInDowntime && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics
             variant="warning"
@@ -182,7 +180,7 @@ function PastAppointments({
             onPastAppointmentPress,
             true,
             pagination,
-            includeTravelClaims,
+            !travelPayInDowntime,
           )}
           <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
             <Pagination {...paginationProps} />

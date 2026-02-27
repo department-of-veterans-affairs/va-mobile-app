@@ -41,7 +41,6 @@ import { isDisabilityCompensationClaim, numberOfItemsNeedingAttentionFromVet } f
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
@@ -98,8 +97,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     }, [attributes]),
   ) //force a rerender due to react query updating data
 
-  const submitEvidenceExpansionFlag = featureEnabled('submitEvidenceExpansion')
-
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
     if (loadingClaim) {
@@ -139,11 +136,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     if (claimType === ClaimTypeConstants.ACTIVE && claim) {
       if (count > 0 && !claim.attributes.waiverSubmitted) {
         logAnalyticsEvent(Events.vama_claim_file_request(claimID))
-      } else if (submitEvidenceExpansionFlag && claim.attributes.open && count >= 0) {
+      } else if (claim.attributes.open && count >= 0) {
         logAnalyticsEvent(Events.vama_claim_submit_ev(claimID))
       }
     }
-  }, [claimType, submitEvidenceExpansionFlag, count, claim, claimID])
+  }, [claimType, count, claim, claimID])
 
   // Track how long user maintains focus on this screen
   useFocusEffect(
@@ -204,8 +201,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
     if (claimType === ClaimTypeConstants.CLOSED) {
       const isDecisionLetterReady =
-        (featureEnabled('decisionLettersWaygate') &&
-          userAuthorizedServices?.decisionLetters &&
+        (userAuthorizedServices?.decisionLetters &&
           claim?.attributes.decisionLetterSent &&
           (decisionLetterData?.data.length || 0) > 0) ||
         false
@@ -253,7 +249,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           <AlertWithHaptics {...alertProps} />
         </Box>
       )
-    } else if (submitEvidenceExpansionFlag && attributes?.open) {
+    } else if (attributes?.open) {
       const buttonProps: ButtonProps = {
         buttonType: ButtonVariants.Primary,
         label: t('claimDetails.submitEvidence'),

@@ -270,9 +270,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       return !filteredRecentRecipientsIds.has(r.value)
     })
 
+    const selectedFacility = careSystems.find((cs) => cs.value === careSystem)
+    const facilityName = selectedFacility?.label || t('secureMessaging.formMessage.allCareTeams')
+
     return {
       [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
+      [facilityName]: filteredAllRecipients,
     }
   }
 
