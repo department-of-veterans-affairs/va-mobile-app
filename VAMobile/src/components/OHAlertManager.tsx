@@ -3,8 +3,10 @@ import React from 'react'
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
 import DuplicateRecordAlert from 'components/DuplicateRecordAlert'
 import {
-  MigrationErrorMessage,
-  MigrationWarningMessage,
+  MigrationErrorMessage } from 'components/MigrationErrorMessage'
+import {
+  MigrationWarningMessage } from 'components/MigrationWarningMessage'
+import {
   OHParentScreens,
   getAlertState,
 } from 'utils/ohMigration'
