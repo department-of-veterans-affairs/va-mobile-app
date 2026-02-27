@@ -1,7 +1,5 @@
 export { default as AppointmentCalendarButton } from './AppointmentCalendarButton'
 export * from './AppointmentCalendarButton'
-export { default as DEPRECATED_AppointmentCalendarButton } from './DEPRECATED_AppointmentCalendarButton'
-export * from './DEPRECATED_AppointmentCalendarButton'
 export { default as AppointmentCancelReschedule } from './AppointmentCancelReschedule'
 export * from './AppointmentCancelReschedule'
 export { default as AppointmentDateAndTime } from './AppointmentDateAndTime'
