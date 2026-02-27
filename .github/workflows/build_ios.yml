@@ -2,7 +2,7 @@
 # dependencies, decodes signing keys, bundles the app, and runs the specified
 # Fastlane lane (qa, rc, review, release, on_demand) to build and distribute.
 
-name: '[Build] Reusable iOS Workflow'
+name: '[Build] Reusable iOS Build Workflow'
 
 on:
   workflow_call:
