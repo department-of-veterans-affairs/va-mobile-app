@@ -48,8 +48,19 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     attachmentIconTopMargin,
     condensedMarginBetween,
   } = theme.dimensions
-  const { displayName, type, status, description, uploadDate, documents, requestedDate, suspenseDate, friendlyName } =
-    request
+  const {
+    displayName,
+    type,
+    status,
+    description,
+    uploadDate,
+    documents,
+    requestedDate,
+    suspenseDate,
+    friendlyName,
+    uploadsAllowed,
+    canUploadFile,
+  } = request
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -289,7 +300,10 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
               {renderRequestDateBlurb()}
               {renderWhatWeNeedFromYouSection()}
               {renderNextStepsSection()}
-              {renderMoreOnSubmittingFilesSection()}
+              {/* Show accordion if uploadsAllowed is true AND canUploadFile is true (or undefined).
+                  When backend flag 'cst_evidence_requests_content_override_mobile' is OFF,
+                  canUploadFile is undefined, so we fall back to showing based on uploadsAllowed alone. */}
+              {uploadsAllowed && (canUploadFile ?? true) && renderMoreOnSubmittingFilesSection()}
               {renderNeedHelpSection()}
             </>
           ) : (

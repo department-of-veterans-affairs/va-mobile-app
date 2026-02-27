@@ -169,6 +169,21 @@ context('FileRequestDetails', () => {
           renderWithRequest({ ...requestWithoutFiles, suspenseDate: null })
           expect(screen.queryByText(/Respond by/)).toBeFalsy()
         })
+
+        it("should display 'More on submitting files' accordion when both uploadsAllowed and canUploadFile are true", () => {
+          renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: true, canUploadFile: true })
+          expect(screen.getByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeTruthy()
+        })
+
+        it("should NOT display 'More on submitting files' accordion when canUploadFile is false", () => {
+          renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: true, canUploadFile: false })
+          expect(screen.queryByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeFalsy()
+        })
+
+        it("should display 'More on submitting files' accordion when canUploadFile is undefined (backend flag OFF)", () => {
+          renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: true, canUploadFile: undefined })
+          expect(screen.getByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeTruthy()
+        })
       })
 
       describe('when the request has files uploaded awaiting review', () => {
