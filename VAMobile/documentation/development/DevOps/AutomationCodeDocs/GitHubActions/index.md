@@ -9,7 +9,7 @@ sidebar_label: Overview
 
 [GitHub Actions](https://github.com/features/actions) is used to automate several processes for our project, including build automation, releases, ensuring code quality, and other workflows related to project management. Our workflows can be found on the va-mobile-app repo's [Actions tab](https://github.com/department-of-veterans-affairs/va-mobile-app/actions).
 
-- [View documentation  of all GitHub Actions workflows](./Workflows.mdx)
+- [View documentation of all GitHub Actions workflows](./Workflows.mdx)
 
 ### Code Quality
 
