@@ -3,7 +3,7 @@
 # changelog, and title. Runs on PRs targeting main/develop/release that touch
 # Android metadata.
 
-name: '[Release] Play Store Requirement Checks (Google)'
+name: '[Release] Google Play Store Requirement Checks'
 
 on:
   pull_request:

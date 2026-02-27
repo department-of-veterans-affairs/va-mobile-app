@@ -149,11 +149,14 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-        /** Tracking only works for prod so set a fake one for dev as it is required. Replace G-XXXXXXXXXX with development ID from Google Analytics for any dev testing*/
-        gtag: {
-          trackingID: process.env.MOBILE_DOC_MEASUREMENT_ID || 'G-XXXXXXXXXX',
-          anonymizeIP: true,
-        },
+        ...(process.env.MOBILE_DOC_MEASUREMENT_ID
+          ? {
+              gtag: {
+                trackingID: process.env.MOBILE_DOC_MEASUREMENT_ID,
+                anonymizeIP: true,
+              },
+            }
+          : {}),
       },
     ],
     [

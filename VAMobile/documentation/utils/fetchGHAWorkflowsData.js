@@ -74,18 +74,69 @@ function buildUsedByMap(files) {
 }
 
 /**
+ * Builds a forward "uses" map: for each workflow, records which reusable workflows it calls.
+ * @param {string[]} files - Workflow filenames.
+ * @param {Object.<string, {name: string}>} nameMap - Map of fileName to parsed workflow name.
+ * @returns {Object.<string, Array<{name: string, fileName: string}>>}
+ */
+function buildUsesMap(files, nameMap) {
+  const usesMap = {}
+
+  files.forEach((fileName) => {
+    const filePath = path.join(WORKFLOWS_DIR, fileName)
+    const content = fs.readFileSync(filePath, 'utf8')
+
+    const usesRegex = /uses:\s+(?:\.\/)?(?:[\w.-]+\/[\w.-]+\/)?\.github\/workflows\/([\w-]+\.yml)(?:@[\w.-]+)?/g
+    let match
+    const refs = []
+
+    while ((match = usesRegex.exec(content)) !== null) {
+      const reusableFile = match[1]
+      if (!refs.find((r) => r.fileName === reusableFile)) {
+        const name = nameMap[reusableFile] || reusableFile
+        refs.push({ name, fileName: reusableFile })
+      }
+    }
+
+    if (refs.length > 0) {
+      usesMap[fileName] = refs
+    }
+  })
+
+  return usesMap
+}
+
+/**
+ * Pre-scans all workflow files to build a name map (fileName → workflow name).
+ * @param {string[]} files - Workflow filenames.
+ * @returns {Object.<string, string>}
+ */
+function buildNameMap(files) {
+  const nameMap = {}
+  files.forEach((fileName) => {
+    const filePath = path.join(WORKFLOWS_DIR, fileName)
+    const content = fs.readFileSync(filePath, 'utf8')
+    const nameMatch = content.match(/^name:\s+['"]?(.*?)['"]?\s*$/m)
+    nameMap[fileName] = nameMatch ? nameMatch[1] : fileName
+  })
+  return nameMap
+}
+
+/**
  * Parses a single workflow file into a sanitized metadata object.
  * @param {string} fileName - The workflow filename.
  * @param {Object} userMap - The "Used By" reverse map from buildUsedByMap().
+ * @param {Object} usesMap - The forward "Uses" map from buildUsesMap().
  * @returns {object|null} Metadata object, or null if parsing fails.
  */
-function parseWorkflow(fileName, userMap) {
+function parseWorkflow(fileName, userMap, usesMap) {
   const filePath = path.join(WORKFLOWS_DIR, fileName)
   const content = fs.readFileSync(filePath, 'utf8')
 
   const description = extractDescription(content)
 
   const usedBy = userMap[fileName] || null
+  const uses = usesMap[fileName] || null
 
   let data
   try {
@@ -110,6 +161,7 @@ function parseWorkflow(fileName, userMap) {
     name: data.name || fileName,
     description,
     usedBy,
+    uses,
     on,
     jobs: data.jobs ? Object.keys(data.jobs) : [],
   }
@@ -130,10 +182,12 @@ function main() {
     return isYaml && !isExcluded
   })
 
+  const nameMap = buildNameMap(files)
   const userMap = buildUsedByMap(files)
+  const usesMap = buildUsesMap(files, nameMap)
 
   const workflows = files
-    .map((file) => parseWorkflow(file, userMap))
+    .map((file) => parseWorkflow(file, userMap, usesMap))
     .filter(Boolean)
     .sort((a, b) => a.name.localeCompare(b.name))
 

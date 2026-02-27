@@ -10,6 +10,7 @@ interface WorkflowData {
   name: string
   description: string | null
   usedBy: { name: string; fileName: string }[] | null
+  uses: { name: string; fileName: string }[] | null
   on: Record<string, TriggerConfig> | string | string[]
   jobs: string[]
 }
@@ -37,6 +38,8 @@ const data = rawData as WorkflowData[]
 
 const GITHUB_WORKFLOW_BASE_URL =
   'https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/.github/workflows/'
+
+const GITHUB_ACTION_BASE_URL = 'https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/'
 
 // Maps raw GitHub Action trigger event names to human-friendly display labels
 const friendlyTriggerNames: Record<string, string> = {
@@ -329,19 +332,31 @@ const WorkflowsList: React.FC = () => {
             <Heading as="h2" id={slug} className="margin-bottom--sm">
               {workflow.name}
             </Heading>
-
-            <p className="margin-bottom--md">
-              <strong>File:</strong>{' '}
-              <a href={`${GITHUB_WORKFLOW_BASE_URL}${workflow.fileName}`} target="_blank" rel="noopener noreferrer">
-                {workflow.fileName}
-              </a>
+            <p className="margin-bottom--sm" style={{ fontSize: '0.9rem', color: 'var(--ifm-color-emphasis-700)' }}>
+              ({workflow.fileName})
             </p>
-
             {workflow.description && (
-              <div className="margin-bottom--md">
-                <p>{workflow.description}</p>
+              <div>
+                <p className="margin-bottom--sm">{workflow.description}</p>
               </div>
             )}
+
+            <div className="margin-bottom--md" style={{ display: 'flex', gap: '0.5rem' }}>
+              <a
+                className="button button--outline button--sm button--secondary"
+                href={`${GITHUB_WORKFLOW_BASE_URL}${workflow.fileName}`}
+                target="_blank"
+                rel="noopener noreferrer">
+                Source
+              </a>
+              <a
+                className="button button--outline button--sm button--secondary"
+                href={`${GITHUB_ACTION_BASE_URL}${workflow.fileName}`}
+                target="_blank"
+                rel="noopener noreferrer">
+                Runs
+              </a>
+            </div>
 
             <div className="margin-bottom--md">
               <strong>Triggers:</strong>
@@ -358,6 +373,19 @@ const WorkflowsList: React.FC = () => {
             </div>
 
             <InputsTable inputs={allInputs} />
+
+            {workflow.uses && workflow.uses.length > 0 && (
+              <div className="margin-bottom--md">
+                <strong>Uses:</strong>
+                <ul className="margin-top--xs" style={{ listStyleType: 'circle', paddingLeft: '1.5rem' }}>
+                  {workflow.uses.map((ref) => (
+                    <li key={ref.fileName}>
+                      <a href={`#${getSlug(ref)}`}>{ref.name}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="margin-top--lg text--right">
               <a href="#top" style={{ fontSize: '0.8rem' }}>
