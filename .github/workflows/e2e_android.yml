@@ -22,23 +22,23 @@ on:
   workflow_dispatch:
     inputs:
       run_full_test:
-        description: 'Run full e2e test?'
+        description: 'Run all e2e test suites'
         type: boolean
         required: false
       skip_cache:
-        description: 'Skip caches?'
+        description: 'Skip build and dependency caches'
         type: boolean
         required: false
       tests_to_run:
-        description: 'List tests to test in ["test name", "test name"] format.  Leave blank if running full e2e test.'
+        description: 'Tests to run in ["test name", "test name"] format.  Leave blank if running full e2e test.'
         type: string
         required: false
       testRail_name:
-        description: 'Name testRail run (will default to date if blank)'
+        description: 'Name for TestRail run (will default to date if blank)'
         type: string
         required: false
       run_testRail:
-        description: 'Add results to testRail?'
+        description: 'Add results to TestRail?'
         type: boolean
         required: false
   schedule:
