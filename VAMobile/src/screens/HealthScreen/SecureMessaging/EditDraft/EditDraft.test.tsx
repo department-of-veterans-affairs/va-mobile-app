@@ -600,7 +600,7 @@ context('EditDraft', () => {
 
   describe('when the user only has one facility on record', () => {
     it('should hide care systems selection box', async () => {
-      const mockSingleCareSystemRecipientsResponse = recipients
+      const mockSingleCareSystemRecipientsResponse = JSON.parse(JSON.stringify(recipients))
       mockSingleCareSystemRecipientsResponse.meta.careSystems = [
         {
           healthCareSystemName: '357',
@@ -627,7 +627,7 @@ context('EditDraft', () => {
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
     })
     it('should display To combobox with selected care system as header', async () => {
-      const mockSingleCareSystemRecipientsResponse = recipients
+      const mockSingleCareSystemRecipientsResponse = JSON.parse(JSON.stringify(recipients))
       mockSingleCareSystemRecipientsResponse.meta.careSystems = [
         {
           healthCareSystemName: 'station 357',

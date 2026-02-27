@@ -346,6 +346,25 @@ context('StartNewMessage', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
     })
+
+    it('should display To combobox with auto-selected care system as header', async () => {
+      initializeApiCalls(true)
+      initializeTestInstance()
+      // Wait for form to load - care system is auto-selected for single facility
+      const toField = await screen.findByTestId('to field')
+      const picker = await screen.findByTestId('picker')
+      fireEvent.press(picker)
+      const generalOption = await screen.findByTestId(t('secureMessaging.startNewMessage.general'))
+      fireEvent.press(generalOption)
+      const doneButton = await screen.findByLabelText(t('done'))
+      fireEvent.press(doneButton)
+      fireEvent.press(toField)
+      // Verify facility name appears as header in ComboBox (not "All care teams")
+      const comboBoxScrollView = await screen.findByTestId('comboBoxScrollViewID')
+      expect(comboBoxScrollView).toBeTruthy()
+      expect(screen.getAllByText('357').length).toBeGreaterThanOrEqual(1)
+      expect(screen.queryByText('All care teams')).toBeFalsy()
+    })
   })
 
   describe('on click of send', () => {
