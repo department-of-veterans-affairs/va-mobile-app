@@ -42,15 +42,20 @@ function extractDescription(content) {
       description = trimmedLine.replace('# DESCRIPTION:', '').trim();
       inDescription = true;
     } else if (inDescription && trimmedLine.startsWith('#')) {
-      // Continuation lines of the description block
-      description += ' ' + trimmedLine.replace('#', '').trim();
+      // Continuation lines of the description block.
+      // A bare '#' with no text is treated as whitespace — skip it to avoid extra spaces.
+      const continuationText = trimmedLine.replace(/^#\s*/, '').trim();
+      if (continuationText) {
+        description += ' ' + continuationText;
+      }
     } else if (inDescription && !trimmedLine.startsWith('#')) {
       // Stop at the first non-comment line after the description block
       break;
     }
   }
 
-  return description || null;
+  // Collapse any double-spaces that crept in from continuation lines
+  return description.replace(/  +/g, ' ').trim() || null;
 }
 
 /**

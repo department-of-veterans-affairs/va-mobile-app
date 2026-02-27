@@ -10,6 +10,9 @@
 
 # Automatically imported files
 design/About/For\ engineers/
+
+# The following JSON files are generated at build time by scripts in utils/ (run via `yarn prebuild`).
+# They should NOT be committed - regenerate locally with `yarn prebuild` before starting the dev server.
 static/data/workflows.json
 static/data/github-milestones.json
 static/data/whats-new-history.json

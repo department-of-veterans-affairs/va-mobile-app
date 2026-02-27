@@ -237,7 +237,7 @@ const WorkflowTrigger = ({ trigger, triggerConfig }: { trigger: string, triggerC
 }
 
 /**
- * Renders a responsive table detailed the parameters/inputs required by the workflow.
+ * Renders a responsive table detailing the parameters/inputs required by the workflow.
  */
 const InputsTable = ({ inputs }: { inputs: any }) => {
   const entries = Object.entries(inputs)
@@ -262,7 +262,7 @@ const InputsTable = ({ inputs }: { inputs: any }) => {
               const { description, type, default: defaultValue, required } = config
               const defaultDisplay = defaultValue !== undefined ? <code>{defaultValue === '' ? '""' : String(defaultValue)}</code> : '-'
               
-              return(
+              return (
               <tr key={inputName}>
                 <td><code>{inputName}</code></td>
                 <td>{description || '-'}</td>
@@ -295,6 +295,11 @@ const WorkflowsList = () => {
     return acc
   }, {} as Record<string, typeof data>)
 
+  // Guard: render a message if the data file is missing or empty
+  if (!data || data.length === 0) {
+    return <p>No workflow data available. Run <code>yarn prebuild</code> to generate it.</p>
+  }
+
   return (
     <div>
       {/* 1. Quick Navigation Grid */}
@@ -309,7 +314,7 @@ const WorkflowsList = () => {
         const allInputs = extractAllInputs(on)
 
         return (
-          <div key={index} id={slug} className="margin-top--xl margin-bottom--xl">
+          <div key={workflow.fileName} id={slug} className="margin-top--xl margin-bottom--xl">
             <h2>{workflow.name}</h2>
             
             {/* Metadata: File link and Description */}
