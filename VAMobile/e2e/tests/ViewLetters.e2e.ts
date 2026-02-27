@@ -2,7 +2,6 @@ import { by, device, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openLetters, toggleRemoteConfigFlag } from './utils'
 
-//Add any new letter type to the letter_types array here.
 export const LettersConstants = {
   MAILING_ADDRESS: '3101 N Fort Valley Rd',
   DOWNLOAD_DOCUMENTS_TEXT: 'Downloaded documents will list your address as:',
@@ -35,7 +34,7 @@ describe('VA Letters', () => {
 
   it('should tap address and open edit screen', async () => {
     await element(by.text(LettersConstants.MAILING_ADDRESS)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_CANCEL_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
 
     await expect(element(by.text(LettersConstants.DOWNLOAD_DOCUMENTS_TEXT))).toExist()
   })

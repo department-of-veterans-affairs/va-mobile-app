@@ -140,7 +140,6 @@ export const CommonE2eIdConstants = {
   SETTINGS_ROW_TEXT: 'Settings',
   CONTACT_INFO_SCREEN_ID: 'ContactInfoTestID',
   CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
-  CONTACT_INFO_CANCEL_ID: 'contactInfoBackTestID',
   CONTACT_INFO_SUGGESTED_ADDRESS_ID: 'suggestedAddressTestID',
   CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
   CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',

@@ -191,6 +191,7 @@ const detoxMapping = {
     'labsAndTests.ts': ['LabsAndTests'],
     'letters.json': ['VALetters', 'ViewLetters'],
     'letters.ts': ['VALetters', 'ViewLetters'],
+    'Letters.ts': ['VALetters', 'ViewLetters'],
     'linking.test.tsx': [],
     'linking.tsx': [],
     'medicalCopays.ts': medicalCopaysArray,
