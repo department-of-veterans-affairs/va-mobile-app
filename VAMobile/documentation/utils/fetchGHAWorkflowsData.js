@@ -1,33 +1,40 @@
 /**
- * fetchWorkflowsData.js
+ * fetchGHAWorkflowsData.js
  *
- * Reads all GitHub Actions workflow YAML files from the .github/workflows directory,
- * extracts key metadata (name, triggers, inputs, job names, and developer description),
- * and writes the results to a static JSON file consumed by the documentation site.
- *
- * Run via: node utils/fetchWorkflowsData.js
+ * This script is responsible for generating the metadata source for the
+ * GitHub Actions documentation site. It performs the following steps:
+ * 1. Discovers all workflow YAML files in .github/workflows.
+ * 2. Parses YAML content to extract triggers (on), jobs, and names.
+ * 3. Scans for "uses:" references to build a reverse-map of reusable workflow callers.
+ * 4. Extracts descriptive comments from the top of each file.
+ * 5. Writes a sanitized, consolidated JSON file to the static data directory.
  */
 
 const fs = require('fs')
 const path = require('path')
 const yaml = require('js-yaml')
 
-// --- Paths ---
+// --- Paths Configuration ---
 
-/** Absolute path to the repository's GitHub Actions workflow files. */
+/**
+ * Absolute path to the repository's GitHub Actions workflow files.
+ */
 const WORKFLOWS_DIR = path.resolve(__dirname, '../../../.github/workflows')
 
-/** Output path for the generated JSON data, served statically by the docs site. */
+/**
+ * Output path for the generated JSON data, consumed by the Docusaurus WorkflowsList component.
+ */
 const OUTPUT_PATH = path.resolve(__dirname, '../static/data/workflows.json')
 
-// --- Helpers ---
+// --- Extraction Utilities ---
 
 /**
  * Extracts a human-readable description from a workflow file's leading comments.
- * Looks for a `# DESCRIPTION:` marker and collects all immediately following comment lines.
+ * It identifies the first block of comments at the top of the file and merges them
+ * into a single continuous string.
  *
  * @param {string} content - Raw file content of the workflow YAML.
- * @returns {string|null} - The extracted description string, or null if not found.
+ * @returns {string|null} - The extracted description string, or null if no comments were found.
  */
 function extractDescription(content) {
   const lines = content.split('\n')
@@ -37,51 +44,64 @@ function extractDescription(content) {
   for (const line of lines) {
     const trimmedLine = line.trim()
 
+    // If the line starts with #, it's a comment we want to capture
     if (trimmedLine.startsWith('#')) {
       inBlock = true
-      // Strip leading # and optional space
+      // Strip leading # and optional space to get the raw text
       const text = trimmedLine.replace(/^#\s*/, '').trim()
 
       if (text) {
         description += (description ? ' ' : '') + text
       }
     } else if (inBlock && trimmedLine === '') {
-      // Allow empty comments (bare #) within the block, treated as spaces/separators
+      // Allow empty comments (bare #) within the block, treating them as separators
       continue
     } else if (trimmedLine !== '') {
-      // First non-empty, non-comment line ends the block
+      // The first non-empty, non-comment line (like 'name:' or 'on:') marks the end of our description block
       break
     }
   }
 
-  // Collapse any double-spaces that crept in from continuation lines
+  // Sanitize: collapse multiple spaces and return null if the result is empty
   return description.replace(/  +/g, ' ').trim() || null
 }
 
 /**
- * Pre-scans all workflow files to build a map of reusable workflow usage.
+ * Pre-scans all workflow files to identify which workflows call which reusable workflows.
+ * This allows us to display "Used By" information for every reusable workflow.
  *
- * @param {string[]} files - List of workflow filenames.
- * @returns {Object} - Map of reusable file name to list of callers.
+ * @param {string[]} files - List of workflow filenames (e.g. ['build.yml', 'deploy.yml']).
+ * @returns {Object} - A map where keys are filenames and values are arrays of { name, fileName } callers.
  */
-function buildUserMap(files) {
+function buildUsedByMap(files) {
   const userMap = {}
 
   files.forEach((fileName) => {
     const filePath = path.join(WORKFLOWS_DIR, fileName)
     const content = fs.readFileSync(filePath, 'utf8')
 
-    // Find internal reusable workflow calls: "uses: ./.github/workflows/reusable.yml"
-    // or direct internal references "uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/reusable.yml"
+    /**
+     * Regex to find internal reusable workflow calls.
+     * Matches:
+     * - uses: ./.github/workflows/reusable.yml
+     * - uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/reusable.yml
+     */
     const usesRegex = /uses:\s+(?:\.\/)?(?:[\w.-]+\/[\w.-]+\/)?\.github\/workflows\/([\w-]+\.yml)(?:@[\w.-]+)?/g
     let match
 
+    // Get the workflow name from the file to facilitate better linking
     const nameMatch = content.match(/^name:\s+['"]?(.*?)['"]?\s*$/m)
     const workflowName = nameMatch ? nameMatch[1] : fileName
 
     while ((match = usesRegex.exec(content)) !== null) {
       const reusableFile = match[1]
-      if (!userMap[reusableFile]) userMap[reusableFile] = []
+
+      // Initialize the map entry for this reusable workflow if it doesn't exist
+      if (!userMap[reusableFile]) {
+        userMap[reusableFile] = []
+      }
+
+      // Prevent duplicate entries (a workflow calling another multiple times)
       if (!userMap[reusableFile].find((c) => c.fileName === fileName)) {
         userMap[reusableFile].push({ name: workflowName, fileName })
       }
@@ -92,11 +112,11 @@ function buildUserMap(files) {
 }
 
 /**
- * Removes `secrets` and `outputs` from each trigger's configuration object.
- * These are internal CI details that don't add value in the documentation context
- * and may contain sensitive metadata.
+ * Removes internal technical details from the 'on' trigger configuration.
+ * Secrets and Outputs are excluded as they are implementation details that
+ * clutter the architectural documentation.
  *
- * @param {object} on - The parsed `on` trigger map from a workflow file.
+ * @param {object} on - The parsed `on` trigger map from the workflow YAML.
  */
 function stripSensitiveKeys(on) {
   Object.keys(on).forEach((trigger) => {
@@ -108,22 +128,24 @@ function stripSensitiveKeys(on) {
 }
 
 /**
- * Reads, parses, and extracts metadata from a single workflow YAML file.
+ * Reads, parses, and extracts high-level metadata from a single workflow file.
  *
- * @param {string} fileName - The file name (not full path) of the workflow file.
- * @param {Object} userMap - Map built by buildUserMap.
- * @returns {object|null} - Parsed workflow metadata, or null if the file is invalid.
+ * @param {string} fileName - The filename of the workflow.
+ * @param {Object} userMap - The pre-built map of reusable workflow callers.
+ * @returns {object|null} - A sanitized metadata object, or null if parsing fails.
  */
 function parseWorkflow(fileName, userMap) {
   const filePath = path.join(WORKFLOWS_DIR, fileName)
   const content = fs.readFileSync(filePath, 'utf8')
 
+  // 1. Extract the high-level description from top-of-file comments
   const description = extractDescription(content)
 
-  // Get users from the pre-built userMap
+  // 2. Map callers from our relationship scan
   const users = userMap[fileName] || null
   const usedBy = users ? users.map((c) => `${c.name} (${c.fileName})`) : null
 
+  // 3. Parse the YAML content
   let data
   try {
     data = yaml.load(content)
@@ -134,55 +156,59 @@ function parseWorkflow(fileName, userMap) {
 
   if (!data) return null
 
-  // Extract and sanitize the trigger configuration
+  // 4. Sanitize the trigger ('on') configuration
   const on = data.on || {}
   stripSensitiveKeys(on)
 
+  // 5. Build the final documentation object
   return {
     fileName,
     name: data.name || fileName,
     description,
     usedBy,
     on,
-    // Only store job names (keys), not full job configs
+    // Store only the keys (names) of the jobs to provide a high-level overview
     jobs: data.jobs ? Object.keys(data.jobs) : [],
   }
 }
 
-// --- Main ---
+// --- Main Execution Flow ---
 
 /**
- * Entry point. Orchestrates:
- *  1. Discovering all workflow files in the .github/workflows directory.
- *  2. Parsing each file and extracting metadata.
- *  3. Writing the sorted results to a static JSON file.
+ * Orchestrates the metadata extraction process.
  */
 function main() {
-  console.log(`Reading workflows from: ${WORKFLOWS_DIR}`)
+  console.log(`Scanning workflows in: ${WORKFLOWS_DIR}`)
 
   if (!fs.existsSync(WORKFLOWS_DIR)) {
-    console.error(`Error: Workflows directory not found at ${WORKFLOWS_DIR}`)
+    console.error(`Fatal Error: Workflows directory not found at ${WORKFLOWS_DIR}`)
     process.exit(1)
   }
 
-  // 1. Discover: find all .yml/.yaml files
+  // 1. Find all YAML files in the directory
   const files = fs.readdirSync(WORKFLOWS_DIR).filter((file) => file.endsWith('.yml') || file.endsWith('.yaml'))
 
-  // 2. Pre-scan for reusable workflow usage
-  const userMap = buildUserMap(files)
+  // 2. Perform a pre-scan to build the "Used By" relationship map
+  const userMap = buildUsedByMap(files)
 
-  // 3. Parse: extract metadata and filter out any unparseable workflows
+  // 3. Parse each file into a sanitized metadata object
   const workflows = files
     .map((file) => parseWorkflow(file, userMap))
-    .filter(Boolean)
-    .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by display name
+    .filter(Boolean) // Remove any null results from parsing errors
+    .sort((a, b) => a.name.localeCompare(b.name)) // Alphabetize by display name
 
-  // 3. Write: serialize to JSON for use by the documentation site
-  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true })
-  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(workflows, null, 2))
+  // 4. Persistence: write the consolidated data to JSON
+  try {
+    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true })
+    fs.writeFileSync(OUTPUT_PATH, JSON.stringify(workflows, null, 2))
 
-  console.log(`✅ Workflow data written to ${OUTPUT_PATH}`)
-  console.log(`Extracted metadata for ${workflows.length} workflows.`)
+    console.log(`✅ Documentation data successfully written to ${OUTPUT_PATH}`)
+    console.log(`Successfully processed ${workflows.length} workflows.`)
+  } catch (err) {
+    console.error(`Fatal Error: Failed to write output file:`, err.message)
+    process.exit(1)
+  }
 }
 
+// Kick off the process
 main()
