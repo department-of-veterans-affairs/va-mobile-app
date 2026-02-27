@@ -1,6 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions, toggleRemoteConfigFlag } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions } from './utils'
 
 export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
