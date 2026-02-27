@@ -226,7 +226,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     }
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(120000)
+      .withTimeout(60000)
   }
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toBeVisible()
@@ -815,7 +815,6 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherSelector-${endpoint}`)).tap()
     await element(by.id('overrideAPITestID')).scroll(100, 'down')
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
-    await element(by.id(`otherStatus-${endpoint}`)).tapReturnKey()
   }
 
   await element(by.id('saveErrors')).tap()

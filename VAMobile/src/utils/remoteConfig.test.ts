@@ -40,13 +40,14 @@ const mockOverrides = {
   appointmentsTestTime: true,
   internationalPhoneNumber: false,
   show5103Flow: true,
-  showCernerWarningAlert: true,
-  showCernerWhatsNew: false,
+  showCernerWarningAlert: false,
+  showCernerWhatsNew: true,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayments: false,
   offlineMode: false,
   remoteConfigRefreshTest: false,
+  veteranStatusCardUpdate: false,
 }
 
 describe('activate', () => {

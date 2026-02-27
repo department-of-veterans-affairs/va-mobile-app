@@ -152,10 +152,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const hasRecentMessages = thread.some(
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
+  const providerAllowsReply = !thread.some((msg) => msg.attributes?.replyDisabled === true)
+  const replyIsStale = isReplyDraft && !hasRecentMessages
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
   const { data: authorizedServicesData } = useAuthorizedServices()
-  const replyDisabled = isReplyDraft && (!hasRecentMessages || migrationBlocksReply)
+  const replyDisabled = isReplyDraft && (!hasRecentMessages || !providerAllowsReply || migrationBlocksReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -631,13 +633,24 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
-  function renderAlert() {
+  function renderStaleReplyAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="warning"
           header={t('secureMessaging.reply.tooOldForReplies')}
           description={t('secureMessaging.reply.olderThan45Days')}
+        />
+      </Box>
+    )
+  }
+  function renderCannotReplyAlert() {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('secureMessaging.reply.cannotReplyHeader')}
+          description={t('secureMessaging.reply.cannotReplyBody')}
         />
       </Box>
     )
@@ -819,7 +832,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {replyDisabled && !migrationBlocksReply && renderAlert()}
+          {replyIsStale && !migrationBlocksReply && providerAllowsReply && renderStaleReplyAlert()}
+          {!providerAllowsReply && !migrationBlocksReply && renderCannotReplyAlert()}
           {migrationBlocksReply && authorizedServicesData && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <OHAlertManager

@@ -4,10 +4,7 @@
 
 name: '[Admin] Notify Slack of new Onboarding requests'
 
-on:
-  issues:
-    types:
-      - opened
+on: workflow_call
 
 jobs:
   get_slack_id_user1:
@@ -26,7 +23,6 @@ jobs:
 
   notify_slack:
     name: Notify Both Slack Users
-    if: contains(github.event.issue.labels.*.name, 'user-onboarding')
     needs: [get_slack_id_user1, get_slack_id_user2]
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
