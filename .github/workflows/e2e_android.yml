@@ -22,7 +22,7 @@ on:
   workflow_dispatch:
     inputs:
       run_full_test:
-        description: 'Run all e2e test suites'
+        description: 'Run all tests'
         type: boolean
         required: false
       skip_cache:
