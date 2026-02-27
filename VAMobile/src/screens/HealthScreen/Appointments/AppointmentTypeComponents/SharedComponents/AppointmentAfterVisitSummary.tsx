@@ -12,6 +12,7 @@ import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { getA11yLabelText } from 'utils/common'
 import { createFileFromBase64, isValidBase64, unlinkFile } from 'utils/filesystem'
 import { useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export type AppointmentAfterVisitSummaryProps = {
   attributes: AppointmentAttributes
@@ -91,8 +92,9 @@ export const getListItemVals = (
 export default function AppointmentAfterVisitSummary({ attributes }: AppointmentAfterVisitSummaryProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  // Currently only Cerner appointments have AVS PDFs (VistA will in the future -- currently only a web version)
-  if (!attributes.isCerner || attributes.avsError) return null
+  const isAvsEnabled = featureEnabled('vaOnlineSchedulingAddOhAvs')
+  // Currently only Cerner appointments have AVS Binaries (VistA will in the future -- currently only a web version not on VAHB)
+  if (!attributes.isCerner || attributes.avsError || !attributes.avsPdf || !isAvsEnabled) return null
   const listItems = getListItemVals(attributes.avsPdf, attributes.isCerner, theme, t)
 
   return (

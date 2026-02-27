@@ -2,8 +2,11 @@ import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
+import { prefetchAvsBinaries } from 'api/appointments/getAvsBinaries'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
@@ -22,7 +25,7 @@ import {
   getPastAppointmentDateRange,
   getPastTimeFrame,
 } from 'utils/appointments'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -46,6 +49,10 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const queryClient = useQueryClient()
+  const dispatch = useAppDispatch()
+  const { data: authorizedServices } = useAuthorizedServices()
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)
   const [page, setPage] = useState(1)
   const [onApplyClicked, setOnApplyClicked] = useState(false)
@@ -57,6 +64,7 @@ function PastAppointments({
   const { maintenanceWindows } = useMaintenanceWindows()
   const endTime = maintenanceWindows?.[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
+  const isAvsEnabled = featureEnabled('vaOnlineSchedulingAddOhAvs')
 
   const filteredAppointments = useMemo(
     () => filterAppointments(appointmentsData?.data || [], true, datePickerRange),
@@ -112,7 +120,27 @@ function PastAppointments({
     setPage(1)
   }
 
-  const onPastAppointmentPress = (appointment: AppointmentData): void => {
+  const onPastAppointmentPress = async (appointment: AppointmentData): Promise<void> => {
+    const { attributes } = appointment || ({} as AppointmentData)
+    const avsMetadata = attributes?.avsPdf
+    const shouldPrefetchAvs =
+      !!avsMetadata?.length &&
+      !!attributes?.isCerner &&
+      !attributes?.avsError &&
+      isAvsEnabled &&
+      authorizedServices?.appointments &&
+      !appointmentsInDowntime
+
+    if (shouldPrefetchAvs) {
+      const hasMissingBinary = avsMetadata.some((summary) => !summary.binary)
+      if (hasMissingBinary) {
+        try {
+          await prefetchAvsBinaries(queryClient, dispatch, avsMetadata)
+        } catch {
+          // Ignore prefetch errors and proceed to details.
+        }
+      }
+    }
     navigateTo('PastAppointmentDetails', { appointment })
   }
 

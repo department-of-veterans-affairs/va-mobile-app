@@ -10,7 +10,7 @@ import {
   openHealth,
   scrollToElement,
   scrollToIDThenTap,
-  toggleRemoteConfigFlag,
+  toggleRemoteConfigFlags,
 } from './utils'
 
 export const AppointmentsExpandede2eConstants = {
@@ -458,37 +458,30 @@ export async function checkHasAvs(
   }
 }
 
-// In text, elements are 1-based
-export async function clickAvsID(n?: number, text = 'Review after-visit summary') {
-  await element(by.text(`${text}${n !== undefined ? ` ${n}` : ''}`)).tap()
-  await waitFor(element(by.text('Done')))
-    .toBeVisible()
-    .withTimeout(20000)
-    .then(async () => {
-      await sleep(4000)
-      await element(by.text('Done')).tap()
-    })
-}
-
 const sleep = (milliseconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds))
 }
 
 export async function returnToAppointmentsFromDetails() {
-  await waitFor(element(by.text('Appointments')))
+  await waitFor(element(by.text('Back')))
     .toBeVisible()
     .withTimeout(5000)
     .then(async () => {
-      await element(by.text('Appointments')).tap()
+      await element(by.text('Back')).tap()
     })
 }
 
 export function checkOHAVS() {
   describe('OH AVS Tests', () => {
     beforeAll(async () => {
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+
       // Test Cerner 001 is 48 days in past, all are prior (But less than default 3 months)
       const back48days = todaysDate.minus({ days: 48 })
-      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
       await element(by.text('Past')).tap()
       await iosPastApptDate({ to: back48days })
       await element(by.text('Apply')).tap()
@@ -503,9 +496,7 @@ export function checkOHAVS() {
       await scrollTo('Cern Er 001', true)
       await checkHasAvs(true, 1)
       await checkHasAvs(true, 2)
-      await clickAvsID(1)
-      // Seems to have a similar problem as webview reopening in the same test flow
-      // await clickAvsID(2)
+      // No longer clicking on AVS in detox because cannot close the window in ios26+
     })
     it('should open appointment details with empty binary for AVS', async () => {
       await scrollTo('Cern Er 002', true)
@@ -522,12 +513,15 @@ export function checkOHAVS() {
     it('should open with two valid binary data but only one supported type of AVS', async () => {
       await scrollTo('Cern Er 005', true)
       await checkHasAvs(true) // no number means no suffix
-      // Seems to have a similar problem as webview reopening in the same test flow
-      // await clickAvsID(undefined, 'Review after-visit summary') // no number means no suffix
     })
     it('should open appointment with error alert for AVS PDF (no shown PDF even if there is data)', async () => {
       await scrollTo('Cern Er 006', true)
-      // AVS error case
+      // AVS error and content
+      await checkHasAvs(false, undefined, undefined, 'avs-error-alert')
+    })
+    it('should have no AVS data and just an Error alert for AVS PDF', async () => {
+      await scrollTo('Cern Er 007', true)
+      // AVS error case with no data
       await checkHasAvs(false, undefined, undefined, 'avs-error-alert')
     })
   })
@@ -1301,9 +1295,12 @@ export async function apppointmentVerification(pastAppointment = false) {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  // Guarantees that travel pay is enabled for these tests
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT, true)
+  await toggleRemoteConfigFlags([
+    [CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT],
+    // Guarantees that travel pay is enabled for these tests
+    [CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT, true],
+    [CommonE2eIdConstants.VA_ONLINE_SCHEDULING_ADD_OH_AVS, true],
+  ])
   await loginToDemoMode()
   await openHealth()
   await openAppointments()

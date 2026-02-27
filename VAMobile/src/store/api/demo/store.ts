@@ -9,7 +9,12 @@ import {
 } from 'api/types'
 import { Params } from 'store/api/api'
 import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from 'store/api/demo/allergies'
-import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from 'store/api/demo/appointments'
+import {
+  AppointmentDemoReturnTypes,
+  AppointmentsDemoStore,
+  getAppointments,
+  getAvsBinaries,
+} from 'store/api/demo/appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from 'store/api/demo/claims'
 import { DebtsDemoReturnTypes, DebtsDemoStore, getDebts } from 'store/api/demo/debts'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from 'store/api/demo/decisionLetters'
@@ -227,6 +232,10 @@ export const transform = (
 const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
   if (!store) {
     return undefined
+  }
+
+  if (endpoint.match(/^\/v0\/appointments\/avs_binaries\/[^/]+\/?$/)) {
+    return getAvsBinaries(store, params, endpoint)
   }
 
   if (endpoint.startsWith('/v0/push/prefs/')) {

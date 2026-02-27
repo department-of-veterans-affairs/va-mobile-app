@@ -129,7 +129,12 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
             <TextView>{remoteConfig().lastFetchStatus}</TextView>
           </TextArea>
         </Box>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
+        <TextView
+          testID="overrideTogglesHeader"
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={gutter}
+          mt={standardMarginBetween}>
           Override Toggles
         </TextView>
         {toggleList()}

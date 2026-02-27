@@ -95,7 +95,7 @@ export const CommonE2eIdConstants = {
   CONFIRM_EMAIL_TEXT: 'Confirm',
   SKIP_EMAIL_TEXT: 'Skip adding email',
   //health
-  CALENDAR_AVS_RANGE: 'apptCalendarAVSRange',
+  VA_ONLINE_SCHEDULING_ADD_OH_AVS: 'vaOnlineSchedulingAddOhAvs',
   APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
@@ -137,6 +137,7 @@ export const CommonE2eIdConstants = {
   DIRECT_DEPOSIT_BUTTON_ID: 'toDirectDepositID',
   PAYMENT_HISTORY_SCREEN_ID: 'paymentHistoryTestID',
   //profile, settings
+  OVERRIDE_TOGGLES_ID: 'overrideTogglesHeader',
   PROFILE_SCROLL_ID: 'profileID',
   PERSONAL_INFO_BUTTON_ID: 'toPersonalInfoID',
   CONTACT_INFO_BUTTON_ID: 'toContactInfoID',
@@ -775,17 +776,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   }
 }
 
-/** Toggle the specified remote config feature flag
- * @param flagName - name of flag to toggle
- * @param makeState - optional boolean to set the flag to a specific state
- * */
-export async function toggleRemoteConfigFlag(flagName: string, makeState?: boolean) {
-  await loginToDemoMode()
-  await openProfile()
-  await openSettings()
-  await openDeveloperScreen()
-
-  await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
+export async function findAndToggleFlag(flagName: string, makeState?: boolean) {
   if (makeState !== undefined) {
     try {
       await waitFor(element(by.id(flagName)))
@@ -798,6 +789,42 @@ export async function toggleRemoteConfigFlag(flagName: string, makeState?: boole
   } else {
     await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   }
+}
+
+/**
+ *
+ * @param flagsToToggle - Array of tuple of string (id of flag) and boolean (optional makeState to set)
+ * If not set, makeState, will change whatever the default state is whether or not the app has been reinstalled or set in another test
+ */
+export async function toggleRemoteConfigFlags(flagsToToggle: Array<[string, boolean?]>) {
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
+
+  for (const flag of flagsToToggle) {
+    await waitFor(element(by.id(CommonE2eIdConstants.OVERRIDE_TOGGLES_ID)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
+      .scroll(1000, 'up')
+    await findAndToggleFlag(flag[0], flag[1])
+  }
+  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+}
+
+/** Toggle the specified remote config feature flag
+ * @param flagName - name of flag to toggle
+ * @param makeState - optional boolean to set the flag to a specific state
+ * */
+export async function toggleRemoteConfigFlag(flagName: string, makeState?: boolean) {
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
+
+  await findAndToggleFlag(flagName, makeState)
 
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }

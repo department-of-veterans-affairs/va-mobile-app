@@ -2164,7 +2164,7 @@
             "isCerner": true,
             "avsPdf": [
               {
-                "id": "20875041789",
+                "id": "208750417891",
                 "apptId": "testcerner001a",
                 "name": "Ambulatory Visit Summary",
                 "noteType": "ambulatory_patient_summary",
@@ -2172,11 +2172,10 @@
                   "4189669",
                   "96345-4"
                 ],
-                "contentType": "application/pdf",
-                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+                "contentType": "application/pdf"
               },
               {
-                "id": "20875041799",
+                "id": "208750417892",
                 "apptId": "testcerner001a",
                 "name": "Ambulatory Visit Summary",
                 "noteType": "ambulatory_patient_summary",
@@ -2184,8 +2183,7 @@
                   "4189669",
                   "96345-4"
                 ],
-                "contentType": "application/pdf",
-                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+                "contentType": "application/pdf"
               }
             ]
           }
@@ -2260,16 +2258,15 @@
             "isCerner": true,
             "avsPdf": [
               {
-                "id": "20875041789",
-                "apptId": "testcerner002",
+                "id": "208750417893",
+                "apptId": "testcerner002a",
                 "name": "Ambulatory Visit Summary",
                 "noteType": "ambulatory_patient_summary",
                 "loincCodes": [
                   "4189669",
                   "96345-4"
                 ],
-                "contentType": "application/pdf",
-                "binary": ""
+                "contentType": "application/pdf"
               }
             ]
           }
@@ -2344,16 +2341,15 @@
             "isCerner": true,
             "avsPdf": [
               {
-                "id": "20875041789",
-                "apptId": "testcerner003",
+                "id": "208750417894",
+                "apptId": "testcerner003a",
                 "name": "Ambulatory Visit Summary",
                 "noteType": "ambulatory_patient_summary",
                 "loincCodes": [
                   "4189669",
                   "96345-4"
                 ],
-                "contentType": "application/pdf",
-                "binary": "JVBERi0xLjQKJeLjz9M#INVALID-DATA$$%%123=="
+                "contentType": "application/pdf"
               }
             ]
           }
@@ -2428,16 +2424,15 @@
             "isCerner": true,
             "avsPdf": [
               {
-                "id": "20875041789",
-                "apptId": "AVS_PDF_Test_4",
+                "id": "208750417895",
+                "apptId": "testcerner004a",
                 "name": "Pharmacology Discharge summary",
                 "noteType": "pharmacology_discharge_summary",
                 "loincCodes": [
                   "4189669",
                   "96345-4"
                 ],
-                "contentType": "application/pdf",
-                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+                "contentType": "application/pdf"
               }
             ]
           }
@@ -2512,8 +2507,8 @@
             "isCerner": true,
             "avsPdf": [
               {
-                "id": "20875041789",
-                "apptId": "testcerner005",
+                "id": "208750417896",
+                "apptId": "testcerner005a",
                 "name": "Pharmacology Discharge summary",
                 "noteType": "pharmacology_discharge_summary",
                 "loincCodes": [
@@ -2521,22 +2516,10 @@
                   "96345-4"
                 ],
                 "contentType": "application/pdf",
-                "binary": "JVBERi0xLjQKJeLjz9M#INVALID-DATA$$%%123=="
+                "binary": null
               },
               {
-                "id": "20875041789",
-                "apptId": "testcerner005",
-                "name": "Auditory Visit Summary",
-                "noteType": "auditory_patient_summary",
-                "loincCodes": [
-                  "4189669",
-                  "96345-4"
-                ],
-                "contentType": "application/pdf",
-                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
-              },
-              {
-                "id": "20875041789",
+                "id": "208750417897",
                 "apptId": "testcerner005",
                 "name": "Ambulatory Visit Summary",
                 "noteType": "ambulatory_patient_summary",
@@ -2545,7 +2528,7 @@
                   "96345-4"
                 ],
                 "contentType": "application/pdf",
-                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+                "binary": null
               }
             ]
           }
@@ -2618,8 +2601,185 @@
               }
             },
             "isCerner": true,
+            "avsPdf": [
+              {
+                "id": "208750417898",
+                "apptId": "testcerner006a",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf"
+              }
+            ]
+          }
+        },
+        {
+          "id": "testcerner007",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc0007",
+            "comment": null,
+            "healthcareProvider": "Cern Er 007",
+            "healthcareService": null,
+            "location": {
+              "id": "556",
+              "name": "Lovell Federal health care - VA",
+              "address": {
+                "street": "3001 Green Bay Road",
+                "city": "North Chicago",
+                "state": "IL",
+                "zipCode": "60064-3048"
+              },
+              "lat": 42.306795,
+              "long": -87.8605335,
+              "phone": {
+                "areaCode": "847",
+                "number": "688-1900",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 53 day}}",
+            "startDateUtc": "{{now - 53 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
+            "avsPdf": [
+              {
+                "id": "208750417899",
+                "apptId": "testcerner007a",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf"
+              },
+              {
+                "id": "208750417900",
+                "apptId": "testcerner007a",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf"
+              }
+            ]
+          }
+        },
+        {
+          "id": "testcerner008",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc0008",
+            "comment": null,
+            "healthcareProvider": "Cern Er 008",
+            "healthcareService": null,
+            "location": {
+              "id": "556",
+              "name": "Lovell Federal health care - VA",
+              "address": {
+                "street": "3001 Green Bay Road",
+                "city": "North Chicago",
+                "state": "IL",
+                "zipCode": "60064-3048"
+              },
+              "lat": 42.306795,
+              "long": -87.8605335,
+              "phone": {
+                "areaCode": "847",
+                "number": "688-1900",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 53 day}}",
+            "startDateUtc": "{{now - 53 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
             "avsPdf": null,
-            "avsError": "Error retrieving AVS PDF"
+            "avsError": "Error retrieving AVS data"
           }
         }
       ],
