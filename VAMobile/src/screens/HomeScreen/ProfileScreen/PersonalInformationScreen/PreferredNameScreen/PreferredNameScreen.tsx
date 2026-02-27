@@ -46,7 +46,6 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
           options,
           title: '',
           message: t('personalInformation.preferredName.cancelMessage'),
-          cancelButtonIndex: 1,
           destructiveButtonIndex: 0,
         },
         (buttonIndex) => {

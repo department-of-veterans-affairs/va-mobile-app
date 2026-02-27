@@ -31,7 +31,6 @@ function ResolveCopayButton({ copay }: ResolveCopayButtonProps) {
         options,
         title: t('copays.resolveCopay'),
         message: t('copays.resolveCopay.how'),
-        cancelButtonIndex: 3,
       },
       (buttonIndex) => {
         if (buttonIndex !== undefined && buttonIndex < 3) {

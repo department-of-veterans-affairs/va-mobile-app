@@ -113,7 +113,6 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
         {
           options,
           title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
-          cancelButtonIndex: 1,
         },
         (buttonIndex) => {
           switch (buttonIndex) {
