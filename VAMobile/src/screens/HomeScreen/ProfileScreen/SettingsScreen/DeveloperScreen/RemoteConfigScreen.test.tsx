@@ -56,7 +56,7 @@ context('RemoteConfigScreen', () => {
     initializeTestInstance()
 
     // Toggle an item to enable override button
-    fireEvent.press(screen.getByText('useOldLinkComponent'))
+    fireEvent.press(screen.getByText('testFeature'))
 
     const applyOverridesButton = screen.getByTestId(APPLY_OVERRIDES_BUTTON_TEST_ID)
     expect(applyOverridesButton).toBeDefined()

@@ -19,7 +19,6 @@ export type FeatureToggleType =
   | 'COEAvailable'
   | 'copayments'
   | 'appointmentsTestTime'
-  | 'decisionLettersWaygate'
   | 'evidenceRequestsUpdatedUI'
   | 'hsScrollAnalytics'
   | 'inAppReview'
@@ -27,15 +26,8 @@ export type FeatureToggleType =
   | 'loadLabsAndTestsOnHomeScreen'
   | 'mhvMedicationsOracleHealthCutover'
   | 'mrHide36HrHoldTimes'
-  | 'rescheduleLink'
-  | 'submitEvidenceExpansion'
-  | 'sso'
   | 'startScheduling'
   | 'testFeature'
-  | 'travelPaySMOC'
-  | 'travelPayClaimDetails'
-  | 'travelPayStatusList'
-  | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'show5103Flow'
   | 'showCernerWarningAlert'
@@ -52,7 +44,6 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   COEAvailable: boolean
   copayments: boolean
-  decisionLettersWaygate: boolean
   evidenceRequestsUpdatedUI: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
@@ -60,15 +51,8 @@ type FeatureToggleValues = {
   loadLabsAndTestsOnHomeScreen: boolean
   mhvMedicationsOracleHealthCutover: boolean
   mrHide36HrHoldTimes: boolean
-  rescheduleLink: boolean
-  submitEvidenceExpansion: boolean
-  sso: boolean
   startScheduling: boolean
   testFeature: boolean
-  travelPaySMOC: boolean
-  travelPayClaimDetails: boolean
-  travelPayStatusList: boolean
-  useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   show5103Flow: boolean
   showCernerWarningAlert: boolean
@@ -86,7 +70,6 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
-  decisionLettersWaygate: true,
   evidenceRequestsUpdatedUI: false,
   hsScrollAnalytics: false,
   inAppReview: true,
@@ -94,15 +77,8 @@ export const defaults: FeatureToggleValues = {
   loadLabsAndTestsOnHomeScreen: false,
   mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
-  rescheduleLink: true,
-  submitEvidenceExpansion: true,
-  sso: true,
   startScheduling: false,
   testFeature: false,
-  travelPaySMOC: true,
-  travelPayClaimDetails: true,
-  travelPayStatusList: true,
-  useOldLinkComponent: true,
   internationalPhoneNumber: false,
   show5103Flow: true,
   showCernerWarningAlert: false,

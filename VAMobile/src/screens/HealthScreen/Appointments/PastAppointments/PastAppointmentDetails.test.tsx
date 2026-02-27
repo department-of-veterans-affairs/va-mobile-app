@@ -11,8 +11,7 @@ import {
   AppointmentTypeConstants,
 } from 'api/types'
 import PastAppointmentDetails from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointmentDetails'
-import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import { context, mockNavProps, render } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 const mockNavigationSpy = jest.fn()
@@ -121,10 +120,7 @@ context('PastAppointmentDetails', () => {
     },
   })
 
-  const mockFeatureEnabled = featureEnabled as jest.Mock
-
-  const initializeTestInstance = (paramAppointment?: AppointmentData, travelPaySMOCEnabled = false) => {
-    when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
+  const initializeTestInstance = (paramAppointment?: AppointmentData) => {
     const props = mockNavProps(
       {},
       {

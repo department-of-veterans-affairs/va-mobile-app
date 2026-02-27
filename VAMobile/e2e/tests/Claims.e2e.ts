@@ -366,7 +366,10 @@ describe('Claims Screen', () => {
     // Submit evidence screen
     await element(by.id(CommonE2eIdConstants.REQUEST_DETAILS_5103_ID)).scrollTo('bottom')
 
-    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE)).tap()
+    // The order that this button is found between the platforms differs so we need this check to find the correct one
+    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE))
+      .atIndex(device.getPlatform() === 'android' ? 0 : 1)
+      .tap()
 
     await element(by.id(CommonE2eIdConstants.SUBMIT_EVIDENCE_5103_ID)).scrollTo('bottom')
 

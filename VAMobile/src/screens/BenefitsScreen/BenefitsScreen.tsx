@@ -25,7 +25,6 @@ import TravelPayClaimDetailsScreen from 'screens/HealthScreen/TravelPay/TravelPa
 import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
@@ -64,7 +63,7 @@ export function BenefitsScreen({}: BenefitsScreenProps) {
   }
 
   const onClaims = () => {
-    if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters) {
+    if (userAuthorizedServices?.decisionLetters) {
       navigateTo('Claims')
     } else {
       navigateTo('ClaimsHistoryScreen')

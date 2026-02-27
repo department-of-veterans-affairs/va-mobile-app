@@ -1,17 +1,34 @@
 import React, { FC } from 'react'
 
-import LinkComponent from 'components/LinkWithAnalytics/LinkComponent'
-import OldLinkComponent from 'components/LinkWithAnalytics/OldLinkComponent'
-import { LinkWithAnalyticsProps } from 'components/LinkWithAnalytics/types'
-import { featureEnabled } from 'utils/remoteConfig'
+import { Link } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
-/** Wrapper for the Link component which adds analytics */
-const LinkWithAnalytics: FC<LinkWithAnalyticsProps> = (props) => {
-  if (featureEnabled('useOldLinkComponent')) {
-    return <OldLinkComponent {...props} />
-  } else {
-    return <LinkComponent {...props} />
+import { LinkWithAnalyticsProps } from 'components/LinkWithAnalytics/types'
+import { getDefinedAnalyticsProps } from 'components/LinkWithAnalytics/utils'
+import { Box } from 'components/index'
+import { Events } from 'constants/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useTheme } from 'utils/hooks'
+
+const LinkWithAnalytics: FC<LinkWithAnalyticsProps> = ({ analyticsOnPress, disablePadding, ...props }) => {
+  const definedAnalyticsProps = getDefinedAnalyticsProps(props)
+  const theme = useTheme()
+
+  const py = disablePadding ? 0 : theme.dimensions.buttonPadding
+  const pr = disablePadding ? 0 : theme.dimensions.gutter
+
+  const analytics = {
+    onPress: () => {
+      analyticsOnPress && analyticsOnPress()
+      logAnalyticsEvent(Events.vama_link_click(definedAnalyticsProps))
+    },
+    onConfirm: () => logAnalyticsEvent(Events.vama_link_confirm(definedAnalyticsProps)),
   }
+
+  return (
+    <Box flexDirection={'row'} flexWrap="wrap" py={py} pr={pr}>
+      <Link analytics={analytics} icon={{ preventScaling: true }} {...props} />
+    </Box>
+  )
 }
 
 export default LinkWithAnalytics
