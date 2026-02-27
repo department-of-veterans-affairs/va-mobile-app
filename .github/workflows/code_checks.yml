@@ -96,7 +96,7 @@ jobs:
           VALIDATE_DOCKER_HADOLINT: false
           VALIDATE_XML: false
           VALIDATE_YAML_PRETTIER: false
-        uses: super-linter/super-linter@v7.4.0
+        uses: super-linter/super-linter@v8.3.1
   test:
     runs-on: ubuntu-latest
     strategy:
