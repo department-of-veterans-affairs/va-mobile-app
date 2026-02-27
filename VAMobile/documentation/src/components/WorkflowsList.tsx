@@ -329,7 +329,7 @@ const WorkflowsList: React.FC = () => {
 
         return (
           <div key={workflow.fileName} className="margin-top--xl margin-bottom--xl">
-            <Heading as="h2" id={slug} className="margin-bottom--sm">
+            <Heading as="h2" id={slug} className="margin-bottom--xs">
               {workflow.name}
             </Heading>
             <p className="margin-bottom--sm" style={{ fontSize: '0.9rem', color: 'var(--ifm-color-emphasis-700)' }}>
