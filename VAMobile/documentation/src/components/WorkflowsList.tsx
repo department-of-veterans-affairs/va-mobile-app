@@ -16,6 +16,7 @@ const GITHUB_WORKFLOW_BASE_URL =
 const friendlyTriggerNames = {
   create: 'Branch or Tag Created',
   issues: 'Issue',
+  issue_comment: 'Issue Comment',
   pull_request_review: 'Pull Request Review',
   pull_request: 'Pull Request',
   push: 'Push',
@@ -41,7 +42,7 @@ const toTitleCase = (str: string) =>
 /**
  * Generates a URL-friendly slug from a workflow name or object.
  */
-const getSlug = (item: string | { name: string; fileName?: string }) => {
+export const getSlug = (item: string | { name: string; fileName?: string }) => {
   const name = typeof item === 'string' ? item : item.name
   return name
     .toLowerCase()
@@ -122,6 +123,7 @@ const TriggerDetails = ({ trigger, triggerConfig }: { trigger: string; triggerCo
   if (!triggerConfig || typeof triggerConfig !== 'object') return null
 
   const isSchedule = trigger === 'schedule'
+  const isWorkflowRun = trigger === 'workflow_run'
 
   return (
     <ul className="text--small" style={{ listStyleType: 'none', paddingLeft: '1rem', marginTop: '0.25rem' }}>
@@ -141,6 +143,17 @@ const TriggerDetails = ({ trigger, triggerConfig }: { trigger: string; triggerCo
         })
       ) : (
         <>
+          {isWorkflowRun && triggerConfig.workflows && (
+            <li key="workflows">
+              Workflows:{' '}
+              {triggerConfig.workflows.map((parentName: string, i: number) => (
+                <React.Fragment key={parentName}>
+                  {i > 0 && ', '}
+                  <Link to={`#${getSlug(parentName)}`}>{parentName}</Link>
+                </React.Fragment>
+              ))}
+            </li>
+          )}
           {triggerConfig.branches && (
             <li key="branches">
               Branches:{' '}
@@ -157,7 +170,7 @@ const TriggerDetails = ({ trigger, triggerConfig }: { trigger: string; triggerCo
           )}
           {triggerConfig.types && (
             <li key="types">
-              Types:{' '}
+              When:{' '}
               <code>
                 {(Array.isArray(triggerConfig.types) ? triggerConfig.types : [triggerConfig.types])
                   .map(toTitleCase)
@@ -337,6 +350,12 @@ const WorkflowsList = () => {
                   />
                 ))}
               </ul>
+            </div>
+
+            <div className="margin-top--md text--right">
+              <Link to="#top" style={{ fontSize: '0.8rem' }}>
+                ↑ Back to Top
+              </Link>
             </div>
 
             <InputsTable inputs={allInputs} />
