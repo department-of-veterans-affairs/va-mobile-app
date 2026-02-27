@@ -161,10 +161,8 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
         <PrescriptionsDetailsBanner
           variant="error"
           phoneNumber={phoneNumberString}
-          customBodyText={
-            "If you need a refill now, call your VA pharmacy's automated refill line. You can also find the phone number on your prescription label."
-          }
-          customHeaderText={"You can't refill this prescription online right now"}
+          customBodyText={t('prescription.details.banner.migrating.body')}
+          customHeaderText={t('prescription.details.banner.migrating.header')}
           showDefaultContent={false}
         />
       )

@@ -225,10 +225,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
             <PrescriptionsDetailsBanner
               migratingPrescriptions={migratingPrescriptions}
               variant="error"
-              customHeaderText={"You can't refill prescriptions online for some facilities right now"}
-              customFooterText={
-                "If you need a refill now, call your VA pharmacy's automated refill line. The phone number is on your prescription label or in your prescriptions details page."
-              }
+              customHeaderText={t('prescription.refill.banner.migrating.header')}
+              customFooterText={t('prescription.refill.banner.migrating.body')}
               showDefaultContent={false}
             />
           )}
