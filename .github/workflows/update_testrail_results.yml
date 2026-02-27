@@ -2,7 +2,7 @@
 # to TestRail. Finds or creates the appropriate test run, then uses the trcli
 # tool to parse and upload results for each test suite.
 
-name: '[E2E] Update TestRail Results'
+name: '[TestRail] Update E2E Results'
 
 on:
   workflow_call:

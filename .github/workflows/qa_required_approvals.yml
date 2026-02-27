@@ -2,7 +2,7 @@
 # engineer approval and one QA team approval before merging. Checks changed
 # files against inclusion/exclusion patterns and validates review approvals.
 
-name: '[Utils] QA required approval'
+name: '[Admin] QA Required Approvals'
 
 on: pull_request
 

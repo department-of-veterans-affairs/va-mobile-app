@@ -88,6 +88,19 @@ const extractAllInputs = (on: Record<string, TriggerConfig>): Record<string, Inp
     {} as Record<string, InputConfig>,
   )
 
+// Brief descriptions for each workflow group, shown in the table of contents
+const groupDescriptions: Record<string, string> = {
+  Admin: 'Team processes, repo admin, and maintenance tasks',
+  Build: 'iOS and Android builds for QA and Release',
+  'Code Quality': 'Linting, formatting, and static analysis',
+  Documentation: 'Building and deploying documentation',
+  E2E: 'End-to-end testing on iOS and Android',
+  Release: 'App release process automation',
+  Security: 'Security scanning and vulnerability detection',
+  TestRail: 'Test case and result syncing with TestRail',
+  Utils: 'Shared building blocks used by other workflows',
+}
+
 /** Grid-based table of contents for quick navigation between workflow groups. */
 const TableOfContents: React.FC<{ groupedData: Record<string, WorkflowData[]> }> = ({ groupedData }) => {
   const sortedPrefixes = Object.keys(groupedData).sort()
@@ -102,6 +115,11 @@ const TableOfContents: React.FC<{ groupedData: Record<string, WorkflowData[]> }>
             <h4 className="margin-bottom--sm" style={{ textTransform: 'capitalize' }}>
               {prefix}
             </h4>
+            {groupDescriptions[prefix] && (
+              <p className="margin-bottom--sm" style={{ fontSize: '0.8rem', color: 'var(--ifm-color-emphasis-700)' }}>
+                {groupDescriptions[prefix]}
+              </p>
+            )}
             <ul style={{ listStyleType: 'none', paddingLeft: 0, fontSize: '0.9rem' }}>
               {groupedData[prefix].map((workflow) => (
                 <li key={workflow.fileName} className="margin-bottom--xs">
