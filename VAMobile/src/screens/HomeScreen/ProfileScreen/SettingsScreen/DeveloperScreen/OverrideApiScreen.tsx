@@ -13,7 +13,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { APIError } from 'store/api'
-import { DemoState, dispatchUpdateErrors } from 'store/slices/demoSlice'
+import { DemoState, dispatchUpdateErrors, dispatchUpdateResponses } from 'store/slices/demoSlice'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
@@ -22,6 +22,10 @@ export const APIGroupings: {
   name: string
   endpoints: string[]
 }[] = [
+  {
+    name: 'Veteran Status Card',
+    endpoints: ['/v0/veteran_status_card'],
+  },
   {
     name: 'Appointments',
     endpoints: ['/v0/appointments'],
@@ -111,6 +115,8 @@ const IndividualQueryDisplay = (
   endpoint: string,
   overrideErrors: APIError[],
   setErrors: React.Dispatch<React.SetStateAction<APIError[]>>,
+  overrideResponses: Array<{ endpoint: string; body: string }>,
+  setResponses: React.Dispatch<React.SetStateAction<Array<{ endpoint: string; body: string }>>>,
   clearErrors: boolean,
 ) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -123,6 +129,8 @@ const IndividualQueryDisplay = (
   const [initialBEBody, setInitialBEBody] = useState('')
   const [initialBEPhone, setInitialBEPhone] = useState('')
   const [initialOtherErrorCode, setInitialOtherErrorCode] = useState('500')
+  const [successSelected, setSuccessSelected] = useState(false)
+  const [successBody, setSuccessBody] = useState('')
 
   useEffect(() => {
     _.forEach(overrideErrors, (error) => {
@@ -155,9 +163,52 @@ const IndividualQueryDisplay = (
     }
   }, [clearErrors])
 
+  useEffect(() => {
+    const match = _.find(overrideResponses, (r) => r.endpoint === endpoint)
+    if (match) {
+      setSuccessSelected(true)
+      setSuccessBody(match.body)
+    }
+  }, [overrideResponses, endpoint])
+
   return (
     <Box>
       <TextView>{endpoint}</TextView>
+      <VASelector
+        selectorType={SelectorType.Checkbox}
+        labelKey="Success body override"
+        selected={successSelected}
+        onSelectionChange={() => {
+          const next = !successSelected
+          setSuccessSelected(next)
+
+          const other = _.filter(overrideResponses, (r) => r.endpoint !== endpoint)
+          if (next) {
+            other.push({ endpoint, body: successBody || '{}' })
+          }
+          setResponses(other)
+        }}
+        testID={`${endpoint}_successOverride`}
+      />
+
+      {successSelected && (
+        <Box>
+          <TextView>Success JSON</TextView>
+          <TextArea>
+            <VATextInput
+              value={successBody}
+              inputType="none"
+              onChange={(val) => {
+                setSuccessBody(val)
+                const other = _.filter(overrideResponses, (r) => r.endpoint !== endpoint)
+                other.push({ endpoint, body: val })
+                setResponses(other)
+              }}
+              testID={`${endpoint}_successOverride_body`}
+            />
+          </TextArea>
+        </Box>
+      )}
       <VASelector
         selectorType={SelectorType.Checkbox}
         labelKey={t('overrideAPI.network')}
@@ -387,13 +438,15 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { overrideErrors } = useSelector<RootState, DemoState>((state) => state.demo)
+  const { overrideErrors, overrideResponses } = useSelector<RootState, DemoState>((state) => state.demo)
   const [clearData, setClearData] = useState(false)
   const [temporaryErrors, setErrors] = useState<Array<APIError>>([])
+  const [temporaryResponses, setResponses] = useState<Array<{ endpoint: string; body: string }>>([]) // NEW
 
   useEffect(() => {
     setErrors(overrideErrors)
-  }, [overrideErrors])
+    setResponses(overrideResponses)
+  }, [overrideErrors, overrideResponses])
 
   useEffect(() => {
     if (clearData) {
@@ -402,14 +455,32 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
     }
   }, [clearData, dispatch])
 
-  const saveErrors = () => {
+  // const saveErrors = () => {
+  //   queryClient.clear()
+  //   dispatch(dispatchUpdateErrors(temporaryErrors))
+  // }
+
+  const saveOverrides = () => {
     queryClient.clear()
     dispatch(dispatchUpdateErrors(temporaryErrors))
+    dispatch(dispatchUpdateResponses(temporaryResponses))
   }
 
-  const clearErrors = () => {
+  // const clearErrors = () => {
+  //   setClearData(true)
+  // }
+
+  const clearOverrides = () => {
     setClearData(true)
   }
+
+  useEffect(() => {
+    if (clearData) {
+      setClearData(false)
+      dispatch(dispatchUpdateErrors([]))
+      dispatch(dispatchUpdateResponses([]))
+    }
+  }, [clearData, dispatch])
 
   const groupings = APIGroupings.map((group) => {
     const individualQueries = group.endpoints.map((endpoint, idx) => {
@@ -417,7 +488,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
         <Box
           mt={theme.dimensions.standardMarginBetween}
           mb={idx === group.endpoints.length - 1 ? theme.dimensions.standardMarginBetween : undefined}>
-          {IndividualQueryDisplay(endpoint, temporaryErrors, setErrors, clearData)}
+          {IndividualQueryDisplay(endpoint, temporaryErrors, setErrors, temporaryResponses, setResponses, clearData)}
         </Box>
       )
     })
@@ -442,9 +513,9 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           mb={theme.dimensions.contentMarginBottom}
           mt={theme.dimensions.standardMarginBetween}>
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <Button label="Set API Errors" onPress={saveErrors} testID="saveErrors" />
+            <Button label="Set API Overrides" onPress={saveOverrides} testID="saveOverrides" />
           </Box>
-          <Button label="Clear API Errors" onPress={clearErrors} />
+          <Button label="Clear API Overrides" onPress={clearOverrides} />
         </Box>
       }>
       <Box>{groupings}</Box>

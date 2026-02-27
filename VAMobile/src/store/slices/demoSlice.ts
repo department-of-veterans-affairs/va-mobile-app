@@ -4,14 +4,21 @@ import { AppThunk } from 'store'
 import * as api from 'store/api'
 import { initDemoStore } from 'store/api/demo/store'
 
+type OverrideResponse = {
+  endpoint: string
+  body: string // JSON string pasted in UI
+}
+
 export type DemoState = {
   demoMode: boolean
   overrideErrors: Array<api.APIError>
+  overrideResponses: Array<OverrideResponse>
 }
 
 export const initialDemoState: DemoState = {
   demoMode: false,
   overrideErrors: [],
+  overrideResponses: [],
 }
 
 /**
@@ -30,6 +37,7 @@ export const updateDemoMode =
     }
     if (!demoMode) {
       dispatch(dispatchUpdateErrors([]))
+      dispatch(dispatchUpdateResponses([]))
     }
   }
 
@@ -46,8 +54,11 @@ const demoSlice = createSlice({
     dispatchUpdateErrors: (state, action: PayloadAction<Array<api.APIError>>) => {
       state.overrideErrors = action.payload
     },
+    dispatchUpdateResponses: (state, action: PayloadAction<Array<OverrideResponse>>) => {
+      state.overrideResponses = action.payload
+    },
   },
 })
 
-export const { dispatchUpdateDemoMode, dispatchUpdateErrors } = demoSlice.actions
+export const { dispatchUpdateDemoMode, dispatchUpdateErrors, dispatchUpdateResponses } = demoSlice.actions
 export default demoSlice.reducer
