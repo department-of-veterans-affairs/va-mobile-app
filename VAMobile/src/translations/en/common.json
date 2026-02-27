@@ -1164,6 +1164,7 @@
   "fileRequestDetails.nextSteps.toRespond": "To respond to this request:",
   "fileRequestDetails.requestDateBlurb": "We requested this evidence from you on {{requestedDate}}. You can send the evidence after the \"respond by\" date, but it may delay your claim.",
   "fileRequestDetails.requestDateBlurb.a11yLabel": "We requested this evidence from you on {{requestedDate}}. You can send the evidence after the respond by date, but it may delay your claim.",
+  "fileRequestDetails.requestDateBlurbShort": "We requested this evidence from you on {{requestedDate}}.",
   "fileRequestDetails.respondByFor": "Respond by {{date}} for: {{displayName}}",
   "fileRequestDetails.submittedTitle": "Submitted on",
   "fileRequestDetails.title": "Request for evidence",

@@ -119,6 +119,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     {
       text: t('fileRequestDetails.nextSteps.bullet1'),
       boldedText: t('fileRequestDetails.nextSteps.bullet1.bold'),
+      a11yLabel: `${t('fileRequestDetails.nextSteps.bullet1')}${t('fileRequestDetails.nextSteps.bullet1.bold')}`,
     },
     {
       text: t('fileRequestDetails.nextSteps.bullet2'),
@@ -130,14 +131,18 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
       return null
     }
 
+    // Use shorter copy if suspenseDate is missing (full copy references "respond by" date)
+    const blurbKey = formattedSuspenseDate
+      ? 'fileRequestDetails.requestDateBlurb'
+      : 'fileRequestDetails.requestDateBlurbShort'
+    const a11yKey = formattedSuspenseDate
+      ? 'fileRequestDetails.requestDateBlurb.a11yLabel'
+      : 'fileRequestDetails.requestDateBlurbShort'
+
     return (
       // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-      <TextView
-        variant="MobileBody"
-        accessibilityLabel={t('fileRequestDetails.requestDateBlurb.a11yLabel', {
-          requestedDate: formattedRequestedDate,
-        })}>
-        {t('fileRequestDetails.requestDateBlurb', { requestedDate: formattedRequestedDate })}
+      <TextView variant="MobileBody" accessibilityLabel={t(a11yKey, { requestedDate: formattedRequestedDate })}>
+        {t(blurbKey, { requestedDate: formattedRequestedDate })}
       </TextView>
     )
   }
@@ -300,9 +305,9 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
               {renderRequestDateBlurb()}
               {renderWhatWeNeedFromYouSection()}
               {renderNextStepsSection()}
-              {/* Show accordion if uploadsAllowed is true AND canUploadFile is true (or undefined).
-                  When backend flag 'cst_evidence_requests_content_override_mobile' is OFF,
-                  canUploadFile is undefined, so we fall back to showing based on uploadsAllowed alone. */}
+              {/* Show accordion if uploadsAllowed is true AND canUploadFile is not explicitly false.
+                  canUploadFile can be: undefined (backend flag OFF), null (no override), true, or false.
+                  We only hide when canUploadFile === false; undefined/null fall back to showing. */}
               {uploadsAllowed && (canUploadFile ?? true) && renderMoreOnSubmittingFilesSection()}
               {renderNeedHelpSection()}
             </>

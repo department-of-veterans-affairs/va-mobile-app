@@ -130,8 +130,10 @@ context('FileRequestDetails', () => {
           expect(screen.getByText(/Respond by/)).toBeTruthy()
         })
 
-        it('should display the request date blurb with formatted date', () => {
-          expect(screen.getByText(/We requested this evidence from you on July 16, 2020/)).toBeTruthy()
+        it('should display the FULL request date blurb with formatted date', () => {
+          expect(
+            screen.getByText(/We requested this evidence from you on July 16, 2020.*respond by.*delay your claim/i),
+          ).toBeTruthy()
         })
 
         it("should display the 'What we need from you' section with description", () => {
@@ -170,6 +172,13 @@ context('FileRequestDetails', () => {
           expect(screen.queryByText(/Respond by/)).toBeFalsy()
         })
 
+        it('should display SHORT request date blurb when suspenseDate is null (no "respond by" reference)', () => {
+          renderWithRequest({ ...requestWithoutFiles, requestedDate: '2021-05-05', suspenseDate: null })
+
+          expect(screen.getByText('We requested this evidence from you on May 05, 2021.')).toBeTruthy()
+          expect(screen.queryByText(/respond by/i)).toBeFalsy()
+        })
+
         it("should display 'More on submitting files' accordion when both uploadsAllowed and canUploadFile are true", () => {
           renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: true, canUploadFile: true })
           expect(screen.getByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeTruthy()
@@ -182,6 +191,11 @@ context('FileRequestDetails', () => {
 
         it("should display 'More on submitting files' accordion when canUploadFile is undefined (backend flag OFF)", () => {
           renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: true, canUploadFile: undefined })
+          expect(screen.getByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeTruthy()
+        })
+
+        it("should display 'More on submitting files' accordion when canUploadFile is null (no override value)", () => {
+          renderWithRequest({ ...requestWithoutFiles, uploadsAllowed: true, canUploadFile: null })
           expect(screen.getByRole('tab', { name: t('fileRequestDetails.moreOnSubmitting') })).toBeTruthy()
         })
       })
