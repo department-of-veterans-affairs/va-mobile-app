@@ -106,5 +106,5 @@ The following are steps to create a new demo mode user
       * Go to Settings -> Developer Screen -> Click the Remote Config button
       * Scroll down to the Override Toggle section
       * Tap the relevant feature toggle to on
-      * Click Apply Overrides
+      * Click Apply button in the top right header
       * Log back into Demo Mode
