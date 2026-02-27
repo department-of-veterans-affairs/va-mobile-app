@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "node utils/fetchGitHubData.js && node utils/fetchWhatsNewData.js && node utils/fetchWorkflowsData.js",
+    "prebuild": "yarn fetch-whats-new && yarn fetch-gh-data && yarn fetch-gha-data",
     "fetch-whats-new": "node utils/fetchWhatsNewData.js",
+    "fetch-gh-data": "node utils/fetchGitHubData.js",
+    "fetch-gha-data": "node utils/fetchGHAWorkflowsData.js",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",

@@ -74,6 +74,24 @@
     ]
   },
   {
+    "fileName": "issue_created.yml",
+    "name": "[Admin] Issue created notifications",
+    "description": null,
+    "on": {
+      "issues": {
+        "types": [
+          "opened"
+        ]
+      }
+    },
+    "jobs": [
+      "user-onboarding-issue-notification",
+      "automation-issue-notification",
+      "go-live-issue-notification",
+      "project-kickoff-issue-notification"
+    ]
+  },
+  {
     "fileName": "apply-milestone.yml",
     "name": "[Admin] Milestone Linker",
     "description": "Automatically links the nearest upcoming milestone to a PR's linked issue (or the PR itself) when a PR touching app source code is merged. Ensures all merged work is tracked under the correct release milestone.",
@@ -93,13 +111,7 @@
     "fileName": "automation-issue-notification.yml",
     "name": "[Admin] Notify Slack of DevOps issues",
     "description": "When a new issue with the 'devops' label is opened, adds it to the DevOps project board with \"Ready to Work\" status and sends a Slack notification to the va-mobile-devops channel.",
-    "on": {
-      "issues": {
-        "types": [
-          "opened"
-        ]
-      }
-    },
+    "on": "workflow_call",
     "jobs": [
       "set_project_status",
       "notify_slack"
@@ -109,13 +121,7 @@
     "fileName": "user-onboarding-issue-notification.yml",
     "name": "[Admin] Notify Slack of new Onboarding requests",
     "description": "Sends a Slack notification when a new issue with the 'user-onboarding' label is opened. Looks up Slack IDs for the designated onboarding contacts and posts a message with a link to the issue.",
-    "on": {
-      "issues": {
-        "types": [
-          "opened"
-        ]
-      }
-    },
+    "on": "workflow_call",
     "jobs": [
       "get_slack_id_user1",
       "get_slack_id_user2",
@@ -814,6 +820,24 @@
     ]
   },
   {
+    "fileName": "screenshot_e2e.yml",
+    "name": "[Release] Gather iOS and Android screenshots",
+    "description": "Generates App Store screenshots for iOS (iPhone and iPad) and Android using Detox e2e tests in CI. It builds and runs screenshot tests on each platform, combines and frames the images, commits them to the PR branch, and notifies Slack of success or failure.",
+    "on": {
+      "workflow_dispatch": null
+    },
+    "jobs": [
+      "start_slack_message",
+      "generate-iphone-screenshots",
+      "generate-ipad-screenshots",
+      "generate-android-screenshots",
+      "combine-and-frame-images",
+      "commit-screenshots",
+      "success-slack-message",
+      "failure-slack-message"
+    ]
+  },
+  {
     "fileName": "go_live.yml",
     "name": "[Release] Go Live",
     "description": "Promotes release builds to production in the App Store and Google Play Store. Runs weekly on Tuesdays or manually. Checks environment protections, then triggers the iOS and Android Fastlane release lanes from the main branch.",
@@ -1080,24 +1104,6 @@
     ]
   },
   {
-    "fileName": "screenshot_e2e.yml",
-    "name": "[Release] Gather iOS and Android screenshots",
-    "description": "Generates App Store screenshots for iOS (iPhone and iPad) and Android using Detox e2e tests in CI. It builds and runs screenshot tests on each platform, combines and frames the images, commits them to the PR branch, and notifies Slack of success or failure.",
-    "on": {
-      "workflow_dispatch": null
-    },
-    "jobs": [
-      "start_slack_message",
-      "generate-iphone-screenshots",
-      "generate-ipad-screenshots",
-      "generate-android-screenshots",
-      "combine-and-frame-images",
-      "commit-screenshots",
-      "success-slack-message",
-      "failure-slack-message"
-    ]
-  },
-  {
     "fileName": "onboarding.yml",
     "name": "[Utils] Onboarding",
     "description": "Placeholder onboarding workflow that triggers when an issue is labeled with 'onboarding'. Currently logs the issue event; Slack notification logic is commented out pending future implementation.",
@@ -1159,32 +1165,6 @@
     "jobs": [
       "get_channel_id",
       "start_thread"
-    ]
-  },
-  {
-    "fileName": "codeql-analysis.yml",
-    "name": "CodeQL",
-    "description": "Runs GitHub CodeQL static analysis on Ruby, JavaScript, and Python code. Triggers on pushes and PRs to develop, weekly on a schedule, and manually. Uses the VA's shared codeql-tools action for scanning.",
-    "on": {
-      "push": {
-        "branches": [
-          "develop"
-        ]
-      },
-      "pull_request": {
-        "branches": [
-          "develop"
-        ]
-      },
-      "schedule": [
-        {
-          "cron": "47 14 * * 1"
-        }
-      ],
-      "workflow_dispatch": null
-    },
-    "jobs": [
-      "analyze"
     ]
   },
   {
