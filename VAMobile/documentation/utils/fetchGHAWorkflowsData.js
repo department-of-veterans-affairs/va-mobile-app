@@ -8,6 +8,8 @@
  * 3. Scans for "uses:" references to build a reverse-map of reusable workflow callers.
  * 4. Extracts descriptive comments from the top of each file.
  * 5. Writes a sanitized, consolidated JSON file to the static data directory.
+ *
+ * Run via: yarn fetch-gha-data
  */
 
 const fs = require('fs')
@@ -42,8 +44,9 @@ const EXCLUDED_WORKFLOWS = [
 
 /**
  * Extracts a human-readable description from a workflow file's leading comments.
- * It identifies the first block of comments at the top of the file and merges them
- * into a single continuous string.
+ * It concatenates all consecutive comment lines at the very top of the file into
+ * a single string. Any leading '# ' markers are stripped. The block ends at the
+ * first non-comment, non-empty line (e.g. 'name:' or 'on:').
  *
  * @param {string} content - Raw file content of the workflow YAML.
  * @returns {string|null} - The extracted description string, or null if no comments were found.
@@ -160,7 +163,7 @@ function parseWorkflow(fileName, userMap) {
   // 3. Parse the YAML content
   let data
   try {
-    data = yaml.load(content)
+    data = yaml.load(content, { schema: yaml.DEFAULT_SAFE_SCHEMA })
   } catch (e) {
     console.error(`Error parsing YAML in ${fileName}:`, e.message)
     return null

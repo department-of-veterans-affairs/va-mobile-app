@@ -203,7 +203,7 @@ const TriggerDetails: React.FC<{ trigger: string; triggerConfig: TriggerConfig |
               if (schedule.cron) {
                 humanReadable = cronstrue.toString(schedule.cron)
               }
-            } catch (e) {
+            } catch {
               humanReadable = 'Invalid cron expression'
             }
             return (
@@ -313,7 +313,7 @@ const WorkflowTrigger: React.FC<{
             // formatted as "Workflow Name (filename.yml)" in the JSON.
             const match = caller.match(/(.*) \((.*\.yml)\)/)
             if (match) {
-              const [_, name, fileName] = match
+              const [, name, fileName] = match
               return (
                 <li key={i}>
                   <Link to={`#${getSlug({ name, fileName })}`}>{name}</Link>
@@ -329,7 +329,7 @@ const WorkflowTrigger: React.FC<{
 }
 
 /**
- * Renders a structured table of workflow input parameters.
+ * Renders a structured table detailing the workflow input parameters.
  */
 const InputsTable: React.FC<{ inputs: Record<string, InputConfig> }> = ({ inputs }) => {
   const entries = Object.entries(inputs)
@@ -382,6 +382,14 @@ const InputsTable: React.FC<{ inputs: Record<string, InputConfig> }> = ({ inputs
  * The primary component that consumes workflow data and renders the documentation UI.
  */
 const WorkflowsList: React.FC = () => {
+  if (!data || data.length === 0) {
+    return (
+      <p>
+        No workflow data available. Run <code>yarn prebuild</code> to generate it.
+      </p>
+    )
+  }
+
   // Group workflows by their prefix (e.g., "[Build]", "[Release]") for better organization.
   const groupedData = data.reduce(
     (acc, workflow) => {
@@ -393,14 +401,6 @@ const WorkflowsList: React.FC = () => {
     },
     {} as Record<string, WorkflowData[]>,
   )
-
-  if (!data || data.length === 0) {
-    return (
-      <p>
-        No workflow data available. Run <code>yarn prebuild</code> to generate it.
-      </p>
-    )
-  }
 
   return (
     <div>
@@ -448,16 +448,16 @@ const WorkflowsList: React.FC = () => {
               </ul>
             </div>
 
+            {/* Optional inputs for manual/reusable triggers */}
+            <InputsTable inputs={allInputs} />
+
             {/* Navigation Aid */}
-            <div className="margin-top--md text--right">
+            <div className="margin-top--lg text--right">
               <Link to="#top" style={{ fontSize: '0.8rem' }}>
                 ↑ Back to Top
               </Link>
             </div>
-
-            {/* Optional inputs for manual/reusable triggers */}
-            <InputsTable inputs={allInputs} />
-            <hr className="margin-top--xl" />
+            <hr className="margin-top--lg" />
           </div>
         )
       })}
