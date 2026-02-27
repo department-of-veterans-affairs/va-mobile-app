@@ -47,7 +47,7 @@ describe('Prescriptions', () => {
 
     await expect(element(by.text('Refills with tracking (1), sorted by medication name (A to Z)'))).toExist()
 
-    // Verify ACETAMINOPHEN 325MG TAB TAB is visible (it matches tracking)
+    // Verify ACETAMINOPHEN 325MG TAB is visible (it matches tracking)
     await waitFor(element(by.text('ACETAMINOPHEN 325MG TAB'))).toBeVisible()
 
     // 2. View Prescription Details
