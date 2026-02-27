@@ -210,7 +210,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(120000)
+      .withTimeout(60000)
   } catch (ex) {
     await device.uninstallApp()
     await device.installApp()
@@ -226,7 +226,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     }
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(120000)
+      .withTimeout(60000)
   }
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toBeVisible()
