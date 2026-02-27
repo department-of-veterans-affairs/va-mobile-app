@@ -218,7 +218,7 @@ describe('Claims Screen', () => {
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
   })
 
-  describe("Evidence Requests Updated UI - 'updatedEvidenceRequests' feature flag ON", () => {
+  describe("Evidence Requests Updated UI - 'evidenceRequestsUpdatedUI' feature flag ON", () => {
     it('should navigate to file request with enriched UI content', async () => {
       await element(by.text('Accidental injury - 21-4176 needed')).tap()
     })
@@ -298,7 +298,7 @@ describe('Claims Screen', () => {
     })
   })
 
-  describe("Evidence Requests Updated UI - 'updatedEvidenceRequests' feature flag OFF", () => {
+  describe("Evidence Requests Updated UI - 'evidenceRequestsUpdatedUI' feature flag OFF", () => {
     beforeAll(async () => {
       // Restart app to get to login screen (preserves AsyncStorage, unlike uninstall)
       await device.launchApp({ newInstance: true })
