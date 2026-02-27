@@ -253,15 +253,19 @@ const InputsTable = ({ inputs }: { inputs: any }) => {
             </tr>
           </thead>
           <tbody>
-            {entries.map(([inputName, config]: [string, any]) => (
+            {entries.map(([inputName, config]: [string, any]) => {
+              const { description, type, default: defaultValue, required } = config
+              const defaultDisplay = defaultValue !== undefined ? <code>{defaultValue === '' ? '""' : String(defaultValue)}</code> : '-'
+              
+              return(
               <tr key={inputName}>
                 <td><code>{inputName}</code></td>
-                <td>{config.description || '-'}</td>
-                <td><code>{config.type || 'string'}</code></td>
-                <td>{config.default !== undefined ? <code>{String(config.default)}</code> : '-'}</td>
-                <td>{config.required ? 'Yes' : 'No'}</td>
+                <td>{description || '-'}</td>
+                <td><code>{type || 'string'}</code></td>
+                <td>{defaultDisplay}</td>
+                <td>{required ? 'Yes' : 'No'}</td>
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
       </div>
@@ -331,7 +335,7 @@ const WorkflowsList = () => {
             {/* Input parameters table (if applicable) */}
             <InputsTable inputs={allInputs} />
             
-            <hr className="margin-top--lg margin-bottom--lg" />
+            <hr className="margin-top--xl" />
           </div>
         )
       })}
