@@ -201,16 +201,14 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('MedicalRecordsList')}
           testID="toMedicalRecordsListID"
         />
-        {featureEnabled('travelPayStatusList') && (
-          <Box ml={theme.dimensions.gutter}>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('travelPay.claims.viewYourClaims')}
-              testID="toTravelPayClaimsLinkIDHealthScreen"
-              onPress={() => navigateToTravelClaims(navigateTo)}
-            />
-          </Box>
-        )}
+        <Box ml={theme.dimensions.gutter}>
+          <LinkWithAnalytics
+            type="custom"
+            text={t('travelPay.claims.viewYourClaims')}
+            testID="toTravelPayClaimsLinkIDHealthScreen"
+            onPress={() => navigateToTravelClaims(navigateTo)}
+          />
+        </Box>
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {!enrolledInVAHealthCare && (

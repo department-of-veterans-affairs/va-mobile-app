@@ -345,7 +345,6 @@ context('HomeScreen', () => {
 
   describe('Past Appointments module', () => {
     it('displays travel pay reimbursement eligible appointments when they exist', async () => {
-      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 5))
@@ -363,7 +362,6 @@ context('HomeScreen', () => {
     })
 
     it('navigates to Appointments screen when pressed', async () => {
-      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 5))

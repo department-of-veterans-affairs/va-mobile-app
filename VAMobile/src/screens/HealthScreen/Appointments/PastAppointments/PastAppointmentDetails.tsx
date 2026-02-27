@@ -33,7 +33,6 @@ import {
 import { useDowntime } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
@@ -51,8 +50,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const { lastUpdatedDate } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
     enabled: !appointment,
   })
-  const travelPayEnabled =
-    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
+  const travelPayEnabled = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
 
   useEffect(() => {
     if (attributes) {
