@@ -10,11 +10,12 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
 import {
   Box,
+  DefaultList,
+  DefaultListItemObj,
   ErrorComponent,
   LoadingComponent,
-  SimpleList,
-  SimpleListItemObj,
   TextArea,
+  TextLine,
   TextView,
   VAScrollView,
 } from 'components'
@@ -64,7 +65,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
 
-  const getRequests = (): Array<SimpleListItemObj> => {
+  const getRequests = (): Array<DefaultListItemObj> => {
     let requestNumber = 1
 
     const onDetailsPress = (request: ClaimEventData) => {
@@ -77,25 +78,44 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       }
     }
 
-    const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
-      const nameContainsRequestNumber = displayName && /Request \d/.test(displayName)
+    const getA11yLabel = (requestIndex: number, requestName?: string, uploaded?: boolean) => {
+      const nameContainsRequestNumber = requestName && /Request \d/.test(requestName)
       const status = uploaded ? t('uploaded') : t('needed')
 
-      if (!displayName) {
+      if (!requestName) {
         return `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}`
       }
 
       return nameContainsRequestNumber
-        ? `${displayName} ${t('fileRequest.buttonA11y.totalCount', { totalCount: requests.length })} ${status}`
-        : `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}. ${displayName}`
+        ? `${requestName} ${t('fileRequest.buttonA11y.totalCount', { totalCount: requests.length })} ${status}`
+        : `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}. ${requestName}`
     }
 
     return map(requests, (request, index) => {
-      const { displayName } = request
+      const { friendlyName, displayName } = request
+      // Display title logic (as of 2/25/2026):
+      // - No overrides (no friendlyName) -> "Request for evidence" with displayName underneath
+      // - Has overrides (friendlyName exists) -> Show friendlyName
+      const hasOverrides = friendlyName != null
+
+      const textLines: Array<TextLine> = hasOverrides
+        ? [{ text: friendlyName }]
+        : [
+            { text: t('fileRequest.requestForEvidence') },
+            { text: displayName || '', variant: 'HelperText', color: 'bodyText' },
+          ]
+
+      // Include displayName in the label for non-override case so screen readers
+      // announce both the generic title AND the specific document name (matching what's visible)
+      const a11yText = hasOverrides
+        ? friendlyName
+        : displayName
+          ? `${t('fileRequest.requestForEvidence')}. ${displayName}`
+          : t('fileRequest.requestForEvidence')
       const hasUploaded = hasUploadedOrReceived(request)
-      const item: SimpleListItemObj = {
-        text: displayName || '',
-        testId: getA11yLabel(index + 1, displayName, hasUploaded),
+      const item: DefaultListItemObj = {
+        textLines,
+        testId: getA11yLabel(index + 1, a11yText, hasUploaded),
         onPress: () => {
           onDetailsPress(request)
         },
@@ -152,7 +172,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
             {t('claimPhase.youHaveFileRequestVA', { count })}
           </TextView>
           <Box>
-            <SimpleList items={getRequests()} />
+            <DefaultList items={getRequests()} />
           </Box>
           <TextView
             mt={condensedMarginBetween}

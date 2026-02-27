@@ -80,7 +80,6 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
       {
         options,
         title: t('contactInformation.emailAddress.deleteChanges'),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {

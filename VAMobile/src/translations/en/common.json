@@ -1134,6 +1134,7 @@
   "fileRequest.buttonA11y.totalCount": "of {{totalCount}}",
   "fileRequest.buttonA11yHint.needed": "Navigates you to the file upload screen",
   "fileRequest.buttonA11yHint.uploaded": "Review uploaded file details.",
+  "fileRequest.requestForEvidence": "Request for evidence",
   "fileRequest.title": "File requests",
   "fileRequest.viewEvaluationDetails": "Review evaluation details",
   "fileRequest.weSentYouALaterText": "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",

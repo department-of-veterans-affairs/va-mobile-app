@@ -148,7 +148,7 @@ export const CommonE2eIdConstants = {
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
-  APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
+  APPLY_OVERRIDES_BUTTON_TEST_ID: 'applyOverridesTestID',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
   EVIDENCE_REQUESTS_UPDATED_UI_TEXT: 'evidenceRequestsUpdatedUI',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
@@ -582,11 +582,11 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
   await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
+    await waitFor(element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
       .scroll(600, 'up')
-    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
     if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
       await loginToDemoMode()
     }
@@ -782,7 +782,7 @@ export async function toggleRemoteConfigFlag(flagName: string) {
 
   await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
   await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
 }
 
 /**

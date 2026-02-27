@@ -66,7 +66,6 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
       {
         options,
         title: t('directDeposit.deleteChanges'),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {
