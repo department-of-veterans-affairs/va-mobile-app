@@ -2,17 +2,10 @@ import React from 'react'
 
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
 import DuplicateRecordAlert from 'components/DuplicateRecordAlert'
-import {
-  MigrationErrorMessage } from 'components/MigrationErrorMessage'
-import {
-  MigrationWarningMessage } from 'components/MigrationWarningMessage'
-import {
-  OHParentScreens,
-  getAlertState,
-} from 'utils/ohMigration'
+import { MigrationErrorMessage } from 'components/MigrationErrorMessage'
+import { MigrationWarningMessage } from 'components/MigrationWarningMessage'
+import { OHParentScreens, getAlertState } from 'utils/ohMigration'
 import { featureEnabled } from 'utils/remoteConfig'
-
-export { OHParentScreens, getAlertState }
 
 type OHAlertManagerProps = {
   parentScreen: OHParentScreens
