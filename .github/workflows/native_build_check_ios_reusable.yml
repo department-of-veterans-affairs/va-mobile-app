@@ -13,4 +13,4 @@ jobs:
   build_ios:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "PASS -- No native ios files updated."
+      - run: echo "PASS -- No native iOS files updated."

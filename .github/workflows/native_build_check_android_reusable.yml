@@ -13,4 +13,4 @@ jobs:
   build_android:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "PASS -- No native android files updated."
+      - run: echo "PASS -- No native Android files updated."
