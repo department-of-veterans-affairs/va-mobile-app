@@ -14,6 +14,8 @@ const mockOverrides = {
   ...devConfig,
 }
 
+const APPLY_OVERRIDES_BUTTON_TEST_ID = 'applyOverridesTestID'
+
 context('RemoteConfigScreen', () => {
   const initializeTestInstance = (queriesData?: QueriesData) => {
     const props = mockNavProps(
@@ -42,7 +44,7 @@ context('RemoteConfigScreen', () => {
   it('shows a snackbar if no values changed', async () => {
     initializeTestInstance()
 
-    const applyOverridesButton = screen.getByRole('button', { name: 'Apply Overrides' })
+    const applyOverridesButton = screen.getByTestId(APPLY_OVERRIDES_BUTTON_TEST_ID)
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 
@@ -54,9 +56,9 @@ context('RemoteConfigScreen', () => {
     initializeTestInstance()
 
     // Toggle an item to enable override button
-    fireEvent.press(screen.getByText('useOldLinkComponent'))
+    fireEvent.press(screen.getByText('testFeature'))
 
-    const applyOverridesButton = screen.getByRole('button', { name: 'Apply Overrides' })
+    const applyOverridesButton = screen.getByTestId(APPLY_OVERRIDES_BUTTON_TEST_ID)
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 

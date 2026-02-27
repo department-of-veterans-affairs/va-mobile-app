@@ -101,7 +101,6 @@ export const LargePanel: FC<LargePanelProps> = ({
         options,
         title: '',
         message,
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {

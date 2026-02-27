@@ -69,6 +69,7 @@ function MessageCard({
     fileToGet.size = file.size
     refetchFile()
   }
+  const providerAllowsReply = !message?.replyDisabled
 
   function getHeader() {
     return (
@@ -174,7 +175,7 @@ function MessageCard({
     })
 
   function getReplyOrStartNewMessageButton() {
-    if (!replyExpired && userInTriageTeam && !migrationBlocksReply) {
+    if (!replyExpired && providerAllowsReply && userInTriageTeam && !migrationBlocksReply) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />

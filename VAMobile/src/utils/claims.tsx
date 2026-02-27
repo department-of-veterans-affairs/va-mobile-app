@@ -180,7 +180,6 @@ export const onAddPhotos = (
   showActionSheetWithOptions(
     {
       options,
-      cancelButtonIndex: 2,
     },
     (buttonIndex) => {
       setIsActionSheetVisible && setIsActionSheetVisible(false)

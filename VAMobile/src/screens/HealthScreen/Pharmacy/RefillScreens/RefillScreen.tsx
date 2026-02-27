@@ -88,7 +88,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       {
         options,
         title: t('prescriptions.refillRequest.cancelMessage'),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {
@@ -124,7 +123,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
           selectedPrescriptionsCount === refillablePrescriptions?.length
             ? t('prescriptions.refill.confirmationTitle.all')
             : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
