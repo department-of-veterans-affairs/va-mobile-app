@@ -28,9 +28,8 @@ export const EvidenceRequestsUpdatedUIConstants = {
 beforeAll(async () => {
   // Toggle in-app review off to prevent interference
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  // Toggle the new evidence requests UI on
+  // Toggle the new evidence requests UI on (loginToDemoMode is called internally)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.EVIDENCE_REQUESTS_UPDATED_UI_TEXT)
-  await loginToDemoMode()
   await openBenefits()
   await openClaims()
   await openClaimsHistory()
