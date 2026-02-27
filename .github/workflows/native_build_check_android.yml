@@ -1,6 +1,7 @@
 # DESCRIPTION: Verifies that changes to native Android files do not break the
 # Android build process. Triggers on PRs that modify files under VAMobile/android/
 # and runs a test-only Android build via the reusable build_android workflow.
+
 name: '[Code Quality] Check Native Android Builds'
 
 on:

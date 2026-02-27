@@ -1,6 +1,7 @@
 # DESCRIPTION: Validates that PRs do not exceed Apple App Store limits for
 # screenshot counts (iPhone, iPad), description length, release notes, keywords,
 # and title. Runs on PRs targeting main/develop/release that touch iOS metadata.
+
 name: '[Release] App Store Requirement Checks (Apple)'
 
 on:

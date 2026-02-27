@@ -1,6 +1,7 @@
 # DESCRIPTION: Optimizes App Store screenshots for iOS and Android on pushes to
 # release branches. Uses imagemin to compress images in-place, then commits
 # the optimized files back to the release branch.
+
 name: "[Build] Optimize Image"
 
 on:
