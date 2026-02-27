@@ -426,13 +426,13 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             variant="error"
             header={t('secureMessaging.reply.youCantReplyMigrationMessage')}
             description={''}>
-            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+            <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
               {t('secureMessaging.reply.youCantReplyMigrationMessage.body')}
             </TextView>
             <Box mb={theme.dimensions.standardMarginBetween} />
             <VABulletList listOfText={migratingFacilitiesInErrorNames} />
             <Box mb={theme.dimensions.standardMarginBetween} />
-            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+            <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
               <Trans
                 i18nKey={'secureMessaging.reply.youCantReplyMigrationMessage.body2'}
                 components={{ bold: <TextView variant="MobileBodyBold" /> }}
@@ -442,7 +442,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </TextView>
             <Box mb={theme.dimensions.standardMarginBetween} />
-            <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+            <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
               {t('secureMessaging.reply.youCantReplyMigrationMessage.note')}
             </TextView>
             <LinkWithAnalytics {...linkProps} />
