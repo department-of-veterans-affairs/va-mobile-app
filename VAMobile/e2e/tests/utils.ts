@@ -192,7 +192,6 @@ export const CommonE2eIdConstants = {
   MILITARY_POST_OFFICE_PICKER_CONFIRM_ID: 'militaryPostOfficeConfirmID',
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
-  TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
   TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsButtonID',
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN: 'toTravelPayClaimsLinkIDHealthScreen',
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_PAYMENTS_SCREEN: 'toTravelPayClaimsLinkIDPaymentsScreen',
