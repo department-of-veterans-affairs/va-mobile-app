@@ -13,19 +13,13 @@ import {
   PaginationProps,
   TextLine,
 } from 'components'
-import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
 import { getTestIDFromTextLines } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY, getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
 import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
-import { featureEnabled } from 'utils/remoteConfig'
-
-const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
@@ -56,21 +50,9 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
       return
     }
 
-    const isEnabled = featureEnabled('travelPayClaimDetails')
-    if (!isEnabled) {
-      logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
-      navigateTo('Webview', {
-        url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
-        displayTitle: t('travelPay.webview.claims.displayTitle'),
-        loadingMessage: t('travelPay.webview.claims.loading'),
-        useSSO: true,
-        backButtonTestID: `webviewBack`,
-      })
-    } else {
-      navigateTo('TravelPayClaimDetailsScreen', {
-        claimId: claimId,
-      })
-    }
+    navigateTo('TravelPayClaimDetailsScreen', {
+      claimId: claimId,
+    })
   }
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
