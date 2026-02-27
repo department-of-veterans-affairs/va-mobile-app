@@ -69,10 +69,10 @@ context('BenefitsScreen', () => {
     ).toBeFalsy()
   })
 
-  it('navigates to Claims history screen when claims button is pressed', () => {
+  it('navigates to Claims screen when claims button is pressed', () => {
     initializeTestInstance(3)
     fireEvent.press(screen.getByRole('link', { name: t('claims.title') }))
-    expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimsHistoryScreen')
+    expect(mockNavigationSpy).toHaveBeenCalledWith('Claims')
   })
 
   it('does not display active claims count when there is a service error', () => {

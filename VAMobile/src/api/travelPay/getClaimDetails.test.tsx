@@ -4,7 +4,6 @@ import { useTravelPayClaimDetails } from 'api/travelPay'
 import { TravelPayClaimDetailData } from 'api/types'
 import { get } from 'store/api'
 import { context, renderQuery, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('store/api', () => {
   const original = jest.requireActual('store/api')
@@ -102,14 +101,6 @@ context('useTravelPayClaimDetails', () => {
         .calledWith(`/v0/travel-pay/claims/${claimId}`)
         .mockResolvedValueOnce(mockResponse)
 
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
-        .mockReturnValue(true)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayClaimDetails')
-        .mockReturnValue(true)
-
       const { result } = renderQuery(() => useTravelPayClaimDetails(claimId))
 
       await waitFor(() => {
@@ -120,48 +111,8 @@ context('useTravelPayClaimDetails', () => {
       expect(result.current.data).toEqual(mockResponse)
     })
 
-    it('should not fetch when SMOC feature is disabled', () => {
-      mockUseDowntime.mockReturnValue(false)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
-        .mockReturnValue(false)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayClaimDetails')
-        .mockReturnValue(true)
-
-      renderQuery(() => useTravelPayClaimDetails(claimId))
-
-      expect(get).not.toHaveBeenCalled()
-    })
-
-    it('should not fetch when claim details feature is disabled', () => {
-      mockUseDowntime.mockReturnValue(false)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
-        .mockReturnValue(true)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayClaimDetails')
-        .mockReturnValue(false)
-
-      renderQuery(() => useTravelPayClaimDetails(claimId))
-
-      expect(get).not.toHaveBeenCalled()
-    })
-
     it('should not fetch when claimId is empty', () => {
       mockUseDowntime.mockReturnValue(false)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
-        .mockReturnValue(true)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayClaimDetails')
-        .mockReturnValue(true)
 
       renderQuery(() => useTravelPayClaimDetails(''))
 
@@ -170,14 +121,6 @@ context('useTravelPayClaimDetails', () => {
 
     it('should not fetch when explicitly disabled', () => {
       mockUseDowntime.mockReturnValue(false)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
-        .mockReturnValue(true)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayClaimDetails')
-        .mockReturnValue(true)
 
       renderQuery(() => useTravelPayClaimDetails(claimId, { enabled: false }))
 
@@ -191,14 +134,6 @@ context('useTravelPayClaimDetails', () => {
       when(get as jest.Mock)
         .calledWith(`/v0/travel-pay/claims/${claimId}`)
         .mockRejectedValueOnce(new Error(errorMessage))
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
-        .mockReturnValue(true)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayClaimDetails')
-        .mockReturnValue(true)
 
       const { result } = renderQuery(() => useTravelPayClaimDetails(claimId))
 

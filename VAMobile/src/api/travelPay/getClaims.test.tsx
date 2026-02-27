@@ -7,7 +7,6 @@ import { TimeFrameTypeConstants } from 'constants/timeframes'
 import { DowntimeFeatureTypeConstants, get } from 'store/api'
 import { context, renderQuery, when } from 'testUtils'
 import { getDateRangeFromTimeFrame } from 'utils/dateUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 let mockLogNonFatalErrorToFirebase: jest.Mock
 jest.mock('utils/analytics', () => {
@@ -87,10 +86,6 @@ context('getClaims', () => {
         .calledWith('/v0/travel-pay/claims', adjustedParams)
         .mockResolvedValueOnce(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
 
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
-
       // useTravelPayClaims will call the get claims endpoint and populate the query data
       const { result } = renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
       const response = await waitFor(() => {
@@ -106,23 +101,6 @@ context('getClaims', () => {
 
     it('should not fetch data when downtime is active', async () => {
       mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
-
-      renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
-
-      // Should not be called when Travel Pay is in downtime
-      expect(get).not.toHaveBeenCalled()
-    })
-
-    it('should not fetch data when feature is disabled', async () => {
-      mockUseDowntime.mockImplementation(() => false)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(false)
 
       renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
 
@@ -205,10 +183,6 @@ context('getClaims', () => {
       when(get as jest.Mock)
         .calledWith('/v0/travel-pay/claims', adjustedParamsPage2)
         .mockResolvedValueOnce(PAGE2_RESPONSE)
-
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
 
       const { result } = renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
 
