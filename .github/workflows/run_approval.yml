@@ -2,8 +2,7 @@
 # creation process, adds a rocket reaction to the slash command comment, and
 # comments on the release issue with the created PR links upon completion.
 
-name: '[Release] Run approval Workflow'
-
+name: "[Release] Run Release Approval"
 on:
   workflow_call:
     inputs:

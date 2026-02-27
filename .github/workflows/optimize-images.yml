@@ -2,8 +2,7 @@
 # release branches. Uses imagemin to compress images in-place, then commits
 # the optimized files back to the release branch.
 
-name: "[Build] Optimize Image"
-
+name: "[Release] Optimize App Store Screenshots"
 on:
   push:
     branches:

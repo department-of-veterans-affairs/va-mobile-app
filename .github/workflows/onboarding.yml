@@ -2,8 +2,7 @@
 # labeled with 'onboarding'. Currently logs the issue event; Slack notification
 # logic is commented out pending future implementation.
 
-name: '[Utils] Onboarding'
-
+name: '[Admin] Onboarding Issue Handler'
 on:
   issues:
     types: [labeled]

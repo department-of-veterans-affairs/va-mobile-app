@@ -3,8 +3,7 @@
 # autobuilds the project, and performs the analysis.
 
 ---
-name: '[Code Quality] CodeQL'
-
+name: "[Code Quality] CodeQL (JavaScript)"
 on:
   push:
     branches: [develop]

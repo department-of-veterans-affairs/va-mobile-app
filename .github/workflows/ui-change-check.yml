@@ -2,8 +2,7 @@
 # checked, automatically requests reviews from designated UI reviewers and
 # blocks the PR until one of them approves.
 
-name: UI Approval Check
-
+name: "[Admin] UI Change Approval Check"
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
