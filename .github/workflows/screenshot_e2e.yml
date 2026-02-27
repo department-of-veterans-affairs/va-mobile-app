@@ -1,4 +1,4 @@
-# DESCRIPTION: Generates App Store screenshots for iOS (iPhone and iPad) and Android
+# Generates App Store screenshots for iOS (iPhone and iPad) and Android
 # using Detox e2e tests in CI. It builds and runs screenshot tests on each platform,
 # combines and frames the images, commits them to the PR branch, and notifies Slack
 # of success or failure.

@@ -1,4 +1,4 @@
-# DESCRIPTION: Updates Ruby bundler dependencies and Fastlane plugins for both
+# Updates Ruby bundler dependencies and Fastlane plugins for both
 # Android and iOS every Wednesday. If any lock files change, commits and pushes
 # them automatically.
 

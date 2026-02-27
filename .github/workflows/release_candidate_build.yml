@@ -1,4 +1,4 @@
-# DESCRIPTION: Builds release candidate (RC) staging builds for iOS and Android,
+# Builds release candidate (RC) staging builds for iOS and Android,
 # triggered by an RC-v*.*.* tag pushed from new_release_branch.yml at the end of
 # each sprint. Queues the build, notifies Slack, and runs iOS and Android RC builds
 # in parallel for QA validation and regression testing.

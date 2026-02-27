@@ -1,4 +1,4 @@
-# DESCRIPTION: Manually triggered on-demand builds for iOS and Android. Accepts
+# Manually triggered on-demand builds for iOS and Android. Accepts
 # environment (staging/production) and notes as inputs, queues the build, notifies
 # Slack, and runs both platform builds from the triggering branch.
 

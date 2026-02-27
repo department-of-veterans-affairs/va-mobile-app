@@ -1,4 +1,4 @@
-# DESCRIPTION: Reusable workflow that determines which Detox e2e tests to run
+# Reusable workflow that determines which Detox e2e tests to run
 # based on changed files in the PR. Reads the detoxMapping.js config to map
 # source file and directory changes to their associated e2e test suites.
 

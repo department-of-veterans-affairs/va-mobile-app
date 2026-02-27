@@ -1,4 +1,4 @@
-# DESCRIPTION: Reusable Android build workflow. Sets up the Linux environment,
+# Reusable Android build workflow. Sets up the Linux environment,
 # installs dependencies, decodes signing keys, bundles the app, and runs the
 # specified Fastlane lane (qa, rc, review, release, on_demand) to build and distribute.
 

@@ -1,8 +1,8 @@
-# DESCRIPTION: Reusable release workflow that merges the release branch to main
+# Reusable release workflow that merges the release branch to main
 # (squash merge), tags the release version, and creates a PR to merge release
 # changes back into develop. Outputs the develop PR URL and release commit hash.
 
-name: "[Release] Merge to Main and Open Develop PR"
+name: '[Release] Merge to Main and Open Develop PR'
 on:
   workflow_call:
     inputs:

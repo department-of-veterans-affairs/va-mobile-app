@@ -1,8 +1,8 @@
-# DESCRIPTION: Reusable release approval workflow. Triggers the release PR
+# Reusable release approval workflow. Triggers the release PR
 # creation process, adds a rocket reaction to the slash command comment, and
 # comments on the release issue with the created PR links upon completion.
 
-name: "[Release] Run Release Approval"
+name: '[Release] Run Release Approval'
 on:
   workflow_call:
     inputs:

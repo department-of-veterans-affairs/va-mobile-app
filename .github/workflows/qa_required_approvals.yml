@@ -1,4 +1,4 @@
-# DESCRIPTION: Enforces that PRs modifying app source code have at least one
+# Enforces that PRs modifying app source code have at least one
 # engineer approval and one QA team approval before merging. Checks changed
 # files against inclusion/exclusion patterns and validates review approvals.
 

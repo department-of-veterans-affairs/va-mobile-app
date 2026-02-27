@@ -1,4 +1,4 @@
-# DESCRIPTION: Deletes remote branches whose last commit is older than 365 days
+# Deletes remote branches whose last commit is older than 365 days
 # and that have no open PRs. Runs weekly on a schedule (dry-run by default) or
 # manually, uploads a CSV of affected branches, and notifies Slack with a summary.
 

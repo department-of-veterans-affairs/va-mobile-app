@@ -1,4 +1,4 @@
-# DESCRIPTION: Sends a Slack notification when a new issue with the
+# Sends a Slack notification when a new issue with the
 # 'user-onboarding' label is opened. Looks up Slack IDs for the designated
 # onboarding contacts and posts a message with a link to the issue.
 

@@ -1,34 +1,34 @@
-# DESCRIPTION: Reusable workflow that creates a new regression test run in TestRail
+# Reusable workflow that creates a new regression test run in TestRail
 # for a release candidate. Fetches RC test cases, creates the run under the
 # specified milestone, and outputs the TestRail run URL.
 
-name: "[TestRail] Start RC Run"
+name: '[TestRail] Start RC Run'
 
 on:
   workflow_call:
     inputs:
       version:
-        description: "Version Number (eg. v1.1.0)"
+        description: 'Version Number (eg. v1.1.0)'
         type: string
         required: true
       releaseDate:
-        description: "Go-live date for release (eg. 06/21/2022)"
+        description: 'Go-live date for release (eg. 06/21/2022)'
         type: string
         required: true
       ticketNumber:
-        description: "Issue number for release ticket (eg. 3333)"
+        description: 'Issue number for release ticket (eg. 3333)'
         type: string
         required: true
       milestoneId:
-        description: "Milestone id for the run to be associated with"
+        description: 'Milestone id for the run to be associated with'
         type: string
         required: true
     secrets:
       TEST_RAIL_USER:
-        description: "Testrail robot userid"
+        description: 'Testrail robot userid'
         required: true
       TEST_RAIL_KEY:
-        description: "Testrail api key"
+        description: 'Testrail api key'
         required: true
     outputs:
       testrailUrl:
@@ -36,19 +36,19 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version Number (eg. v1.1.0)"
+        description: 'Version Number (eg. v1.1.0)'
         required: true
         type: string
       releaseDate:
-        description: "Go-live date for release (eg. 06/21/2022)"
+        description: 'Go-live date for release (eg. 06/21/2022)'
         type: string
         required: true
       ticketNumber:
-        description: "Issue number for release ticket (eg. 3333)"
+        description: 'Issue number for release ticket (eg. 3333)'
         type: string
         required: true
       milestoneId:
-        description: "Milestone id for the run to be associated with"
+        description: 'Milestone id for the run to be associated with'
         type: string
         required: true
 jobs:
@@ -57,7 +57,7 @@ jobs:
       testrailUrl: ${{steps.add_run.outputs.url}}
     runs-on: ubuntu-latest
     steps:
-      - name: "Add RC run in testrail"
+      - name: 'Add RC run in testrail'
         id: add_run
         run: |
           echo "TICKET_NUMBER: ${{inputs.ticketNumber}}"

@@ -1,4 +1,4 @@
-# DESCRIPTION: Reusable workflow that posts a message to a Slack channel to start
+# Reusable workflow that posts a message to a Slack channel to start
 # a thread. Looks up the channel ID by name, posts the message, and outputs the
 # thread timestamp and channel ID for downstream workflows to reply to.
 

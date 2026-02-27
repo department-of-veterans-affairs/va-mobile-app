@@ -1,4 +1,4 @@
-# DESCRIPTION: Checks whether a PR author is a member of the flagship-mobile-team.
+# Checks whether a PR author is a member of the flagship-mobile-team.
 # If the author is not a team member (i.e., from an experience team), sends a
 # Slack notification to va-mobile-app alerting designated contacts.
 

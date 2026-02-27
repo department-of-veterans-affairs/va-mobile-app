@@ -1,4 +1,4 @@
-# DESCRIPTION: Automatically adds non-draft PRs targeting the develop branch to
+# Automatically adds non-draft PRs targeting the develop branch to
 # the GitHub project board. Triggers when PRs are opened, reopened, synchronized,
 # or marked as ready for review.
 

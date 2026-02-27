@@ -1,4 +1,4 @@
-# DESCRIPTION: Listens for issue comments and dispatches recognized slash commands
+# Listens for issue comments and dispatches recognized slash commands
 # (currently /approve) to their corresponding workflow handlers. Uses the
 # peter-evans/slash-command-dispatch action for parsing and dispatching.
 

@@ -1,4 +1,4 @@
-# DESCRIPTION: Validates that PRs do not exceed Google Play Store limits for
+# Validates that PRs do not exceed Google Play Store limits for
 # screenshot counts (phone, 7-inch tablet), description length, short description,
 # changelog, and title. Runs on PRs targeting main/develop/release that touch
 # Android metadata.

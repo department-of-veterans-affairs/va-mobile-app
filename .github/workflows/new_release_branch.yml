@@ -1,4 +1,4 @@
-# DESCRIPTION: Cuts a new release branch from develop at the end of each sprint.
+# Cuts a new release branch from develop at the end of each sprint.
 # Runs on a weekly schedule (Wednesdays) or manually. Executes the release_branch.sh
 # script which creates the branch and tags it to trigger the RC build.
 

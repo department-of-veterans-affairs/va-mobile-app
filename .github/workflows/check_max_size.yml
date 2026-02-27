@@ -1,4 +1,4 @@
-# DESCRIPTION: Reusable workflow that checks whether a file count or character
+# Reusable workflow that checks whether a file count or character
 # count exceeds an app store limit. Called by app_store_checks_apple and
 # app_store_checks_google to validate screenshots and metadata sizes.
 

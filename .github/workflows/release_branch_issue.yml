@@ -1,4 +1,4 @@
-# DESCRIPTION: Creates a release tracking issue when a new release branch is created.
+# Creates a release tracking issue when a new release branch is created.
 # Generates the release ticket with due dates, assigns release approvers, creates a
 # TestRail milestone and RC test run, closes the previous milestone, posts release
 # coordination details to Slack, and waits for manual approval to trigger the release.

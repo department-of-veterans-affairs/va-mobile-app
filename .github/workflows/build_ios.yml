@@ -1,4 +1,4 @@
-# DESCRIPTION: Reusable iOS build workflow. Sets up the macOS environment, installs
+# Reusable iOS build workflow. Sets up the macOS environment, installs
 # dependencies, decodes signing keys, bundles the app, and runs the specified
 # Fastlane lane (qa, rc, review, release, on_demand) to build and distribute.
 

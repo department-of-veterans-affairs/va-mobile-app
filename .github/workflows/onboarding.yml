@@ -1,4 +1,4 @@
-# DESCRIPTION: Placeholder onboarding workflow that triggers when an issue is
+# Placeholder onboarding workflow that triggers when an issue is
 # labeled with 'onboarding'. Currently logs the issue event; Slack notification
 # logic is commented out pending future implementation.
 

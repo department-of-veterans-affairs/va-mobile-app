@@ -1,4 +1,4 @@
-# DESCRIPTION: Checks that every PR has a linked issue. If no linked issue is
+# Checks that every PR has a linked issue. If no linked issue is
 # found, it posts a comment asking the author to link one. PRs targeting release,
 # dependabot, and main branches are excluded from this requirement.
 

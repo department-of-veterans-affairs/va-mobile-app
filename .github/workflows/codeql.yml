@@ -1,4 +1,4 @@
-# DESCRIPTION: Runs GitHub CodeQL security analysis on JavaScript code. Triggers
+# Runs GitHub CodeQL security analysis on JavaScript code. Triggers
 # on pushes and PRs to develop and weekly on a schedule. Initializes CodeQL,
 # autobuilds the project, and performs the analysis.
 

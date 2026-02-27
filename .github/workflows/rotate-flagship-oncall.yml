@@ -1,4 +1,4 @@
-# DESCRIPTION: Posts the weekly on-call assignment to the va-mobile-app-alerts
+# Posts the weekly on-call assignment to the va-mobile-app-alerts
 # Slack channel every Monday. Fetches the current on-call person from PagerDuty,
 # sends a Slack notification, and updates the channel topic.
 
