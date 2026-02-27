@@ -10,6 +10,9 @@
 
 # Automatically imported files
 design/About/For\ engineers/
+static/data/workflows.json
+static/data/github-milestones.json
+static/data/whats-new-history.json
 
 # Misc
 .DS_Store

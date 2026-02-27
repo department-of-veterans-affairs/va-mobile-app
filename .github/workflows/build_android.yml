@@ -1,7 +1,8 @@
 # DESCRIPTION: Reusable Android build workflow. Sets up the Linux environment,
 # installs dependencies, decodes signing keys, bundles the app, and runs the
 # specified Fastlane lane (qa, rc, review, release, on_demand) to build and distribute.
-name: "[Build] Reusable Android Workflow"
+
+name: '[Build] Reusable Android Workflow'
 
 on:
   workflow_call:
@@ -17,19 +18,19 @@ on:
       notes:
         description: 'Release notes for Firebase (defaults to "New QA version for {{DATE_TIME}}")'
         type: string
-        default: ""
+        default: ''
       ps_track:
         description: 'Google Play Console track to distribute to (defaults to "Development Team")'
         type: string
-        default: ""
+        default: ''
       ref:
         description: 'Branch or tag to build from (defaults to triggering ref)'
         type: string
-        default: ""
+        default: ''
       slack_thread_ts:
         description: 'Slack thread timestamp for build status messages'
         type: string
-        default: ""
+        default: ''
       version:
         description: 'Version for production release (QA/on-demand builds auto-increment)'
         type: string
@@ -92,19 +93,19 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: "microsoft"
+          distribution: 'microsoft'
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3"
+          ruby-version: '3.3'
           bundler-cache: true
           working-directory: VAMobile/android
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: "VAMobile/.nvmrc"
-          cache: "yarn"
-          cache-dependency-path: "VAMobile/yarn.lock"
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install npm dependencies
         uses: nick-fields/retry@v2
         with:

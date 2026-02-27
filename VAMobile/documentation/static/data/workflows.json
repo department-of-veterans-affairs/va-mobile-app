@@ -451,6 +451,32 @@
     ]
   },
   {
+    "fileName": "codeql-analysis.yml",
+    "name": "[Code Quality] CodeQL",
+    "description": "Runs GitHub CodeQL static analysis on Ruby, JavaScript, and Python code. Triggers on pushes and PRs to develop, weekly on a schedule, and manually. Uses the VA's shared codeql-tools action for scanning.",
+    "on": {
+      "push": {
+        "branches": [
+          "develop"
+        ]
+      },
+      "pull_request": {
+        "branches": [
+          "develop"
+        ]
+      },
+      "schedule": [
+        {
+          "cron": "47 14 * * 1"
+        }
+      ],
+      "workflow_dispatch": null
+    },
+    "jobs": [
+      "analyze"
+    ]
+  },
+  {
     "fileName": "codeql.yml",
     "name": "[Code Quality] CodeQL",
     "description": "Runs GitHub CodeQL security analysis on JavaScript code. Triggers on pushes and PRs to develop and weekly on a schedule. Initializes CodeQL, autobuilds the project, and performs the analysis.",

@@ -2,7 +2,7 @@
 # code. Triggers on pushes and PRs to develop, weekly on a schedule, and manually.
 # Uses the VA's shared codeql-tools action for scanning.
 
-name: [Code Quality] CodeQL
+name: '[Code Quality] CodeQL'
 'on':
   push:
     branches:

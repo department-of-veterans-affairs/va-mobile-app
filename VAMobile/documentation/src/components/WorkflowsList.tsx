@@ -40,8 +40,8 @@ const getSlug = (name: string) =>
   name.toLowerCase().replace(/\[|\]/g, '').replace(/\s+/g, '-').replace(/[^\w-]/g, '')
 
 /**
- * Provides representative human-readable examples for common regex-based tag patterns
- * used in the VA Mobile GitHub Actions.
+ * Provides representative human-readable examples for common glob-style tag patterns
+ * used in the VA Mobile GitHub Actions (e.g., `v*.*.*`, `RC-v**`).
  */
 const getTagExample = (pattern: string) => {
   if (pattern === 'v[0-9]+.[0-9]+.[0-9]+') return 'v1.22.0'
@@ -144,24 +144,29 @@ const TriggerDetails = ({ trigger, triggerConfig }: { trigger: string, triggerCo
               </li>
             ))}
           
-          {/* Render event types (e.g., opened, reopened) in title case */}
-          {triggerConfig.types && Array.isArray(triggerConfig.types) && (
-            triggerConfig.types.map((type: string) => (
+          {/* Render event types (e.g., opened, reopened) in title case.
+              Normalize to array since YAML allows `types: closed` (string) or `types: [closed, opened]` (array). */}
+          {triggerConfig.types && (
+            (Array.isArray(triggerConfig.types) ? triggerConfig.types : [triggerConfig.types]).map((type: string) => (
               <li key={type}>{toTitleCase(type)}</li>
             ))
           )}
           
-          {/* Render file path filters if present */}
-          {triggerConfig.paths && Array.isArray(triggerConfig.paths) && (
-            <li key="paths">
-              File Paths:
-              <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', marginTop: '0.25rem' }}>
-                {triggerConfig.paths.map((path: string) => (
-                  <li key={path}><code>{path}</code></li>
-                ))}
-              </ul>
-            </li>
-          )}
+          {/* Render file path filters if present.
+              Normalize to array since YAML allows `paths: 'VAMobile/**'` (string) or `paths: [...]` (array). */}
+          {triggerConfig.paths && (() => {
+            const paths = Array.isArray(triggerConfig.paths) ? triggerConfig.paths : [triggerConfig.paths]
+            return (
+              <li key="paths">
+                File Paths:
+                <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', marginTop: '0.25rem' }}>
+                  {paths.map((path: string) => (
+                    <li key={path}><code>{path}</code></li>
+                  ))}
+                </ul>
+              </li>
+            )
+          })()}
         </>
       )}
     </ul>
@@ -302,7 +307,6 @@ const WorkflowsList = () => {
         const slug = getSlug(workflow.name)
         const on = normalizeTriggers(workflow.on)
         const allInputs = extractAllInputs(on)
-        const hasInputs = Object.keys(allInputs).length > 0
 
         return (
           <div key={index} id={slug} className="margin-top--xl margin-bottom--xl">
