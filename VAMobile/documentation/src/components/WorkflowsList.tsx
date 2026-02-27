@@ -429,7 +429,6 @@ const WorkflowsList: React.FC = () => {
             {/* User-provided Description from comments */}
             {workflow.description && (
               <div className="margin-bottom--md">
-                <strong>Description:</strong>
                 <p>{workflow.description}</p>
               </div>
             )}
