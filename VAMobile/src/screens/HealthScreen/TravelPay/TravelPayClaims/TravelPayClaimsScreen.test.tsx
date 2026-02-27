@@ -10,6 +10,7 @@ import { context, mockNavProps, render } from 'testUtils'
 import { DowntimeFeatureTypeConstants } from 'store/api'
 import { createTimeFrameDateRangeMap } from 'utils/dateUtils'
 import { formatDateRangeMMMyyyy } from 'utils/formattingUtils'
+import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 
 // Mock screen reader hook to prevent act() warning within
 // VAModalPicker that aren't affecting these tests
@@ -42,6 +43,14 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useDowntime: mockUseDowntime,
+  }
+})
+
+let mockUseMaintenanceWindows: jest.Mock
+jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
+  mockUseMaintenanceWindows = jest.fn(() => ({ maintenanceWindows: {} }))
+  return {
+    useMaintenanceWindows: mockUseMaintenanceWindows,
   }
 })
 
@@ -168,6 +177,11 @@ jest.mock('api/travelPay', () => {
 })
 
 context('TravelPayClaims', () => {
+  beforeEach(() => {
+    mockUseDowntime.mockImplementation(() => false)
+    mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload([]))
+  })
+
   const initializeTestInstance = (routeMock?: { from: string }) => {
     render(
       <TravelPayClaims
@@ -183,8 +197,6 @@ context('TravelPayClaims', () => {
         )}
       />,
     )
-
-    mockUseDowntime.mockImplementation(() => false)
   }
 
   it('should show travel claims header', () => {
@@ -364,10 +376,11 @@ context('TravelPayClaims', () => {
   describe('when in downtime', () => {
     it('should show the downtime message when travel pay is in downtime', async () => {
       mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
+      mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
 
       initializeTestInstance()
 
-      expect(screen.getByText(/We're working on the mobile app\./i)).toBeTruthy()
+      expect(screen.getByText(/We're working on this part of the mobile app right now\./i)).toBeTruthy()
     })
   })
 })
