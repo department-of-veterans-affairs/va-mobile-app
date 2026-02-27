@@ -55,7 +55,6 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
         options,
         title: t('logout.confirm.text'),
         destructiveButtonIndex: 0,
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {

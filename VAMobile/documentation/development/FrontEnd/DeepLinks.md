@@ -10,6 +10,7 @@ When a user taps a link, the link will decide whether to open the link on the we
 - If a user is logged into the app, any path whitelisted will navigate to the correct deep linked screen.
 - If a user has the app, but is not logged in, then they will be navigated to the login screen.
 - If a user does not have the app installed, they will be navigated to the website.
+- If the user is on iOS and clicks a universal link from within the VA.gov domain, it will display a smart banner recommending to open the app instead of opening the app directly.
 
 ## Configurations
 :::note

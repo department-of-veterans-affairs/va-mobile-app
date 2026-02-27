@@ -116,7 +116,6 @@ export function useComposeCancelConfirmation(): [
                 ? t('composeCancelConfirmation.draft.title')
                 : t('composeCancelConfirmation.reply.title'),
           message: origin === 'Draft' ? t('composeCancelConfirmation.draft.body') : t('composeCancelConfirmation.body'),
-          cancelButtonIndex: 2,
           destructiveButtonIndex: 0,
         },
         (buttonIndex) => {
