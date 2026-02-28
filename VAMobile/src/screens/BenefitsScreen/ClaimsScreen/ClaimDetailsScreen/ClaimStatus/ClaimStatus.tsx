@@ -11,7 +11,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import ClaimTimeline from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/ClaimTimeline'
 import ClosedClaimStatusDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClosedClaimInfo/ClosedClaimStatusDetails'
 import EstimatedDecisionDate from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/EstimatedDecisionDate/EstimatedDecisionDate'
-import { featureEnabled } from 'utils/remoteConfig'
 
 /** props for the ClaimStatus component */
 type ClaimStatusProps = {
@@ -34,8 +33,7 @@ function ClaimStatus({ claim, claimType, scrollIsEnabled, scrollViewRef }: Claim
   const { data: decisionLetterData } = useDecisionLetters()
 
   const letterIsDownloadable = Boolean(
-    featureEnabled('decisionLettersWaygate') &&
-      userAuthorizedServices?.decisionLetters &&
+    userAuthorizedServices?.decisionLetters &&
       claim.attributes.decisionLetterSent &&
       (decisionLetterData?.data.length || 0) > 0,
   )

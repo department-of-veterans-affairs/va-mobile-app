@@ -18,7 +18,6 @@ import ClaimsAndAppealsListView from 'screens/BenefitsScreen/ClaimsScreen/Claims
 import NoClaimsAndAppealsAccess from 'screens/BenefitsScreen/ClaimsScreen/NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { useDowntime, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHistoryScreen'>
@@ -56,10 +55,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     scrollViewRef: scrollViewRef,
   }
 
-  const title =
-    featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
-      ? t('claimsHistory.title')
-      : t('claims.title')
+  const title = userAuthorizedServices?.decisionLetters ? t('claimsHistory.title') : t('claims.title')
 
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()

@@ -464,11 +464,14 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       return !filteredRecentRecipientsIds.has(r.value)
     })
 
+    const selectedFacility = careSystems.find((cs) => cs.value === careSystem)
+    const facilityName = selectedFacility?.label || t('secureMessaging.formMessage.allCareTeams')
+
     // not crazy about the keys here being the labels we eventually display in the combobox
     // open to suggestions here
     return {
       [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
+      [facilityName]: filteredAllRecipients,
     }
   }
 

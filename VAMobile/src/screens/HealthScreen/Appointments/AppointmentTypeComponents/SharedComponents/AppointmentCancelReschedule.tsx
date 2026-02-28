@@ -23,7 +23,6 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { ActionSheetProps, useShowActionSheet, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_VA_SCHEDULING, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -157,7 +156,7 @@ const phoneFacilitySchedulingLink = (
           a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
         />
       ) : undefined}
-      {featureEnabled('rescheduleLink') && showScheduleLink && !useFacilityLocatorFallback && (
+      {showScheduleLink && !useFacilityLocatorFallback && (
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_VA_SCHEDULING}
@@ -334,9 +333,7 @@ function AppointmentCancelReschedule({
           t,
           theme,
         )
-      ) : featureEnabled('rescheduleLink') &&
-        showScheduleLink &&
-        subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
+      ) : showScheduleLink && subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_VA_SCHEDULING}
