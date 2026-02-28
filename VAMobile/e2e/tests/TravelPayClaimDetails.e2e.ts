@@ -33,7 +33,6 @@ const TravelPayClaimDetailsE2eIds = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
