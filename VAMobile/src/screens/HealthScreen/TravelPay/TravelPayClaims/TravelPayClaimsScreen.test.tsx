@@ -6,8 +6,8 @@ import { t } from 'i18next'
 import { GetTravelPayClaimsResponse } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
-import { context, mockNavProps, render } from 'testUtils'
 import { DowntimeFeatureTypeConstants } from 'store/api'
+import { context, mockNavProps, render } from 'testUtils'
 import { createTimeFrameDateRangeMap } from 'utils/dateUtils'
 import { formatDateRangeMMMyyyy } from 'utils/formattingUtils'
 import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
@@ -129,47 +129,49 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   ],
 }
 
-let mockUseTravelPayClaims: jest.Mock
-jest.mock('api/travelPay', () => {
-  mockUseTravelPayClaims = jest.fn((timeFrame: TimeFrameType) => {
-    const claims = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data
-    const claimsForTimeFrame = timeFrame === 'pastThreeMonths' ? [claims[0], claims[1]] : [claims[2]]
+const defaultUseTravelPayClaimsImplementation = (timeFrame: TimeFrameType) => {
+  const claims = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data
+  const claimsForTimeFrame = timeFrame === 'pastThreeMonths' ? [claims[0], claims[1]] : [claims[2]]
 
-    // Replace the hardcoded year with current year to work better with date picker tests
-    const currentYear = new Date().getFullYear().toString()
-    const pastYear = (new Date().getFullYear() - 1).toString()
+  // Replace the hardcoded year with current year to work better with date picker tests
+  const currentYear = new Date().getFullYear().toString()
+  const pastYear = (new Date().getFullYear() - 1).toString()
 
-    claimsForTimeFrame.map((claim) => {
-      const attributes = { ...claim.attributes }
-      attributes.appointmentDateTime.replace('2025', currentYear)
-      attributes.appointmentDateTime.replace('2024', pastYear)
-      attributes.createdOn.replace('2025', currentYear)
-      attributes.createdOn.replace('2024', pastYear)
-      attributes.modifiedOn.replace('2025', currentYear)
-      attributes.modifiedOn.replace('2024', pastYear)
+  claimsForTimeFrame.map((claim) => {
+    const attributes = { ...claim.attributes }
+    attributes.appointmentDateTime.replace('2025', currentYear)
+    attributes.appointmentDateTime.replace('2024', pastYear)
+    attributes.createdOn.replace('2025', currentYear)
+    attributes.createdOn.replace('2024', pastYear)
+    attributes.modifiedOn.replace('2025', currentYear)
+    attributes.modifiedOn.replace('2024', pastYear)
 
-      return {
-        ...claim,
-        attributes,
-      }
-    })
-    const adjustedResponse = {
-      ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE,
-      data: claimsForTimeFrame,
-    }
     return {
-      data: {
-        pages: [adjustedResponse],
-      },
-      isFetchingNextPage: false,
-      hasNextPage: false,
-      isFetching: false,
-      isLoading: false,
-      error: null,
-      refetch: jest.fn(),
-      fetchNextPage: jest.fn(),
+      ...claim,
+      attributes,
     }
   })
+  const adjustedResponse = {
+    ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE,
+    data: claimsForTimeFrame,
+  }
+  return {
+    data: {
+      pages: [adjustedResponse],
+    },
+    isFetchingNextPage: false,
+    hasNextPage: false,
+    isFetching: false,
+    isLoading: false,
+    error: null,
+    refetch: jest.fn(),
+    fetchNextPage: jest.fn(),
+  }
+}
+
+let mockUseTravelPayClaims: jest.Mock
+jest.mock('api/travelPay', () => {
+  mockUseTravelPayClaims = jest.fn(defaultUseTravelPayClaimsImplementation)
 
   return {
     useTravelPayClaims: mockUseTravelPayClaims,
@@ -180,6 +182,7 @@ context('TravelPayClaims', () => {
   beforeEach(() => {
     mockUseDowntime.mockImplementation(() => false)
     mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload([]))
+    mockUseTravelPayClaims.mockImplementation(defaultUseTravelPayClaimsImplementation)
   })
 
   const initializeTestInstance = (routeMock?: { from: string }) => {
@@ -373,14 +376,46 @@ context('TravelPayClaims', () => {
     })
   })
 
-  describe('when in downtime', () => {
-    it('should show the downtime message when travel pay is in downtime', async () => {
+  describe('displaying the downtime error message', () => {
+    it('should show downtime error when travel pay is in downtime', async () => {
       mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
       mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
 
       initializeTestInstance()
 
       expect(screen.getByText(/We're working on this part of the mobile app right now\./i)).toBeTruthy()
+    })
+
+    it('should show downtime error even when there is an API error if travel pay is in downtime', async () => {
+      mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
+      mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
+      mockUseTravelPayClaims.mockReturnValue({
+        data: undefined,
+        error: new Error('API Error'),
+        isFetching: false,
+        refetch: jest.fn(),
+      })
+
+      initializeTestInstance()
+
+      expect(screen.getByText(/We're working on this part of the mobile app right now\./i)).toBeTruthy()
+    })
+
+    it('should show the API error when downtime is off', async () => {
+      mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
+
+      mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload([]))
+
+      mockUseTravelPayClaims.mockReturnValue({
+        data: undefined,
+        error: new Error('API Error'),
+        isFetching: false,
+        refetch: jest.fn(),
+      })
+
+      initializeTestInstance()
+
+      expect(screen.getByText(/We're sorry. Something went wrong on our end. Try again later./i)).toBeTruthy()
     })
   })
 })
