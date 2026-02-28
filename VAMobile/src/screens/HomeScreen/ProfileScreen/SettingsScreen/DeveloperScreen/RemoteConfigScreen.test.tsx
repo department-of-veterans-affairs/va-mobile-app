@@ -10,9 +10,9 @@ import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { waitFor } from 'testUtils'
 import { FeatureToggleDescriptions, devConfig, setDebugConfig } from 'utils/remoteConfig'
 
-const mockOverrides = {
-  ...devConfig,
-}
+const mockOverrides = Object.fromEntries(
+  Object.entries(devConfig).sort(([a], [b]) => a.localeCompare(b)),
+) as typeof devConfig
 
 const APPLY_OVERRIDES_BUTTON_TEST_ID = 'applyOverridesTestID'
 
