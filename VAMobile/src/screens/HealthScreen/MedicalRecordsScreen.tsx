@@ -35,8 +35,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
 
   const { data: authorizedServices } = useAuthorizedServices()
   const { data: facilitiesInfo } = useFacilitiesInfo()
-  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
-  const cernerExist = cernerFacilities.length >= 1
+  const hasCernerFacilities = facilitiesInfo?.some((f) => f.cerner)
 
   return (
     <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('vaMedicalRecords.title')}>
@@ -44,7 +43,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         <OHAlertManager
           parentScreen={OHParentScreens.MedicalRecords}
           authorizedServices={authorizedServices}
-          cernerExist={cernerExist}
+          hasCernerFacilities={hasCernerFacilities}
         />
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>

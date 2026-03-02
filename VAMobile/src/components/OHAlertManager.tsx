@@ -10,10 +10,10 @@ import { featureEnabled } from 'utils/remoteConfig'
 type OHAlertManagerProps = {
   parentScreen: OHParentScreens
   authorizedServices: UserAuthorizedServicesData
-  cernerExist?: boolean
+  hasCernerFacilities?: boolean
 }
 
-export const OHAlertManager = ({ parentScreen, authorizedServices, cernerExist }: OHAlertManagerProps) => {
+export const OHAlertManager = ({ parentScreen, authorizedServices, hasCernerFacilities }: OHAlertManagerProps) => {
   const alertsForScreen = (migration: MigratingFacility) => {
     const alertState = getAlertState(migration.phases.current, parentScreen)
     if (alertState === 'warning') {
@@ -45,7 +45,7 @@ export const OHAlertManager = ({ parentScreen, authorizedServices, cernerExist }
     parentScreen === OHParentScreens.MedicalRecords &&
     featureEnabled('displayDuplicateRecordAlert') &&
     !hasMigrationAlerts &&
-    (cernerExist || isInP6OrP7)
+    (hasCernerFacilities || isInP6OrP7)
 
   return (
     <>

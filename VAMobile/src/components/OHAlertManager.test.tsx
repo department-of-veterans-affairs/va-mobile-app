@@ -208,7 +208,7 @@ context('OHAlertManager', () => {
         <OHAlertManager
           parentScreen={OHParentScreens.MedicalRecords}
           authorizedServices={authorizedServices}
-          cernerExist={true}
+          hasCernerFacilities={true}
         />,
         {
           preloadedState: {
@@ -229,7 +229,7 @@ context('OHAlertManager', () => {
         <OHAlertManager
           parentScreen={OHParentScreens.MedicalRecords}
           authorizedServices={authorizedServices}
-          cernerExist={true}
+          hasCernerFacilities={true}
         />,
       )
 
@@ -243,7 +243,7 @@ context('OHAlertManager', () => {
         <OHAlertManager
           parentScreen={OHParentScreens.MedicalRecords}
           authorizedServices={authorizedServices}
-          cernerExist={true}
+          hasCernerFacilities={true}
         />,
         {
           preloadedState: {
@@ -265,7 +265,7 @@ context('OHAlertManager', () => {
         <OHAlertManager
           parentScreen={OHParentScreens.Appointments}
           authorizedServices={authorizedServices}
-          cernerExist={true}
+          hasCernerFacilities={true}
         />,
         {
           preloadedState: {
