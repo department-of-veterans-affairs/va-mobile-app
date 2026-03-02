@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import AlertWithHaptics from 'components/AlertWithHaptics'
 import Box from 'components/Box'
-import { TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SettingsState, updateDisplayDuplicateRecordAlert } from 'store/slices'
@@ -46,12 +45,8 @@ const DuplicateRecordAlert = () => {
         initializeExpanded={true}
         variant="info"
         header={t(`ohAlert.duplicatedRecord.title`)}
-        description={''}
-        secondaryButton={{ label: t('dismiss'), onPress: handleDismiss }}>
-        <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
-          {t('ohAlert.duplicatedRecord.body')}
-        </TextView>
-      </AlertWithHaptics>
+        description={t('ohAlert.duplicatedRecord.body')}
+        secondaryButton={{ label: t('dismiss'), onPress: handleDismiss }}/>
     </Box>
   )
 }
