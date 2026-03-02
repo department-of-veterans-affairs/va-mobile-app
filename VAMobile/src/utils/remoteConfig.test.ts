@@ -27,6 +27,8 @@ const mockOverrides = {
   loadLabsAndTestsOnHomeScreen: false,
   mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
+  noErrorPhasesKimOH: false,
+  noRecipientsKimOH: false,
   startScheduling: false,
   testFeature: false,
   appointmentsTestTime: true,
