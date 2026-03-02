@@ -42,6 +42,7 @@ import {
   TextArea,
   TextView,
 } from 'components'
+import { MigrationErrorMessage } from 'components/MigrationErrorMessage'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -62,7 +63,7 @@ import {
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
-import { MigrationErrorMessage, OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
+import { OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -269,9 +270,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       return !filteredRecentRecipientsIds.has(r.value)
     })
 
+    const selectedFacility = careSystems.find((cs) => cs.value === careSystem)
+    const facilityName = selectedFacility?.label || t('secureMessaging.formMessage.allCareTeams')
+
     return {
       [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
+      [facilityName]: filteredAllRecipients,
     }
   }
 

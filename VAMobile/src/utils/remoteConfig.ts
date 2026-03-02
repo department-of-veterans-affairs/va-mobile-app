@@ -19,7 +19,6 @@ export type FeatureToggleType =
   | 'COEAvailable'
   | 'copayments'
   | 'appointmentsTestTime'
-  | 'decisionLettersWaygate'
   | 'hsScrollAnalytics'
   | 'inAppReview'
   | 'labsAndTests'
@@ -28,15 +27,8 @@ export type FeatureToggleType =
   | 'mrHide36HrHoldTimes'
   | 'noErrorPhasesKimOH'
   | 'noRecipientsKimOH'
-  | 'rescheduleLink'
-  | 'submitEvidenceExpansion'
-  | 'sso'
   | 'startScheduling'
   | 'testFeature'
-  | 'travelPaySMOC'
-  | 'travelPayClaimDetails'
-  | 'travelPayStatusList'
-  | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'show5103Flow'
   | 'showCernerWarningAlert'
@@ -53,7 +45,6 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   COEAvailable: boolean
   copayments: boolean
-  decisionLettersWaygate: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
   labsAndTests: boolean
@@ -62,15 +53,8 @@ type FeatureToggleValues = {
   mrHide36HrHoldTimes: boolean
   noErrorPhasesKimOH: boolean
   noRecipientsKimOH: boolean
-  rescheduleLink: boolean
-  submitEvidenceExpansion: boolean
-  sso: boolean
   startScheduling: boolean
   testFeature: boolean
-  travelPaySMOC: boolean
-  travelPayClaimDetails: boolean
-  travelPayStatusList: boolean
-  useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   show5103Flow: boolean
   showCernerWarningAlert: boolean
@@ -88,7 +72,6 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
-  decisionLettersWaygate: true,
   hsScrollAnalytics: false,
   inAppReview: true,
   labsAndTests: true,
@@ -97,15 +80,8 @@ export const defaults: FeatureToggleValues = {
   mrHide36HrHoldTimes: false,
   noErrorPhasesKimOH: false,
   noRecipientsKimOH: false,
-  rescheduleLink: true,
-  submitEvidenceExpansion: true,
-  sso: true,
   startScheduling: false,
   testFeature: false,
-  travelPaySMOC: true,
-  travelPayClaimDetails: true,
-  travelPayStatusList: true,
-  useOldLinkComponent: true,
   internationalPhoneNumber: false,
   show5103Flow: true,
   showCernerWarningAlert: false,

@@ -14,9 +14,9 @@ import {
 } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
-import { mockViewMessageEndpoints } from 'screens/HealthScreen/SecureMessaging/smTestHelpers'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { mockViewMessageEndpoints } from 'utils/tests/smTestHelpers'
 
 jest.mock('api/authorizedServices/getAuthorizedServices')
 jest.mock('api/secureMessaging/getAllMessageRecipients')
@@ -941,49 +941,6 @@ context('ViewMessageScreen', () => {
           expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
         )
       })
-    })
-  })
-
-  describe('when message has migratedToOracleHealth set to true', () => {
-    const migratedMessage: SecureMessagingMessageGetData = {
-      data: {
-        id: 3,
-        type: '3',
-        attributes: {
-          messageId: 3,
-          category: CategoryTypeFields.other,
-          subject: 'Migrated message',
-          body: 'test body',
-          hasAttachments: false,
-          attachment: false,
-          sentDate: '3',
-          senderId: 2,
-          senderName: 'mock sender 3',
-          recipientId: 3,
-          recipientName: 'mock recipient name 3',
-          readReceipt: 'mock read receipt',
-          isOhMessage: false,
-          migratedToOracleHealth: true,
-        },
-      },
-      included: [],
-      meta: {
-        userInTriageTeam: true,
-      },
-    }
-
-    it('should show the migrated to Oracle Health alert', async () => {
-      mockViewMessageEndpoints({
-        messageId: 3,
-        thread,
-        message: migratedMessage,
-        folders: listOfFolders,
-        inboxMessages: messages,
-      })
-      initializeTestInstance()
-      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
-      await waitFor(() => expect(screen.getByTestId('secureMessagingYourMessageHasBeenMigratedAlertID')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
     })
   })
 })

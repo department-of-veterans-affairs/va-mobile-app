@@ -18,7 +18,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { fetchSSOCookies } from 'utils/auth'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
-import { featureEnabled } from 'utils/remoteConfig'
 
 type ReloadButtonProps = {
   reloadPressed: () => void
@@ -95,7 +94,6 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  */
 function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const { url, displayTitle, loadingMessage, useSSO, backButtonTestID } = route.params
-  const isSSOSession = featureEnabled('sso') && useSSO
 
   const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
@@ -103,12 +101,12 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
-  const [fetchingSSOCookies, setFetchingSSOCookies] = useState(isSSOSession)
+  const [fetchingSSOCookies, setFetchingSSOCookies] = useState(useSSO)
   const [webviewLoadFailed, setWebviewLoadFailed] = useState(false)
 
   const onReloadPressed = (): void => {
     // Fetch SSO cookies when attempting to reload after initial WebView load failed
-    if (isSSOSession && webviewLoadFailed) {
+    if (useSSO && webviewLoadFailed) {
       setWebviewLoadFailed(false)
       setFetchingSSOCookies(true)
     }

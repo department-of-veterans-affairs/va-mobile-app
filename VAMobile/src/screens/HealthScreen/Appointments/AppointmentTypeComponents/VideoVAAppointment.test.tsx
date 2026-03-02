@@ -11,10 +11,8 @@ import {
 } from 'api/types'
 import VideoVAAppointment from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/VideoVAAppointment'
 import { context, render } from 'testUtils'
-import { when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
-import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
@@ -24,8 +22,6 @@ jest.mock('@react-navigation/native', () => ({
 }))
 
 context('VideoVAAppointment', () => {
-  when(featureEnabled).calledWith('rescheduleLink').mockReturnValue(true)
-
   const defaultAppointmentAttributes: AppointmentAttributes = {
     //appointmentType and Status not used at this point in the logic, those are used in the upcoming appointments details
     appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
