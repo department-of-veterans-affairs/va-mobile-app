@@ -905,6 +905,40 @@ context('ViewMessageScreen', () => {
         )
       })
 
+      it('should show migrated to Oracle Health alert when migratedToOracleHealth is true', async () => {
+        const migratedMessage: SecureMessagingMessageGetData = {
+          data: {
+            id: 3,
+            type: '3',
+            attributes: {
+              messageId: 3,
+              category: CategoryTypeFields.other,
+              subject: 'Migrated message',
+              body: 'test body',
+              hasAttachments: false,
+              attachment: false,
+              sentDate: '3',
+              senderId: 2,
+              senderName: 'mock sender 3',
+              recipientId: 3,
+              recipientName: 'mock recipient name 3',
+              readReceipt: 'mock read receipt',
+              isOhMessage: false,
+              migratedToOracleHealth: true,
+            },
+          },
+          included: [],
+          meta: {
+            userInTriageTeam: true,
+          },
+        }
+        setupApiCalls(3, migratedMessage)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId('secureMessagingYourMessageHasBeenMigratedAlertID')).toBeTruthy())
+        await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+      })
+
       it('should show "you can no longer" alert when not in triage team and no migration blocking', async () => {
         const messageNotInTriageTeam: SecureMessagingMessageGetData = {
           ...message,
