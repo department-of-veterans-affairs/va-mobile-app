@@ -102,6 +102,68 @@ context('EditDraft', () => {
       },
     ],
   }
+  const cannotReplyThread: SecureMessagingThreadGetData = {
+    data: [
+      {
+        id: 1,
+        type: '1',
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'mock subject 1: The initial message sets the overall thread subject header',
+          body: 'message 1 body text',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1',
+          senderId: 2,
+          senderName: 'mock sender 1',
+          recipientId: 3,
+          recipientName: 'mock recipient name 1',
+          readReceipt: 'mock read receipt 1',
+          isOhMessage: false,
+          replyDisabled: true,
+        },
+      },
+      {
+        id: 2,
+        type: '1',
+        attributes: {
+          messageId: 2,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'test 2',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '2',
+          senderId: 2,
+          senderName: 'mock sender 2',
+          recipientId: 3,
+          recipientName: 'mock recipient name 2',
+          readReceipt: 'mock read receipt 2',
+          isOhMessage: false,
+        },
+      },
+      {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'Last accordion collapsible should be open, so the body text of this message should display',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: String(DateTime.now().toUTC()),
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+        },
+      },
+    ],
+  }
   const nonReplyDraftThread: SecureMessagingThreadGetData = {
     data: [
       {
@@ -406,6 +468,56 @@ context('EditDraft', () => {
     })
   })
 
+  describe('when there are no recent messages and provider does not allow reply', () => {
+    it('should display an alert and should hide the Add Files button and Send button', async () => {
+      const threadWithReplyDisabled = JSON.parse(JSON.stringify(oldThread))
+      threadWithReplyDisabled.data[2].attributes.replyDisabled = true
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(threadWithReplyDisabled)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'You can’t reply to this message' })).toBeTruthy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
+    })
+  })
+
+  describe('when provider does not allow reply', () => {
+    it('should display an alert and should hide the Add Files button and Send button', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(cannotReplyThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'You can’t reply to this message' })).toBeTruthy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())
+    })
+  })
+
   describe('on click of the collapsible view', () => {
     it('should show the Reply Help panel', async () => {
       when(api.get as jest.Mock)
@@ -449,11 +561,42 @@ context('EditDraft', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
+    it('should display To combobox with selected care system as header', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(nonReplyDraftThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
+      const careSystemPicker = await screen.findByTestId('care system field')
+      fireEvent.press(careSystemPicker)
+      const careSystemOptions = await screen.findAllByText('test_healthcare_system_name')
+      fireEvent.press(careSystemOptions[0])
+      const doneButton = await screen.findByText('Done')
+      fireEvent.press(doneButton)
+      const toField = await screen.findByTestId('editDraftToTestID')
+      fireEvent.press(toField)
+      const comboBoxScrollView = await screen.findByTestId('comboBoxScrollViewID')
+      expect(comboBoxScrollView).toBeTruthy()
+      expect(screen.getAllByText('test_healthcare_system_name').length).toBeGreaterThanOrEqual(1)
+      expect(screen.queryByText('All care teams')).toBeFalsy()
+    })
   })
 
   describe('when the user only has one facility on record', () => {
     it('should hide care systems selection box', async () => {
-      const mockSingleCareSystemRecipientsResponse = recipients
+      const mockSingleCareSystemRecipientsResponse = JSON.parse(JSON.stringify(recipients))
       mockSingleCareSystemRecipientsResponse.meta.careSystems = [
         {
           healthCareSystemName: '357',
@@ -478,6 +621,39 @@ context('EditDraft', () => {
         .mockResolvedValue(folderMessages)
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
+    })
+    it('should display To combobox with selected care system as header', async () => {
+      const mockSingleCareSystemRecipientsResponse = JSON.parse(JSON.stringify(recipients))
+      mockSingleCareSystemRecipientsResponse.meta.careSystems = [
+        {
+          healthCareSystemName: 'station 357',
+          stationNumber: '357',
+        },
+      ]
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(nonReplyDraftThread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(mockSingleCareSystemRecipientsResponse)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
+      const toField = await screen.findByTestId('editDraftToTestID')
+      fireEvent.press(toField)
+      const comboBoxScrollView = await screen.findByTestId('comboBoxScrollViewID')
+      expect(comboBoxScrollView).toBeTruthy()
+      expect(screen.getAllByText('station 357').length).toBeGreaterThanOrEqual(1)
+      expect(screen.queryByText('All care teams')).toBeFalsy()
     })
   })
 

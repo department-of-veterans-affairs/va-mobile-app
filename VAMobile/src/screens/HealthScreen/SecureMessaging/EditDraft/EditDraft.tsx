@@ -152,10 +152,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const hasRecentMessages = thread.some(
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
+  const providerAllowsReply = !thread.some((msg) => msg.attributes?.replyDisabled === true)
+  const replyIsStale = isReplyDraft && !hasRecentMessages
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
   const { data: authorizedServicesData } = useAuthorizedServices()
-  const replyDisabled = isReplyDraft && (!hasRecentMessages || migrationBlocksReply)
+  const replyDisabled = isReplyDraft && (!hasRecentMessages || !providerAllowsReply || migrationBlocksReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -302,12 +304,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
 
   const onDeletePressed = (): void => {
     const options = [t('delete'), t('keepEditing')]
-    let cancelBtnIndex = 1
     let saveButtonExists = false
     if (!replyDisabled) {
       saveButtonExists = true
       options.splice(1, 0, t('save'))
-      cancelBtnIndex = 2
     }
 
     destructiveAlert(
@@ -316,7 +316,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         title: t('deleteDraft'),
         message: t('secureMessaging.deleteDraft.deleteInfo'),
         destructiveButtonIndex: 0,
-        cancelButtonIndex: cancelBtnIndex,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
@@ -465,11 +464,14 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       return !filteredRecentRecipientsIds.has(r.value)
     })
 
+    const selectedFacility = careSystems.find((cs) => cs.value === careSystem)
+    const facilityName = selectedFacility?.label || t('secureMessaging.formMessage.allCareTeams')
+
     // not crazy about the keys here being the labels we eventually display in the combobox
     // open to suggestions here
     return {
       [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
+      [facilityName]: filteredAllRecipients,
     }
   }
 
@@ -634,13 +636,24 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
-  function renderAlert() {
+  function renderStaleReplyAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="warning"
           header={t('secureMessaging.reply.tooOldForReplies')}
           description={t('secureMessaging.reply.olderThan45Days')}
+        />
+      </Box>
+    )
+  }
+  function renderCannotReplyAlert() {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('secureMessaging.reply.cannotReplyHeader')}
+          description={t('secureMessaging.reply.cannotReplyBody')}
         />
       </Box>
     )
@@ -822,7 +835,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {replyDisabled && !migrationBlocksReply && renderAlert()}
+          {replyIsStale && !migrationBlocksReply && providerAllowsReply && renderStaleReplyAlert()}
+          {!providerAllowsReply && !migrationBlocksReply && renderCannotReplyAlert()}
           {migrationBlocksReply && authorizedServicesData && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <OHAlertManager
