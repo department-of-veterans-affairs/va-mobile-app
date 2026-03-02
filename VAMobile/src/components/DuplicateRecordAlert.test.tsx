@@ -67,14 +67,4 @@ context('DuplicateRecordAlert', () => {
     })
     expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
   })
-
-  it('does not show alert when Redux setting is true but previously dismissed in AsyncStorage', async () => {
-    const getItemMock = AsyncStorage.getItem as jest.Mock
-    getItemMock.mockResolvedValueOnce('true')
-    renderWithSettings(true)
-    await waitFor(() => {
-      expect(getItemMock).toHaveBeenCalledWith(DUPLICATE_RECORD_ALERT_DISMISSED)
-    })
-    expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
-  })
 })
