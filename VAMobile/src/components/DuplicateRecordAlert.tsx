@@ -35,7 +35,7 @@ const DuplicateRecordAlert = () => {
   }
 
   if (!displayDuplicateRecordAlert) {
-    return <></>
+    return null
   }
 
   return (
