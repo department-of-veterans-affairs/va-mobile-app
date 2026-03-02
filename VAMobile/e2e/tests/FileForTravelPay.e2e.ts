@@ -8,7 +8,6 @@ import {
   openAppointments,
   openDismissLeavingAppPopup,
   openHealth,
-  toggleRemoteConfigFlag,
   updateAddress,
 } from './utils'
 
@@ -109,7 +108,6 @@ const TravelPayE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
@@ -323,7 +321,7 @@ describe('File for Travel Pay', () => {
   it('does not display the file a claim alert after closing the Submit Success screen', async () => {
     await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
 
-    await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
+    await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).not.toExist()
   })
 
