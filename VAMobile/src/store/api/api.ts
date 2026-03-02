@@ -239,6 +239,28 @@ const call = async function <T>(
         }
       })
     }
+
+    // NEW: success body overrides (demo only)
+    const overrideResponses = _store?.getState().demo.overrideResponses as
+      | Array<{ endpoint: string; body: string }>
+      | undefined
+
+    if (overrideResponses) {
+      const match = _.find(overrideResponses, (o) => !!o.endpoint && endpoint.includes(o.endpoint))
+      if (match?.body) {
+        try {
+          return JSON.parse(match.body) as T
+        } catch (e) {
+          throw {
+            status: 418,
+            endpoint,
+            text: 'Invalid override JSON',
+            json: { errors: [{ title: 'Invalid override JSON' }] },
+          }
+        }
+      }
+    }
+
     // we are in demo and need to transform the request from the demo store
     return new Promise((resolve) => {
       setTimeout(async () => {
