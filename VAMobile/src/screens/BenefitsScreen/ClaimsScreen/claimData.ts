@@ -693,7 +693,6 @@ export const claim: ClaimData = {
         },
         nextSteps: {
           blocks: [
-            { type: 'paragraph', content: 'To complete this request:' },
             {
               type: 'paragraph',
               content: [
@@ -701,6 +700,7 @@ export const claim: ClaimData = {
                   type: 'link',
                   text: 'Download VA Form 21-4142',
                   href: 'https://www.va.gov/find-forms/about-form-21-4142/',
+                  testId: 'Download VA Form 21-4142',
                 },
               ],
             },

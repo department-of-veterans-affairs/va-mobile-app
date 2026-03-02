@@ -81,8 +81,8 @@ context('StructuredContentRenderer', () => {
     render(<StructuredContentRenderer content={content} testID="structured" />)
     expect(screen.getByText('Call us at ')).toBeTruthy()
     expect(screen.getByText(' or TTY ')).toBeTruthy()
-    expect(screen.getByRole('link', { name: '8008271000' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: '711' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '8 0 0 8 2 7 1 0 0 0' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '7 1 1' })).toBeTruthy()
   })
 
   it('should render real-world content structure', () => {

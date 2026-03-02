@@ -34,7 +34,11 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
         // Omit empty strings and empty arrays for a11y
         if (item == null) return false
         if (typeof item === 'string') return item.trim().length > 0
-        if (Array.isArray(item)) return item.length > 0
+        if (Array.isArray(item)) {
+          // Require at least one non-empty element so we don't show empty bullet/numbers (e.g. [""] or [" "])
+          const plain = getPlainText(item).trim()
+          return plain.length > 0
+        }
         return true
       })
 
