@@ -67,7 +67,7 @@ const AFNavigationForIndividual = [
     'Health',
     'Messages',
     'Medication: Naproxen side effects',
-    'Only use messages for non-urgent needs',
+    'How to get help sooner for urgent needs',
   ],
   ['Messages.e2e', 'WG_ViewMessage', 'Health', 'Messages', 'Folders', 'Sent', 'Medication: Naproxen side effects'],
   ['Messages.e2e', 'WG_EditDraft', 'Health', 'Messages', 'Folders', 'Drafts (3)', 'Test: Test Inquiry'],

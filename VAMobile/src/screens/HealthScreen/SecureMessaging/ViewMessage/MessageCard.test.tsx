@@ -60,7 +60,7 @@ context('MessageCard', () => {
 
   it('clicking on Only use messages for non-urgent needs should open largePanel', () => {
     render(<MessageCard message={messageAttributes} folderId={SecureMessagingSystemFolderIdConstants.INBOX} />)
-    fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
+    fireEvent.press(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages')))
     expect(mockNavigationSpy).toHaveBeenCalled()
   })
 

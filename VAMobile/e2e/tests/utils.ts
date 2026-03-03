@@ -655,7 +655,7 @@ const navigateToFeature = async (featureNavigationArray) => {
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (
       featureNavigationArray[j] === 'Reply' ||
-      featureNavigationArray[j] === 'Only use messages for non-urgent needs'
+      featureNavigationArray[j] === 'How to get help sooner for urgent needs'
     ) {
       await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
