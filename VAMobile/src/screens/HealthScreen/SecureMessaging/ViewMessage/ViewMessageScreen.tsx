@@ -460,11 +460,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             description={t('secureMessaging.reply.yourMessageHasBeenMigrated.description')}
             descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.yourMessageHasBeenMigrated.description'))}
             testID="secureMessagingYourMessageHasBeenMigratedAlertID">
-            <LinkWithAnalytics
-              type="custom"
-              text={t('upcomingAppointmentDetails.findYourVAFacility')}
-              onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
-            />
+            <LinkWithAnalytics {...linkProps} />
           </AlertWithHaptics>
         </Box>
       )
