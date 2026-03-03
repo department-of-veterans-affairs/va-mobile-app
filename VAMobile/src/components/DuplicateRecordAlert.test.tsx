@@ -3,6 +3,7 @@ import React from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import DuplicateRecordAlert, { DUPLICATE_RECORD_ALERT_DISMISSED } from 'components/DuplicateRecordAlert'
 import { initialSettingsState } from 'store/slices/settingsSlice'
@@ -26,26 +27,27 @@ context('DuplicateRecordAlert', () => {
 
   it('renders the alert when displayDuplicateRecordAlert is true', () => {
     renderWithSettings(true)
-    expect(screen.getByText('You may notice duplicate records for a time')).toBeTruthy()
+    expect(screen.findByText(t('ohAlert.duplicatedRecord.title'))).toBeTruthy()
   })
 
   it('does not render the alert when displayDuplicateRecordAlert is false', () => {
     renderWithSettings(false)
-    expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
+    expect(screen.queryByText(t('ohAlert.duplicatedRecord.title'))).toBeFalsy()
   })
 
   it('renders a dismiss button', () => {
     renderWithSettings(true)
-    expect(screen.getByRole('button', { name: 'Dismiss' })).toBeTruthy()
+    expect(screen.findByRole('button', { name: 'Dismiss' })).toBeTruthy()
   })
 
   it('persists dismissal to AsyncStorage when dismiss is pressed', async () => {
     const setItemMock = AsyncStorage.setItem as jest.Mock
     renderWithSettings(true)
-    const dismissButton = screen.getByRole('button', { name: 'Dismiss' })
+    const dismissButton = await screen.findByRole('button', { name: 'Dismiss' })
     fireEvent.press(dismissButton)
     await waitFor(() => {
       expect(setItemMock).toHaveBeenCalledWith(DUPLICATE_RECORD_ALERT_DISMISSED, 'true')
+      expect(screen.queryByText(t('ohAlert.duplicatedRecord.title'))).toBeFalsy()
     })
   })
 
@@ -55,6 +57,7 @@ context('DuplicateRecordAlert', () => {
     renderWithSettings(false)
     await waitFor(() => {
       expect(getItemMock).toHaveBeenCalledWith(DUPLICATE_RECORD_ALERT_DISMISSED)
+      expect(screen.findByText(t('ohAlert.duplicatedRecord.title'))).toBeTruthy()
     })
   })
 
@@ -65,6 +68,6 @@ context('DuplicateRecordAlert', () => {
     await waitFor(() => {
       expect(getItemMock).toHaveBeenCalledWith(DUPLICATE_RECORD_ALERT_DISMISSED)
     })
-    expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
+    expect(screen.queryByText(t('ohAlert.duplicatedRecord.title'))).toBeFalsy()
   })
 })
