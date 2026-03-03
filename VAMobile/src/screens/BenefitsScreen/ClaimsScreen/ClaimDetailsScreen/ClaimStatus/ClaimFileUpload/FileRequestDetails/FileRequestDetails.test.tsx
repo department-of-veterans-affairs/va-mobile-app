@@ -11,6 +11,15 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('FileRequestDetails', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
 
@@ -146,6 +155,11 @@ context('FileRequestDetails', () => {
           expect(screen.getByText(t('fileRequestDetails.nextSteps.toRespond'))).toBeTruthy()
           expect(screen.getByText(t('fileRequestDetails.accessYourClaimLetters'))).toBeTruthy()
           expect(screen.getByText(t('fileRequestDetails.findVAForm'))).toBeTruthy()
+        })
+
+        it('should navigate to ClaimLettersScreen when claim letters link is pressed', () => {
+          fireEvent.press(screen.getByText(t('fileRequestDetails.accessYourClaimLetters')))
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimLettersScreen')
         })
 
         it("should display the 'Need help' accordion with phone number when expanded", () => {
