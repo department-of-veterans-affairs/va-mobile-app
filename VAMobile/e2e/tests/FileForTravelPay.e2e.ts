@@ -337,7 +337,7 @@ describe('File for Travel Pay', () => {
   it('updates the appointments cache when the travel pay claim is submitted', async () => {
     await element(by.text('Back')).tap()
     await openAppointmentInList('Sami Alsahhar - Onsite - Confirmed')
-    await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
+    await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).not.toExist()
     await element(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID)).scrollTo('bottom')
     await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID)))
