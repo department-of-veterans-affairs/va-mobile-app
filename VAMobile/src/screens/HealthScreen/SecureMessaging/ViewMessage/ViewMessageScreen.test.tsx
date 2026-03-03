@@ -936,7 +936,7 @@ context('ViewMessageScreen', () => {
         initializeTestInstance()
         await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
         await waitFor(() => expect(screen.getByTestId('secureMessagingYourMessageHasBeenMigratedAlertID')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
       })
 
       it('should show "you can no longer" alert when not in triage team and no migration blocking', async () => {
