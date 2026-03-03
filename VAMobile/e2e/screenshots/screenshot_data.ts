@@ -11,7 +11,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'HomeScreen',
     imageName: {
-      ios: 'iphone67-screen-1',
+      ios: 'iphone65-screen-1',
       android: '1_en-US',
       ipad: 'ipadPro129-screen-1',
     },
@@ -22,7 +22,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'HealthScreen',
     imageName: {
-      ios: 'iphone67-screen-2',
+      ios: 'iphone65-screen-2',
       android: '2_en-US',
       ipad: 'ipadPro129-screen-2',
     },
@@ -33,7 +33,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'AppointmentDetails',
     imageName: {
-      ios: 'iphone67-screen-3',
+      ios: 'iphone65-screen-3',
       android: '3_en-US',
       ipad: 'ipadPro129-screen-3',
     },
@@ -44,7 +44,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'MessagesInbox',
     imageName: {
-      ios: 'iphone67-screen-4',
+      ios: 'iphone65-screen-4',
       android: '4_en-US',
       ipad: 'ipadPro129-screen-4',
     },
@@ -55,7 +55,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'PaymentsHistory',
     imageName: {
-      ios: 'iphone67-screen-8',
+      ios: 'iphone65-screen-8',
       android: '8_en-US',
       ipad: 'ipadPro129-screen-8',
     },
@@ -66,7 +66,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'ProfileScreen',
     imageName: {
-      ios: 'iphone67-screen-7',
+      ios: 'iphone65-screen-7',
       ipad: 'ipadPro129-screen-7',
     },
     description: 'Manage your VA.gov profile',
@@ -76,7 +76,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'LettersDownload',
     imageName: {
-      ios: 'iphone67-screen-5',
+      ios: 'iphone65-screen-5',
       android: '5_en-US',
       ipad: 'ipadPro129-screen-5',
     },
@@ -88,7 +88,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'Prescriptions',
     imageName: {
-      ios: 'iphone67-screen-9',
+      ios: 'iphone65-screen-9',
       ipad: 'ipadPro129-screen-9',
       android: '7_en-US',
     },
@@ -99,7 +99,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'ClaimDetails',
     imageName: {
-      ios: 'iphone67-screen-6',
+      ios: 'iphone65-screen-6',
       android: '6_en-US',
       ipad: 'ipadPro129-screen-6',
     },
