@@ -1313,7 +1313,17 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": "READ",
-        "isOhMessage": true
+        "triageGroup": {
+          "triageTeamId": 1013155,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "preferredTeam": true,
+          "active": true,
+          "stationNumber": "989",
+          "ohTriageGroup": false
+        },
+        "isMigratedToOh": true,
+        "isOhMessage": false,
+        "ohMigrationPhase": "p5"
       },
       "relationships": {
         "attachments": {

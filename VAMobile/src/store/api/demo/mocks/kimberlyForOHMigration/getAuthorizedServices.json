@@ -37,6 +37,10 @@
             {
               "facilityId": 528,
               "facilityName": "Test VA Medical Center"
+            },
+            {
+              "facilityId": 989,
+              "facilityName": "Test VA Medical Center 2"
             }
           ],
           "phases": {
