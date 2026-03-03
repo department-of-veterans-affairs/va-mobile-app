@@ -38,6 +38,8 @@
     "e2e:ios-build": "yarn run bundle:ios && detox build -c ios",
     "e2e:ios-build-ci": "yarn run bundle:ios-ci && detox build -c ios",
     "e2e:ios-test": "yarn jest:clear && detox test -c ios --cleanup --record-logs all",
+    "e2e:ios-screenshots": "yarn jest:clear && detox test -c ios e2e/screenshots/screenshot.e2e.ts --retries 3",
+    "e2e:ipad-screenshots": "yarn jest:clear && detox test -c ipad e2e/screenshots/screenshot.e2e.ts --retries 3",
     "e2e:android-build": " yarn run bundle:android && detox build -c android",
     "e2e:android-test": "yarn jest:clear && detox test -c android --cleanup",
     "e2e:attached-build": "yarn run bundle:android && detox build -c attached",
