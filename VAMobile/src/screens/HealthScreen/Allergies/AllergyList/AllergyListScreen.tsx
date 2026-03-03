@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, View } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -31,7 +31,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
 import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useError, usePrevious, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type AllergyListScreenProps = StackScreenProps<HealthStackParamList, 'AllergyList'>
@@ -75,6 +75,15 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
   }
+
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  const wasLoading = usePrevious(loading || loadingUserAuthorizedServices)
+
+  useEffect(() => {
+    if (wasLoading && !loading && !loadingUserAuthorizedServices) {
+      setFocus()
+    }
+  }, [wasLoading, loading, loadingUserAuthorizedServices, setFocus])
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_allergy_list())
@@ -174,9 +183,11 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
         <NoAllergyRecords />
       ) : (
         <>
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <DefaultList items={allergyButtons} />
-          </Box>
+          <View ref={focusRef} accessibilityRole="header" accessible={true}>
+            <Box mb={theme.dimensions.contentMarginBottom}>
+              <DefaultList items={allergyButtons} />
+            </Box>
+          </View>
           {renderPagination()}
         </>
       )}
