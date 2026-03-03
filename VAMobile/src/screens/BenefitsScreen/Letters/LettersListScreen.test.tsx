@@ -28,6 +28,10 @@ const lettersData: LettersList = [
     letterType: 'commissary',
   },
   {
+    name: 'Foreign Medical Program Enrollment Letter',
+    letterType: 'foreign_medical_program',
+  },
+  {
     name: 'Proof of Service Letter',
     letterType: 'proof_of_service',
   },

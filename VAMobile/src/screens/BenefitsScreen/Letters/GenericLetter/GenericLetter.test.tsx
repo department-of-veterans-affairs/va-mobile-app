@@ -34,4 +34,11 @@ context('GenericLetter', () => {
       expect(screen.getByText(t('letters.serviceVerificationLetter.informational'))).toBeTruthy()
     })
   })
+
+  describe('when the letter type is foreign medical program', () => {
+    it('should render correctly', () => {
+      initializeTestInstance(LetterTypeConstants.foreignMedicalProgram)
+      expect(screen.getByRole('button', { name: t('letters.benefitService.viewLetter') })).toBeTruthy()
+    })
+  })
 })

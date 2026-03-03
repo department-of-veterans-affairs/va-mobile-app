@@ -22,6 +22,10 @@
             "letterType": "commissary"
           },
           {
+            "name": "Foreign Medical Program Enrollment Letter",
+            "letterType": "foreign_medical_program"
+          },
+          {
             "name": "Proof of Creditable Prescription Drug Coverage Letter",
             "letterType": "medicare_partd"
           },
