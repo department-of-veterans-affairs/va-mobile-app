@@ -41,7 +41,6 @@ export const Appointmentse2eConstants = {
   UPCOMING_APPT_DETAILS_SCROLL_ID: 'UpcomingApptDetailsTestID',
   UPCOMING_CC_APPT_BODY: 'Ask your provider how to attend this appointment.',
   UPCOMING_CC_APPT_TITLE: 'Community care appointment',
-  WEBVIEW_BACK_BUTTON_ID: 'webviewBack',
   WHAT_TO_BRING_ID: 'whatToBringLinkTestID',
 }
 
@@ -104,10 +103,10 @@ describe('Review Upcoming Appointments', () => {
 
     // Get info about what to bring to appointment
     await element(by.id(Appointmentse2eConstants.WHAT_TO_BRING_ID)).tap()
-    await waitFor(element(by.id(Appointmentse2eConstants.WEBVIEW_BACK_BUTTON_ID)))
+    await waitFor(element(by.text('Done')))
       .toBeVisible()
       .withTimeout(1000)
-    await element(by.id(Appointmentse2eConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
+    await element(by.text('Done')).tap()
 
     // Call VA phone numbers
     await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1).tap()
