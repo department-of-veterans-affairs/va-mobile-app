@@ -137,14 +137,14 @@ const defaultUseTravelPayClaimsImplementation = (timeFrame: TimeFrameType) => {
   const currentYear = new Date().getFullYear().toString()
   const pastYear = (new Date().getFullYear() - 1).toString()
 
-  claimsForTimeFrame.map((claim) => {
+  const adjustedClaimsForTimeFrame = claimsForTimeFrame.map((claim) => {
     const attributes = { ...claim.attributes }
-    attributes.appointmentDateTime.replace('2025', currentYear)
-    attributes.appointmentDateTime.replace('2024', pastYear)
-    attributes.createdOn.replace('2025', currentYear)
-    attributes.createdOn.replace('2024', pastYear)
-    attributes.modifiedOn.replace('2025', currentYear)
-    attributes.modifiedOn.replace('2024', pastYear)
+    attributes.appointmentDateTime = attributes.appointmentDateTime.replace('2025', currentYear)
+    attributes.appointmentDateTime = attributes.appointmentDateTime.replace('2024', pastYear)
+    attributes.createdOn = attributes.createdOn.replace('2025', currentYear)
+    attributes.createdOn = attributes.createdOn.replace('2024', pastYear)
+    attributes.modifiedOn = attributes.modifiedOn.replace('2025', currentYear)
+    attributes.modifiedOn = attributes.modifiedOn.replace('2024', pastYear)
 
     return {
       ...claim,
@@ -153,7 +153,7 @@ const defaultUseTravelPayClaimsImplementation = (timeFrame: TimeFrameType) => {
   })
   const adjustedResponse = {
     ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE,
-    data: claimsForTimeFrame,
+    data: adjustedClaimsForTimeFrame,
   }
   return {
     data: {
@@ -377,7 +377,7 @@ context('TravelPayClaims', () => {
   })
 
   describe('displaying the downtime error message', () => {
-    it('should show downtime error when travel pay is in downtime', async () => {
+    it('should show downtime message when travel pay is in downtime', async () => {
       mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
       mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
 
@@ -386,8 +386,7 @@ context('TravelPayClaims', () => {
       expect(screen.getByText(/We're working on this part of the mobile app right now\./i)).toBeTruthy()
     })
 
-    it('should show downtime error even when there is an API error if travel pay is in downtime', async () => {
-      mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
+    it('should show downtime message even when there is an API error if travel pay is in downtime', async () => {
       mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
       mockUseTravelPayClaims.mockReturnValue({
         data: undefined,
@@ -401,11 +400,7 @@ context('TravelPayClaims', () => {
       expect(screen.getByText(/We're working on this part of the mobile app right now\./i)).toBeTruthy()
     })
 
-    it('should show the API error when downtime is off', async () => {
-      mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
-
-      mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload([]))
-
+    it('should show the API error when no travel pay downtime', async () => {
       mockUseTravelPayClaims.mockReturnValue({
         data: undefined,
         error: new Error('API Error'),
