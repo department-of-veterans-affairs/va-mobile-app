@@ -8,6 +8,7 @@ import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-comp
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   secureMessagingKeys,
   useAllMessageRecipients,
@@ -134,15 +135,19 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const scrollViewRef = useRef<ScrollView>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
+  const selectedRecipient = recipients?.find((recipient) => recipient.id === to?.value)
   const messageData = {
     recipient_id: parseInt(to?.value || '', 10),
     category: category as CategoryTypes,
     body: message,
     subject,
+    station_number: selectedRecipient?.attributes.stationNumber,
   } as SecureMessagingFormData
   // Ref for use in snackbar callbacks to ensure we have the latest messageData
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)
   messageDataRef.current = messageData
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -468,6 +473,20 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             </TextView>
           </AlertWithHaptics>
         </Box>
+        {cernerFacilities.length > 0 && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertWithHaptics
+              variant="warning"
+              expandable={true}
+              initializeExpanded={true}
+              focusOnError={false}
+              header={t('secureMessaging.startNewMessage.nameChangeAlert.title')}>
+              <TextView accessible variant="MobileBody">
+                {t('secureMessaging.startNewMessage.nameChangeAlert.body')}
+              </TextView>
+            </AlertWithHaptics>
+          </Box>
+        )}
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}

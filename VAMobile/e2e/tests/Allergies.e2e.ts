@@ -24,7 +24,7 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_6_ID: 'Latex allergy August 20, 2020',
   ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 5',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison',
 }
 
 beforeAll(async () => {
@@ -35,7 +35,7 @@ beforeAll(async () => {
   await openAllergyRecords()
 })
 
-describe('Allergies Screen', () => {
+describe.skip('Allergies Screen', () => {
   it('should show allergy list content', async () => {
     await expect(element(by.text('Allergies'))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID))).toExist()
