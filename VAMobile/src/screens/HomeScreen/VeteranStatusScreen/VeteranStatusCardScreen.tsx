@@ -21,7 +21,7 @@ import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isValidDisabilityRating } from 'utils/claims'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useBeforeNavBackListener, useOrientation } from 'utils/hooks'
+import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -40,6 +40,7 @@ function VeteranStatusCardScreen({ navigation }: VeteranStatusCardScreenProps) {
   const isCardAllowedByWaygate = screenContentAllowed('WG_VeteranStatusCard')
 
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
   const isPortrait = useOrientation()
   const horizontalPadding = isPortrait ? PORTRAIT_PADDING : LANDSCAPE_PADDING
   const containerStyle = !isPortrait ? { alignSelf: 'center' as const, maxWidth: MAX_WIDTH } : {}
@@ -97,25 +98,35 @@ function VeteranStatusCardScreen({ navigation }: VeteranStatusCardScreenProps) {
 
     const { header, body, alertType } = vscAlert.attributes
 
+    const lastTextIndex =
+      body?.reduce((lastIndex, row, idx) => {
+        return row.type === 'text' ? idx : lastIndex
+      }, -1) ?? -1
+
     return (
       <AlertWithHaptics variant={alertType} header={header} headerA11yLabel={a11yLabelVA(header)}>
         {body?.map((row: VSCAlertBodyRow, idx: number) => {
+          const isLastTextItem = idx === lastTextIndex
+          const valueWithBreak = row.type === 'text' && !isLastTextItem ? `${row.value}\n` : row.value
+
           if (row.type === 'text') {
             return (
               <TextView key={idx} variant="MobileBody">
-                {row.value}
+                {valueWithBreak}
               </TextView>
             )
           }
 
           if (row.type === 'phone') {
             return (
-              <ClickToCallPhoneNumber
-                key={idx}
-                a11yLabel={a11yLabelID(row.value)}
-                displayedText={displayedTextPhoneNumber(row.value)}
-                phone={row.value}
-              />
+              <Box mt={theme.dimensions.standardMarginBetween}>
+                <ClickToCallPhoneNumber
+                  key={idx}
+                  a11yLabel={a11yLabelID(row.value)}
+                  displayedText={displayedTextPhoneNumber(row.value)}
+                  phone={row.value}
+                />
+              </Box>
             )
           }
 
