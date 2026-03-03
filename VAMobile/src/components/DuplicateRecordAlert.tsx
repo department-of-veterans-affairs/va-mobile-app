@@ -11,7 +11,7 @@ import { RootState } from 'store'
 import { SettingsState, updateDisplayDuplicateRecordAlert } from 'store/slices'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
-export const DUPLICATE_RECORD_ALERT_DISMISSED = '@duplicate_record_alert_dismissed'
+export const DUPLICATE_RECORD_ALERT_DISMISSED = '@store_duplicate_record_alert_dismissed'
 
 const DuplicateRecordAlert = () => {
   const theme = useTheme()
