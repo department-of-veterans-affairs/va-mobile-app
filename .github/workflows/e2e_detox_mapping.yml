@@ -203,7 +203,7 @@ jobs:
           if [[ "$firstInstanceFile" == "true" ]]; then
             test_matrix="[]"
           fi
-          test_matrix=$(echo $test_matrix | jq -c 'unique')
+          test_matrix=$(echo $test_matrix | jq -c 'unique | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
         env:
