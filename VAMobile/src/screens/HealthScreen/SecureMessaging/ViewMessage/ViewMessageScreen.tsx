@@ -191,8 +191,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 
   // Derive OH migration phase from the first thread message or the current message
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
-  const migratedToOracleHealth = message?.migratedToOracleHealth || thread?.[0]?.attributes?.migratedToOracleHealth
-  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase) || migratedToOracleHealth
+  const migratedToOracleHealth = message?.migratedToOracleHealth ?? thread?.[0]?.attributes?.migratedToOracleHealth
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
   const stationNumber = message?.triageGroup?.stationNumber || messageData?.meta?.stationNumber || undefined
 
   useEffect(() => {

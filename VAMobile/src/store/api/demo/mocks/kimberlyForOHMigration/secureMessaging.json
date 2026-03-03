@@ -1321,7 +1321,7 @@
           "stationNumber": "989",
           "ohTriageGroup": false
         },
-        "isMigratedToOh": true,
+        "migratedToOracleHealth": true,
         "isOhMessage": false,
         "ohMigrationPhase": "p5"
       },
