@@ -115,9 +115,7 @@ const TableOfContents: React.FC<{ groupedData: Record<string, WorkflowData[]> }>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
         {sortedPrefixes.map((prefix) => (
           <div key={prefix}>
-            <h4 className="margin-bottom--sm" style={{ textTransform: 'capitalize' }}>
-              {prefix}
-            </h4>
+            <h4 className="margin-bottom--sm">{prefix}</h4>
             {groupDescriptions[prefix] && (
               <p className="margin-bottom--sm" style={{ fontSize: '0.8rem', color: 'var(--ifm-color-emphasis-700)' }}>
                 {groupDescriptions[prefix]}
