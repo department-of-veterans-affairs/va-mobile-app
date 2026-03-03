@@ -193,7 +193,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migratedToOracleHealth = message?.migratedToOracleHealth || thread?.[0]?.attributes?.migratedToOracleHealth
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase) || migratedToOracleHealth
-  const stationNumber = messageData?.meta?.stationNumber || message?.triageGroup?.stationNumber || undefined
+  const stationNumber = message?.triageGroup?.stationNumber || messageData?.meta?.stationNumber || undefined
 
   useEffect(() => {
     if (threadFetched) {
