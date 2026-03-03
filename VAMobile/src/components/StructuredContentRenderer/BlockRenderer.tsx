@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { InlineContent, StructuredContentBlock } from 'api/types'
 import { Box, TextView } from 'components'
-import { InlineRenderer, getPlainText } from 'components/StructuredContentRenderer/InlineRenderer'
+import { InlineRenderer, getAccessibilityLabel } from 'components/StructuredContentRenderer/InlineRenderer'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -24,9 +24,9 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
   switch (block.type) {
     case 'paragraph':
       return (
-        <TextView variant="MobileBody" mb={marginBetween}>
+        <Box flexDirection="row" flexWrap="wrap" alignItems="center" mb={marginBetween}>
           <InlineRenderer content={block.content} />
-        </TextView>
+        </Box>
       )
     case 'list': {
       const items = block.items || []
@@ -36,7 +36,7 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
         if (typeof item === 'string') return item.trim().length > 0
         if (Array.isArray(item)) {
           // Require at least one non-empty element so we don't show empty bullet/numbers (e.g. [""] or [" "])
-          const plain = getPlainText(item).trim()
+          const plain = getAccessibilityLabel(item).trim()
           return plain.length > 0
         }
         return true
@@ -49,7 +49,7 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
       return (
         <Box mb={marginBetween} accessibilityRole="list">
           {validItems.map((item, idx) => {
-            const a11yLabel = getPlainText(item)
+            const a11yLabel = getAccessibilityLabel(item)
             return (
               // eslint-disable-next-line react-native-a11y/has-accessibility-hint
               <Box
@@ -69,9 +69,9 @@ export const BlockRenderer = ({ block }: BlockRendererProps): React.ReactElement
                     <Box backgroundColor="bullet" height={6} width={6} />
                   </Box>
                 )}
-                <TextView variant="MobileBody" flex={1}>
+                <Box flexDirection="row" flexWrap="wrap" alignItems="center" flex={1}>
                   <InlineRenderer content={item} />
-                </TextView>
+                </Box>
               </Box>
             )
           })}

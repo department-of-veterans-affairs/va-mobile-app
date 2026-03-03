@@ -2,8 +2,10 @@ import React from 'react'
 import { TextStyle } from 'react-native'
 
 import { InlineContent } from 'api/types'
-import { LinkWithAnalytics, TextView } from 'components'
+import { Box, LinkWithAnalytics, TextView } from 'components'
 import type { FontVariant } from 'components/TextView'
+import { EnvironmentTypesConstants } from 'constants/common'
+import getEnv from 'utils/env'
 import {
   displayedTextPhoneNumber,
   getNumberAccessibilityLabelFromString,
@@ -12,21 +14,33 @@ import {
 
 const italicTextStyle: TextStyle = { fontStyle: 'italic' }
 
+const { ENVIRONMENT, IS_TEST } = getEnv()
+const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
+
+/** Resolves relative paths to full VA.gov URLs by environment; leaves absolute URLs unchanged. */
+const getLinkUrl = (href: string) => {
+  if (href.startsWith('https://')) return href
+
+  const path = href.startsWith('/') ? href.slice(1) : href
+  if (IS_TEST) return `https://test.va.gov/${path}`
+  if (isProduction) return `https://www.va.gov/${path}`
+  return `https://staging.va.gov/${path}`
+}
 /** Extracts plain text from InlineContent for use in accessibility labels. */
-export const getPlainText = (content: InlineContent): string => {
+export const getAccessibilityLabel = (content: InlineContent): string => {
   if (content == null) return ''
   if (typeof content === 'string') return content
-  if (Array.isArray(content)) return content.map(getPlainText).join('')
+  if (Array.isArray(content)) return content.map(getAccessibilityLabel).join('')
   switch (content.type) {
     case 'bold':
     case 'italic':
-      return getPlainText(content.content)
+      return getAccessibilityLabel(content.content)
     case 'link':
       return content.text
     case 'telephone':
       return content.tty
-        ? `TTY: ${displayedTextPhoneNumber(content.contact)}`
-        : displayedTextPhoneNumber(content.contact)
+        ? `TTY: ${getNumberAccessibilityLabelFromString(content.contact)}`
+        : getNumberAccessibilityLabelFromString(content.contact)
     case 'lineBreak':
       return ' '
     default:
@@ -51,11 +65,18 @@ export const InlineRenderer = ({
   if (content == null) return null
 
   if (typeof content === 'string') {
-    return content ? (
-      <TextView variant={variant} style={styleOverride}>
-        {content}
-      </TextView>
-    ) : null
+    if (!content) return null
+    const words = content.split(' ')
+    return (
+      <>
+        {words.map((word, i) => (
+          <TextView key={i} variant={variant} style={styleOverride}>
+            {word}
+            {i < words.length - 1 ? ' ' : ''}
+          </TextView>
+        ))}
+      </>
+    ) as React.ReactElement
   }
 
   if (Array.isArray(content)) {
@@ -83,7 +104,7 @@ export const InlineRenderer = ({
       return (
         <LinkWithAnalytics
           type="url"
-          url={content.href}
+          url={getLinkUrl(content.href)}
           text={content.text}
           a11yLabel={content.text}
           testID={content.testId}
@@ -95,18 +116,15 @@ export const InlineRenderer = ({
       const displayText = content.tty
         ? `TTY: ${displayedTextPhoneNumber(content.contact)}`
         : displayedTextPhoneNumber(content.contact)
-      return (
-        <LinkWithAnalytics
-          type="url"
-          url={`tel:${digits}`}
-          text={displayText}
-          a11yLabel={getNumberAccessibilityLabelFromString(content.contact)}
-          inline
-        />
+      const a11yLabel = getNumberAccessibilityLabelFromString(content.contact)
+      return content.tty ? (
+        <LinkWithAnalytics type="call TTY" TTYnumber={digits} text={displayText} a11yLabel={a11yLabel} inline />
+      ) : (
+        <LinkWithAnalytics type="call" phoneNumber={digits} text={displayText} a11yLabel={a11yLabel} inline />
       )
     }
     case 'lineBreak':
-      return <TextView variant="MobileBody">{'\n'}</TextView>
+      return <Box width="100%" height={0} accessible={false} />
     default:
       return null
   }

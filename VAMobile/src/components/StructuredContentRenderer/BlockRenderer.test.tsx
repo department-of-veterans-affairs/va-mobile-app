@@ -10,7 +10,9 @@ import { context, render } from 'testUtils'
 context('BlockRenderer', () => {
   it('should render paragraph with text content', () => {
     render(<BlockRenderer block={{ type: 'paragraph', content: 'Simple paragraph text' }} />)
-    expect(screen.getByText('Simple paragraph text')).toBeTruthy()
+    expect(screen.getByText('Simple')).toBeTruthy()
+    expect(screen.getByText('paragraph')).toBeTruthy()
+    expect(screen.getByText('text')).toBeTruthy()
   })
 
   it('should render paragraph with inline elements', () => {
@@ -22,7 +24,7 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('Visit ')).toBeTruthy()
+    expect(screen.getByText('Visit')).toBeTruthy()
     expect(screen.getByRole('link', { name: 'VA.gov' })).toBeTruthy()
   })
 
@@ -36,9 +38,10 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('Item 1')).toBeTruthy()
-    expect(screen.getByText('Item 2')).toBeTruthy()
-    expect(screen.getByText('Item 3')).toBeTruthy()
+    expect(screen.getAllByText('Item')).toHaveLength(3)
+    expect(screen.getByText('1')).toBeTruthy()
+    expect(screen.getByText('2')).toBeTruthy()
+    expect(screen.getByText('3')).toBeTruthy()
   })
 
   it('should render numbered list', () => {
@@ -70,8 +73,10 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('Simple item')).toBeTruthy()
-    expect(screen.getByText('bold text')).toBeTruthy()
+    expect(screen.getByText('Simple')).toBeTruthy()
+    expect(screen.getAllByText('item').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByText('bold')).toBeTruthy()
+    expect(screen.getByText('text')).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Link item' })).toBeTruthy()
   })
 
@@ -123,8 +128,10 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('Valid item 1')).toBeTruthy()
-    expect(screen.getByText('Valid item 2')).toBeTruthy()
+    expect(screen.getAllByText('Valid').length).toBeGreaterThanOrEqual(2)
+    expect(screen.getAllByText('item').length).toBeGreaterThanOrEqual(2)
+    expect(screen.getByText('1')).toBeTruthy()
+    expect(screen.getByText('2')).toBeTruthy()
     expect(screen.queryByText('  ')).toBeNull()
   })
 
@@ -144,10 +151,11 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('String item')).toBeTruthy()
-    expect(screen.getByText('Bold object')).toBeTruthy()
-    expect(screen.getByText('Array ')).toBeTruthy()
-    expect(screen.getByText('item')).toBeTruthy()
+    expect(screen.getByText('String')).toBeTruthy()
+    expect(screen.getAllByText('item').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByText('Bold')).toBeTruthy()
+    expect(screen.getByText('object')).toBeTruthy()
+    expect(screen.getByText('Array')).toBeTruthy()
   })
 
   it('should filter out empty arrays', () => {
@@ -165,9 +173,9 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('Valid string')).toBeTruthy()
-    expect(screen.getByText('Valid object')).toBeTruthy()
-    expect(screen.getByText('Valid')).toBeTruthy()
+    expect(screen.getByText('string')).toBeTruthy()
+    expect(screen.getByText('object')).toBeTruthy()
+    expect(screen.getAllByText('Valid').length).toBeGreaterThanOrEqual(3)
     expect(screen.getByText(' array')).toBeTruthy()
   })
 })

@@ -10,20 +10,22 @@ import { context, render } from 'testUtils'
 context('InlineRenderer', () => {
   it('should render string content', () => {
     render(<InlineRenderer content="Plain text" />)
-    expect(screen.getByText('Plain text')).toBeTruthy()
+    expect(screen.getByText('Plain')).toBeTruthy()
+    expect(screen.getByText('text')).toBeTruthy()
   })
 
   it('should render array of strings', () => {
     render(<InlineRenderer content={['Hello', ' ', 'World']} />)
     expect(screen.getByText('Hello')).toBeTruthy()
-    expect(screen.getByText(' ')).toBeTruthy()
     expect(screen.getByText('World')).toBeTruthy()
   })
 
   it('should render mixed array with links', () => {
     render(<InlineRenderer content={['Visit ', { type: 'link', text: 'VA.gov', href: '/test' }, ' for more info']} />)
-    expect(screen.getByText('Visit ')).toBeTruthy()
-    expect(screen.getByText(' for more info')).toBeTruthy()
+    expect(screen.getByText('Visit')).toBeTruthy()
+    expect(screen.getByText('for')).toBeTruthy()
+    expect(screen.getByText('more')).toBeTruthy()
+    expect(screen.getByText('info')).toBeTruthy()
     const link = screen.getByRole('link', { name: 'VA.gov' })
     expect(link).toBeTruthy()
     expect(link.props.accessibilityLabel).toBe('VA.gov')
@@ -31,12 +33,14 @@ context('InlineRenderer', () => {
 
   it('should render bold text', () => {
     render(<InlineRenderer content={{ type: 'bold', content: 'Bold text' }} />)
-    expect(screen.getByText('Bold text')).toBeTruthy()
+    expect(screen.getByText('Bold')).toBeTruthy()
+    expect(screen.getByText('text')).toBeTruthy()
   })
 
   it('should render italic text', () => {
     render(<InlineRenderer content={{ type: 'italic', content: 'Italic text' }} />)
-    expect(screen.getByText('Italic text')).toBeTruthy()
+    expect(screen.getByText('Italic')).toBeTruthy()
+    expect(screen.getByText('text')).toBeTruthy()
   })
 
   it('should render link', () => {
@@ -59,20 +63,23 @@ context('InlineRenderer', () => {
     const link = screen.getByRole('link', { name: '7 1 1' })
     expect(link).toBeTruthy()
     expect(link.props.accessibilityLabel).toBe('7 1 1')
-    expect(screen.getByText('TTY: 711')).toBeTruthy()
+    expect(screen.getByText('TTY:')).toBeTruthy()
+    expect(screen.getByText('711')).toBeTruthy()
   })
 
   it('should render line break', () => {
     render(<InlineRenderer content={{ type: 'lineBreak' }} />)
-    expect(screen.getByText('\n')).toBeTruthy()
+    expect(screen.queryByText('\n')).toBeNull()
   })
 
   it('should handle nested content', () => {
     render(
       <InlineRenderer content={{ type: 'bold', content: ['This is ', { type: 'italic', content: 'bold italic' }] }} />,
     )
-    expect(screen.getByText('This is ')).toBeTruthy()
-    expect(screen.getByText('bold italic')).toBeTruthy()
+    expect(screen.getByText('This')).toBeTruthy()
+    expect(screen.getByText('is')).toBeTruthy()
+    expect(screen.getByText('bold')).toBeTruthy()
+    expect(screen.getByText('italic')).toBeTruthy()
   })
 
   it('should return null for invalid content', () => {
