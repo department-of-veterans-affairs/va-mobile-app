@@ -48,7 +48,7 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
-import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
+import { MigrationErrorMessage } from 'components/MigrationErrorMessage'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -70,6 +70,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useAttachments, useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -138,6 +139,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   } = useThread(messageID, false, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
+  const {
+    data: userAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    isFetched: hasLoadedUserAuthorizedServices,
+    refetch: refetchAuthServices,
+    isFetching: refetchingAuthServices,
+  } = useAuthorizedServices()
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageDraftData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
@@ -156,7 +164,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const replyIsStale = isReplyDraft && !hasRecentMessages
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
-  const { data: authorizedServicesData } = useAuthorizedServices()
   const replyDisabled = isReplyDraft && (!hasRecentMessages || !providerAllowsReply || migrationBlocksReply)
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
@@ -779,7 +786,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     )
   }
 
-  const hasError = recipientsError || threadError || messageError || folderMessagesError
+  const hasError =
+    recipientsError || threadError || messageError || folderMessagesError || getUserAuthorizedServicesError
   const isLoading =
     (!isReplyDraft && !hasLoadedRecipients) ||
     loadingMessage ||
@@ -790,7 +798,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     refetchingRecipients ||
     refetchingThread ||
     !hasLoadedFolderMessages ||
-    refetchingFolderMessages
+    refetchingFolderMessages ||
+    !hasLoadedUserAuthorizedServices ||
+    refetchingAuthServices
 
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -802,6 +812,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           ? t('secureMessaging.deletingChanges.loading')
           : t('secureMessaging.draft.loading')
   const leftButtonAction = noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel
+  const allMigrationsInErrorState = getMigrationsInErrorState(
+    userAuthorizedServices?.migratingFacilitiesList || [],
+    OHParentScreens.SecureMessaging,
+  )
 
   return (
     <FullScreenSubtask
@@ -820,7 +834,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
-          error={recipientsError || threadError || messageError}
+          error={
+            recipientsError || threadError || messageError || folderMessagesError || getUserAuthorizedServicesError
+          }
           onTryAgain={
             recipientsError
               ? refetchRecipients
@@ -830,21 +846,25 @@ function EditDraft({ navigation, route }: EditDraftProps) {
                   ? refetchMessage
                   : folderMessagesError
                     ? refetchFolderMessages
-                    : undefined
+                    : getUserAuthorizedServicesError
+                      ? refetchAuthServices
+                      : undefined
           }
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           {replyIsStale && !migrationBlocksReply && providerAllowsReply && renderStaleReplyAlert()}
           {!providerAllowsReply && !migrationBlocksReply && renderCannotReplyAlert()}
-          {migrationBlocksReply && authorizedServicesData && (
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <OHAlertManager
+          {migrationBlocksReply &&
+            userAuthorizedServices &&
+            allMigrationsInErrorState.length > 0 &&
+            allMigrationsInErrorState.map((migration) => (
+              <MigrationErrorMessage
+                key={migration.migrationDate}
+                migration={migration}
                 parentScreen={OHParentScreens.SecureMessaging}
-                authorizedServices={authorizedServicesData}
               />
-            </Box>
-          )}
+            ))}
           <Box>{renderForm()}</Box>
           <Box>{isReplyDraft && renderMessageThread()}</Box>
         </Box>

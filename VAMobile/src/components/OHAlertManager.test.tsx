@@ -3,8 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
-import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
+import OHAlertManager from 'components/OHAlertManager'
 import { context, render } from 'testUtils'
+import { OHParentScreens } from 'utils/ohMigration'
 
 context('OHAlertManager', () => {
   const mockFacilities = [
