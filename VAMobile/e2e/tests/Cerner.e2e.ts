@@ -29,7 +29,7 @@ export const CernerIdConstants = {
     "Some care teams use My VA Health. Information from that health portal isn't included here.",
   CERNER_HEALTH_HELP_LINK_TEXT: 'Check if your care team uses My VA Health',
   MESSAGES_ID: 'messagesTestID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 5',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison',
 }
 
 beforeAll(async () => {
@@ -45,11 +45,7 @@ beforeAll(async () => {
       .scroll(200, 'down')
     await element(by.text('Remote Config')).tap()
     await scrollToIDThenTap('cernerTrueForDemo', CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-    await waitFor(element(by.text('Apply Overrides')))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-      .scroll(200, 'down')
-    await element(by.text('Apply Overrides')).tap()
+    await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
 
     //navigates to correct screen with cerner on
     await loginToDemoMode()

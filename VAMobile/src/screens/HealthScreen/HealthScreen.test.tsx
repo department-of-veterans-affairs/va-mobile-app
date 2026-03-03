@@ -11,7 +11,6 @@ import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/a
 import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
 import { DowntimeFeatureType, get } from 'store/api'
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
 
@@ -120,29 +119,13 @@ context('HealthScreen', () => {
   })
 
   describe('Travel Claims button', () => {
-    it('is not displayed if feature toggle is disabled', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(false)
-
-      initializeTestInstance()
-      expect(screen.queryByTestId('toTravelPayClaimsLinkIDHealthScreen')).toBeFalsy()
-    })
-
     it('is displayed if feature toggle is enabled', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
-
       initializeTestInstance()
 
       expect(screen.getByTestId('toTravelPayClaimsLinkIDHealthScreen')).toBeTruthy()
     })
 
     it('navigates to Travel Claims screen when pressed', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
       initializeTestInstance()
 
       fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkIDHealthScreen'))

@@ -208,7 +208,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     {
       text: 'Demo Mode Users',
       decorator: ButtonDecoratorType.Navigation,
-      onPress: () => navigateTo('DemoModeUsers'),
+      onPress: () => navigateTo('DemoModeUsers', { fromLogin: false }),
       testId: 'DemoModeUsers',
     },
   ]

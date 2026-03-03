@@ -18,10 +18,8 @@ import {
   AppointmentReasonAndComment,
   AppointmentTravelClaimDetails,
   AppointmentTypeOfCare,
-  DEPRECATED_AppointmentCalendarButton,
 } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
 import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
-import { featureEnabled } from 'utils/remoteConfig'
 
 type VideoHomeAppointmentProps = {
   appointmentID: string
@@ -45,21 +43,12 @@ function VideoHomeAppointment({
         <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
         <AppointmentJoinSessionPrepareForVideo attributes={attributes} subType={subType} type={type} />
         <AppointmentDateAndTime attributes={attributes} subType={subType} />
-        {featureEnabled('useOldLinkComponent') ? (
-          <DEPRECATED_AppointmentCalendarButton
-            appointmentID={appointmentID}
-            attributes={attributes}
-            subType={subType}
-            type={type}
-          />
-        ) : (
-          <AppointmentCalendarButton
-            appointmentID={appointmentID}
-            attributes={attributes}
-            subType={subType}
-            type={type}
-          />
-        )}
+        <AppointmentCalendarButton
+          appointmentID={appointmentID}
+          attributes={attributes}
+          subType={subType}
+          type={type}
+        />
         <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
         <AppointmentPreferredModality subType={subType} type={type} />
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />

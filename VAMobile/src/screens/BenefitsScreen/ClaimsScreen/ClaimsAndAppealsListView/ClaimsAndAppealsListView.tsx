@@ -23,7 +23,6 @@ import { getTestIDFromTextLines } from 'utils/accessibility'
 import { getUserPhase, isDisabilityCompensationClaim } from 'utils/claims'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType
@@ -76,7 +75,6 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
       const textLines: Array<TextLine> = [{ text: capitalizeWord(attributes.displayTitle), variant: 'MobileBodyBold' }]
 
       if (
-        featureEnabled('decisionLettersWaygate') &&
         userAuthorizedServices?.decisionLetters &&
         attributes.decisionLetterSent &&
         (decisionLetterData?.data.length || 0) > 0

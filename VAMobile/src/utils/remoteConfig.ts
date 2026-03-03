@@ -15,32 +15,20 @@ export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
-  | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'COEAvailable'
   | 'copayments'
   | 'appointmentsTestTime'
-  | 'datePickerUpdate'
-  | 'decisionLettersWaygate'
-  | 'haptics'
   | 'hsScrollAnalytics'
-  | 'inAppRecruitment'
-  | 'inAppFeedback'
   | 'inAppReview'
   | 'labsAndTests'
   | 'loadLabsAndTestsOnHomeScreen'
+  | 'mhvMedicationsOracleHealthCutover'
   | 'mrHide36HrHoldTimes'
-  | 'nonVAMedsLink'
-  | 'rescheduleLink'
-  | 'shareMyHealthDataLink'
-  | 'submitEvidenceExpansion'
-  | 'sso'
+  | 'noErrorPhasesKimOH'
+  | 'noRecipientsKimOH'
   | 'startScheduling'
   | 'testFeature'
-  | 'travelPaySMOC'
-  | 'travelPayClaimDetails'
-  | 'travelPayStatusList'
-  | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'show5103Flow'
   | 'showCernerWarningAlert'
@@ -50,34 +38,23 @@ export type FeatureToggleType =
   | 'overpayments'
   | 'offlineMode'
   | 'remoteConfigRefreshTest'
+  | 'veteranStatusCardUpdate'
 
 type FeatureToggleValues = {
-  appointmentRequests: boolean
   appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
-  datePickerUpdate: boolean
   COEAvailable: boolean
   copayments: boolean
-  decisionLettersWaygate: boolean
-  haptics: boolean
   hsScrollAnalytics: boolean
-  inAppRecruitment: boolean
-  inAppFeedback: boolean
   inAppReview: boolean
   labsAndTests: boolean
   loadLabsAndTestsOnHomeScreen: boolean
+  mhvMedicationsOracleHealthCutover: boolean
   mrHide36HrHoldTimes: boolean
-  nonVAMedsLink: boolean
-  rescheduleLink: boolean
-  shareMyHealthDataLink: boolean
-  submitEvidenceExpansion: boolean
-  sso: boolean
+  noErrorPhasesKimOH: boolean
+  noRecipientsKimOH: boolean
   startScheduling: boolean
   testFeature: boolean
-  travelPaySMOC: boolean
-  travelPayClaimDetails: boolean
-  travelPayStatusList: boolean
-  useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   show5103Flow: boolean
   showCernerWarningAlert: boolean
@@ -87,44 +64,34 @@ type FeatureToggleValues = {
   overpayments: boolean
   offlineMode: boolean
   remoteConfigRefreshTest: boolean
+  veteranStatusCardUpdate: boolean
 }
 
 export const defaults: FeatureToggleValues = {
-  appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,
-  datePickerUpdate: true,
   COEAvailable: false,
   copayments: false,
-  decisionLettersWaygate: true,
-  haptics: true,
   hsScrollAnalytics: false,
-  inAppRecruitment: false,
-  inAppFeedback: true,
   inAppReview: true,
   labsAndTests: true,
   loadLabsAndTestsOnHomeScreen: false,
+  mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
-  nonVAMedsLink: true,
-  rescheduleLink: true,
-  submitEvidenceExpansion: true,
-  shareMyHealthDataLink: true,
-  sso: true,
+  noErrorPhasesKimOH: false,
+  noRecipientsKimOH: false,
   startScheduling: false,
   testFeature: false,
-  travelPaySMOC: true,
-  travelPayClaimDetails: true,
-  travelPayStatusList: true,
-  useOldLinkComponent: true,
   internationalPhoneNumber: false,
   show5103Flow: true,
-  showCernerWarningAlert: true,
-  showCernerWhatsNew: false,
+  showCernerWarningAlert: false,
+  showCernerWhatsNew: true,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayments: false,
   remoteConfigRefreshTest: false,
   offlineMode: false,
+  veteranStatusCardUpdate: false,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {
   offlineMode: '(Restart required)',

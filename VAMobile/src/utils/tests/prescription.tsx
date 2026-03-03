@@ -4,6 +4,7 @@ export const defaultPrescriptionsList: PrescriptionsList = [
   {
     attributes: {
       dispensedDate: '2021-09-06T04:00:00.000Z',
+      sortedDispensedDate: '2021-09-21T04:00:00.000Z',
       expirationDate: '2022-05-04T04:00:00.000Z',
       facilityName: 'SLC10 TEST LAB',
       facilityPhoneNumber: '(217) 636-6712',
@@ -26,6 +27,7 @@ export const defaultPrescriptionsList: PrescriptionsList = [
   {
     attributes: {
       dispensedDate: null,
+      sortedDispensedDate: '2022-05-15T04:00:00.000Z',
       expirationDate: '2022-10-28T04:00:00.000Z',
       facilityName: 'SLC10 TEST LAB',
       facilityPhoneNumber: '(217) 636-6712',
@@ -51,6 +53,7 @@ export const emptyStatePrescriptionList = [
   {
     attributes: {
       dispensedDate: '2022-08-02T04:00:00.000Z',
+      sortedDispensedDate: null,
       expirationDate: '2023-04-27T04:00:00.000Z',
       facilityName: '',
       instructions: '',
@@ -142,6 +145,7 @@ export const defaultLoadAllPrescriptionsList: PrescriptionsList = [
     // isRefillable - true
     attributes: {
       dispensedDate: '2021-09-06T04:00:00.000Z',
+      sortedDispensedDate: '2021-09-21T04:00:00.000Z',
       expirationDate: '2022-05-04T04:00:00.000Z',
       facilityName: 'SLC10 TEST LAB',
       facilityPhoneNumber: '(217) 636-6712',
@@ -165,6 +169,7 @@ export const defaultLoadAllPrescriptionsList: PrescriptionsList = [
     // isTrackable - true
     attributes: {
       dispensedDate: null,
+      sortedDispensedDate: '2022-05-15T04:00:00.000Z',
       expirationDate: '2022-10-28T04:00:00.000Z',
       facilityName: 'SLC10 TEST LAB',
       facilityPhoneNumber: '(217) 636-6712',
@@ -188,6 +193,7 @@ export const defaultLoadAllPrescriptionsList: PrescriptionsList = [
     // transferred
     attributes: {
       dispensedDate: null,
+      sortedDispensedDate: '2022-05-15T04:00:00.000Z',
       expirationDate: '2022-10-28T04:00:00.000Z',
       facilityName: 'SLC10 TEST LAB03',
       facilityPhoneNumber: '(217) 636-6712',
@@ -211,6 +217,7 @@ export const defaultLoadAllPrescriptionsList: PrescriptionsList = [
     // refillStatus - RefillStatusConstants.REFILL_IN_PROCESS
     attributes: {
       dispensedDate: null,
+      sortedDispensedDate: '2022-05-15T04:00:00.000Z',
       expirationDate: '2022-10-28T04:00:00.000Z',
       facilityName: 'SLC10 TEST LAB4',
       facilityPhoneNumber: '(217) 636-6712',
@@ -234,6 +241,7 @@ export const defaultLoadAllPrescriptionsList: PrescriptionsList = [
     // refillStatus - RefillStatusConstants.SUBMITTED
     attributes: {
       dispensedDate: null,
+      sortedDispensedDate: '2022-05-15T04:00:00.000Z',
       expirationDate: '2022-10-28T04:00:00.000Z',
       facilityName: 'SLC10 TEST LAB04',
       facilityPhoneNumber: '(217) 636-6712',

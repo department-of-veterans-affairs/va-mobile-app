@@ -126,7 +126,7 @@ const message: SecureMessagingMessageGetData = {
 context('ReplyMessage', () => {
   const isIOSMock = isIOS as jest.Mock
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (stationNumber?: string) => {
     isIOSMock.mockReturnValue(false)
 
     const props = mockNavProps(
@@ -137,7 +137,7 @@ context('ReplyMessage', () => {
         navigate: jest.fn(),
         setOptions: () => {},
       },
-      { params: { messageID: 3, attachmentFileToAdd: {} } },
+      { params: { messageID: 3, attachmentFileToAdd: {}, stationNumber } },
     )
 
     when(api.get as jest.Mock)
@@ -151,7 +151,7 @@ context('ReplyMessage', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    initializeTestInstance('989')
   })
 
   describe('render correctly', () => {
@@ -192,6 +192,39 @@ context('ReplyMessage', () => {
         )
         expect(screen.getAllByText(t('secureMessaging.formMessage.weNeedMoreInfo'))).toBeTruthy()
         expect(screen.getAllByText(t('secureMessaging.formMessage.sendMessage.validation.text'))).toBeTruthy()
+      })
+    })
+
+    describe('when the message is filled and sent', () => {
+      it('should include station_number in the reply payload', async () => {
+        ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+        const replyField = await screen.findByTestId('reply field')
+        fireEvent.changeText(replyField, 'test reply')
+        const sendButton = await screen.findByText(t('secureMessaging.formMessage.send'))
+        fireEvent.press(sendButton)
+        await waitFor(() =>
+          expect(api.post).toHaveBeenCalledWith(
+            '/v0/messaging/health/messages/3/reply',
+            expect.objectContaining({ station_number: '989' }),
+            undefined,
+          ),
+        )
+      })
+
+      it('should send reply without station_number when stationNumber is not in route params', async () => {
+        initializeTestInstance()
+        ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+        const replyField = await screen.findByTestId('reply field')
+        fireEvent.changeText(replyField, 'test reply')
+        const sendButton = await screen.findByText(t('secureMessaging.formMessage.send'))
+        fireEvent.press(sendButton)
+        await waitFor(() =>
+          expect(api.post).toHaveBeenCalledWith(
+            '/v0/messaging/health/messages/3/reply',
+            expect.not.objectContaining({ station_number: expect.anything() }),
+            undefined,
+          ),
+        )
       })
     })
   })

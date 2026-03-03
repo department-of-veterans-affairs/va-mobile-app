@@ -27,6 +27,7 @@ const fullTestRun = [
   'Prescriptions',
   'ProfileScreen',
   'PushNotifications',
+  'ReviewClaimDetails',
   'SettingsScreen',
   'SignIn',
   'TravelPay',
@@ -77,7 +78,7 @@ const profileScreenArray = [
   'Payments',
 ]
 
-const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims']
+const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims', 'ReviewClaimDetails']
 const contactInfoArray = ['ContactInformation', 'VALetters']
 const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
 const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
@@ -97,10 +98,10 @@ const detoxMapping = {
     benjaminAdams: [],
     BiometricsPreferenceScreen: [],
     claimsAndAppeals: claimsAndAppealsArray,
-    ClaimDetailsScreen: ['Claims'],
+    ClaimDetailsScreen: ['Claims', 'ReviewClaimDetails'],
     ClaimLettersScreen: ['Claims'],
     ClaimsAndAppealsListView: claimsAndAppealsArray,
-    ClaimsHistoryScreen: ['Claims'],
+    ClaimsHistoryScreen: ['Claims', 'ReviewClaimDetails'],
     ClaimsScreen: [...claimsAndAppealsArray, 'TravelPay'],
     claraJefferson: [],
     components: fullTestRun,
@@ -190,6 +191,7 @@ const detoxMapping = {
     'labsAndTests.ts': ['LabsAndTests'],
     'letters.json': ['VALetters'],
     'letters.ts': ['VALetters'],
+    'linking.test.tsx': [],
     'linking.tsx': [],
     'medicalCopays.ts': medicalCopaysArray,
     'medicalCopays.json': medicalCopaysArray,

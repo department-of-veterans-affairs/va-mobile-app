@@ -3,6 +3,8 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   CategoryTypeFields,
   SecureMessagingCareSystemData,
@@ -33,6 +35,8 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
   }
 })
+
+jest.mock('api/authorizedServices/getAuthorizedServices')
 
 jest.mock('../../../../api/facilities/getFacilitiesInfo', () => {
   const original = jest.requireActual('../../../../api/facilities/getFacilitiesInfo')
@@ -194,6 +198,18 @@ context('StartNewMessage', () => {
     render(<StartNewMessage {...props} />, {})
   }
 
+  beforeEach(() => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {
+        migratingFacilitiesList: [],
+      },
+      isFetched: true,
+      error: null,
+      refetch: jest.fn(),
+      isFetching: false,
+    })
+  })
+
   const initializeApiCalls = (isSingleFaciltyTest: boolean = false) => {
     if (isSingleFaciltyTest) {
       recipients.meta.careSystems = singleCareSystemList
@@ -313,6 +329,31 @@ context('StartNewMessage', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
+
+    it('should display To combobox with selected care system as header', async () => {
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
+      const careSystemPicker = await screen.findByTestId('care system field')
+      fireEvent.press(careSystemPicker)
+      const careSystemOption = await screen.findAllByText('357')
+      fireEvent.press(careSystemOption[0])
+      const careSystemDoneButton = await screen.findByText('Done')
+      fireEvent.press(careSystemDoneButton)
+      const toField = await screen.findByTestId('to field')
+      const picker = await screen.findByTestId('picker')
+      fireEvent.press(picker)
+      const generalOption = await screen.findByTestId(t('secureMessaging.startNewMessage.general'))
+      fireEvent.press(generalOption)
+      const doneButton = await screen.findByLabelText(t('done'))
+      fireEvent.press(doneButton)
+      fireEvent.press(toField)
+      // Verify facility name appears as header in ComboBox (not "All care teams")
+      const comboBoxScrollView = await screen.findByTestId('comboBoxScrollViewID')
+      expect(comboBoxScrollView).toBeTruthy()
+      expect(screen.getAllByText('357').length).toBeGreaterThanOrEqual(1)
+      expect(screen.queryByText('All care teams')).toBeFalsy()
+    })
   })
 
   describe('when user has only one facility on record', () => {
@@ -320,6 +361,25 @@ context('StartNewMessage', () => {
       initializeApiCalls(true)
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
+    })
+
+    it('should display To combobox with auto-selected care system as header', async () => {
+      initializeApiCalls(true)
+      initializeTestInstance()
+      // Wait for form to load - care system is auto-selected for single facility
+      const toField = await screen.findByTestId('to field')
+      const picker = await screen.findByTestId('picker')
+      fireEvent.press(picker)
+      const generalOption = await screen.findByTestId(t('secureMessaging.startNewMessage.general'))
+      fireEvent.press(generalOption)
+      const doneButton = await screen.findByLabelText(t('done'))
+      fireEvent.press(doneButton)
+      fireEvent.press(toField)
+      // Verify facility name appears as header in ComboBox (not "All care teams")
+      const comboBoxScrollView = await screen.findByTestId('comboBoxScrollViewID')
+      expect(comboBoxScrollView).toBeTruthy()
+      expect(screen.getAllByText('357').length).toBeGreaterThanOrEqual(1)
+      expect(screen.queryByText('All care teams')).toBeFalsy()
     })
   })
 
@@ -336,6 +396,43 @@ context('StartNewMessage', () => {
         expect(screen.getAllByText(t('secureMessaging.formMessage.message.fieldError'))).toBeTruthy()
         expect(screen.getByText(t('secureMessaging.formMessage.weNeedMoreInfo'))).toBeTruthy()
         expect(screen.getByText(t('secureMessaging.formMessage.sendMessage.validation.text'))).toBeTruthy()
+      })
+    })
+
+    describe('when the form is filled and sent', () => {
+      it('should include station_number in the send message payload', async () => {
+        initializeApiCalls(true)
+        ;(api.post as jest.Mock).mockResolvedValue({ data: {} })
+        initializeTestInstance()
+        // Wait for form to load (to field only appears after careSystem is auto-set for single facility)
+        const toField = await screen.findByTestId('to field')
+        // Select category - use findBy to wait for modal content to render between each step
+        const picker = await screen.findByTestId('picker')
+        fireEvent.press(picker)
+        const generalOption = await screen.findByTestId(t('secureMessaging.startNewMessage.general'))
+        fireEvent.press(generalOption)
+        const doneButton = await screen.findByLabelText(t('done'))
+        fireEvent.press(doneButton)
+        // Select recipient from ComboBox
+        fireEvent.press(toField)
+        const doctor = await screen.findByText('Doctor 1')
+        fireEvent.press(doctor)
+        // Fill subject (required for General category)
+        const subjectField = await screen.findByTestId('startNewMessageSubjectTestID')
+        fireEvent.changeText(subjectField, 'test subject')
+        // Fill message
+        const messageField = await screen.findByTestId('message field')
+        fireEvent.changeText(messageField, 'test message')
+        // Press send
+        const sendButton = await screen.findByText(t('secureMessaging.formMessage.send'))
+        fireEvent.press(sendButton)
+        await waitFor(() =>
+          expect(api.post).toHaveBeenCalledWith(
+            '/v0/messaging/health/messages',
+            expect.objectContaining({ station_number: '357' }),
+            undefined,
+          ),
+        )
       })
     })
   })
@@ -361,6 +458,224 @@ context('StartNewMessage', () => {
               t('secureMessaging.startNewMessage.nonurgent.reply'),
           ),
         ).toBeTruthy(),
+      )
+    })
+  })
+
+  describe('migration alerts', () => {
+    const mockMigrationPhases = {
+      current: 'p3',
+      p0: 'March 1, 2026',
+      p1: 'March 15, 2026',
+      p2: 'April 1, 2026',
+      p3: 'April 24, 2026',
+      p4: 'April 27, 2026',
+      p5: 'May 1, 2026',
+      p6: 'May 3, 2026',
+      p7: 'May 8, 2026',
+    }
+
+    it('should show migration error alert when a facility is in error state for secure messaging', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p3' },
+            },
+          ],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
+      )
+      expect(screen.getByText('Test VA Medical Center')).toBeTruthy()
+    })
+
+    it('should show migration error alert for p4 phase', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p4' },
+            },
+          ],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
+      )
+    })
+
+    it('should show migration error alert for p5 phase', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p5' },
+            },
+          ],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText("You can't use messages to contact some facilities right now")).toBeTruthy(),
+      )
+    })
+
+    it('should show the facility locator link in the migration error alert', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p3' },
+            },
+          ],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
+    })
+
+    it('should not show migration error alert when no facilities are in error state', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p1' },
+            },
+          ],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByText("You can't use messages to contact some facilities right now")).toBeNull(),
+      )
+    })
+
+    it('should not show migration error alert when migratingFacilitiesList is empty', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByText("You can't use messages to contact some facilities right now")).toBeNull(),
+      )
+    })
+
+    it('should show error alerts for all migrations in error state when multiple exist', async () => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities: [{ facilityId: 528, facilityName: 'Test VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p3' },
+            },
+            {
+              migrationDate: '2026-06-01',
+              facilities: [{ facilityId: 123, facilityName: 'Different VA Medical Center' }],
+              phases: { ...mockMigrationPhases, current: 'p4' },
+            },
+          ],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('Test VA Medical Center')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Different VA Medical Center')).toBeTruthy())
+    })
+  })
+
+  describe('name change alert', () => {
+    it('should show the name change alert when user has cerner facilities', async () => {
+      ;(useFacilitiesInfo as jest.Mock).mockReturnValue({
+        data: [
+          {
+            id: '528',
+            name: 'Test VA Medical Center',
+            city: 'Test City',
+            state: 'TS',
+            cerner: true,
+            miles: '10',
+          },
+        ],
+        isLoading: false,
+        isError: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText(t('secureMessaging.startNewMessage.nameChangeAlert.title'))).toBeTruthy(),
+      )
+    })
+
+    it('should not show the name change alert when user has no cerner facilities', async () => {
+      ;(useFacilitiesInfo as jest.Mock).mockReturnValue({
+        data: [
+          {
+            id: '528',
+            name: 'Test VA Medical Center',
+            city: 'Test City',
+            state: 'TS',
+            cerner: false,
+            miles: '10',
+          },
+        ],
+        isLoading: false,
+        isError: false,
+      })
+      initializeApiCalls()
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByText(t('secureMessaging.startNewMessage.nameChangeAlert.title'))).toBeNull(),
       )
     })
   })

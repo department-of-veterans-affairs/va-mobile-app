@@ -35,9 +35,20 @@ export type MessageCardProps = {
   folderId: number
   userInTriageTeam?: boolean
   replyExpired?: boolean
+  migrationBlocksReply?: boolean
+  noProviderError?: boolean
+  stationNumber?: string
 }
 
-function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: MessageCardProps) {
+function MessageCard({
+  message,
+  folderId,
+  userInTriageTeam,
+  replyExpired,
+  stationNumber,
+  migrationBlocksReply,
+  noProviderError,
+}: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -58,6 +69,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
     fileToGet.size = file.size
     refetchFile()
   }
+  const providerAllowsReply = !message?.replyDisabled
 
   function getHeader() {
     return (
@@ -155,20 +167,33 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
   }
 
   const onReplyPress = () =>
-    navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+    navigateTo('ReplyMessage', {
+      messageID: message.messageId,
+      attachmentFileToAdd: {},
+      attachmentFileToRemove: {},
+      stationNumber,
+    })
 
   function getReplyOrStartNewMessageButton() {
+    if (noProviderError) {
+      return <></>
+    }
+
+    if (!replyExpired && providerAllowsReply && userInTriageTeam && !migrationBlocksReply) {
+      return (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
+        </Box>
+      )
+    }
+
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {!replyExpired && userInTriageTeam ? (
-          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
-        ) : (
-          <Button
-            label={t('secureMessaging.startNewMessage')}
-            onPress={onStartMessagePress}
-            testID={'startNewMessageButtonTestID'}
-          />
-        )}
+        <Button
+          label={t('secureMessaging.startNewMessage')}
+          onPress={onStartMessagePress}
+          testID={'startNewMessageButtonTestID'}
+        />
       </Box>
     )
   }
@@ -179,7 +204,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
         {getHeader()}
         {getContent()}
         {(hasAttachments || attachment) && getAttachment()}
-        {getMessageHelp()}
+        {!migrationBlocksReply && getMessageHelp()}
         {getReplyOrStartNewMessageButton()}
       </Box>
     </Box>

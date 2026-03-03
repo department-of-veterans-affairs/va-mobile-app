@@ -31,7 +31,6 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -45,7 +44,6 @@ describe('Home Screen', () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
     await loginToDemoMode()
   })
 
@@ -176,12 +174,7 @@ describe('Home Screen', () => {
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
-    const militaryBadge = await element(by.id('United States Coast Guard Emblem')).takeScreenshot(
-      'MilitaryServiceBadgeHome',
-    )
-    checkImages(militaryBadge)
   })
 
   it('should reveal disability rating on pressing show', async () => {

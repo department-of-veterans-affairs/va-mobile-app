@@ -39,7 +39,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
       {
         options,
         title: t('travelPay.cancelClaim.title'),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {

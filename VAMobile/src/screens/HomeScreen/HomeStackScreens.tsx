@@ -49,7 +49,7 @@ export type HomeStackParamList = WebviewStackParams & {
   FeedbackTermsAndConditions: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
-  DemoModeUsers: undefined
+  DemoModeUsers: { fromLogin: boolean }
   RemoteConfigTestScreen: undefined
   MaintenanceWindows: undefined
 }

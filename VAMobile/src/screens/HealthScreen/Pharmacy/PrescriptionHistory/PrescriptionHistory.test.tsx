@@ -9,7 +9,6 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigationSpy = jest.fn()
 
@@ -32,6 +31,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'refillinprocess',
         refillSubmitDate: '2021-06-28T17:01:12.000Z',
         refillDate: '2021-07-14T04:00:00.000Z',
+        sortedDispensedDate: '2021-07-14T04:00:00.000Z',
         refillRemaining: 9,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -55,6 +55,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'discontinued',
         refillSubmitDate: '2021-05-24T17:42:19.000Z',
         refillDate: '2021-07-10T04:00:00.000Z',
+        sortedDispensedDate: '2021-07-10T04:00:00.000Z',
         refillRemaining: 2,
         facilityName: 'DAYT29',
         facilityPhoneNumber: '(217) 636-6712',
@@ -77,6 +78,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'transferred',
         refillSubmitDate: '2021-10-25T14:38:35.000Z',
         refillDate: null,
+        sortedDispensedDate: null,
         refillRemaining: 0,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -100,6 +102,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'discontinued',
         refillSubmitDate: '2021-06-17T17:57:41.000Z',
         refillDate: '2021-07-01T04:00:00.000Z',
+        sortedDispensedDate: '2021-07-01T04:00:00.000Z',
         refillRemaining: 0,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -123,6 +126,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'discontinued',
         refillSubmitDate: '2021-06-17T17:57:42.000Z',
         refillDate: '2021-07-01T04:00:00.000Z',
+        sortedDispensedDate: '2021-07-01T04:00:00.000Z',
         refillRemaining: 9,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -145,6 +149,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'refillinprocess',
         refillSubmitDate: '2021-05-07T14:10:35.000Z',
         refillDate: '2021-05-27T04:00:00.000Z',
+        sortedDispensedDate: '2021-05-27T04:00:00.000Z',
         refillRemaining: 10,
         facilityName: 'DAYT29',
         facilityPhoneNumber: '(217) 636-6712',
@@ -167,6 +172,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'refillinprocess',
         refillSubmitDate: '2021-06-02T17:11:16.000Z',
         refillDate: '2021-06-24T04:00:00.000Z',
+        sortedDispensedDate: '2021-06-24T04:00:00.000Z',
         refillRemaining: 4,
         facilityName: 'DAYT29',
         facilityPhoneNumber: '(217) 636-6712',
@@ -189,6 +195,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'refillinprocess',
         refillSubmitDate: '2022-05-05T18:22:15.000Z',
         refillDate: '2022-05-16T04:00:00.000Z',
+        sortedDispensedDate: '2022-05-16T04:00:00.000Z',
         refillRemaining: 1,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -211,6 +218,7 @@ const prescriptionData: PrescriptionsGetData = {
         refillStatus: 'discontinued',
         refillSubmitDate: '2021-07-15T18:50:27.000Z',
         refillDate: '2021-08-04T04:00:00.000Z',
+        sortedDispensedDate: '2021-08-04T04:00:00.000Z',
         refillRemaining: 8,
         facilityName: 'SLC10 TEST LAB',
         facilityPhoneNumber: '(217) 636-6712',
@@ -292,7 +300,6 @@ const emptyMock: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
-  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = () => {
     render(<PrescriptionHistory {...mockNavProps()} />)
   }
@@ -347,9 +354,8 @@ context('PrescriptionHistory', () => {
     })
   })
 
-  describe('When nonVAMedsLink feature toggle is true and user has non-VA meds', () => {
+  describe('When user has non-VA meds', () => {
     it('should display the alert for non-VA medications', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -381,7 +387,6 @@ context('PrescriptionHistory', () => {
     })
 
     it('should open a webview that navigates to va.gov when link is clicked', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -410,7 +415,6 @@ context('PrescriptionHistory', () => {
     })
 
     it('should hide the alert when the dismiss button is clicked', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -436,9 +440,8 @@ context('PrescriptionHistory', () => {
     })
   })
 
-  describe('When nonVAMedsLink feature toggle is true and user does not have non-VA meds', () => {
+  describe('When user does not have non-VA meds', () => {
     it('should not display the alert for non-VA medications', async () => {
-      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),

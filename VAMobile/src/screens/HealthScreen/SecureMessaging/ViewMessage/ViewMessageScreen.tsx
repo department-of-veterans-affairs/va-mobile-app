@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { LinkProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   secureMessagingKeys,
+  useAllMessageRecipients,
   useFolderMessages,
   useFolders,
   useMessage,
@@ -20,6 +22,7 @@ import {
   useThread,
 } from 'api/secureMessaging'
 import {
+  FacilityInfo,
   MoveMessageParameters,
   SecureMessagingAttachment,
   SecureMessagingFolderList,
@@ -40,11 +43,17 @@ import {
   LoadingComponent,
   PickerItem,
   TextView,
+  VABulletList,
   VAModalPicker,
 } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  READ,
+  REPLY_WINDOW_IN_DAYS,
+  isMigrationPhaseBlockingReplies,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import CollapsibleMessage from 'screens/HealthScreen/SecureMessaging/ViewMessage/CollapsibleMessage'
 import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/MessageCard'
@@ -57,6 +66,8 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { OHParentScreens } from 'utils/ohMigration'
+import { getMigrationEndDate, getMigrationForFacilityId, getMigrationsInErrorState } from 'utils/ohMigration'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -113,6 +124,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const smNotInDowntime = !useDowntimeByScreenID(screenID)
   const isScreenContentAllowed = screenContentAllowed('WG_ViewMessage')
   const { mutate: moveMessage, isPending: loadingMoveMessage } = useMoveMessage()
+  const { data: userAuthorizedServices, isFetching: fetchingAuthServices } = useAuthorizedServices()
   const {
     data: messageData,
     error: messageError,
@@ -149,6 +161,16 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
 
+  const {
+    data: recipientsResponse,
+    isFetched: hasLoadedRecipients,
+    error: recipientsError,
+    isFetching: refetchingRecipients,
+  } = useAllMessageRecipients({
+    enabled: isScreenContentAllowed && smNotInDowntime,
+  })
+
+  const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
@@ -164,6 +186,13 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const userInTriageTeam = messageData?.meta?.userInTriageTeam
+  const noRecipientsReceived = !recipients || recipients.length === 0
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients && !recipientsError
+
+  // Derive OH migration phase from the first thread message or the current message
+  const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
+  const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
+  const stationNumber = messageData?.meta?.stationNumber
 
   useEffect(() => {
     if (threadFetched) {
@@ -262,10 +291,20 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     return filteredFolder
   }
 
+  const providerAllowsReply = !message?.replyDisabled
   const replyExpired =
     demoMode && (message?.messageId === 2092809 || message?.messageId === 2092803)
       ? false
       : DateTime.fromISO(message?.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
+
+  const linkProps: LinkProps = {
+    type: 'url',
+    url: WEBVIEW_URL_FACILITY_LOCATOR,
+    text: t('ohAlert.error.linkText'),
+    a11yLabel: a11yLabelVA(t('ohAlert.error.linkText')),
+    testID: 'goToFindLocationInfoTestID',
+    variant: 'base',
+  }
 
   const onMove = (value: string) => {
     setShowModalPicker(false)
@@ -343,7 +382,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   // If error is caused by an individual message, we want the error alert to be
   // contained to that message, not to take over the entire screen
   const hasError = folderMessagesError || foldersError || messageError || threadError || !smNotInDowntime
-  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage || loadingFolderMessages
+  const isLoading =
+    loadingFolder ||
+    loadingThread ||
+    loadingMessage ||
+    loadingMoveMessage ||
+    loadingFolderMessages ||
+    refetchingRecipients ||
+    fetchingAuthServices
   const isEmpty = !message || !thread
   const loadingText = loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')
 
@@ -359,6 +405,106 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           },
           testID: 'pickerMoveMessageID',
         }
+
+  const associatedErrorMigration = getMigrationForFacilityId(
+    getMigrationsInErrorState(userAuthorizedServices?.migratingFacilitiesList || [], OHParentScreens.SecureMessaging),
+    stationNumber || '',
+  )
+
+  const migratingFacilitiesInErrorNames = associatedErrorMigration?.facilities.map(
+    (facility: FacilityInfo) => facility.facilityName,
+  )
+
+  const renderAlerts = () => {
+    if (migrationBlocksReply && associatedErrorMigration && migratingFacilitiesInErrorNames) {
+      return (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            expandable={true}
+            initializeExpanded={true}
+            variant="error"
+            header={t('secureMessaging.reply.youCantReplyMigrationMessage')}
+            description={''}>
+            <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+              {t('secureMessaging.reply.youCantReplyMigrationMessage.body')}
+            </TextView>
+            <Box mb={theme.dimensions.standardMarginBetween} />
+            <VABulletList listOfText={migratingFacilitiesInErrorNames} />
+            <Box mb={theme.dimensions.standardMarginBetween} />
+            <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+              <Trans
+                i18nKey={'secureMessaging.reply.youCantReplyMigrationMessage.body2'}
+                components={{ bold: <TextView accessible={true} variant="MobileBodyBold" /> }}
+                values={{
+                  endDate: getMigrationEndDate(associatedErrorMigration, OHParentScreens.SecureMessaging),
+                }}
+              />
+            </TextView>
+            <Box mb={theme.dimensions.standardMarginBetween} />
+            <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
+              {t('secureMessaging.reply.youCantReplyMigrationMessage.note')}
+            </TextView>
+            <LinkWithAnalytics {...linkProps} />
+          </AlertWithHaptics>
+        </Box>
+      )
+    }
+
+    if (!userInTriageTeam || noProviderError) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.youCanNoLonger')}
+            description={t('secureMessaging.reply.youCanNoLonger.description')}
+            descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
+            testID="secureMessagingYouCanNoLongerAlertID">
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+            <TextView
+              accessible
+              variant="MobileBody"
+              paragraphSpacing={true}
+              accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
+              {t('secureMessaging.reply.error.ifYouThink')}
+            </TextView>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('upcomingAppointmentDetails.findYourVAFacility')}
+              onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+            />
+          </AlertWithHaptics>
+        </Box>
+      )
+    }
+
+    if (!providerAllowsReply) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.cannotReplyHeader')}
+            description={t('secureMessaging.reply.cannotReplyBody')}
+            testID="secureMessagingCannotReplyAlertID"
+          />
+        </Box>
+      )
+    }
+
+    if (replyExpired) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.tooOldForReplies')}
+            description={t('secureMessaging.reply.olderThan45Days')}
+            testID="secureMessagingOlderThan45DaysAlertID"
+          />
+        </Box>
+      )
+    }
+
+    return <></>
+  }
 
   return (
     <ChildTemplate
@@ -407,45 +553,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && userInTriageTeam && (
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="warning"
-                header={t('secureMessaging.reply.tooOldForReplies')}
-                description={t('secureMessaging.reply.olderThan45Days')}
-                testID="secureMessagingOlderThan45DaysAlertID"
-              />
-            </Box>
-          )}
-          {!userInTriageTeam && (
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="warning"
-                header={t('secureMessaging.reply.youCanNoLonger')}
-                description={t('secureMessaging.reply.youCanNoLonger.description')}
-                descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
-                testID="secureMessagingYouCanNoLongerAlertID">
-                {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-                <TextView
-                  accessible
-                  variant="MobileBody"
-                  paragraphSpacing={true}
-                  accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
-                  {t('secureMessaging.reply.error.ifYouThink')}
-                </TextView>
-                <LinkWithAnalytics
-                  type="custom"
-                  text={t('upcomingAppointmentDetails.findYourVAFacility')}
-                  onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
-                />
-              </AlertWithHaptics>
-            </Box>
-          )}
+          {renderAlerts()}
           <MessageCard
             message={message}
             folderId={currentFolderIdParam}
             userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
+            noProviderError={noProviderError}
+            migrationBlocksReply={migrationBlocksReply}
+            stationNumber={stationNumber}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
