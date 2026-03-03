@@ -22,7 +22,6 @@ import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsS
 export type FileRequestStackParams = {
   AskForClaimDecision: {
     claimID: string
-    provider?: string
   }
   FileRequest: {
     claimID: string
@@ -32,45 +31,37 @@ export type FileRequestStackParams = {
   File5103RequestDetails: {
     claimID: string
     request: ClaimEventData
-    provider?: string
   }
   File5103ReviewWaiver: {
     claimID: string
     request: ClaimEventData
-    provider?: string
   }
   File5103SubmitEvidence: {
     claimID: string
     request: ClaimEventData
-    provider?: string
   }
   FileRequestDetails: {
     claimID: string
     request: ClaimEventData
-    provider?: string
   }
   SelectFile: {
     claimID: string
     request: ClaimEventData
-    provider?: string
   }
   TakePhotos: {
     claimID: string
     request: ClaimEventData
-    provider?: string
   }
   UploadFile: {
     claimID: string
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse
     request?: ClaimEventData
-    provider?: string
   }
   UploadOrAddPhotos: {
     claimID: string
     firstImageResponse: ImagePickerResponse
     request?: ClaimEventData
-    provider?: string
   }
 }
 const FileRequestStack = createStackNavigator<FileRequestStackParams>()
