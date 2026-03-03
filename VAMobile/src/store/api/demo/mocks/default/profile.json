@@ -95,5 +95,17 @@
         "veteranStatus": "confirmed"
       }
     }
+  },
+  "/v0/veteran_status_card": {
+    "type": "veteran_status_card",
+    "attributes": {
+      "fullName": "Demo Veteran",
+      "edipi": "1100377582",
+      "disabilityRating": 70,
+      "veteranStatus": "confirmed",
+      "notConfirmedReason": null,
+      "confirmationStatus": "NO_SSC_CHECK",
+      "serviceSummaryCode": "A1"
+    }
   }
 }

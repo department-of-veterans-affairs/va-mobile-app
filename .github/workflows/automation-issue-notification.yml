@@ -1,14 +1,10 @@
 name: '[Admin] Notify Slack of DevOps issues'
 
-on:
-  issues:
-    types:
-      - opened
+on: workflow_call
 
 jobs:
   set_project_status:
     name: Set project status to Ready to work
-    if: contains(github.event.issue.labels.*.name, 'devops')
     runs-on: ubuntu-latest
     steps:
       - name: Generate token
@@ -91,7 +87,6 @@ jobs:
   notify_slack:
     name: Send Slack notification for DevOps issue
     needs: set_project_status
-    if: contains(github.event.issue.labels.*.name, 'devops')
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:

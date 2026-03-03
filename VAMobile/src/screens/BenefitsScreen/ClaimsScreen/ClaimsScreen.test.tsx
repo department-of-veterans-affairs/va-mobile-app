@@ -3,8 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
-import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import { context, mockNavProps, render } from 'testUtils'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -42,30 +41,13 @@ context('ClaimsScreen', () => {
   })
 
   describe('Travel Claims button', () => {
-    it('is not displayed if feature toggle is disabled', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(false)
-
-      initializeTestInstance()
-
-      expect(screen.queryByTestId('toTravelPayClaimsButtonID')).toBeFalsy()
-    })
-
     it('is displayed if feature toggle is enabled', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
-
       initializeTestInstance()
 
       expect(screen.getByTestId('toTravelPayClaimsButtonID')).toBeTruthy()
     })
 
     it('should navigate to the Travel Claims screen', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
       initializeTestInstance()
 
       fireEvent.press(screen.getByTestId('toTravelPayClaimsButtonID'))

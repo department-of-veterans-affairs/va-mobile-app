@@ -7,10 +7,7 @@ import { DateTime } from 'luxon'
 import { GetTravelPayClaimsResponse } from 'api/types'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
 import { render } from 'testUtils'
-import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY, getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
-
-const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 let mockLogAnalyticsEvent: jest.Mock
 jest.mock('utils/analytics', () => {
@@ -199,8 +196,6 @@ describe('TravelPayClaimsList', () => {
   })
 
   it('navigates to TravelPayClaimDetailsScreen when an item is pressed', () => {
-    mockFeatureEnabled.mockImplementation((flag) => flag === 'travelPayClaimDetails')
-
     initializeTestInstance()
     const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
     fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
@@ -208,25 +203,5 @@ describe('TravelPayClaimsList', () => {
     expect(mockNavigateTo).toHaveBeenCalledWith('TravelPayClaimDetailsScreen', {
       claimId: firstId,
     })
-  })
-
-  it('navigates to webview when travelPayClaimDetails feature is disabled', () => {
-    mockFeatureEnabled.mockReturnValue(false)
-
-    initializeTestInstance()
-    const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
-    fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
-
-    expect(mockLogAnalyticsEvent).toHaveBeenCalled()
-    expect(mockNavigateTo).toHaveBeenCalledWith(
-      'Webview',
-      expect.objectContaining({
-        url: `${LINK_URL_TRAVEL_PAY_WEB_DETAILS}${firstId}`,
-        displayTitle: t('travelPay.webview.claims.displayTitle'),
-        loadingMessage: t('travelPay.webview.claims.loading'),
-        useSSO: true,
-        backButtonTestID: 'webviewBack',
-      }),
-    )
   })
 })

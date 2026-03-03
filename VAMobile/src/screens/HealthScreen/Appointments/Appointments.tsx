@@ -11,7 +11,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import FloatingButton from 'components/FloatingButton'
-import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
+import OHAlertManager from 'components/OHAlertManager'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -28,6 +28,7 @@ import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'ut
 import getEnv from 'utils/env'
 import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
+import { OHParentScreens } from 'utils/ohMigration'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
@@ -195,7 +196,12 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           </Box>
           {serviceErrorAlert()}
           <OHAlertManager parentScreen={OHParentScreens.Appointments} authorizedServices={userAuthorizedServices} />
-          <Box>
+          <Box
+            mb={
+              featureEnabled('startScheduling') && !screenReaderEnabled
+                ? theme.dimensions.floatingButtonOffset
+                : theme.dimensions.contentMarginBottom
+            }>
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}

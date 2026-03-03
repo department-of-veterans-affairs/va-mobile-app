@@ -12,7 +12,6 @@ import { claim as claimData } from 'screens/BenefitsScreen/ClaimsScreen/claimDat
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -26,12 +25,7 @@ jest.mock('utils/hooks', () => {
 jest.mock('utils/remoteConfig')
 
 context('ClaimDetailsScreen', () => {
-  const renderWithData = (
-    claimType = ClaimTypeConstants.ACTIVE,
-    featureFlag: boolean = false,
-    claim?: Partial<ClaimData>,
-  ): void => {
-    when(featureEnabled).calledWith('submitEvidenceExpansion').mockReturnValue(featureFlag)
+  const renderWithData = (claimType = ClaimTypeConstants.ACTIVE, claim?: Partial<ClaimData>): void => {
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
@@ -86,7 +80,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('header section', () => {
     beforeEach(() => {
-      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
     })
@@ -108,7 +102,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('header section - fallback', () => {
     it('should display the claim header fallback if no displayTitle is available', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
         attributes: {
           ...claimData.attributes,
@@ -124,7 +118,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('submit evidence ', () => {
     it('submit evidence button should exist', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, true, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
         attributes: {
           ...claimData.attributes,
@@ -137,7 +131,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('when the selected tab is status', () => {
     it('should display the ClaimStatus component', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() =>
@@ -150,7 +144,7 @@ context('ClaimDetailsScreen', () => {
     })
 
     it('should display the Files component', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, true, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
@@ -161,7 +155,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('need help section', () => {
     it('should always display on claim status tab', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.needHelp') })).toBeTruthy())
@@ -172,7 +166,7 @@ context('ClaimDetailsScreen', () => {
     })
 
     it('should display on claim files tab', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, true, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
@@ -182,7 +176,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('when the claimType is ACTIVE or closed', () => {
     it('Active should have file request alert and what you claimed sections', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, true, {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() =>
@@ -192,7 +186,7 @@ context('ClaimDetailsScreen', () => {
 
     describe('Active on click of Find out why we sometimes combine claims.', () => {
       it('should call useRouteNavigation', async () => {
-        renderWithData(ClaimTypeConstants.ACTIVE, false, {
+        renderWithData(ClaimTypeConstants.ACTIVE, {
           ...claimData,
         })
         await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('claimDetails.whyWeCombineLink') })))
@@ -201,7 +195,7 @@ context('ClaimDetailsScreen', () => {
     })
 
     it('Closed should have decision letter alert', async () => {
-      renderWithData(ClaimTypeConstants.CLOSED, false, {
+      renderWithData(ClaimTypeConstants.CLOSED, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('heading', { name: t('claims.decisionLetterMailed') })).toBeTruthy())
@@ -209,7 +203,7 @@ context('ClaimDetailsScreen', () => {
 
     describe('Closed on click of WhatDoIDoIfDisagreement', () => {
       it('should call useRouteNavigation', async () => {
-        renderWithData(ClaimTypeConstants.CLOSED, false, {
+        renderWithData(ClaimTypeConstants.CLOSED, {
           ...claimData,
         })
         await waitFor(() =>

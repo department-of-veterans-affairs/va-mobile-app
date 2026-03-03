@@ -40,7 +40,6 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
             options,
             title: t('file.removeFile'),
             destructiveButtonIndex: 0,
-            cancelButtonIndex: 1,
           },
           (buttonIndex) => {
             switch (buttonIndex) {

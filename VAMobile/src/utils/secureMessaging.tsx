@@ -418,7 +418,6 @@ export const onAddFileAttachments = (
   showActionSheetWithOptions(
     {
       options,
-      cancelButtonIndex: 3,
     },
     (buttonIndex) => {
       setIsActionSheetVisible(false)
@@ -504,7 +503,6 @@ export const saveDraftWithAttachmentAlert = (
       {
         options,
         title: t('secureMessaging.draft.cantSaveAttachments'),
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
