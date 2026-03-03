@@ -9,7 +9,7 @@ import { Button, SegmentedControl, useSnackbar } from '@department-of-veterans-a
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useAllMessageRecipients, useFolderMessages, useFolders } from 'api/secureMessaging'
+import { useAllMessageRecipients, useFolderMessages, useFolders, useOhSyncStatus } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { OHAlertManager } from 'components/OHAlertManager'
@@ -90,6 +90,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       screenContentAllowed('WG_SecureMessaging') &&
       userAuthorizedServices?.secureMessaging &&
       smNotInDowntime,
+  })
+  const { data: ohSyncStatus } = useOhSyncStatus({
+    enabled: isFocused && !!userAuthorizedServices?.secureMessaging && smNotInDowntime,
   })
   const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
@@ -216,6 +219,17 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
             />
             {featureEnabled('showCernerWarningAlert') && userAuthorizedServices?.isUserAtPretransitionedOhFacility && (
               <CernerAlertSM />
+            )}
+            {ohSyncStatus && !ohSyncStatus.syncComplete && (
+              <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+                <AlertWithHaptics
+                  variant="warning"
+                  header={t('secureMessaging.historicLoad.title')}
+                  description={t('secureMessaging.historicLoad.body')}
+                  expandable
+                  testID="ohSyncStatusAlertTestID"
+                />
+              </Box>
             )}
             <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
               {secureMessagingTab === SegmentedControlIndexes.INBOX &&

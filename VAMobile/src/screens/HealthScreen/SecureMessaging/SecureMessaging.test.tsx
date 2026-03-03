@@ -189,4 +189,94 @@ context('SecureMessaging', () => {
       await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
     })
   })
+
+  describe('OH sync status alert', () => {
+    const mockFolders = {
+      data: [],
+      inboxUnreadCount: 0,
+    }
+
+    const mockInboxMessages = {
+      data: [],
+      meta: {
+        pagination: {
+          totalEntries: 0,
+        },
+      },
+    }
+
+    const mockRecipients = {
+      data: [
+        {
+          id: '1',
+          type: 'mock',
+          attributes: {
+            triageTeamId: 1,
+            name: 'Test Team',
+            relationType: 'PATIENT',
+            preferredTeam: true,
+            stationNumber: '123',
+          },
+        },
+      ],
+      meta: {
+        sort: { name: 'ASC' as const },
+        careSystems: [],
+      },
+    }
+
+    it('should show the loading alert when syncComplete is false', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockInboxMessages)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(mockFolders)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(mockRecipients)
+        .calledWith('/v0/messaging/health/exchange/sync_status')
+        .mockResolvedValue({ syncComplete: false })
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText(t('secureMessaging.historicLoad.title'))).toBeTruthy())
+    })
+
+    it('should not show the loading alert when syncComplete is true', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockInboxMessages)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(mockFolders)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(mockRecipients)
+        .calledWith('/v0/messaging/health/exchange/sync_status')
+        .mockResolvedValue({ syncComplete: true })
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText(t('secureMessaging.historicLoad.title'))).toBeNull())
+    })
+
+    it('should not show the loading alert when sync status endpoint errors', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockInboxMessages)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(mockFolders)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(mockRecipients)
+        .calledWith('/v0/messaging/health/exchange/sync_status')
+        .mockRejectedValue({ networkError: true } as api.APIError)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText(t('secureMessaging.historicLoad.title'))).toBeNull())
+    })
+  })
 })
