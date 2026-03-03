@@ -25,6 +25,8 @@ export type FeatureToggleType =
   | 'loadLabsAndTestsOnHomeScreen'
   | 'mhvMedicationsOracleHealthCutover'
   | 'mrHide36HrHoldTimes'
+  | 'noErrorPhasesKimOH'
+  | 'noRecipientsKimOH'
   | 'startScheduling'
   | 'testFeature'
   | 'internationalPhoneNumber'
@@ -49,6 +51,8 @@ type FeatureToggleValues = {
   loadLabsAndTestsOnHomeScreen: boolean
   mhvMedicationsOracleHealthCutover: boolean
   mrHide36HrHoldTimes: boolean
+  noErrorPhasesKimOH: boolean
+  noRecipientsKimOH: boolean
   startScheduling: boolean
   testFeature: boolean
   internationalPhoneNumber: boolean
@@ -74,6 +78,8 @@ export const defaults: FeatureToggleValues = {
   loadLabsAndTestsOnHomeScreen: false,
   mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
+  noErrorPhasesKimOH: false,
+  noRecipientsKimOH: false,
   startScheduling: false,
   testFeature: false,
   internationalPhoneNumber: false,
