@@ -44,7 +44,7 @@ const DuplicateRecordAlert = () => {
         expandable={true}
         initializeExpanded={true}
         variant="info"
-        header={t(`ohAlert.duplicatedRecord.title`)}
+        header={t('ohAlert.duplicatedRecord.title')}
         description={t('ohAlert.duplicatedRecord.body')}
         secondaryButton={{ label: t('dismiss'), onPress: handleDismiss }}/>
     </Box>
