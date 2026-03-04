@@ -1,6 +1,7 @@
 import { device } from 'detox'
 import { DateTime } from 'luxon'
 
+// Dynamic date to match data in secureMessaging.json
 const folderDate = DateTime.now().minus({ days: 1 }).toFormat('DDD')
 
 export const MessagesE2eIdConstants = {
