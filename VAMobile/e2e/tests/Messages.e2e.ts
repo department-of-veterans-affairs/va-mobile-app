@@ -319,6 +319,7 @@ describe('Messages Screen', () => {
     await element(by.text('357')).tap()
     await element(by.text('Done')).tap()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
+    await element(by.id('comboBoxTextInputID')).replaceText('VA Flagship')
     await element(by.text('VA Flagship mobile applications interface 2_DAYT29')).tap()
   })
 
@@ -483,11 +484,13 @@ describe('Messages Screen', () => {
         'Va Flagship Mobile Applications Interface 2_dayt29 November 3, 2024 Has attachment Education: Education Inquiry',
       ),
     ).tap()
-    await expect(element(by.text('rn_image_picker_lib_temp_52383988-331b-4acc-baaf-9ae21c8a508e.jpg (0.92 MB)')))
+    await expect(
+      element(by.text('rn_image_picker_lib_temp_52383988-331b-4acc-baaf-9ae21c8a508e.jpg (0.92 MB)')),
+    ).toExist()
   })
 
   it('verify that custom folders exist with messages', async () => {
-    await element(by.text('Back')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
   })
