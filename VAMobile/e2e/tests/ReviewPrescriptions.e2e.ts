@@ -15,7 +15,6 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_ALL_DESCRIPTION_LABEL:
     'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
   PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (3), sorted by status (A to Z)',
-  PRESCRIPTION_PENDING_STATUS_LABEL_HEADER_TEXT: 'Active: Refill in process',
   PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active',
   PRESCRIPTION_STATUS_LABEL_BODY_LABEL:
     'A prescription that can be filled at the local  V-A  pharmacy. If this prescription is refillable, you may request a refill of this  V-A  prescription.',
@@ -30,13 +29,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT:
     "We share tracking information here for up to 15 days, even if you've received your prescription.",
   PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL:
-    "We'll mail your refills to the address on file at your local  V-A  Pharmacy.",
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL:
-    "We're reviewing your refill request. Once approved, the  V-A  pharmacy will process your refill.",
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL:
-    'If you have questions about the status of your refill, contact your provider or local  V-A  pharmacy.',
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT: 'Refill request summary',
-  PRESCRIPTION_REFILL_REQUEST_SUMMARY_WHATS_NEXT_HEADER_TEXT: "What's next",
+    'If the delivery service changes, we may change or delete the tracking number. If you have questions, contact your local  V-A  pharmacy.',
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
   PRESCRIPTION_SORTED_NAME_FIRST: 'ACETAMINOPHEN 325MG TAB',
@@ -194,17 +187,9 @@ describeWithSetup('Review prescription tracking information', () => {
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
     await expect(element(by.label('Prescription number 2 7 2 0 1 9 2 A')).atIndex(0)).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT))).toExist()
     await expect(
-      element(
-        by.text("We share tracking information here for up to 15 days, even if you've received your prescription."),
-      ),
-    ).toExist()
-    await expect(
-      element(
-        by.text(
-          'If the delivery service changes, we may change or delete the tracking number. If you have questions, contact your local VA pharmacy.',
-        ),
-      ),
+      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL)),
     ).toExist()
     await expect(element(by.text('Package 1 of 2'))).toExist()
     await expect(element(by.text('Tracking number')).atIndex(0)).toExist()
