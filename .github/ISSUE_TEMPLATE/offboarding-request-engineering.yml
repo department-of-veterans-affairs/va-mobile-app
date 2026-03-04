@@ -66,7 +66,7 @@ body:
         The checklist items below should be left blank, as they will be filled out during the offboarding process.
   - type: checkboxes
     attributes:
-      label: System access to be reovoked by VA Mobile Platform
+      label: System access to be removed by VA Mobile Platform
       description: VA Mobile will remove the user's access to the following systems
       options:
         - label: App store connect
