@@ -364,6 +364,19 @@ export async function scrollToBottomWithWait(containerID: string) {
   await element(by.id(containerID)).scrollTo('bottom')
   await setTimeout(1000)
 }
+/**
+ * Scroll to a direction inside a container with a try-catch to handle flakiness on CI.
+ *
+ * @param containerID - testID of the container to scroll in
+ * @param direction - direction to scroll ('top' or 'bottom')
+ */
+export async function safeScrollTo(containerID: string, direction: 'top' | 'bottom') {
+  try {
+    await element(by.id(containerID)).scrollTo(direction)
+  } catch (e) {
+    console.error(`safeScrollTo failed for ${containerID} to ${direction}: ${e}`)
+  }
+}
 
 /** Test for the presence of text 1 or more times
  *
