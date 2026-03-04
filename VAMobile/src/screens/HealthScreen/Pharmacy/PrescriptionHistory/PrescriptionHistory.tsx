@@ -548,8 +548,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
               mt={theme.dimensions.condensedMarginBetween}
               mb={theme.dimensions.condensedMarginBetween}
               accessibilityRole="header"
-              variant={'MobileBodyBold'}
-              testID="TempforrunningTests">
+              variant={'MobileBodyBold'}>
               {prescriptionListTitle()}
             </TextView>
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
