@@ -113,7 +113,7 @@ context('AppointmentsScreen', () => {
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('appointments.startScheduling') })))
       const expectNavArgs = {
-        url: 'https://va.gov/my-health/appointments/schedule/type-of-care',
+        url: 'https://va.gov/my-health/appointments/schedule',
         displayTitle: t('webview.vagov'),
         loadingMessage: t('webview.appointments.loading'),
         useSSO: true,
