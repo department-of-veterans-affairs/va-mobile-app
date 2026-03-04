@@ -485,7 +485,7 @@ context('EditDraft', () => {
     it('should show the Reply Help panel', async () => {
       mockEditDraftEndpoints({ messageId: 3, thread, message, recipients, folderMessages })
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
+      await waitFor(() => fireEvent.press(screen.getByLabelText('How to get help sooner for urgent needs')))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
     })
   })

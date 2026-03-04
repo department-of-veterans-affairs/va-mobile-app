@@ -13,7 +13,7 @@ context('ReplyHelpScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('header', { name: 'Only use messages for non-urgent needs' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'How to get help sooner for urgent needs' })).toBeTruthy()
     expect(screen.getByText('Your care team may take up to 3 business days to reply.')).toBeTruthy()
     expect(screen.getByText('If you need help sooner, use one of these urgent communication options:')).toBeTruthy()
     expect(

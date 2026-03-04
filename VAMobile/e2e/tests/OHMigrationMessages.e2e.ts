@@ -41,7 +41,7 @@ describe('OH Migration Messages', () => {
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toBeVisible()
   })
 
-  it('should hide the Only use messages for non-urgent needs text when migration blocks replies', async () => {
+  it('should hide the How to get help sooner for urgent needs text when migration blocks replies', async () => {
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).not.toExist()
   })
 

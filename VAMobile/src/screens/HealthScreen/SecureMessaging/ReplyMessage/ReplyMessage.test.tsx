@@ -155,7 +155,7 @@ context('ReplyMessage', () => {
   })
 
   describe('render correctly', () => {
-    it('should also navigate on click of Only use messages for non-urgent needs', async () => {
+    it('should also navigate on click of How to get help sooner for urgent needs', async () => {
       expect(screen.getByText(t('secureMessaging.viewMessage.loading'))).toBeTruthy()
       await waitFor(() =>
         expect(screen.getByText(`${t('secureMessaging.formMessage.message')} ${t('required')}`)).toBeTruthy(),
