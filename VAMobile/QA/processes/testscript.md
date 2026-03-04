@@ -10,7 +10,7 @@ This script defines baseline checks that must be verified for every feature tick
 
 **When to use:** Any PR that requires QA approval. For PRs not flagged for QA (e.g., documentation-only changes, CI config, etc.), this script does not apply.
 
-## How to use this script
+## How to Use This Script
 
 1. When a PR is flagged for QA, the QA engineer copies the relevant checklist sections into a PR comment (or references this document).
 2. Each item is verified and checked off during QA review.
