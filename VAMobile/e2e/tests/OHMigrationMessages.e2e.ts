@@ -25,20 +25,16 @@ describe('OH Migration Messages', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
   })
 
-  it('should show the OH migration alert on the message detail screen', async () => {
-    await waitFor(element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID))
-      .scroll(200, 'down')
-    await expect(element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT))).toExist()
+  it('should not show the old OH migration alert on the message detail screen', async () => {
+    await expect(element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT))).not.toExist()
   })
 
   it('should hide the Reply button when migration blocks replies', async () => {
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
   })
 
-  it('should hide the Start new message button when migration blocks replies', async () => {
-    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toBeVisible()
+  it('should show the Start new message button as a fallback when migration blocks replies', async () => {
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
   })
 
   it('should hide the Only use messages for non-urgent needs text when migration blocks replies', async () => {
@@ -51,19 +47,5 @@ describe('OH Migration Messages', () => {
 
   it('should hide the not in triage team alert when migration blocks replies', async () => {
     await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
-  })
-
-  it('should display the facility name in the migration alert', async () => {
-    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('top')
-    await waitFor(element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID))
-      .scroll(200, 'down')
-    await element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT)).tap()
-    await waitFor(element(by.text(OHMigrationIdConstants.FACILITY_NAME_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID))
-      .scroll(200, 'down')
-    await expect(element(by.text(OHMigrationIdConstants.FACILITY_NAME_TEXT))).toExist()
   })
 })
