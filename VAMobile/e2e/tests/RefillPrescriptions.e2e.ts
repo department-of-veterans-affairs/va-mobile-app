@@ -177,7 +177,7 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
       await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).atIndex(1).tap()
     }
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
+      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTIONS_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).not.toExist()
   })
 
