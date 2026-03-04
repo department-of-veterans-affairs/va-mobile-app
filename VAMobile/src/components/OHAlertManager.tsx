@@ -47,13 +47,9 @@ export const OHAlertManager = ({ parentScreen, authorizedServices, hasCernerFaci
     !hasMigrationAlerts &&
     (hasCernerFacilities || isInP6OrP7)
 
-  if (showDuplicateRecordAlert) {
-    return <DuplicateRecordAlert />
-  }
-
   return (
     <>
-      {alerts}
+      {showDuplicateRecordAlert ? <DuplicateRecordAlert /> : alerts}
     </>
   )
 }
