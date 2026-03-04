@@ -22,6 +22,7 @@ import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsS
 export type FileRequestStackParams = {
   AskForClaimDecision: {
     claimID: string
+    provider?: string
   }
   FileRequest: {
     claimID: string
@@ -31,10 +32,12 @@ export type FileRequestStackParams = {
   File5103RequestDetails: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   File5103ReviewWaiver: {
     claimID: string
     request: ClaimEventData
+    provider?: string
   }
   File5103SubmitEvidence: {
     claimID: string

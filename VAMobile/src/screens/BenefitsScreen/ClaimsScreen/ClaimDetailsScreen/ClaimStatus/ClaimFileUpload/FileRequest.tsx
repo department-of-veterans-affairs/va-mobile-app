@@ -71,7 +71,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
 
       if (featureEnabled('show5103Flow') && is5103Notice(request.displayName || '')) {
-        navigateTo('File5103RequestDetails', { claimID, request })
+        navigateTo('File5103RequestDetails', { claimID, request, provider })
       } else {
         navigateTo('FileRequestDetails', { claimID, request })
       }
@@ -125,7 +125,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
         ),
       )
     }
-    navigateTo('AskForClaimDecision', { claimID })
+    navigateTo('AskForClaimDecision', { claimID, provider })
   }
 
   return (
