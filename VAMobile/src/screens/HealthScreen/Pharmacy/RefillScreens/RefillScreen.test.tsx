@@ -260,11 +260,7 @@ context('RefillScreen', () => {
           .mockResolvedValue(mock)
         initializeTestInstance()
         await waitFor(() =>
-          expect(
-            screen.getByText(
-              "If you need a refill now, call your VA pharmacy's automated refill line. The phone number is on your prescription label or in your prescriptions details page.",
-            ),
-          ).toBeTruthy(),
+          expect(screen.getByText(t('prescription.refill.banner.migrating.body'))).toBeTruthy(),
         )
       })
 
