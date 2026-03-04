@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
@@ -24,6 +25,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import DemoAlert from 'screens/auth/LoginScreen/DemoAlert'
 import { RootState } from 'store'
+import DemoUsers, { DemoUserIds } from 'store/api/demo/mocks/users'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
@@ -47,6 +49,7 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
+  const [demoUser, setDemoUser] = useState('')
 
   useEffect(() => {
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
@@ -63,6 +66,20 @@ function LoginScreen() {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
+  const handleDemoUserUpdated = useCallback(async () => {
+    const storedDemoUser = await AsyncStorage.getItem(DEMO_USER)
+    setDemoUser(storedDemoUser || '')
+    dispatch(updateDemoMode(true, storedDemoUser))
+  }, [dispatch])
+
+  useFocusEffect(
+    useCallback(() => {
+      if (demoMode) {
+        handleDemoUserUpdated()
+      }
+    }, [demoMode, handleDemoUserUpdated]),
+  )
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -72,17 +89,17 @@ function LoginScreen() {
     })
   }
 
-  const handleUpdateDemoMode = async () => {
-    const demoUser = await AsyncStorage.getItem(DEMO_USER)
-    dispatch(updateDemoMode(true, demoUser))
-  }
   const tapForDemo = () => {
     demoTaps++
-    console.log(`demotaps: ${demoTaps}`)
+    console.debug(`demotaps: ${demoTaps}`)
     if (demoTaps >= TAPS_FOR_DEMO) {
       demoTaps = 0
       setDemoPromptVisible(true)
     }
+  }
+
+  const onSelectDemoUser = () => {
+    navigateTo('DemoModeUsers', { fromLogin: true })
   }
 
   async function setFirstTimeLogin() {
@@ -90,6 +107,10 @@ function LoginScreen() {
   }
   async function setNewSession() {
     await AsyncStorage.setItem(NEW_SESSION, 'true')
+  }
+
+  const getDemoUser = () => {
+    return `User: ${demoUser ? DemoUsers[demoUser as DemoUserIds].name : DemoUsers.kimberlyWashington.name}`
   }
 
   const onLoginInit = demoMode
@@ -116,9 +137,18 @@ function LoginScreen() {
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.background.main}
       />
-      <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
+      <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleDemoUserUpdated} />
       {!loadingRefreshToken && <CrisisLineButton />}
-      {demoMode && <AlertWithHaptics variant="info" description="DEMO MODE" />}
+      {demoMode && (
+        <>
+          <AlertWithHaptics variant="info" description="DEMO MODE">
+            <TextView pb={theme.dimensions.condensedMarginBetween}>{getDemoUser()}</TextView>
+          </AlertWithHaptics>
+          <Box px={theme.dimensions.gutter * 2} pt={theme.dimensions.standardMarginBetween}>
+            <Button onPress={onSelectDemoUser} label={'Change Demo User'} />
+          </Box>
+        </>
+      )}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}

@@ -21,12 +21,14 @@ const fullTestRun = [
   'Messages',
   'MilitaryInformation',
   'Navigation',
+  'OHMigrationMessages',
   'Onboarding',
   'Payments',
   'PersonalInformationScreen',
   'Prescriptions',
   'ProfileScreen',
   'PushNotifications',
+  'ReviewClaimDetails',
   'SettingsScreen',
   'SignIn',
   'TravelPay',
@@ -53,6 +55,7 @@ const authorizedServicesArray = [
   'Payments',
   'Prescriptions',
   'Messages',
+  'OHMigrationMessages',
   'VeteranStatusCard',
 ]
 
@@ -61,6 +64,7 @@ const healthScreenArray = [
   'AppointmentsExpanded',
   'AppointmentsTestTime',
   'Messages',
+  'OHMigrationMessages',
   'Prescriptions',
   'TravelPay',
   'VaccineRecords',
@@ -77,7 +81,7 @@ const profileScreenArray = [
   'Payments',
 ]
 
-const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims']
+const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims', 'ReviewClaimDetails']
 const contactInfoArray = ['ContactInformation', 'VALetters']
 const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
 const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
@@ -97,10 +101,10 @@ const detoxMapping = {
     benjaminAdams: [],
     BiometricsPreferenceScreen: [],
     claimsAndAppeals: claimsAndAppealsArray,
-    ClaimDetailsScreen: ['Claims'],
+    ClaimDetailsScreen: ['Claims', 'ReviewClaimDetails'],
     ClaimLettersScreen: ['Claims'],
     ClaimsAndAppealsListView: claimsAndAppealsArray,
-    ClaimsHistoryScreen: ['Claims'],
+    ClaimsHistoryScreen: ['Claims', 'ReviewClaimDetails'],
     ClaimsScreen: [...claimsAndAppealsArray, 'TravelPay'],
     claraJefferson: [],
     components: fullTestRun,
@@ -139,8 +143,8 @@ const detoxMapping = {
     prescriptions: ['Prescriptions'],
     ProfileScreen: profileScreenArray,
     RequestNotifications: ['Onboarding'],
-    secureMessaging: ['Messages'],
-    SecureMessaging: ['Messages'],
+    secureMessaging: ['Messages', 'OHMigrationMessages'],
+    SecureMessaging: ['Messages', 'OHMigrationMessages'],
     SettingsScreen: ['SettingsScreen'],
     slices: fullTestRun,
     SplashScreen: ['Onboarding', 'LoginScreen'],
@@ -190,6 +194,7 @@ const detoxMapping = {
     'labsAndTests.ts': ['LabsAndTests'],
     'letters.json': ['VALetters'],
     'letters.ts': ['VALetters'],
+    'linking.test.tsx': [],
     'linking.tsx': [],
     'medicalCopays.ts': medicalCopaysArray,
     'medicalCopays.json': medicalCopaysArray,
@@ -205,8 +210,8 @@ const detoxMapping = {
     'profile.json': profileScreenArray,
     'profile.ts': profileScreenArray,
     'screens.ts': fullTestRun,
-    'secureMessaging.json': ['Messages'],
-    'secureMessaging.ts': ['Messages'],
+    'secureMessaging.json': ['Messages', 'OHMigrationMessages'],
+    'secureMessaging.ts': ['Messages', 'OHMigrationMessages'],
     'states.ts': ['ContactInformation'],
     'store.ts': [],
     'travelPay.ts': ['TravelPay', 'TravelPayClaims'],

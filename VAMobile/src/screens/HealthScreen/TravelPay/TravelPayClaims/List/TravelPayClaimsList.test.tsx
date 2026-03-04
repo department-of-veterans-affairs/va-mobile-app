@@ -2,13 +2,12 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
 import { render } from 'testUtils'
-import getEnv from 'utils/env'
-
-const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
+import { formatDateMMMMDDYYYY, getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
 
 let mockLogAnalyticsEvent: jest.Mock
 jest.mock('utils/analytics', () => {
@@ -54,7 +53,7 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
         id: 'f33ef640-000f-4ecf-82b8-1c50df13d178',
         claimNumber: 'c68baadf-3d95-45d5-857b-eca5bef6d4a5',
         claimStatus: 'Claim submitted',
-        appointmentDateTime: '2025-08-10T20:54:34.828Z',
+        appointmentDateTime: '2025-08-10T23:54:34.828Z',
         facilityName: 'Cheyenne VA Medical Center',
         createdOn: '2025-08-11T20:54:34.828Z',
         modifiedOn: '2025-08-11T20:54:34.828Z',
@@ -71,7 +70,7 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
         claimStatus: 'Saved',
         appointmentDateTime: '2025-08-09T20:54:34.828Z',
         facilityName: 'Tomah VA Medical Center',
-        createdOn: '2025-08-10T20:54:34.828Z',
+        createdOn: '2025-08-10T2:54:34.828Z',
         modifiedOn: '2025-08-10T20:54:34.828Z',
         totalCostRequested: 50.0,
         reimbursementAmount: 25.0,
@@ -153,6 +152,20 @@ describe('TravelPayClaimsList', () => {
     expect(screen.queryByTestId(t('travelPay.statusList.loading'))).toBeFalsy()
   })
 
+  it('displays time correctly for list items', () => {
+    initializeTestInstance()
+
+    const appointmentDateTime = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].attributes.appointmentDateTime
+    const dateString = formatDateMMMMDDYYYY(appointmentDateTime)
+    const timeString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.TIME_SIMPLE)
+
+    const dateText = screen.getByText(`${dateString} at`)
+    const timeText = screen.getByText(`${timeString} appointment`) // No timezone
+
+    expect(dateText).toBeTruthy()
+    expect(timeText).toBeTruthy()
+  })
+
   it('does not render pagination when total <= page size', () => {
     initializeTestInstance()
     expect(screen.queryByTestId('next-page')).toBeNull()
@@ -183,8 +196,6 @@ describe('TravelPayClaimsList', () => {
   })
 
   it('navigates to TravelPayClaimDetailsScreen when an item is pressed', () => {
-    mockFeatureEnabled.mockImplementation((flag) => flag === 'travelPayClaimDetails')
-
     initializeTestInstance()
     const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
     fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
@@ -192,25 +203,5 @@ describe('TravelPayClaimsList', () => {
     expect(mockNavigateTo).toHaveBeenCalledWith('TravelPayClaimDetailsScreen', {
       claimId: firstId,
     })
-  })
-
-  it('navigates to webview when travelPayClaimDetails feature is disabled', () => {
-    mockFeatureEnabled.mockReturnValue(false)
-
-    initializeTestInstance()
-    const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
-    fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
-
-    expect(mockLogAnalyticsEvent).toHaveBeenCalled()
-    expect(mockNavigateTo).toHaveBeenCalledWith(
-      'Webview',
-      expect.objectContaining({
-        url: `${LINK_URL_TRAVEL_PAY_WEB_DETAILS}${firstId}`,
-        displayTitle: t('travelPay.webview.claims.displayTitle'),
-        loadingMessage: t('travelPay.webview.claims.loading'),
-        useSSO: true,
-        backButtonTestID: 'webviewBack',
-      }),
-    )
   })
 })

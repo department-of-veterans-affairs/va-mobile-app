@@ -1,14 +1,17 @@
 name: Onboarding Request (Engineering)
-description: Fill out this form to request initiation of engineering onboarding for 
-title: "Onboarding: [name]"
+description: Fill out this form to request initiation of engineering onboarding for va-mobile-app
+title: 'Onboarding: [name]'
+projects: ['department-of-veterans-affairs/1616']
 labels: [user-onboarding]
-assignees: beccatupaj
+assignees:
+  - kellylein
+  - dumathane
 body:
 - type: markdown
   attributes:
     value: |
-      **Please read before continuing**: This issue form is to request to start the onboarding process for an engineer planning to work in the VA Mobile App.
-      After this issue is reviewed it will be dual-assigned to an onboarding point of contact and the team member who is being onboarded for completion.
+      **Please read before continuing**: This issue form is to start the onboarding process for an engineer planning to work in the VAHB Mobile App.
+      After this issue is reviewed it will be dual-assigned to a Mobile Platform onboarding point of contact and the Experience Team member who is being onboarded for completion.
 - type: markdown
   attributes:
     value: |
@@ -29,7 +32,6 @@ body:
     placeholder: '@Alex-smith-va'
   validations:
     required: true
-
 - type: input
   id: vaemail
   attributes:
@@ -38,7 +40,6 @@ body:
     placeholder: 'Alex.Smith1@va.gov'
   validations:
     required: true
-
 - type: input
   id: teamname
   attributes:
@@ -46,45 +47,20 @@ body:
     description: Exposing the primary team name helps us sort access requests
   validations:
     required: true
-
 - type: input
   id: vaoctopo
   attributes:
-    label: Who is the OCTO Product Owner for this person's team? 
+    label: Who is the OCTO Product Owner for this person's team?
     description: Add a PO helps us triage requests, and know who the main point of contact is.
   validations:
     required: true
-
-- type: input
-  id: slackchannel
-  attributes:
-    label: What is the main Slack channel for this person's team primary team?
-    description: Slack channels help when we need to contact the rest of the team or easily check in.
-    placeholder: '#va-mobile-app'
-  validations:
-    required: true
-
 - type: markdown
   attributes:
     value: |
       The checklist items below should be left blank, as they will be filled out during the onboarding process.
-
 - type: checkboxes
   attributes:
-    label: Process Documentation
-    description: As you've started onboarding, please check off the documentation as you read through it. All documentation should be reviewed, but we've called out some specifics below to help guide onboarding.
-    options:
-      - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
-      - label: Read about [how push notifications work in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/development/BackEnd/Features/PushNotifications)
-      - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/development/FrontEnd/Accessibility/MCAG/)
-      - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/QA%20process/QAs%20role)
-      - label: Review the [release overview](https://department-of-veterans-affairs.github.io/va-mobile-app/development/DevOps/Overview#releases)
-      - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
-      - label: Review [office hours](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Contributing/OfficeHours) documentation
-
-- type: checkboxes
-  attributes:
-    label: System Access
+    label: System access granted by VA Mobile Platform
     description: Before system access can be granted, the user _must_ be onboarded into VA Github Organization
     options:
     - label: App store connect (VA Mobile will provide)
@@ -92,8 +68,26 @@ body:
     - label: Firebase (VA Mobile will provide)
     - label: App Tester (VA Mobile will provide through Firebase)
     - label: Write access to applicable repositories (VA Mobile will provide)
+- type: checkboxes
+  attributes:
+    label: Tasks for Experience Team member to complete
+    description: These are things done by the new Experience Team member to ensure they know the resources available as they ramp up on the Mobile Platform
+    options:
     - label: Join [#va-mobile-app slack channel](https://dsva.slack.com/archives/C018V2JCWRJ)
-
+    - label: Join [#va-mobile-app-announce slack channel](https://dsva.slack.com/archives/C0AECDP4800)
+    - label: Read all documentation links below
+- type: checkboxes
+  attributes:
+    label: Mobile Platform Documentation
+    description: As you've started onboarding, please check off the documentation as you read through it. All documentation should be reviewed, but we've called out some specifics below to help guide onboarding.
+    options:
+      - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
+      - label: Read about [engineering best practices for the app](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Engineers/)
+      - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/QA%20process/QAs%20role)
+      - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/development/FrontEnd/Accessibility/MCAG/)
+      - label: Review the [release overview](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Releases/releaseCalendar)
+      - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
+      - label: Information about [accessing Demo Mode](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DemoMode/)
 - type: checkboxes
   attributes:
     label: Engineering-specific documentation
@@ -105,10 +99,7 @@ body:
       - label: Read [remote configuration documentation](https://firebase.google.com/docs/remote-config/)
       - label: Get up to speed on the [Mobile Design System](https://department-of-veterans-affairs.github.io/va-mobile-app/design/Intro)
       - label: Review [how to set up deep linking in th app](https://department-of-veterans-affairs.github.io/va-mobile-app/development/FrontEnd/Push%20Notifications#adding-a-new-deep-link)
-      - label: Review [development best practices](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Engineers/)
       - label: Review [information about unit tests](https://department-of-veterans-affairs.github.io/va-mobile-app/development/FrontEnd/Testing)
       - label: Review [information about end-to-end testing with Detox](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/QA%20process/UI%20automation%20testing/)
       - label: Review [best practice documentation around end-to-end testing](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/QA%20process/UI%20automation%20testing/DetoxBestPractices/)
-      - label: Review [technical details around the mobile release process](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Releases/release-process)
       - label: Start [getting the app setup locally](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/)
-      - label: Information about [accessing Demo Mode](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DemoMode/)

@@ -114,7 +114,6 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           options,
           title: '',
           message,
-          cancelButtonIndex: 1,
           destructiveButtonIndex: 0,
         },
         (buttonIndex) => {
@@ -178,6 +177,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
   const fillStyle: ViewStyle = {
     paddingTop: insets.top,
+    paddingBottom: insets.bottom,
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }

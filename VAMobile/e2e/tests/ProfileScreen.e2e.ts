@@ -10,7 +10,7 @@ import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
-  BANNER_NAME_ID: 'KIMBERLY WASHINGTON',
+  BANNER_NAME_ID: 'Kimberly Washington',
 }
 
 beforeAll(async () => {
@@ -32,6 +32,5 @@ describe('Profile Screen', () => {
 
   it('should show profile banner elements', async () => {
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD))).toExist()
   })
 })

@@ -7,7 +7,7 @@ import * as api from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 
-const { AUTH_SIS_TOKEN_EXCHANGE_URL } = getEnv()
+const { AUTH_TOKEN_EXCHANGE_URL } = getEnv()
 
 export const KEYCHAIN_DEVICE_SECRET_KEY = 'vamobileDeviceSecret'
 const SSO_COOKIE_NAMES = ['vagov_access_token', 'vagov_anti_csrf_token', 'vagov_info_token']
@@ -21,7 +21,7 @@ export const fetchSSOCookies = async () => {
     await CookieManager.clearAll()
 
     const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, {})
-    const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
+    const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -39,9 +39,9 @@ export const fetchSSOCookies = async () => {
     const cookieHeaders = response.headers.get('set-cookie')
 
     if (cookieHeaders) {
-      await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeaders)
+      await CookieManager.setFromResponse(AUTH_TOKEN_EXCHANGE_URL, cookieHeaders)
 
-      const cookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
+      const cookies = await CookieManager.get(AUTH_TOKEN_EXCHANGE_URL)
       const cookiesArray = Object.values(cookies)
       hasSSOCookies = SSO_COOKIE_NAMES.every((cookieName) => cookiesArray.some((cookie) => cookie.name === cookieName))
     }

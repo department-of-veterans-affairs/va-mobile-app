@@ -149,7 +149,7 @@ jobs:
         run: |
           declare -A GITHUB_TO_SLACK_MAP
           GITHUB_TO_SLACK_MAP["rtwell"]="UEY4D750B"
-          GITHUB_TO_SLACK_MAP["becca"]="U08AWC7DQA2"
+          GITHUB_TO_SLACK_MAP["b-rocha"]="U01AWJEH5UJ"
           # Example: Convert mapping to environment variables
           for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
@@ -158,7 +158,7 @@ jobs:
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           SLACK_rtwell: $rtwell
-          SLACK_becca: $becca
+          SLACK_brocha: $b-rocha
         run: |
           SLACK_MESSAGE=$(cat <<EOF
           {
@@ -173,7 +173,7 @@ jobs:
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
           - *VA PO for awareness:* CC: <@${SLACK_rtwell}>\n\
-          - *Release coordination:* <@${SLACK_becca}>",
+          - *Release coordination:* <@${SLACK_brocha}>",
             "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
             "unfurl_links": false,
             "unfurl_media": false

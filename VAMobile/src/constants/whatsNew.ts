@@ -1,6 +1,8 @@
 import { UserAuthorizedServicesData } from 'api/types'
+import getEnv from 'utils/env'
 import { FeatureToggleType } from 'utils/remoteConfig'
 
+const { IS_TEST } = getEnv()
 /**
  * Controls what will display on What's New alerts. Can be tied to a feature flag
  * that will cause the message not to be shown until the flag is activated.
@@ -13,7 +15,10 @@ import { FeatureToggleType } from 'utils/remoteConfig'
  * if it's shown or not
  * authorizedService: optional authorizedService the feature is tied to. This will
  * determine if it's shown or not
- *
+ * bullets: optional value for the number of bullets to show with this entry. Maps to
+ * <featureName>.bullet.<number> translation keys for content
+ * hasLink: Whether there is a link to display at the bottom of the entry. Maps to
+ * <featureName>.link.url and <featureName>.link.text
  */
 
 /**
@@ -40,6 +45,11 @@ export type WhatsNewConfigItem = {
   featureFlag?: FeatureToggleType
   // If controlled by an authorized service, will not show to the user unless authorized
   authorizedService?: keyof UserAuthorizedServicesData
+  // number of bullets included for this item. Found by <featureName>.bullet.<number>
+  bullets?: number
+  // Whether there is a link included in the what's new copy. Found by <featureName>.link.url
+  // and <featureName>.link.text
+  hasLink?: boolean
 }
 
 export const WhatsNewConfig: WhatsNewConfigItem[] = [
@@ -47,21 +57,31 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureName: 'PretransitionedOHInfoAlert',
     featureFlag: 'showCernerWhatsNew',
     authorizedService: 'isUserAtPretransitionedOhFacility',
+    hasLink: true,
   },
   {
     featureName: 'COE',
     featureFlag: 'COEAvailable',
   },
   {
-    featureName: 'TravelListAndStatus',
-    featureFlag: 'travelPayStatusList',
-  },
-  {
     featureName: 'DecisionLetter',
     authorizedService: 'benefitsPushNotification',
+    bullets: 1,
+  },
+  {
+    featureName: 'LabsAndTests',
+    featureFlag: 'labsAndTests',
+    authorizedService: 'labsAndTestsEnabled',
+  },
+  {
+    featureName: 'StartScheduling',
+    featureFlag: 'startScheduling',
   },
 ]
 
 export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
+  // To avoid the what's new alert from interfering with the detox tests we set the config to an empty array
+  if (IS_TEST) return []
+
   return WhatsNewConfig
 }

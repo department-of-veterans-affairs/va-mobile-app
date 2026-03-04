@@ -164,27 +164,7 @@ context('PaymentsScreen', () => {
   })
 
   describe('Travel Claims button', () => {
-    it('is not displayed if feature toggle is disabled', () => {
-      initializeTestInstance()
-
-      expect(screen.queryByTestId('toTravelPayClaimsLinkIDPaymentsScreen')).toBeFalsy()
-    })
-
-    it('is displayed if feature toggle is enabled', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
-
-      initializeTestInstance()
-
-      expect(screen.getByTestId('toTravelPayClaimsLinkIDPaymentsScreen')).toBeTruthy()
-    })
-
     it('navigates to Travel Claims screen when pressed', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('travelPayStatusList')
-        .mockReturnValue(true)
-
       initializeTestInstance()
 
       fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkIDPaymentsScreen'))

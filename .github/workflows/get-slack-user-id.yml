@@ -35,10 +35,10 @@ jobs:
       - name: Determine and Validate Target Email
         id: determine_and_validate_email
         env:
-          EMAIL_MAP_ACT: ${{ vars.EMAIL_MAP }} # This will be empty in act unless explicitly passed via --env
+          MAP_SOURCE_CONTENT: ${{ vars.EMAIL_MAP }}
         run: |
-          GIT_HANDLE="${{ github.event.inputs.git_handle }}"
-          EMAIL_INPUT="${{ github.event.inputs.va_email }}"
+          GIT_HANDLE="${{ inputs.git_handle }}"
+          EMAIL_INPUT="${{ inputs.va_email }}"
           TARGET_EMAIL=""
 
           if [[ -z "$GIT_HANDLE" && -z "$EMAIL_INPUT" ]]; then
@@ -46,16 +46,9 @@ jobs:
             exit 1
           fi
 
-          MAP_SOURCE=""
-          if [[ -n "${{ vars.EMAIL_MAP }}" ]]; then
-            MAP_SOURCE="${{ vars.EMAIL_MAP }}"
-            echo "Using vars.EMAIL_MAP from GitHub context."
-          elif [[ -n "${{ env.EMAIL_MAP_ACT }}" ]]; then
-            MAP_SOURCE="${{ env.EMAIL_MAP_ACT }}"
-            echo "Using env.EMAIL_MAP_ACT from environment variable (for act)."
-          else
-            echo "Warning: Neither vars.EMAIL_MAP nor env.EMAIL_MAP_ACT is populated. Git handle lookup will not work."
-          fi
+          # Now read the value from the environment safely
+          MAP_SOURCE="$MAP_SOURCE_CONTENT"
+
 
           # Attempt to get email from git_handle using the determined map source
           if [[ -n "$GIT_HANDLE" && -n "$MAP_SOURCE" ]]; then

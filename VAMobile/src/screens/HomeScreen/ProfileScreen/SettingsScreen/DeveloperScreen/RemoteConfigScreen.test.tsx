@@ -10,10 +10,11 @@ import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { waitFor } from 'testUtils'
 import { FeatureToggleDescriptions, devConfig, setDebugConfig } from 'utils/remoteConfig'
 
-const mockOverrides = {
-  ...devConfig,
-  haptics: false,
-}
+const mockOverrides = Object.fromEntries(
+  Object.entries(devConfig).sort(([a], [b]) => a.localeCompare(b)),
+) as typeof devConfig
+
+const APPLY_OVERRIDES_BUTTON_TEST_ID = 'applyOverridesTestID'
 
 context('RemoteConfigScreen', () => {
   const initializeTestInstance = (queriesData?: QueriesData) => {
@@ -43,7 +44,7 @@ context('RemoteConfigScreen', () => {
   it('shows a snackbar if no values changed', async () => {
     initializeTestInstance()
 
-    const applyOverridesButton = screen.getByRole('button', { name: 'Apply Overrides' })
+    const applyOverridesButton = screen.getByTestId(APPLY_OVERRIDES_BUTTON_TEST_ID)
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 
@@ -55,12 +56,20 @@ context('RemoteConfigScreen', () => {
     initializeTestInstance()
 
     // Toggle an item to enable override button
-    fireEvent.press(screen.getByText('useOldLinkComponent'))
+    fireEvent.press(screen.getByText('testFeature'))
 
-    const applyOverridesButton = screen.getByRole('button', { name: 'Apply Overrides' })
+    const applyOverridesButton = screen.getByTestId(APPLY_OVERRIDES_BUTTON_TEST_ID)
     expect(applyOverridesButton).toBeDefined()
     fireEvent.press(applyOverridesButton)
 
     expect(logoutSpy).toHaveBeenCalled()
+  })
+
+  it('displays feature toggles in alphabetical order', () => {
+    initializeTestInstance()
+    const switches = screen.getAllByRole('switch')
+    const labels = switches.map((s) => s.props.accessibilityLabel || s.props.children).filter(Boolean)
+    const sortedLabels = [...labels].sort((a, b) => a.localeCompare(b))
+    expect(labels).toEqual(sortedLabels)
   })
 })

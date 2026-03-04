@@ -2,8 +2,8 @@
 name: Go-Live Approval Template
 about: Template for Going LIVE with a new Feature 
 title: Go-Live Approval Request - Feature Name 
-labels: front-end, content, qa
-assignees: dumathane, BeccaTupaj, b-rocha, rtwell
+labels: front-end, content, qa, go-live
+assignees: dumathane, kellylein, b-rocha, rtwell, mmiddaugh, eli-oat
 ---
 ## Feature requesting LIVE launch
 <!-- Which feature is ready to go LIVE? -->

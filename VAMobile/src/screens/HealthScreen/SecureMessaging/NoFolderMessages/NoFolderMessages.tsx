@@ -10,7 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-function NoFolderMessages() {
+function NoFolderMessages({ noRecipientsError }: { noRecipientsError: boolean }) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -32,13 +32,15 @@ function NoFolderMessages() {
   return (
     <>
       <VAScrollView contentContainerStyle={scrollStyles}>
-        <Box mx={theme.dimensions.buttonPadding}>
-          <Button
-            label={t('secureMessaging.startNewMessage')}
-            onPress={onPress}
-            testID={'startNewMessageButtonTestID'}
-          />
-        </Box>
+        {!noRecipientsError && (
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('secureMessaging.startNewMessage')}
+              onPress={onPress}
+              testID={'startNewMessageButtonTestID'}
+            />
+          </Box>
+        )}
         <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
           <TextView
             variant="MobileBodyBold"

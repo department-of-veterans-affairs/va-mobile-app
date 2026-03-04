@@ -35,48 +35,42 @@ then
 
   # Use local vets-api for authentication (Mocked Authentication)
   # For local, we use the API authorize endpoint directly, not the frontend route
-  echo "AUTH_SIS_ENDPOINT=${LOCAL_BASE_URL}/v0/sign_in/authorize" >> .env
-  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=${LOCAL_BASE_URL}/v0/sign_in/token" >> .env
-  echo "AUTH_SIS_TOKEN_REFRESH_URL=${LOCAL_BASE_URL}/v0/sign_in/refresh" >> .env
-  echo "AUTH_SIS_REVOKE_URL=${LOCAL_BASE_URL}/v0/sign_in/revoke" >> .env
+  echo "AUTH_ENDPOINT=${LOCAL_BASE_URL}/v0/sign_in/authorize" >> .env
+  echo "AUTH_TOKEN_EXCHANGE_URL=${LOCAL_BASE_URL}/v0/sign_in/token" >> .env
+  echo "AUTH_TOKEN_REFRESH_URL=${LOCAL_BASE_URL}/v0/sign_in/refresh" >> .env
+  echo "AUTH_REVOKE_URL=${LOCAL_BASE_URL}/v0/sign_in/revoke" >> .env
 
   # Get all staging vars
-  while read p; do
-    echo "$p" >> .env
-  done<staging.env
+  awk 1 staging.env >> .env
 elif [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
   API_PREFIX="staging-api."
   echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
-  # set SIS vars
-  AUTH_SIS_ROOT="https://staging.va.gov"
-  echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
-  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
-  echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
-  echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
+  # set auth vars
+  AUTH_ROOT="https://staging.va.gov"
+  echo "AUTH_ENDPOINT=${AUTH_ROOT}/sign-in" >> .env
+  echo "AUTH_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+  echo "AUTH_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+  echo "AUTH_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 
   # Get all staging vars
-  while read p; do
-    echo "$p" >> .env
-  done<staging.env
+  awk 1 staging.env >> .env
 else
   echo "Setting up Production environment"
   API_PREFIX="api."
   echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
-  # set SIS vars
-  AUTH_SIS_ROOT="https://www.va.gov"
-  echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
-  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
-  echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
-  echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
+  # set auth vars
+  AUTH_ROOT="https://www.va.gov"
+  echo "AUTH_ENDPOINT=${AUTH_ROOT}/sign-in" >> .env
+  echo "AUTH_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+  echo "AUTH_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+  echo "AUTH_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 
   # Get all production vars
-  while read p; do
-    echo "$p" >> .env
-  done<prod.env
+  awk 1 prod.env >> .env
 fi
 
 if [[ $showDebug == 'true' ]]
@@ -105,6 +99,4 @@ fi
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 
 # Get all vars that are the same across environments
-while read p; do
-  echo "$p" >> .env
-done<constant.env
+awk 1 constant.env >> .env
