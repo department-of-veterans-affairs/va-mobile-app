@@ -78,12 +78,12 @@ env:
 
 jobs:
   start_slack_thread:
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'workflow_dispatch'
     name: Start Slack thread
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-build-alerts
+      channel_name: va-mobile-sandbox
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
@@ -113,8 +113,8 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
@@ -131,7 +131,7 @@ jobs:
             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
                   e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
@@ -375,7 +375,7 @@ jobs:
           retention-days: 1
 
   output-slack-results-and-update-detox-failure-ticket:
-    if: (!cancelled()) && github.event_name == 'schedule'
+    if: (!cancelled()) && github.event_name == 'workflow_dispatch'
     needs: [matrix-e2e-ios, start_slack_thread]
     runs-on: ubuntu-latest
     steps:
@@ -399,7 +399,7 @@ jobs:
         id: inform_slack
         shell: bash
         run: |
-          if grep -rq "<failure>" .; then
+          if needs.matrix-e2e-ios.result == 'failure'; then
             echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/json' \
@@ -420,22 +420,21 @@ jobs:
       - name: Find failing tests
         id: failing_tests
         shell: bash
+        if: needs.matrix-e2e-ios.result == 'failure'
         run: |
-          if grep -rq "<failure>" .; then
-            failing_tests_list=$(grep -rl "<failure>")
-            failing_tests=""
-            for i in ${failing_tests_list[@]}; do
-              remove_before=${i%.ts*}
-              remove_after=${remove_before#*test_reports/}
-              echo "$remove_after"
-              if [ -z "${failing_tests}" ]; then
-                failing_tests=$(echo $failing_tests"$remove_after")
-              else
-                failing_tests=$(echo $failing_tests", ""$remove_after")
-              fi
-            done
-            echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
-          fi
+          failing_tests_list=$(grep -rl "<failure>")
+          failing_tests=""
+          for i in ${failing_tests_list[@]}; do
+            remove_before=${i%.ts*}
+            remove_after=${remove_before#*test_reports/}
+            echo "$remove_after"
+            if [ -z "${failing_tests}" ]; then
+              failing_tests=$(echo $failing_tests"$remove_after")
+            else
+              failing_tests=$(echo $failing_tests", ""$remove_after")
+            fi
+          done
+          echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
 
       - name: Github CLI Authentication
         run: |
@@ -443,7 +442,7 @@ jobs:
           gh auth login --with-token < token.txt
 
       - name: Update a ticket on failure (if needed)
-        if: steps.inform_slack.outputs.TEST_FAILURE != ''
+        if: needs.matrix-e2e-ios.result == 'failure'
         id: find_if_ticket_already_exists
         run: |
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
@@ -460,14 +459,14 @@ jobs:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
       - name: Make a ticket on failure (if needed)
-        if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
+        if: needs.matrix-e2e-ios.result == 'failure' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
           search_existing: open
         env:
           dateOfIssue: ${{ env.DATE_OF_ISSUE }}
-          OS: 'iOS'
+          OS: 'iOS (TEST)'
           issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         id: create-issue
