@@ -1692,7 +1692,7 @@
   "prescription.details.banner.migrating.header": "You can't refill this prescription online right now",
   "prescription.details.banner.migrating.body": "If you need a refill now, call your VA pharmacy's automated refill line. You can also find the phone number on your prescription label.",
   "prescription.refill.banner.migrating.header": "You can't refill prescriptions online for some facilities right now",
-  "prescription.refill.banner.migrating.body": "If you need a refill now, call your VA pharmacy's automated refill line. The phone number is on your prescription label or in your prescriptions details page.",
+  "prescription.refill.banner.migrating.body": "If you need a refill now, call your VA pharmacy's automated refill line. The phone number is on your prescription label or in your prescription details page.",
   "prescription.details.expiresOnHeader": "Expires on",
   "prescription.details.instructionsHeader": "Instructions",
   "prescription.details.loading": "Loading your prescription details...",
