@@ -39,7 +39,7 @@ beforeAll(async () => {
   await loginToDemoMode()
 })
 
-describe.skip('Travel Pay Claims Screen', () => {
+describe('Travel Pay Claims Screen', () => {
   it('navigates from the different entry points', async () => {
     // Visit through Benefits tab
     await openBenefits()

@@ -173,7 +173,7 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 }
 
-describe.skip('Availability Framework', () => {
+describe('Availability Framework', () => {
   if (AFValue !== undefined) {
     let AFNeeded = false
     for (let x = 0; x < AFNavigationForIndividual.length; x++) {

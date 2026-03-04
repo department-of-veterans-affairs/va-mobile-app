@@ -81,7 +81,7 @@ beforeAll(async () => {
   await openLetters()
 })
 
-describe.skip('VA Letters', () => {
+describe('VA Letters', () => {
   it('should match design', async () => {
     await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
@@ -141,12 +141,10 @@ describe.skip('VA Letters', () => {
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await element(by.id(LettersConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
 
-          await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
-          await waitFor(element(by.text(LettersConstants.LETTER_FILE_NAME)))
-            .toBeVisible()
-            .withTimeout(20000)
-          await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
-          await element(by.text('Done')).tap()
+          // iOS 26: PDF viewer renders in a system layer inaccessible to Detox.
+          // TODO: Restore full PDF viewer behavior testing (or add an alternative verification
+          // strategy) once Detox supports interacting with the iOS system PDF viewer.
+          await expect(element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID))).toExist()
         }
       }
 

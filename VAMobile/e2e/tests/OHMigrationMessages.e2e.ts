@@ -1,6 +1,6 @@
 import { by, element, expect, waitFor } from 'detox'
 
-import { MessagesE2eIdConstants } from './Messages.e2e'
+import { MessagesE2eIdConstants } from './MessagesConstants'
 import { CommonE2eIdConstants, changeDemoModeUser, loginToDemoMode, openHealth, openMessages } from './utils'
 
 export const OHMigrationIdConstants = {
