@@ -603,7 +603,7 @@ context('ViewMessageScreen', () => {
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
       await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
       await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
-      await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
     })
 
     it('should show "you can no longer" alert even when message is expired (takes precedence over expired alert)', async () => {
@@ -645,7 +645,7 @@ context('ViewMessageScreen', () => {
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
       await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
       await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
-      await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
     })
   })
 

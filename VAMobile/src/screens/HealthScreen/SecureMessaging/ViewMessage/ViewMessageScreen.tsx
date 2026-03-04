@@ -483,11 +483,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
               {t('secureMessaging.reply.error.ifYouThink')}
             </TextView>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('upcomingAppointmentDetails.findYourVAFacility')}
-              onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
-            />
+            <LinkWithAnalytics {...linkProps} />
           </AlertWithHaptics>
         </Box>
       )
