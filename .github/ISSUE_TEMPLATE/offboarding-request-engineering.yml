@@ -45,7 +45,7 @@ body:
         user1@example.com
         user2@example.com
     validations:
-    required: false
+      required: false
   - type: input
     id: teamname
     attributes:
