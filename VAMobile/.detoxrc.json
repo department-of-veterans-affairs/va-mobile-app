@@ -80,7 +80,7 @@
       "screenshot": {
         "enabled": true,
         "shouldTakeAutomaticSnapshots": true,
-        "keepOnlyFailedTestsArtifacts": false,
+        "keepOnlyFailedTestsArtifacts": true,
         "takeWhen": {
           "testStart": false,
           "testDone": true,
