@@ -21,8 +21,11 @@ export const useClaim = (id: string, provider?: string, options?: { enabled?: bo
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const effectiveProvider = userAuthorizedServices?.cstMultiClaimProvider ? provider : undefined
 
+  const servicesReady = !provider || userAuthorizedServices !== undefined
+
   return useQuery({
     ...options,
+    enabled: !!(servicesReady && (options?.enabled ?? true)),
     queryKey: [claimsAndAppealsKeys.claim, id],
     queryFn: () => getClaim(id, effectiveProvider),
     meta: {
