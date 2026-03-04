@@ -1,10 +1,13 @@
 import { device } from 'detox'
+import { DateTime } from 'luxon'
+
+const folderDate = DateTime.now().minus({ days: 1 }).toFormat('DDD')
 
 export const MessagesE2eIdConstants = {
-  MESSAGE_1_ID: 'Unread: Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
-  MESSAGE_1_READ_ID: 'Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
-  MESSAGE_2_ID: 'Unread: Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
-  MESSAGE_2_READ_ID: 'Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
+  MESSAGE_1_ID: `Unread: Ratana, Narin  ${folderDate} Medication: Naproxen side effects`,
+  MESSAGE_1_READ_ID: `Ratana, Narin  ${folderDate} Medication: Naproxen side effects`,
+  MESSAGE_2_ID: `Unread: Diana Persson, Md ${folderDate} Has attachment COVID: Prepping for your visit`,
+  MESSAGE_2_READ_ID: `Diana Persson, Md ${folderDate} Has attachment COVID: Prepping for your visit`,
   MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md August 26, 2024 General: Your requested info',
   MESSAGE_3_READ_ID: 'Sarah Kotagal, Md August 26, 2024 General: Your requested info',
   MESSAGE_4_ID: 'Cheryl Rodger, Md August 26, 2024 Appointment: Please read and prepare appropriately',
