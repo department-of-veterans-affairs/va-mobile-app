@@ -5,7 +5,7 @@ import { CommonE2eIdConstants, changeDemoModeUser, loginToDemoMode, openHealth, 
 
 export const OHMigrationIdConstants = {
   DESIRED_DEMO_MODE_USER_ID: 'Kimberly For OH Migration',
-  OH_ALERT_HEADING_TEXT: "You can't use messages to contact some facilities right now",
+  OH_ALERT_HEADING_TEXT: "You can't reply to conversations at some facilities",
   FACILITY_NAME_TEXT: 'Test VA Medical Center',
 }
 
@@ -25,8 +25,12 @@ describe('OH Migration Messages', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
   })
 
-  it('should not show the old OH migration alert on the message detail screen', async () => {
-    await expect(element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT))).not.toExist()
+  it('should how the OH migration reply alert on the message detail screen', async () => {
+    await expect(element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT))).toExist()
+  })
+
+  it('should display the facility name in the migration alert', async () => {
+    await expect(element(by.text(OHMigrationIdConstants.FACILITY_NAME_TEXT))).toExist()
   })
 
   it('should hide the Reply button when migration blocks replies', async () => {
