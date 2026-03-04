@@ -16,7 +16,7 @@ body:
     id: fullname
     attributes:
       label: Full Name
-      description: Users Full Name
+      description: User's full name
       placeholder: Alex Smith
     validations:
       required: true
@@ -24,7 +24,7 @@ body:
     id: username
     attributes:
       label: GitHub Username
-      description: Username within the VA Github Organization
+      description: Username within the VA GitHub organization
       placeholder: "@Alex-smith-va"
     validations:
       required: true
@@ -57,7 +57,7 @@ body:
     id: vaoctopo
     attributes:
       label: Who is the OCTO Product Owner for this person's team?
-      description: Add a PO helps us triage requests, and know who the main point of contact is.
+      description: Adding a PO helps us triage requests and know who the main point of contact is.
     validations:
       required: true
   - type: markdown
@@ -69,7 +69,7 @@ body:
       label: System access to be removed by VA Mobile Platform
       description: VA Mobile will remove the user's access to the following systems
       options:
-        - label: App store connect
+        - label: App Store Connect
         - label: TestFlight
         - label: Firebase
         - label: App Tester
