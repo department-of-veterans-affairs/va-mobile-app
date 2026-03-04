@@ -37,9 +37,9 @@ body:
     validations:
       required: true
   - type: textarea
-    id: other_contact_emails
+    id: other_emails
     attributes:
-      label: Other Contact Emails
+      label: Other Emails
       description: Other email addresses used to access developer systems. Add one email per line if you have multiple.
       placeholder: |
         user1@example.com
