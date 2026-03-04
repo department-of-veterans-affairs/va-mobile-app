@@ -399,7 +399,7 @@ jobs:
         id: inform_slack
         shell: bash
         run: |
-          if needs.matrix-e2e-ios.result == 'failure'; then
+          if [[ "${{needs.matrix-e2e-ios.result}}" == 'failure' ]]; then
             echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/json' \
