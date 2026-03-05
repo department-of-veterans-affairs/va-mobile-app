@@ -1,9 +1,22 @@
 import { linking } from 'constants/linking'
+import * as platformUtils from 'utils/platform'
+import * as analyticsUtils from 'utils/analytics'
+
+jest.mock('utils/analytics', () => ({
+  logAnalyticsEvent: jest.fn(),
+}))
+
+jest.mock('utils/platform', () => ({
+  isIOS: jest.fn(() => false),
+}))
 
 type LinkingConfig = Parameters<NonNullable<typeof linking.getStateFromPath>>[1]
 const linkingConfig = linking.config as LinkingConfig
 
 describe('linking', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
   describe('getStateFromPath', () => {
     describe('track-claims/your-claim-letters/link', () => {
       it('should navigate to ClaimLettersScreen when path is /track-claims/your-claim-letters/link', () => {
@@ -84,6 +97,96 @@ describe('linking', () => {
         const path = '/track-claims/your-claim-letters/link?messageID=456&read=true'
         const state = linking.getStateFromPath?.(path, linkingConfig)
 
+        expect(state).toEqual({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'BenefitsTab',
+                    state: {
+                      routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        })
+      })
+
+      it('should log analytics event when path is /track-claims/your-claim-letters/link on Android', () => {
+        const mockLogAnalyticsEvent = analyticsUtils.logAnalyticsEvent as jest.Mock
+        mockLogAnalyticsEvent.mockClear()
+        ;(platformUtils.isIOS as jest.Mock).mockReturnValue(false)
+
+        const path = '/track-claims/your-claim-letters/link'
+        const beforeTimestamp = Date.now()
+        const state = linking.getStateFromPath?.(path, linkingConfig)
+        const afterTimestamp = Date.now()
+
+        // Verify analytics was called with correct event structure
+        expect(mockLogAnalyticsEvent).toHaveBeenCalledWith(
+          expect.objectContaining({
+            name: 'vama_claim_letters_link',
+            params: expect.objectContaining({
+              p1: 'android',
+            }),
+          }),
+        )
+
+        // Verify timestamp is within the correct range
+        const callArgs = mockLogAnalyticsEvent.mock.calls[0][0]
+        expect(callArgs.params.p2).toBeGreaterThanOrEqual(beforeTimestamp)
+        expect(callArgs.params.p2).toBeLessThanOrEqual(afterTimestamp)
+
+        // Verify state is correct
+        expect(state).toEqual({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'BenefitsTab',
+                    state: {
+                      routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        })
+      })
+
+      it('should log analytics event when path is /track-claims/your-claim-letters/link on iOS', () => {
+        const mockLogAnalyticsEvent = analyticsUtils.logAnalyticsEvent as jest.Mock
+        mockLogAnalyticsEvent.mockClear()
+        ;(platformUtils.isIOS as jest.Mock).mockReturnValue(true)
+
+        const path = '/track-claims/your-claim-letters/link'
+        const beforeTimestamp = Date.now()
+        const state = linking.getStateFromPath?.(path, linkingConfig)
+        const afterTimestamp = Date.now()
+
+        // Verify analytics was called with correct event structure
+        expect(mockLogAnalyticsEvent).toHaveBeenCalledWith(
+          expect.objectContaining({
+            name: 'vama_claim_letters_link',
+            params: expect.objectContaining({
+              p1: 'ios',
+            }),
+          }),
+        )
+
+        // Verify timestamp is within the correct range
+        const callArgs = mockLogAnalyticsEvent.mock.calls[0][0]
+        expect(callArgs.params.p2).toBeGreaterThanOrEqual(beforeTimestamp)
+        expect(callArgs.params.p2).toBeLessThanOrEqual(afterTimestamp)
+
+        // Verify state is correct
         expect(state).toEqual({
           routes: [
             {

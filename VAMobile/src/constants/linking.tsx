@@ -6,6 +6,9 @@ import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import queryClient from 'api/queryClient'
 import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
 import { LoadingComponent } from 'components'
+import { Events } from 'constants/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { isIOS } from 'utils/platform'
 
 const authorizedServices = queryClient.getQueryData(
   authorizedServicesKeys.authorizedServices,
@@ -179,6 +182,11 @@ export const linking: LinkingOptions<any> = {
       pathParts[2]?.split('?')[0] === 'link' &&
       pathParts.length === 3
     ) {
+      const timestamp = new Date().getTime()
+      const deviceType = isIOS() ? 'ios' : 'android'
+
+      logAnalyticsEvent(Events.vama_claim_letters_link(deviceType, timestamp))
+
       return {
         routes: [
           {
