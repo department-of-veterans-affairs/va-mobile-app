@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
 import OHAlertManager from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
@@ -33,11 +34,17 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const showOfflineSnackbar = useOfflineSnackbar()
 
   const { data: authorizedServices } = useAuthorizedServices()
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const hasCernerFacilities = facilitiesInfo?.some((f) => f.cerner)
 
   return (
     <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('vaMedicalRecords.title')}>
       {authorizedServices && (
-        <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
+        <OHAlertManager
+          parentScreen={OHParentScreens.MedicalRecords}
+          authorizedServices={authorizedServices}
+          hasCernerFacilities={hasCernerFacilities}
+        />
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
         {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
