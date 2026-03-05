@@ -258,10 +258,13 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       try {
         await detoxExpect(element(by.text('Get prescription details')).atIndex(0)).toBeVisible()
       } catch (e) {
+        // Specify startPositionY=0.5 — the scroll view is partially clipped
+        // by the bottom tab bar, so the default start point (near the bottom)
+        // falls outside the visible area
+        await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(200, 'down', 0.5, 0.5)
         await waitFor(element(by.text('Get prescription details')).atIndex(0))
           .toBeVisible()
-          .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-          .scroll(100, 'down')
+          .withTimeout(5000)
       }
       await element(by.text('Get prescription details')).atIndex(0).tap()
       await device.enableSynchronization()
