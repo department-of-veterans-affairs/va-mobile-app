@@ -8,9 +8,10 @@ import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWind
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
-import { RenderParams, context, mockNavProps, render } from 'testUtils'
+import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 
@@ -276,6 +277,24 @@ context('PastAppointments', () => {
 
       expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
       expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
+    })
+  })
+
+  describe('when useOldDatePicker feature toggle is true', () => {
+    it('displays the old date picker instead of the new date picker', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('useOldDatePicker')
+        .mockReturnValue(true)
+      initializeTestInstance({ data: appointmentData() })
+
+      expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
+      expect(screen.getByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
+
+      expect(screen.queryByText(t('pastAppointments.selectAPastDateRange'))).toBeFalsy()
+      expect(screen.queryByText(t('reset'))).toBeFalsy()
+      expect(screen.queryByText(t('datePicker.from'))).toBeFalsy()
+      expect(screen.queryByText(t('datePicker.to'))).toBeFalsy()
+      expect(screen.queryByRole('button', { name: t('apply') })).toBeFalsy()
     })
   })
 })
