@@ -1,6 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
+import { MessagesE2eIdConstants } from './MessagesConstants'
 import {
   CommonE2eIdConstants,
   checkImages,
@@ -9,55 +10,6 @@ import {
   openMessages,
   toggleRemoteConfigFlag,
 } from './utils'
-
-export const MessagesE2eIdConstants = {
-  MESSAGE_1_ID: 'Unread: Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
-  MESSAGE_1_READ_ID: 'Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
-  MESSAGE_2_ID: 'Unread: Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
-  MESSAGE_2_READ_ID: 'Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
-  MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md August 26, 2024 General: Your requested info',
-  MESSAGE_3_READ_ID: 'Sarah Kotagal, Md August 26, 2024 General: Your requested info',
-  MESSAGE_4_ID: 'Cheryl Rodger, Md August 26, 2024 Appointment: Please read and prepare appropriately',
-  MESSAGE_4_READ_ID: 'Cheryl Rodger, Md August 26, 2024 Appointment: Please read and prepare appropriately',
-  MESSAGE_5_ID: 'Vija A. Ravi, Md July 21, 2024 General: Summary of visit',
-  MESSAGE_6_ID: 'Ratana, Narin  July 21, 2024 Test: Preparing for your visit',
-  MESSAGE_7_ID: 'Ratana, Narin  June 17, 2024 Education: Good morning to you',
-  MESSAGE_8_ID: 'Johnson, Patricia A. August 1, 2024 Appointment: Follow-up from your last visit',
-  MESSAGE_10_ID: 'Leo Spaceman, Md August 1, 2024 Test: Lab results ready',
-  MESSAGE_10_READ_ID: 'Leo Spaceman, Md August 1, 2024 Test: Lab results ready',
-  FOLDERS_ID: 'foldersID',
-  MESSAGES_ID: 'messagesTestID',
-  REVIEW_MESSAGE_REPLY_ID: 'replyTestID',
-  ONLY_USE_MESSAGES_TEXT: 'Only use messages for non-urgent needs',
-  ATTACHMENTS_BUTTON_ID: 'messagesAttachmentsAddFilesID',
-  MESSAGE_INPUT_ID: 'reply field',
-  SEND_BUTTON_ID: 'sendButtonTestID',
-  SELECT_A_FILE_ID: 'messagesSelectAFileID',
-  REPLY_PAGE_TEST_ID: 'replyPageTestID',
-  START_NEW_MESSAGE_CARE_SYSTEM_ID: 'care system field',
-  START_NEW_MESSAGE_TO_ID: 'to field',
-  START_NEW_MESSAGE_CATEGORY_ID: 'picker',
-  START_NEW_MESSAGE_SUBJECT_ID: 'startNewMessageSubjectTestID',
-  START_NEW_MESSAGE_MESSAGE_FIELD_ID: 'message field',
-  START_NEW_MESSAGE_ADD_FILES_TEXT: 'Add Files',
-  START_NEW_MESSAGE_ID: 'startNewMessageTestID',
-  START_NEW_MESSAGE_SAVE_ID: 'startNewMessageSaveTestID',
-  START_NEW_MESSAGE_CANCEL_ID: 'startNewMessageCancelTestID',
-  START_NEW_MESSAGE_NON_URGENT_WARNING: 'startNewMessageNonUrgentWarning',
-  MESSAGE_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete' : 'Delete ',
-  MESSAGE_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save' : 'Save ',
-  EDIT_DRAFT_MESSAGE_FIELD_ID: 'messageText',
-  EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
-  EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
-  EDIT_DRAFT_PAGE_TEST_ID: 'editDraftTestID',
-  BACK_TO_MESSAGES_ID: 'backToMessagesID',
-  MOVE_PICKER_ID: 'pickerMoveMessageID',
-  MOVE_PICKER_CANCEL_ID: 'pickerMoveMessageCancelID',
-  MOVE_PICKER_CONFIRM_ID: 'pickerMoveMessageConfirmID',
-  ATTACHMENTS_PAGE_CANCEL_ID: 'attachmentsCancelID',
-  MESSAGE_PICKER_CONFIRM_ID: 'messagePickerConfirmID',
-  FOLDERS_BACK_ID: 'foldersBackToMessagesID',
-}
 
 const tapItems = async (items: string, type: string) => {
   // if (type === 'url' || type === 'map' || type === 'email') {
@@ -93,7 +45,7 @@ beforeAll(async () => {
   await openMessages()
 })
 
-describe.skip('Messages Screen', () => {
+describe('Messages Screen', () => {
   it('should match the messages page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text('Inbox (3)'))).toExist()

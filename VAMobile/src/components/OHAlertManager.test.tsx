@@ -4,8 +4,11 @@ import { screen } from '@testing-library/react-native'
 
 import { MigratingFacility, UserAuthorizedServicesData } from 'api/types'
 import OHAlertManager from 'components/OHAlertManager'
-import { context, render } from 'testUtils'
+import { context, render, when } from 'testUtils'
 import { OHParentScreens } from 'utils/ohMigration'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
 
 context('OHAlertManager', () => {
   const mockFacilities = [
@@ -196,6 +199,84 @@ context('OHAlertManager', () => {
       render(<OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />)
 
       expect(screen.queryByText('New medical records may not appear here until May 3, 2026')).toBeFalsy()
+    })
+
+    it('should render duplicate record alert for p0 phase when user has cerner facilities and feature flag is enabled', () => {
+      when(featureEnabled).calledWith('displayDuplicateRecordAlert').mockReturnValue(true)
+      const authorizedServices = createAuthorizedServices('p0')
+      render(
+        <OHAlertManager
+          parentScreen={OHParentScreens.MedicalRecords}
+          authorizedServices={authorizedServices}
+          hasCernerFacilities={true}
+        />,
+        {
+          preloadedState: {
+            settings: {
+              displayDuplicateRecordAlert: true,
+            },
+          },
+        },
+      )
+
+      expect(screen.getByText('You may notice duplicate records for a time')).toBeTruthy()
+    })
+
+    it('should not render duplicate record alert for p0 phase when feature flag is disabled', () => {
+      when(featureEnabled).calledWith('displayDuplicateRecordAlert').mockReturnValue(false)
+      const authorizedServices = createAuthorizedServices('p0')
+      render(
+        <OHAlertManager
+          parentScreen={OHParentScreens.MedicalRecords}
+          authorizedServices={authorizedServices}
+          hasCernerFacilities={true}
+        />,
+      )
+
+      expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
+    })
+
+    it('should not render duplicate record alert when migration alerts are showing', () => {
+      when(featureEnabled).calledWith('displayDuplicateRecordAlert').mockReturnValue(true)
+      const authorizedServices = createAuthorizedServices('p3')
+      render(
+        <OHAlertManager
+          parentScreen={OHParentScreens.MedicalRecords}
+          authorizedServices={authorizedServices}
+          hasCernerFacilities={true}
+        />,
+        {
+          preloadedState: {
+            settings: {
+              displayDuplicateRecordAlert: true,
+            },
+          },
+        },
+      )
+
+      expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
+      expect(screen.getByText('App updates will begin May 1, 2026')).toBeTruthy()
+    })
+
+    it('should not render duplicate record alert on non-MedicalRecords screens even when conditions are met', () => {
+      when(featureEnabled).calledWith('displayDuplicateRecordAlert').mockReturnValue(true)
+      const authorizedServices = createAuthorizedServices('p0')
+      render(
+        <OHAlertManager
+          parentScreen={OHParentScreens.Appointments}
+          authorizedServices={authorizedServices}
+          hasCernerFacilities={true}
+        />,
+        {
+          preloadedState: {
+            settings: {
+              displayDuplicateRecordAlert: true,
+            },
+          },
+        },
+      )
+
+      expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
     })
   })
 
