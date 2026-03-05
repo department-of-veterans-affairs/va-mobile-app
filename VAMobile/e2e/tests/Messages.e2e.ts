@@ -320,6 +320,7 @@ describe('Messages Screen', () => {
     await element(by.text('Done')).tap()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
     await element(by.id('comboBoxTextInputID')).replaceText('VA Flagship')
+    await element(by.id('comboBoxTextInputID')).tapReturnKey()
     await element(by.text('VA Flagship mobile applications interface 2_DAYT29')).tap()
   })
 
