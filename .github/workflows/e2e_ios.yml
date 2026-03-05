@@ -115,12 +115,13 @@ jobs:
         run: |
           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
             if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-              e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+              e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
+                echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
               else
                 echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -131,12 +132,13 @@ jobs:
               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
                 if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
                   if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                    echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                    matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
+                    echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
                     echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
                   else
                     echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -350,7 +352,7 @@ jobs:
             echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           else
             # Targeted: Prepend prerequisites for safety
-            echo "CMD=yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:ios-test /e2e/tests/Navigation.e2e.ts /e2e/tests/AvailabilityFramework.e2e.ts /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           fi
 
       - name: Run e2e tests for iOS
