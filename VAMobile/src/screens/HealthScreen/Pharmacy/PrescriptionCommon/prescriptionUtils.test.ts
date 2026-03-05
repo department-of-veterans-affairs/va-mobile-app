@@ -1,6 +1,8 @@
 import { MigratingFacility, PrescriptionData, RefillStatus } from 'api/types'
-
-import { getMigratingPrescriptions, isPrescriptionAtMigratingFacility } from './prescriptionUtils'
+import {
+  getMigratingPrescriptions,
+  isPrescriptionAtMigratingFacility,
+} from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/prescriptionUtils'
 
 describe('prescriptionUtils', () => {
   const mockMigratingFacilitiesList: MigratingFacility[] = [

@@ -59,6 +59,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return prescription.attributes.isRefillable
   })
 
+  const refillable = refillablePrescriptions || []
+
   const {
     mutate: requestRefill,
     isPending: showLoadingScreenRequestRefills,
@@ -68,13 +70,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
-  const migratingPrescriptions = getMigratingPrescriptions(
-    allPrescriptions,
-    userAuthorizedServices?.migratingFacilitiesList,
-  )
+  const migratingPrescriptions = getMigratingPrescriptions(refillable, userAuthorizedServices?.migratingFacilitiesList)
   const hasMigratingPrescriptions = migratingPrescriptions.length > 0
-
-  const refillable = refillablePrescriptions || []
 
   // Only filter out migrating prescriptions when the cutover flag is enabled
   const migratingPrescriptionIds = new Set(migratingPrescriptions.map((p) => p.id))
@@ -82,6 +79,14 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     isOHCutoverFlagEnabled && hasMigratingPrescriptions
       ? refillable.filter((prescription) => !migratingPrescriptionIds.has(prescription.id))
       : refillable
+
+  // Reset selections when the filtered list changes to prevent stale index references
+  const filteredRefillableIds = filteredRefillable.map((p) => p.id).join(',')
+  useEffect(() => {
+    setSelectedValues({})
+    setSelectedPrescriptionsCount(0)
+    setAlert(false)
+  }, [filteredRefillableIds])
 
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {

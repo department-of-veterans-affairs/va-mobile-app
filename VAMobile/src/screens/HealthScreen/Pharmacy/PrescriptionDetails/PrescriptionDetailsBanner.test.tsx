@@ -163,7 +163,7 @@ context('PrescriptionsDetailsBanner', () => {
     it('should display affected medications header when migratingPrescriptions is provided', () => {
       render(<PrescriptionsDetailsBanner migratingPrescriptions={mockMigratingPrescriptions} />)
       fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
-      expect(screen.getByText('Affected medications:')).toBeTruthy()
+      expect(screen.getByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeTruthy()
     })
   })
 
@@ -212,7 +212,7 @@ context('PrescriptionsDetailsBanner', () => {
       fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
 
       expect(screen.queryByText('NON-MIGRATING PRESCRIPTION')).toBeFalsy()
-      expect(screen.queryByText('Affected medications:')).toBeFalsy()
+      expect(screen.queryByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeFalsy()
     })
   })
 })

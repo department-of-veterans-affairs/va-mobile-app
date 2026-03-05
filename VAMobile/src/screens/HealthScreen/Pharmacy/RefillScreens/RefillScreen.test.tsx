@@ -259,9 +259,7 @@ context('RefillScreen', () => {
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
-        await waitFor(() =>
-          expect(screen.getByText(t('prescription.refill.banner.migrating.body'))).toBeTruthy(),
-        )
+        await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.body'))).toBeTruthy())
       })
 
       it('should not show banner when no prescriptions match migrating facilities', async () => {
@@ -402,9 +400,7 @@ context('RefillScreen', () => {
     })
 
     describe('when cutover flag is disabled', () => {
-      it('should still filter migrating prescriptions from the list even when flag is off', async () => {
-        // Filtering uses getMigratingPrescriptions which doesn't depend on the flag
-        // The banner won't show, but filtering still applies
+      it('should not filter migrating prescriptions from the list when flag is off', async () => {
         mockUseAuthorizedServices.mockReturnValue({
           data: {
             migratingFacilitiesList: migratingFacilitiesList,
@@ -414,10 +410,9 @@ context('RefillScreen', () => {
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
-        // All prescriptions filtered out → NoRefills
-        await waitFor(() =>
-          expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy(),
-        )
+        // Flag is off, so no filtering — all prescriptions remain in the list
+        await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+        await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
       })
     })
   })

@@ -75,7 +75,14 @@ function PrescriptionsDetailsBanner({
       { text: t('prescription.details.banner.bullet4') },
     ]
 
-    if (isOHCutoverFlagEnabled) {
+    const hasOverrides =
+      customBodyText ||
+      customFooterText ||
+      (migratingPrescriptions && migratingPrescriptions.length > 0) ||
+      !showDefaultContent
+
+    // Only show the V2 short-body when the flag is on AND no overrides are provided
+    if (isOHCutoverFlagEnabled && !hasOverrides) {
       return (
         <>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
@@ -118,7 +125,7 @@ function PrescriptionsDetailsBanner({
         {migratingPrescriptions && migratingPrescriptions.length > 0 && (
           <Box>
             <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
-              You cannot refill these prescriptions online right now:
+              {t('prescription.details.banner.migrating.affectedMedications')}
             </TextView>
             {migratingPrescriptions.map((prescription) => (
               <Box key={prescription.id} flexDirection="row" mb={standardMarginBetween}>
