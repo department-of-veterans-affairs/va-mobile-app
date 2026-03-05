@@ -116,7 +116,7 @@ describeWithSetup('Start a refill request for a single prescription', () => {
   })
 
   it('should navigate back to prescriptions screen when "Go to all pending refills" is pressed', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
+    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTIONS_HEADER_TEXT))).toExist()
   })
 })
@@ -206,7 +206,7 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
   })
 
   it('should navigate back to prescriptions screen when "Go to all pending refills" is pressed', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
+    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTIONS_HEADER_TEXT))).toExist()
   })
 })
