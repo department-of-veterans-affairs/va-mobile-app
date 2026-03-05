@@ -21,6 +21,7 @@ const mockOverrides = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
+  displayDuplicateRecordAlert: true,
   hsScrollAnalytics: false,
   inAppReview: true,
   labsAndTests: true,
