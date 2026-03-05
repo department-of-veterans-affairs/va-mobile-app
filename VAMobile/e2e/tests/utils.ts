@@ -206,6 +206,7 @@ export const CommonE2eIdConstants = {
  * @param pushNotifications: Boolean value that tells the detox tests whether to turn on/off push notifications
  * */
 export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
+  await device.disableSynchronization()
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
@@ -223,6 +224,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     } else {
       await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     }
+    await device.disableSynchronization()
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
       .withTimeout(60000)
@@ -232,6 +234,9 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     .whileElement(by.id('Login-page'))
     .scroll(100, 'down')
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
+
+  // Re-enable sync for dialog interaction — the RN Modal needs sync for proper tap delivery
+  await device.enableSynchronization()
 
   if (DEMO_PASSWORD !== undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
@@ -246,35 +251,51 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     .scroll(100, 'down')
   await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  if (skipOnboarding === true) {
-    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
+  // Disable sync again for the post-login transition which keeps the app busy
+  await device.disableSynchronization()
+  try {
+    await waitFor(element(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID)))
+      .toExist()
+      .withTimeout(30000)
 
-    if (ifCarouselSkipBtnExist) {
-      await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
+    if (skipOnboarding === true) {
+      const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
+
+      if (ifCarouselSkipBtnExist) {
+        await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
+      }
     }
-  }
-  const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
-    CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
-    true,
-  )
-  if (turnOnNotificationsBtnExist) {
-    await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
-  }
+    const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
+      CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
+      true,
+    )
+    if (turnOnNotificationsBtnExist) {
+      await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+    }
 
-  const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
-  if (confirmEmailBtnExist) {
-    await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
-      .scroll(200, 'down')
-    await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
-    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
-  }
+    const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
+    if (confirmEmailBtnExist) {
+      await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+        .scroll(200, 'down')
+      await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
+      const dismissExists = await checkIfElementIsPresent(CommonE2eIdConstants.DISMISS_TEXT, true)
+      if (dismissExists) {
+        await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+      }
+    }
 
-  const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
-  if (skipEmailBtnExist) {
-    await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
-    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+    const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
+    if (skipEmailBtnExist) {
+      await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
+      const dismissExists = await checkIfElementIsPresent(CommonE2eIdConstants.DISMISS_TEXT, true)
+      if (dismissExists) {
+        await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+      }
+    }
+  } finally {
+    await device.enableSynchronization()
   }
 }
 
@@ -295,7 +316,7 @@ export async function checkIfElementIsPresent(
   try {
     if (findbyText) {
       if (waitForElement) {
-        waitFor(element(by.text(matchString)))
+        await waitFor(element(by.text(matchString)))
           .toExist()
           .withTimeout(timeOut)
       } else {
@@ -303,7 +324,7 @@ export async function checkIfElementIsPresent(
       }
     } else {
       if (waitForElement) {
-        waitFor(element(by.id(matchString)))
+        await waitFor(element(by.id(matchString)))
           .toExist()
           .withTimeout(timeOut)
       } else {
