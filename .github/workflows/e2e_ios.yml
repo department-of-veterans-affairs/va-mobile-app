@@ -83,7 +83,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-engineering
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
@@ -403,7 +403,7 @@ jobs:
             echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/json' \
-              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions/runs/${{ github.run_id }}"}' \
+              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions/runs/${{ github.run_id }}", "reply_broadcast": true }' \
               https://slack.com/api/chat.postMessage|
               jq -r '.ts')
             echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
