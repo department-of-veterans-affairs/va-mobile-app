@@ -17,14 +17,13 @@ jest.mock('utils/remoteConfig')
 jest.mock('api/authorizedServices/getAuthorizedServices')
 
 const mockUseAuthorizedServices = useAuthorizedServices as jest.Mock
+const mockFeatureEnabled = featureEnabled as jest.MockedFunction<typeof featureEnabled>
 
 context('RefillScreen', () => {
   const migratingFacilitiesList = [
     {
       migrationDate: '2026-05-01',
-      facilities: [
-        { facilityId: 979, facilityName: 'SLC10 TEST LAB' }, // Matches stationNumber in mockData
-      ],
+      facilities: [{ facilityId: 979, facilityName: 'SLC10 TEST LAB' }],
       phases: {
         current: 'p3',
         p0: 'March 1, 2026',
@@ -129,15 +128,17 @@ context('RefillScreen', () => {
   }
 
   beforeEach(() => {
+    jest.resetAllMocks()
+
     // Default: no migrating facilities, cutover flag off
     mockUseAuthorizedServices.mockReturnValue({
       data: {
         migratingFacilitiesList: [],
       },
     })
-    when(featureEnabled as jest.Mock)
-      .calledWith('mhvMedicationsOracleHealthCutover')
-      .mockReturnValue(false)
+
+    // Default to false for all flags — deterministic and leak-proof
+    mockFeatureEnabled.mockReturnValue(false)
   })
 
   // ============================================================
@@ -149,12 +150,16 @@ context('RefillScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', apiParams)
         .mockResolvedValue(mock)
       initializeTestInstance()
+
+      // Verify NoRefills is NOT shown
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      expect(screen.queryByRole('header', { name: t('prescriptions.noRefill.header') })).toBeFalsy()
+
       await waitFor(() =>
         expect(
           screen.getByLabelText(`${t('prescription.history.orderIdentifier', { idx: 1, total: 2 })}.`),
         ).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
       await waitFor(() =>
         expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 6 9 1`)).toBeTruthy(),
       )
@@ -201,10 +206,11 @@ context('RefillScreen', () => {
         .mockResolvedValue(mock)
       initializeTestInstance()
       await waitFor(() =>
-        fireEvent.press(
+        expect(
           screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }),
-        ),
+        ).toBeTruthy(),
       )
+      fireEvent.press(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }))
       await waitFor(() => expect(screen.getByText(t('prescriptions.refill.pleaseSelect'))).toBeTruthy())
     })
   })
@@ -215,14 +221,10 @@ context('RefillScreen', () => {
   describe('migrating facilities banner', () => {
     describe('when cutover flag is enabled', () => {
       beforeEach(() => {
-        when(featureEnabled as jest.Mock)
-          .calledWith('mhvMedicationsOracleHealthCutover')
-          .mockReturnValue(true)
+        mockFeatureEnabled.mockReturnValue(true)
       })
 
       it('should not show banner when all refillable prescriptions are migrating (NoRefills shows instead)', async () => {
-        // All mockData prescriptions have stationNumber '979' which matches migratingFacilitiesList
-        // filteredRefillable is empty → NoRefills renders, banner branch is not reached
         mockUseAuthorizedServices.mockReturnValue({
           data: {
             migratingFacilitiesList: migratingFacilitiesList,
@@ -239,7 +241,6 @@ context('RefillScreen', () => {
       })
 
       it('should show banner when only some refillable prescriptions are migrating', async () => {
-        // Create mock with a mix: one migrating (station 979) and one non-migrating (station 999)
         const mixedMock: PrescriptionsGetData = {
           data: [
             {
@@ -256,35 +257,8 @@ context('RefillScreen', () => {
               },
             },
           ],
-          meta: {
-            pagination: {
-              currentPage: 1,
-              perPage: 10,
-              totalPages: 1,
-              totalEntries: 2,
-            },
-            prescriptionStatusCount: {
-              active: 2,
-              isRefillable: 2,
-              discontinued: 0,
-              expired: 0,
-              historical: 0,
-              pending: 0,
-              transferred: 0,
-              submitted: 0,
-              hold: 0,
-              unknown: 0,
-              total: 0,
-            },
-            hasNonVaMeds: false,
-          },
-          links: {
-            self: '',
-            first: '',
-            prev: '',
-            next: '',
-            last: '',
-          },
+          meta: mock.meta,
+          links: mock.links,
         }
         mockUseAuthorizedServices.mockReturnValue({
           data: {
@@ -295,13 +269,9 @@ context('RefillScreen', () => {
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mixedMock)
         initializeTestInstance()
-        // Banner shows because hasMigratingPrescriptions is true AND filteredRefillable.length > 0
         await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.header'))).toBeTruthy())
-        // The migrating prescription name appears in the banner
         await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
-        // Custom footer text shows
         await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.body'))).toBeTruthy())
-        // The non-migrating prescription is still in the selectable list
         await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
       })
 
@@ -380,9 +350,7 @@ context('RefillScreen', () => {
   describe('migrating prescription filtering', () => {
     describe('when cutover flag is enabled', () => {
       beforeEach(() => {
-        when(featureEnabled as jest.Mock)
-          .calledWith('mhvMedicationsOracleHealthCutover')
-          .mockReturnValue(true)
+        mockFeatureEnabled.mockReturnValue(true)
       })
 
       it('should filter migrating prescriptions out of the refillable list', async () => {
@@ -395,8 +363,6 @@ context('RefillScreen', () => {
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
-        // All mockData prescriptions have stationNumber '979' which matches migratingFacilitiesList
-        // So filteredRefillable should be empty, showing NoRefills
         await waitFor(() =>
           expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy(),
         )
@@ -428,7 +394,6 @@ context('RefillScreen', () => {
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
-        // No prescriptions match facilityId 999, so all should still be in the list
         await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
         await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
       })
@@ -445,7 +410,6 @@ context('RefillScreen', () => {
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
-        // Flag is off, so no filtering — all prescriptions remain in the list
         await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
         await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
       })
@@ -457,7 +421,6 @@ context('RefillScreen', () => {
   // ============================================================
   describe('prescription count', () => {
     it('should show correct count after filtering', async () => {
-      // No migrating facilities → all prescriptions shown
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', apiParams)
         .mockResolvedValue(mock)
