@@ -326,6 +326,7 @@ describe('Messages Screen', () => {
 
   it(':ios: should tap the category field and select a category', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('top')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(200, 'down')
     await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
