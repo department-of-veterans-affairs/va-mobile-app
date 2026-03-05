@@ -765,7 +765,7 @@ const authSlice = createSlice({
       const finalLoggedIn = isTestOrDev ? state.loggedIn || loggedIn : loggedIn
 
       return {
-        ...state,
+        ...initialAuthState,
         ...action.payload,
         initializing: false,
         syncing: state.syncing && loggedIn,
@@ -773,6 +773,7 @@ const authSlice = createSlice({
         loggedIn: finalLoggedIn,
         displayBiometricsPreferenceScreen: true,
         requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
+        successfulLogin: isTestOrDev ? state.successfulLogin : initialAuthState.successfulLogin,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
