@@ -284,11 +284,10 @@ export type MoveMessageParameters = {
 }
 
 /**
- * Response shape from the OH sync status endpoint.
+ * Response shape from the OH sync status endpoint - there may be additional properties that are not currently being used.
  * When syncComplete is false, historic messages are still being loaded
  * after a facility migration to Oracle Health.
  */
 export type OhSyncStatusData = {
-  //TODO: update other properties.
   syncComplete: boolean
 }
