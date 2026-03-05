@@ -1941,7 +1941,7 @@
   "secureMessaging.startNewMessage": "Start new message",
   "secureMessaging.startNewMessage.nameChangeAlert.title": "We updated your list of care teams",
   "secureMessaging.startNewMessage.nameChangeAlert.body": "You may have more care teams in your list, and some of your care team names may have changed. To find a care team, you can still search by type of care.",
-  "secureMessaging.startNewMessage.nonurgent.title": "How to get help sooner for urgent needs",
+  "secureMessaging.startNewMessage.nonurgent.title": "Only use messages for non-urgent needs",
   "secureMessaging.startNewMessage.nonurgent.careTeam": "Your care team may take up to ",
   "secureMessaging.startNewMessage.nonurgent.threeDays": "3 business days",
   "secureMessaging.startNewMessage.nonurgent.reply": " to reply.",
