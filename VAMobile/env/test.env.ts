@@ -60,7 +60,7 @@ export const LINK_URL_TRAVEL_PAY_ELIGIBILITY =
 export const LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT =
   'https://www.va.gov/resources/how-to-set-up-direct-deposit-for-va-travel-pay-reimbursement/'
 export const LINK_URL_TRAVEL_PAY_WEB_DETAILS = 'https://www.va.gov/my-health/travel-pay/claims/'
-export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://va.gov/my-health/appointments/schedule/type-of-care'
+export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://va.gov/my-health/appointments/schedule'
 export const LINK_URL_WAIVERS_FOR_VA_BENEFIT_DEBT = 'https://va.gov/resources/waivers-for-va-benefit-debt/'
 export const LINK_URL_REQUEST_HARDSHIP_ASSISTANCE = 'https://www.va.gov/health-care/pay-copay-bill/financial-hardship/'
 export const ENVIRONMENT = 'test'
