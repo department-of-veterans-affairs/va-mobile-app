@@ -1,23 +1,22 @@
 import { by, element, expect, waitFor } from 'detox'
 
 import { MessagesE2eIdConstants } from './MessagesConstants'
-import { CommonE2eIdConstants, changeDemoModeUser, loginToDemoMode, openHealth, openMessages } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openHealth, openMessages } from './utils'
 
 export const OHMigrationIdConstants = {
-  DESIRED_DEMO_MODE_USER_ID: 'Kimberly For OH Migration',
+  DESIRED_DEMO_MODE_USER_ID: CommonE2eIdConstants.DEMO_USER_KIMBERLY_OH_MIGRATION,
   OH_ALERT_HEADING_TEXT: "You can't reply to conversations at some facilities",
   FACILITY_NAME_TEXT: 'Test VA Medical Center',
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
-  await changeDemoModeUser(OHMigrationIdConstants.DESIRED_DEMO_MODE_USER_ID)
+  await launchAppWithDemoMode(CommonE2eIdConstants.DEMO_USER_KIMBERLY_OH_MIGRATION)
+  await openHealth()
+  await openMessages()
 })
 
 describe('OH Migration Messages', () => {
   it('should navigate to messages and open a message with a blocking migration phase', async () => {
-    await openHealth()
-    await openMessages()
     await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))

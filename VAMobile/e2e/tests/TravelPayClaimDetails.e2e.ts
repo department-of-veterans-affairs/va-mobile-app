@@ -1,7 +1,7 @@
 import { by, element, expect, waitFor } from 'detox'
 
 // eslint-disable-next-line no-restricted-imports
-import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openClaims, toggleRemoteConfigFlag } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openBenefits, openClaims, toggleRemoteConfigFlag } from './utils'
 
 const TravelPayClaimDetailsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
@@ -33,7 +33,7 @@ const TravelPayClaimDetailsE2eIds = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openBenefits()
   await openClaims()
   await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()

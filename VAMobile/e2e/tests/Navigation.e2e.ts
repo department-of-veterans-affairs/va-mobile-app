@@ -10,7 +10,7 @@ This script should be updated whenever a new feature/new page that has the botto
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
+import { CommonE2eIdConstants, checkImages, launchAppWithDemoMode, toggleRemoteConfigFlag } from './utils'
 
 let navigationValue = process.argv[7]
 
@@ -170,7 +170,7 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
         }
       })
       await setTimeout(2000)
-      await loginToDemoMode()
+      await launchAppWithDemoMode()
       await navigateToPage(key, navigationDicValue)
     }
 
@@ -276,9 +276,8 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
-  await device.launchApp({ newInstance: false })
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
 })
 
 afterEach(async () => {
@@ -304,7 +303,7 @@ afterEach(async () => {
     })
     if (textResized) {
       textResized = false
-      await loginToDemoMode()
+      await launchAppWithDemoMode()
     }
   }
 })

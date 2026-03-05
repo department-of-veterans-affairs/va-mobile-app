@@ -1,7 +1,7 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, openMilitaryInformation, openProfile } from './utils'
+import { CommonE2eIdConstants, checkImages, launchAppWithDemoMode, openMilitaryInformation, openProfile } from './utils'
 
 export const MilitaryInformationE2eIdConstants = {
   SERVICE_INFORMATION_INCORRECT_ID: 'militaryServiceIncorrectLinkID',
@@ -17,7 +17,7 @@ export const MilitaryInformationE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
 })
 
 describe('Military Info Screen', () => {

@@ -9,7 +9,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openBenefits,
   openDisabilityRating,
   openMilitaryInformation,
@@ -30,7 +30,7 @@ export const VeteranStatusCardConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
 })
 
 /*

@@ -5,7 +5,7 @@ import { EN_DASH } from 'utils/formattingUtils'
 
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openBenefits,
   openClaims,
   openHealth,
@@ -36,7 +36,7 @@ const TravePayClaimsE2eIds = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
 })
 
 describe('Travel Pay Claims Screen', () => {

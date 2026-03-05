@@ -1,6 +1,12 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  launchAppWithDemoMode,
+  openAppointments,
+  openHealth,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const AppointmentsExpandede2eConstants = {
   PATIENT_CANCELLATION: 'You canceled this appointment.',
@@ -1174,7 +1180,6 @@ export async function apppointmentVerification(pastAppointment = false) {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
   await openHealth()
   await openAppointments()
   await waitFor(element(by.text('Upcoming')))

@@ -6,7 +6,7 @@ This script should be updated whenever new things are added/changed in payments 
 */
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openPayments, openVAPaymentHistory } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openPayments, openVAPaymentHistory } from './utils'
 
 export const PaymentsE2eIDConstants = {
   PAYMENTS_YEAR_PICKER_ID: 'selectAYearTestID',
@@ -25,7 +25,7 @@ export const PaymentsE2eIDConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openPayments()
   await openVAPaymentHistory()
 })

@@ -531,8 +531,7 @@ export async function backButton(backButtonName: string) {
  * @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
  * */
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
@@ -597,7 +596,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       .scroll(600, 'up')
     await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
     if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
-      await loginToDemoMode()
+      await launchAppWithDemoMode()
     }
   } else {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
@@ -614,8 +613,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode()
+    await launchAppWithDemoMode()
   }
   await openProfile()
   await openSettings()
@@ -784,7 +782,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
  * @param flagName - name of flag to toggle
  * */
 export async function toggleRemoteConfigFlag(flagName: string) {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
@@ -849,5 +847,5 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
     CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
     CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,
   )
-  await loginToDemoMode()
+  await launchAppWithDemoMode(testIdOfDesiredUser)
 }

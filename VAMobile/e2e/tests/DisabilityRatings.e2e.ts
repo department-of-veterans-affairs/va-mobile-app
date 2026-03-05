@@ -1,7 +1,7 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openBenefits, openDisabilityRating } from './utils'
 
 export const DisabilityRatingsIdConstants = {
   COMBINED_DISABILITY_RATING_TEXT: 'Combined disability rating',
@@ -17,7 +17,7 @@ export const DisabilityRatingsIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openBenefits()
   await openDisabilityRating()
 })

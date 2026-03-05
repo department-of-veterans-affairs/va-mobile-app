@@ -6,7 +6,7 @@ This script should be updated whenever new things are added/changed in allergies
 */
 import { by, element, expect } from 'detox'
 
-import { checkImages, loginToDemoMode, openAllergyRecords, openHealth, openMedicalRecords } from './utils'
+import { checkImages, launchAppWithDemoMode, openAllergyRecords, openHealth, openMedicalRecords } from './utils'
 
 export const AllergiesE2eIdConstants = {
   ALLERGY_1_ID: 'Penicillins allergy January 10, 2023',
@@ -21,7 +21,7 @@ export const AllergiesE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openHealth()
   await openMedicalRecords()
   await openAllergyRecords()

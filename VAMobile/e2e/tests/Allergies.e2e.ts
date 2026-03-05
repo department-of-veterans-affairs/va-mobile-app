@@ -7,9 +7,9 @@ This script should be updated whenever new things are added/changed in allergies
 import { by, element, expect } from 'detox'
 
 import {
-  changeDemoModeUser,
+  CommonE2eIdConstants,
   checkImages,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openAllergyRecords,
   openHealth,
   openMedicalRecords,
@@ -24,12 +24,10 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_6_ID: 'Penicillin allergy January 01, 2002',
   ALLERGY_7_ID: 'ASPIRIN allergy ', // trailing space needed due to date being null
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison',
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
-  await changeDemoModeUser(AllergiesE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
+  await launchAppWithDemoMode(CommonE2eIdConstants.DEMO_USER_DENNIS_MADISON)
   await openHealth()
   await openMedicalRecords()
   await openAllergyRecords()

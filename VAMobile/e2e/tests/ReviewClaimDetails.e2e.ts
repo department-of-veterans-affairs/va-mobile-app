@@ -3,7 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openBenefits,
   openClaims,
   openClaimsHistory,
@@ -70,7 +70,7 @@ export const ReviewClaimDetailsE2eIdConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openBenefits()
   await openClaims()
   await openClaimsHistory()

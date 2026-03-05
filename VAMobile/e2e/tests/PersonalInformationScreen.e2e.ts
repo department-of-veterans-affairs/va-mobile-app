@@ -9,7 +9,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openPersonalInformation,
   openProfile,
   toggleRemoteConfigFlag,
@@ -78,7 +78,7 @@ const checkLocatorAndContactLinks = async (scrollID?: string) => {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openProfile()
   await openPersonalInformation()
 })

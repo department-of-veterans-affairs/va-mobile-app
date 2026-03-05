@@ -7,7 +7,7 @@ This script should be updated whenever new things are added/changed in appeals d
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 
 export const AppealsIdConstants = {
   APPEAL_1_ID: 'Disability compensation appeal Received June 12, 2008 Moved to this step on November 22, 2011',
@@ -21,7 +21,7 @@ export const AppealsIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openBenefits()
   await openClaims()
   await openClaimsHistory()

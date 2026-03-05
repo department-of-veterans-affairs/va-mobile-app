@@ -3,7 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openAppointments,
   openDismissLeavingAppPopup,
   openHealth,
@@ -477,7 +477,7 @@ const openAppointmentInList = async (text: string) => {
 
 const openTravelPayFlow = async (text: string, login: boolean = true) => {
   if (login) {
-    await loginToDemoMode()
+    await launchAppWithDemoMode()
   }
 
   // Open the appointments screen to the past appointments list

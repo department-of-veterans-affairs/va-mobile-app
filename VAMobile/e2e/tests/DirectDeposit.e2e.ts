@@ -2,7 +2,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { Dir } from 'fs'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openDirectDeposit, openPayments } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openDirectDeposit, openPayments } from './utils'
 
 export const DirectDepositConstants = {
   SCREEN_TITLE: 'Direct deposit',
@@ -41,7 +41,7 @@ const scrollToThenTap = async (text: string, id?: boolean) => {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openPayments()
   await openDirectDeposit()
 })

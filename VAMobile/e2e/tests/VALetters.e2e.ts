@@ -11,7 +11,7 @@ import { setTimeout } from 'timers/promises'
 import {
   CommonE2eIdConstants,
   checkIfElementIsPresent,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openBenefits,
   openContactInfo,
   openLetters,
@@ -76,7 +76,7 @@ export const LettersConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openBenefits()
   await openLetters()
 })

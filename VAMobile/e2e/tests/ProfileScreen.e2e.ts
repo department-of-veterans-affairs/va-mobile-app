@@ -6,7 +6,7 @@ This script should be updated whenever new menu options are added/changed in the
 */
 import { by, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
@@ -14,7 +14,7 @@ export const ProfileE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openProfile()
 })
 

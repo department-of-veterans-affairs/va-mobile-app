@@ -1,6 +1,12 @@
 import { by, element, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  launchAppWithDemoMode,
+  openAppointments,
+  openHealth,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const ApptsTestTimeE2eConstants = {
   APPOINTMENTS_PAST_TAB_ID: 'apptsPastID',
@@ -8,7 +14,6 @@ export const ApptsTestTimeE2eConstants = {
 beforeAll(async () => {
   // Turns on using alternate (overlapping data on upcoming and past) json for appointments (default off)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.APPOINTMENTS_TEST_TIME)
-  await loginToDemoMode()
   await openHealth()
   await openAppointments()
   await waitFor(element(by.text('Upcoming')))

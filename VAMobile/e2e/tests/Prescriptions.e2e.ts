@@ -1,6 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openHealth, openPrescriptions } from './utils'
 
 export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
@@ -15,7 +15,7 @@ export const PrescriptionsE2eIdConstants = {
 
 describe('Prescriptions', () => {
   beforeAll(async () => {
-    await loginToDemoMode()
+    await launchAppWithDemoMode()
     await openHealth()
     await openPrescriptions()
     await waitFor(element(by.text('Loading prescriptions...')))

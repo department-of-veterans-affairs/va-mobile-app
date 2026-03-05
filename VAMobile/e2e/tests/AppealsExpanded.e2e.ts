@@ -9,7 +9,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openBenefits,
   openClaims,
   openClaimsHistory,
@@ -137,7 +137,7 @@ const expectedInformation = [
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openBenefits()
   await openClaims()
   await openClaimsHistory()

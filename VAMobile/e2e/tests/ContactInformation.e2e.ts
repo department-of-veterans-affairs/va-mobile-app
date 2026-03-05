@@ -3,7 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openContactInfo,
   openProfile,
   scrollToBottomWithWait,
@@ -379,7 +379,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openProfile()
   await openContactInfo()
 })

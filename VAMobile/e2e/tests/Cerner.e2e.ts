@@ -3,8 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  changeDemoModeUser,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openDeveloperScreen,
   openHealth,
   openMessages,
@@ -29,27 +28,13 @@ export const CernerIdConstants = {
     "Some care teams use My VA Health. Information from that health portal isn't included here.",
   CERNER_HEALTH_HELP_LINK_TEXT: 'Check if your care team uses My VA Health',
   MESSAGES_ID: 'messagesTestID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison',
 }
 
 beforeAll(async () => {
   if (device.getPlatform() === 'android') {
     // turns on Cerner demo mode
-    await loginToDemoMode()
-    await openProfile()
-    await openSettings()
-    await openDeveloperScreen()
-    await waitFor(element(by.text('Remote Config')))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID))
-      .scroll(200, 'down')
-    await element(by.text('Remote Config')).tap()
-    await scrollToIDThenTap('cernerTrueForDemo', CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-    await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
-
-    //navigates to correct screen with cerner on
-    await loginToDemoMode()
-    await changeDemoModeUser(CernerIdConstants.DESIRED_DEMO_MODE_USER_ID)
+    await toggleRemoteConfigFlag('cernerTrueForDemo')
+    await launchAppWithDemoMode(CommonE2eIdConstants.DEMO_USER_DENNIS_MADISON)
   }
 })
 

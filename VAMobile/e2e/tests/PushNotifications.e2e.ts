@@ -7,7 +7,7 @@ This script should be updated whenever any new notification types are added to t
 */
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { backButton, loginToDemoMode } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode } from './utils'
 
 const PushNotificationsConstants = {
   MESSAGE_COMPOSE_BUTTON_TEXT: 'Start new message',
@@ -28,13 +28,7 @@ const mockNotification = {
 //This script is only run on iOS because there are additional requirements that can't be met for Android
 describe(':ios: Push Notifications', () => {
   it('dead state: should navigate to appropriate screen when launching', async () => {
-    await device.launchApp({
-      delete: true,
-      permissions: { notifications: 'YES' },
-      newInstance: true,
-      userNotification: mockNotification,
-    })
-    await loginToDemoMode(true, true)
+    await launchAppWithDemoMode(CommonE2eIdConstants.DEMO_USER_KIMBERLY_WASHINGTON, true, true)
     await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE)))
       .toExist()
       .withTimeout(8000)
@@ -48,8 +42,7 @@ describe(':ios: Push Notifications', () => {
   })
 
   it('background: should navigate to appropriate screen', async () => {
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
+    await launchAppWithDemoMode()
     await device.sendToHome()
     await device.launchApp({ newInstance: false, userNotification: mockNotification })
     await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE)))
@@ -58,8 +51,7 @@ describe(':ios: Push Notifications', () => {
   })
 
   it('foreground: should navigate to appropriate screen', async () => {
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
+    await launchAppWithDemoMode()
     await device.sendUserNotification(mockNotification)
     await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE)))
       .toExist()

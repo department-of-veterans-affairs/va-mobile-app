@@ -5,7 +5,7 @@ import { MessagesE2eIdConstants } from './MessagesConstants'
 import {
   CommonE2eIdConstants,
   checkImages,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openHealth,
   openMessages,
   toggleRemoteConfigFlag,
@@ -40,7 +40,6 @@ let messageExpanded
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await loginToDemoMode()
   await openHealth()
   await openMessages()
 })

@@ -7,7 +7,7 @@ This script should be updated whenever new things are added/changed in Veterans 
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openVeteransCrisisLine } from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openVeteransCrisisLine } from './utils'
 
 export const VCLConstants = {
   SUBHEADING_TEXT: 'We’re here anytime, day or night – 24/7',
@@ -27,7 +27,7 @@ const tapAndTakeScreenshot = async (text: string, screenshotName: string) => {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openVeteransCrisisLine()
 })
 

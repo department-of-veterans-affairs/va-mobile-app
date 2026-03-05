@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import { getFormattedDate } from '../../src/utils/dateUtils'
 import {
   CommonE2eIdConstants,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openHealth,
   openLabsAndTestRecords,
   openMedicalRecords,
@@ -43,7 +43,7 @@ const HEADER_TEXT = 'Labs and tests'
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TEST_TOGGLE_TEXT)
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openHealth()
   await openMedicalRecords()
   await openLabsAndTestRecords()

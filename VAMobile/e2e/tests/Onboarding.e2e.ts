@@ -6,7 +6,7 @@ This script should be updated whenever new things are added/changed to the onboa
 */
 import { by, device, element, expect } from 'detox'
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils'
+import { CommonE2eIdConstants, checkImages, launchAppWithDemoMode } from './utils'
 
 export const OnboardingE2eIdConstants = {
   VA_ICON_ID: 'VAIconOnboardingLogo',
@@ -15,7 +15,7 @@ export const OnboardingE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode(false)
+  await launchAppWithDemoMode(undefined, false)
 })
 
 describe('Onboarding Screen', () => {
@@ -88,8 +88,7 @@ describe('Onboarding Screen', () => {
   it('verify the notifications page is displayed after skipping', async () => {
     await device.uninstallApp()
     await device.installApp()
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode(false)
+    await launchAppWithDemoMode(undefined, false)
     await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     await expect(element(by.text(OnboardingE2eIdConstants.NOTIFICATIONS_PAGE_HEADER))).toExist()
   })

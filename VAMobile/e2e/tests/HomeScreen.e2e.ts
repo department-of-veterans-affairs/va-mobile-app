@@ -1,7 +1,14 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, checkImages, enableAF, loginToDemoMode, toggleRemoteConfigFlag, verifyAF } from './utils'
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  enableAF,
+  launchAppWithDemoMode,
+  toggleRemoteConfigFlag,
+  verifyAF,
+} from './utils'
 
 export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Veteran Status Card',
@@ -31,7 +38,7 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
 })
 
 describe('Home Screen', () => {
@@ -43,8 +50,7 @@ describe('Home Screen', () => {
   it(':android: should disable AF use case 3', async () => {
     await device.uninstallApp()
     await device.installApp()
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode()
+    await launchAppWithDemoMode()
   })
 
   it('should show primary home page header content', async () => {

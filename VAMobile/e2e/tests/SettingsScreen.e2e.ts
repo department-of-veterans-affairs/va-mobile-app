@@ -7,7 +7,13 @@ This script should be updated whenever new items are added to the settings scree
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openDismissLeavingAppPopup, openProfile, openSettings } from './utils'
+import {
+  CommonE2eIdConstants,
+  launchAppWithDemoMode,
+  openDismissLeavingAppPopup,
+  openProfile,
+  openSettings,
+} from './utils'
 
 export const SettingsE2eIdConstants = {
   SETTINGS_SCREEN_TEXT: 'Settings',
@@ -34,7 +40,7 @@ export const SettingsE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openProfile()
   await openSettings()
 })
@@ -74,8 +80,7 @@ describe('Settings Screen', () => {
     if (device.getPlatform() === 'ios') {
       await element(by.id(SettingsE2eIdConstants.SHARE_APP_ROW_ID)).tap()
       await device.takeScreenshot('ShareTheAppScreenshot')
-      await device.launchApp({ newInstance: true })
-      await loginToDemoMode()
+      await launchAppWithDemoMode()
       await openProfile()
       await openSettings()
     }

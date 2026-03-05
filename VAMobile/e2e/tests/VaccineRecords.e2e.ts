@@ -11,7 +11,7 @@ import { by, element, expect } from 'detox'
 import {
   CommonE2eIdConstants,
   checkImages,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openHealth,
   openMedicalRecords,
   openVaccineRecords,
@@ -27,7 +27,7 @@ export const VaccinesE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openHealth()
   await openMedicalRecords()
   await openVaccineRecords()
