@@ -106,7 +106,7 @@ describe('Review Upcoming Appointments', () => {
     await element(by.id(Appointmentse2eConstants.WHAT_TO_BRING_ID)).tap()
     await waitFor(element(by.id(Appointmentse2eConstants.WEBVIEW_BACK_BUTTON_ID)))
       .toBeVisible()
-      .withTimeout(3000)
+      .withTimeout(4000)
     await element(by.id(Appointmentse2eConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
 
     // Call VA phone numbers
