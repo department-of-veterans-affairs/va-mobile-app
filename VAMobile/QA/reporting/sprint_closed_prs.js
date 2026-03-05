@@ -83,12 +83,12 @@ query($owner: String!, $name: String!, $cursor: String) {
     pullRequests(
       first: 100
       after: $cursor
-      orderBy: { field: CREATED_AT, direction: DESC }
+      orderBy: { field: UPDATED_AT, direction: DESC }
       states: [MERGED]
     ) {
       pageInfo { hasNextPage endCursor }
       nodes {
-        number title mergedAt
+        number title mergedAt updatedAt
       }
     }
   }
@@ -235,9 +235,10 @@ const fetchMergedPRs = (config, since) => {
       if (pr.mergedAt && pr.mergedAt >= sinceStr) prs.push(pr)
     }
 
-    // Stop paginating once oldest PR on page is before our window
-    const oldest = nodes.at(-1)?.mergedAt
-    if (!conn.pageInfo.hasNextPage || (oldest && oldest < sinceStr)) break
+    // Safe cutoff: pagination is ordered by UPDATED_AT (desc), so once the
+    // oldest updatedAt on this page is before sinceStr, remaining pages are too.
+    const oldestUpdatedAt = nodes.at(-1)?.updatedAt
+    if (!conn.pageInfo.hasNextPage || (oldestUpdatedAt && oldestUpdatedAt < sinceStr)) break
     cursor = conn.pageInfo.endCursor
   }
 
@@ -362,6 +363,9 @@ const main = () => {
     .filter((s) => new Date(s.startDate + 'T00:00:00Z') <= config.now)
     .sort((a, b) => b.startDate.localeCompare(a.startDate))
   const targetSprints = allSprints.slice(0, config.sprints)
+  if (!targetSprints.length) {
+    die('No current/past sprints found after filtering. Check project iteration dates.')
+  }
   const earliest = targetSprints.at(-1)
   const fetchSince = new Date(earliest.startDate + 'T00:00:00Z')
 
