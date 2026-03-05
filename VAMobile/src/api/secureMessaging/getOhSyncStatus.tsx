@@ -9,8 +9,7 @@ import { get } from 'store/api'
  * after a facility migration to Oracle Health.
  */
 const getOhSyncStatus = (): Promise<OhSyncStatusData | undefined> => {
-  // TODO: Update URL once backend team confirms the vets-api proxy endpoint
-  return get<OhSyncStatusData>('/v0/messaging/health/exchange/sync_status')
+  return get<OhSyncStatusData>('/v0/messaging/health/messages/oh_sync_status')
 }
 
 /**
