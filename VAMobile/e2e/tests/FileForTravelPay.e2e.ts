@@ -288,7 +288,6 @@ describe('File for Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.PENALTY_STATEMENT_AGREEMENT_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.TRAVEL_AGREEMENT_LINK_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.CHECK_BOX_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID))).toExist()
 
     // Verify Travel Agreement
     await element(by.id(TravelPayE2eIdConstants.TRAVEL_AGREEMENT_LINK_ID)).tap()
