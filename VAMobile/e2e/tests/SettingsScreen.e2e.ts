@@ -39,7 +39,7 @@ beforeAll(async () => {
   await openSettings()
 })
 
-describe.skip('Settings Screen', () => {
+describe('Settings Screen', () => {
   it('should show settings list content', async () => {
     await waitFor(element(by.text(SettingsE2eIdConstants.SETTINGS_SCREEN_TEXT)))
       .toExist()

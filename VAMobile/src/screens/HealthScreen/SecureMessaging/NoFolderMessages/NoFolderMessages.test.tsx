@@ -18,12 +18,12 @@ jest.mock('utils/hooks', () => {
 })
 
 context('NoFolderMessages', () => {
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (noRecipientsError = false) => {
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
       .calledWith('SecureMessaging')
       .mockReturnValue(jest.fn())
-    render(<NoFolderMessages />)
+    render(<NoFolderMessages noRecipientsError={noRecipientsError} />)
   }
 
   describe('should render correctly', () => {
@@ -32,6 +32,18 @@ context('NoFolderMessages', () => {
       expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy()
       fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('start new message button visibility', () => {
+    it('should show the button when noRecipientsError is false', () => {
+      initializeTestInstance(false)
+      expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy()
+    })
+
+    it('should hide the button when noRecipientsError is true', () => {
+      initializeTestInstance(true)
+      expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
     })
   })
 })

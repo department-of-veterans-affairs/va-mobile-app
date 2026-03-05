@@ -210,7 +210,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(120000)
+      .withTimeout(60000)
   } catch (ex) {
     await device.uninstallApp()
     await device.installApp()
@@ -353,6 +353,17 @@ export async function scrollToElement(text: string, containerID: string) {
     .toBeVisible()
     .whileElement(by.id(containerID))
     .scroll(200, 'down')
+}
+
+/**
+ * Scroll to the bottom of a container and wait for 1 second to allow animations to settle.
+ * Recommended for screens that have dynamic content or animations at the bottom.
+ *
+ * @param containerID - testID of the container to scroll in
+ */
+export async function scrollToBottomWithWait(containerID: string) {
+  await element(by.id(containerID)).scrollTo('bottom')
+  await setTimeout(1000)
 }
 
 /** Test for the presence of text 1 or more times
@@ -815,6 +826,7 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherSelector-${endpoint}`)).tap()
     await element(by.id('overrideAPITestID')).scroll(100, 'down')
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
+    await element(by.id(`otherStatus-${endpoint}`)).tapReturnKey()
   }
 
   await element(by.id('saveErrors')).tap()
