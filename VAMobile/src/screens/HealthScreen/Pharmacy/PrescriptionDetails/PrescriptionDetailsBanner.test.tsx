@@ -84,30 +84,57 @@ context('PrescriptionsDetailsBanner', () => {
     when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(false)
   })
 
-  it('initializes correctly', () => {
-    render(<PrescriptionsDetailsBanner />)
-    expect(screen.getByText(t('prescription.details.banner.title'))).toBeTruthy()
+  // ============================================================
+  // Default behavior (flag OFF, no overrides)
+  // ============================================================
+  describe('default behavior (flag off)', () => {
+    it('initializes correctly with default banner title', () => {
+      render(<PrescriptionsDetailsBanner />)
+      expect(screen.getByText(t('prescription.details.banner.title'))).toBeTruthy()
+    })
+
+    it('should show expanded content with bullets and phone number', () => {
+      render(<PrescriptionsDetailsBanner />)
+      fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
+      expect(screen.getByText(`${t('prescription.details.banner.bullet1')} ${t('or')}`)).toBeTruthy()
+      expect(screen.getByText(`${t('prescription.details.banner.bullet2')} ${t('or')}`)).toBeTruthy()
+      expect(screen.getByText(`${t('prescription.details.banner.bullet3')} ${t('or')}`)).toBeTruthy()
+      expect(screen.getByText(t('prescription.details.banner.bullet4'))).toBeTruthy()
+      expect(screen.getByText(t('automatedPhoneSystem'))).toBeTruthy()
+      expect(screen.getByText(displayedTextPhoneNumber(t('5418307563')))).toBeTruthy()
+      expect(screen.getByText(t('contactVA.tty.displayText'))).toBeTruthy()
+    })
   })
 
-  it('should show expanded content', () => {
-    render(<PrescriptionsDetailsBanner />)
-    fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
-    expect(screen.getByText(`${t('prescription.details.banner.bullet1')} ${t('or')}`)).toBeTruthy()
-    expect(screen.getByText(`${t('prescription.details.banner.bullet2')} ${t('or')}`)).toBeTruthy()
-    expect(screen.getByText(`${t('prescription.details.banner.bullet3')} ${t('or')}`)).toBeTruthy()
-    expect(screen.getByText(t('prescription.details.banner.bullet4'))).toBeTruthy()
-    expect(screen.getByText(t('automatedPhoneSystem'))).toBeTruthy()
-    expect(screen.getByText(displayedTextPhoneNumber(t('5418307563')))).toBeTruthy()
-    expect(screen.getByText(t('contactVA.tty.displayText'))).toBeTruthy()
+  // ============================================================
+  // V2 behavior (flag ON, no overrides)
+  // ============================================================
+  describe('V2 behavior (flag on, no overrides)', () => {
+    beforeEach(() => {
+      when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
+    })
+
+    it('should show V2 title', () => {
+      render(<PrescriptionsDetailsBanner />)
+      expect(screen.getByText(t('prescription.details.banner.titleV2'))).toBeTruthy()
+    })
+
+    it('should show V2 short body when expanded', () => {
+      render(<PrescriptionsDetailsBanner />)
+      fireEvent.press(screen.getByText(t('prescription.details.banner.titleV2')))
+      expect(screen.getByText(t('prescription.details.banner.bodyV2'))).toBeTruthy()
+    })
+
+    it('should NOT show default bullets', () => {
+      render(<PrescriptionsDetailsBanner />)
+      fireEvent.press(screen.getByText(t('prescription.details.banner.titleV2')))
+      expect(screen.queryByText(`${t('prescription.details.banner.bullet1')} ${t('or')}`)).toBeFalsy()
+    })
   })
 
-  it('should show expanded content when mhvMedicationsOracleHealthCutover flag is enabled', () => {
-    when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
-    render(<PrescriptionsDetailsBanner />)
-    fireEvent.press(screen.getByText(t('prescription.details.banner.titleV2')))
-    expect(screen.getByText(`${t('prescription.details.banner.bodyV2')}`)).toBeTruthy()
-  })
-
+  // ============================================================
+  // variant prop
+  // ============================================================
   describe('variant prop', () => {
     it('should render with warning variant by default', () => {
       render(<PrescriptionsDetailsBanner />)
@@ -125,6 +152,9 @@ context('PrescriptionsDetailsBanner', () => {
     })
   })
 
+  // ============================================================
+  // phoneNumber prop
+  // ============================================================
   describe('phoneNumber prop', () => {
     it('should display default phone number when not provided', () => {
       render(<PrescriptionsDetailsBanner />)
@@ -140,33 +170,138 @@ context('PrescriptionsDetailsBanner', () => {
     })
   })
 
-  describe('migratingPrescriptions prop', () => {
+  // ============================================================
+  // Custom overrides with flag OFF (showDefaultContent=true by default)
+  // When migratingPrescriptions are passed but showDefaultContent is not set to false,
+  // BOTH default bullets AND migrating prescriptions render
+  // ============================================================
+  describe('migratingPrescriptions prop (flag off, showDefaultContent defaults to true)', () => {
     it('should not display medication links when migratingPrescriptions is not provided', () => {
       render(<PrescriptionsDetailsBanner />)
       fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
       expect(screen.queryByText('ALLOPURINOL 100MG TAB')).toBeFalsy()
+      expect(screen.queryByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeFalsy()
     })
 
     it('should not display medication links when migratingPrescriptions is empty', () => {
       render(<PrescriptionsDetailsBanner migratingPrescriptions={[]} />)
       fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
       expect(screen.queryByText('ALLOPURINOL 100MG TAB')).toBeFalsy()
+      expect(screen.queryByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeFalsy()
     })
 
-    it('should display medication links when migratingPrescriptions is provided', () => {
+    it('should display medication names alongside default content when migratingPrescriptions is provided', () => {
       render(<PrescriptionsDetailsBanner migratingPrescriptions={mockMigratingPrescriptions} />)
       fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
+      // Default content still shows because showDefaultContent defaults to true
+      expect(screen.getByText(`${t('prescription.details.banner.bullet1')} ${t('or')}`)).toBeTruthy()
+      // Migrating prescriptions also show
+      expect(screen.getByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeTruthy()
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy()
     })
+  })
 
-    it('should display affected medications header when migratingPrescriptions is provided', () => {
-      render(<PrescriptionsDetailsBanner migratingPrescriptions={mockMigratingPrescriptions} />)
-      fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
+  // ============================================================
+  // Custom overrides with showDefaultContent=false (as used in production)
+  // This matches how PrescriptionDetails.tsx and RefillScreen.tsx call the banner
+  // ============================================================
+  describe('migratingPrescriptions prop (showDefaultContent=false)', () => {
+    it('should display only custom content without default bullets', () => {
+      render(
+        <PrescriptionsDetailsBanner
+          migratingPrescriptions={mockMigratingPrescriptions}
+          showDefaultContent={false}
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+          customFooterText={t('prescription.details.banner.migrating.body')}
+        />,
+      )
+      fireEvent.press(screen.getByText(t('prescription.details.banner.migrating.header')))
+      // Default bullets should NOT show
+      expect(screen.queryByText(`${t('prescription.details.banner.bullet1')} ${t('or')}`)).toBeFalsy()
+      // Custom content should show
       expect(screen.getByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeTruthy()
+      expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
+      expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy()
+      // Custom footer replaces default phone section
+      expect(screen.getByText(t('prescription.details.banner.migrating.body'))).toBeTruthy()
+      expect(screen.queryByText(t('automatedPhoneSystem'))).toBeFalsy()
     })
   })
 
+  // ============================================================
+  // Custom overrides with flag ON + overrides (hasOverrides = true, skips V2 early return)
+  // ============================================================
+  describe('custom overrides with flag ON', () => {
+    beforeEach(() => {
+      when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
+    })
+
+    it('should show custom content instead of V2 short body when overrides are provided', () => {
+      render(
+        <PrescriptionsDetailsBanner
+          migratingPrescriptions={mockMigratingPrescriptions}
+          showDefaultContent={false}
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+          customFooterText={t('prescription.details.banner.migrating.body')}
+        />,
+      )
+      fireEvent.press(screen.getByText(t('prescription.details.banner.migrating.header')))
+      // V2 short body should NOT show because hasOverrides is true
+      expect(screen.queryByText(t('prescription.details.banner.bodyV2'))).toBeFalsy()
+      // Custom content should show
+      expect(screen.getByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeTruthy()
+      expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
+      expect(screen.getByText(t('prescription.details.banner.migrating.body'))).toBeTruthy()
+    })
+
+    it('should show custom body text when provided with showDefaultContent=false', () => {
+      render(
+        <PrescriptionsDetailsBanner
+          showDefaultContent={false}
+          customBodyText={t('prescription.details.banner.migrating.body')}
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+        />,
+      )
+      fireEvent.press(screen.getByText(t('prescription.details.banner.migrating.header')))
+      // V2 short body should NOT show
+      expect(screen.queryByText(t('prescription.details.banner.bodyV2'))).toBeFalsy()
+      // Custom body should show
+      expect(screen.getByText(t('prescription.details.banner.migrating.body'))).toBeTruthy()
+    })
+  })
+
+  // ============================================================
+  // customHeaderText prop
+  // ============================================================
+  describe('customHeaderText prop', () => {
+    it('should use customHeaderText when provided (flag off)', () => {
+      render(
+        <PrescriptionsDetailsBanner
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+          showDefaultContent={false}
+        />,
+      )
+      expect(screen.getByText(t('prescription.details.banner.migrating.header'))).toBeTruthy()
+      expect(screen.queryByText(t('prescription.details.banner.title'))).toBeFalsy()
+    })
+
+    it('should use customHeaderText when provided (flag on)', () => {
+      when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
+      render(
+        <PrescriptionsDetailsBanner
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+          showDefaultContent={false}
+        />,
+      )
+      expect(screen.getByText(t('prescription.details.banner.migrating.header'))).toBeTruthy()
+      expect(screen.queryByText(t('prescription.details.banner.titleV2'))).toBeFalsy()
+    })
+  })
+
+  // ============================================================
+  // Integration with getMigratingPrescriptions utility
+  // ============================================================
   describe('integration with getMigratingPrescriptions utility', () => {
     const mockNonMigratingPrescription: PrescriptionData = {
       id: '789',
@@ -196,20 +331,34 @@ context('PrescriptionsDetailsBanner', () => {
       const allPrescriptions = [...mockMigratingPrescriptions, mockNonMigratingPrescription]
       const filteredPrescriptions = getMigratingPrescriptions(allPrescriptions, mockMigratingFacilitiesList)
 
-      render(<PrescriptionsDetailsBanner migratingPrescriptions={filteredPrescriptions} />)
-      fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
+      render(
+        <PrescriptionsDetailsBanner
+          migratingPrescriptions={filteredPrescriptions}
+          showDefaultContent={false}
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+          customFooterText={t('prescription.details.banner.migrating.body')}
+        />,
+      )
+      fireEvent.press(screen.getByText(t('prescription.details.banner.migrating.header')))
 
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy()
       expect(screen.queryByText('NON-MIGRATING PRESCRIPTION')).toBeFalsy()
     })
 
-    it('should not display medication links when getMigratingPrescriptions returns empty array', () => {
+    it('should not display medication section when getMigratingPrescriptions returns empty array', () => {
       const nonMigratingPrescriptions = [mockNonMigratingPrescription]
       const filteredPrescriptions = getMigratingPrescriptions(nonMigratingPrescriptions, mockMigratingFacilitiesList)
 
-      render(<PrescriptionsDetailsBanner migratingPrescriptions={filteredPrescriptions} />)
-      fireEvent.press(screen.getByText(t('prescription.details.banner.title')))
+      render(
+        <PrescriptionsDetailsBanner
+          migratingPrescriptions={filteredPrescriptions}
+          showDefaultContent={false}
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+          customFooterText={t('prescription.details.banner.migrating.body')}
+        />,
+      )
+      fireEvent.press(screen.getByText(t('prescription.details.banner.migrating.header')))
 
       expect(screen.queryByText('NON-MIGRATING PRESCRIPTION')).toBeFalsy()
       expect(screen.queryByText(t('prescription.details.banner.migrating.affectedMedications'))).toBeFalsy()

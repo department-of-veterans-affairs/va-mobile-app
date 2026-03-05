@@ -57,7 +57,6 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     prescriptionNumber,
     expirationDate,
     orderedDate,
-    stationNumber,
   } = prescription?.attributes
 
   const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()

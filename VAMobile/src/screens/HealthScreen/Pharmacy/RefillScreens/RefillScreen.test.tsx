@@ -220,7 +220,9 @@ context('RefillScreen', () => {
           .mockReturnValue(true)
       })
 
-      it('should show banner when prescriptions are at migrating facilities', async () => {
+      it('should not show banner when all refillable prescriptions are migrating (NoRefills shows instead)', async () => {
+        // All mockData prescriptions have stationNumber '979' which matches migratingFacilitiesList
+        // filteredRefillable is empty → NoRefills renders, banner branch is not reached
         mockUseAuthorizedServices.mockReturnValue({
           data: {
             migratingFacilitiesList: migratingFacilitiesList,
@@ -231,11 +233,59 @@ context('RefillScreen', () => {
           .mockResolvedValue(mock)
         initializeTestInstance()
         await waitFor(() =>
-          expect(screen.getByText("You can't refill prescriptions online for some facilities right now")).toBeTruthy(),
+          expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy(),
         )
+        expect(screen.queryByText(t('prescription.refill.banner.migrating.header'))).toBeFalsy()
       })
 
-      it('should show migrating prescription names in the banner', async () => {
+      it('should show banner when only some refillable prescriptions are migrating', async () => {
+        // Create mock with a mix: one migrating (station 979) and one non-migrating (station 999)
+        const mixedMock: PrescriptionsGetData = {
+          data: [
+            {
+              ...mockData[0],
+              // stationNumber '979' matches migrating facility
+            },
+            {
+              ...mockData[1],
+              id: 'non-migrating-id',
+              attributes: {
+                ...mockData[1].attributes,
+                stationNumber: '999',
+                facilityName: 'Other VA Facility',
+              },
+            },
+          ],
+          meta: {
+            pagination: {
+              currentPage: 1,
+              perPage: 10,
+              totalPages: 1,
+              totalEntries: 2,
+            },
+            prescriptionStatusCount: {
+              active: 2,
+              isRefillable: 2,
+              discontinued: 0,
+              expired: 0,
+              historical: 0,
+              pending: 0,
+              transferred: 0,
+              submitted: 0,
+              hold: 0,
+              unknown: 0,
+              total: 0,
+            },
+            hasNonVaMeds: false,
+          },
+          links: {
+            self: '',
+            first: '',
+            prev: '',
+            next: '',
+            last: '',
+          },
+        }
         mockUseAuthorizedServices.mockReturnValue({
           data: {
             migratingFacilitiesList: migratingFacilitiesList,
@@ -243,23 +293,16 @@ context('RefillScreen', () => {
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
-          .mockResolvedValue(mock)
+          .mockResolvedValue(mixedMock)
         initializeTestInstance()
+        // Banner shows because hasMigratingPrescriptions is true AND filteredRefillable.length > 0
+        await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.header'))).toBeTruthy())
+        // The migrating prescription name appears in the banner
         await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy())
-      })
-
-      it('should show custom footer text in the banner', async () => {
-        mockUseAuthorizedServices.mockReturnValue({
-          data: {
-            migratingFacilitiesList: migratingFacilitiesList,
-          },
-        })
-        when(api.get as jest.Mock)
-          .calledWith('/v0/health/rx/prescriptions', apiParams)
-          .mockResolvedValue(mock)
-        initializeTestInstance()
+        // Custom footer text shows
         await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.body'))).toBeTruthy())
+        // The non-migrating prescription is still in the selectable list
+        await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
       })
 
       it('should not show banner when no prescriptions match migrating facilities', async () => {
@@ -289,9 +332,7 @@ context('RefillScreen', () => {
           .mockResolvedValue(mock)
         initializeTestInstance()
         await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
-        await waitFor(() =>
-          expect(screen.queryByText("You can't refill prescriptions online for some facilities right now")).toBeFalsy(),
-        )
+        expect(screen.queryByText(t('prescription.refill.banner.migrating.header'))).toBeFalsy()
       })
 
       it('should not show banner when migratingFacilitiesList is empty', async () => {
@@ -300,9 +341,7 @@ context('RefillScreen', () => {
           .mockResolvedValue(mock)
         initializeTestInstance()
         await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
-        await waitFor(() =>
-          expect(screen.queryByText("You can't refill prescriptions online for some facilities right now")).toBeFalsy(),
-        )
+        expect(screen.queryByText(t('prescription.refill.banner.migrating.header'))).toBeFalsy()
       })
 
       it('should not show banner when userAuthorizedServices is undefined', async () => {
@@ -314,9 +353,7 @@ context('RefillScreen', () => {
           .mockResolvedValue(mock)
         initializeTestInstance()
         await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
-        await waitFor(() =>
-          expect(screen.queryByText("You can't refill prescriptions online for some facilities right now")).toBeFalsy(),
-        )
+        expect(screen.queryByText(t('prescription.refill.banner.migrating.header'))).toBeFalsy()
       })
     })
 
@@ -331,10 +368,8 @@ context('RefillScreen', () => {
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
-        // Banner should not render because isOHCutoverFlagEnabled is false
-        await waitFor(() =>
-          expect(screen.queryByText("You can't refill prescriptions online for some facilities right now")).toBeFalsy(),
-        )
+        await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+        expect(screen.queryByText(t('prescription.refill.banner.migrating.header'))).toBeFalsy()
       })
     })
   })
