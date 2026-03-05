@@ -45,7 +45,7 @@ beforeAll(async () => {
   await openMessages()
 })
 
-describe.skip('Messages Screen', () => {
+describe('Messages Screen', () => {
   it('should match the messages page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text('Inbox (3)'))).toExist()
@@ -319,6 +319,7 @@ describe.skip('Messages Screen', () => {
     await element(by.text('357')).tap()
     await element(by.text('Done')).tap()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
+    await element(by.id('comboBoxTextInputID')).replaceText('VA Flagship')
     await element(by.text('VA Flagship mobile applications interface 2_DAYT29')).tap()
   })
 
@@ -333,12 +334,11 @@ describe.skip('Messages Screen', () => {
   })
 
   it(':ios: should add and delete text in the subject field', async () => {
-    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)))
-      .toBeVisible()
-      .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
-      .scroll(50, 'down')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).replaceText('Testing')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).tapReturnKey()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).clearText()
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).tapReturnKey()
   })
 
   it(':ios: verify cancel action sheet display', async () => {
