@@ -2,12 +2,14 @@
 
 // Full test run - used by components, slices, translations, utils
 const fullTestRun = [
+  'AccessibilityDarkMode',
+  'AccessibilityLandscape',
+  'AccessibilityTextResize',
   'Allergies',
   'AllergiesAccelerated',
   'Appeals',
   'AppealsExpanded',
   'Appointments',
-  'AppointmentsExpanded',
   'AppointmentsTestTime',
   'AvailabilityFramework',
   'Claims',
@@ -20,7 +22,6 @@ const fullTestRun = [
   'LoginScreen',
   'Messages',
   'MilitaryInformation',
-  'Navigation',
   'OHMigrationMessages',
   'Onboarding',
   'Payments',
@@ -44,7 +45,6 @@ const authorizedServicesArray = [
   'Appeals',
   'AppealsExpanded',
   'Appointments',
-  'AppointmentsExpanded',
   'AppointmentsTestTime',
   'Claims',
   'DirectDeposit',
@@ -61,7 +61,6 @@ const authorizedServicesArray = [
 
 const healthScreenArray = [
   'Appointments',
-  'AppointmentsExpanded',
   'AppointmentsTestTime',
   'Messages',
   'OHMigrationMessages',
@@ -85,7 +84,7 @@ const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims', 'ReviewCl
 const contactInfoArray = ['ContactInformation', 'VALetters']
 const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
 const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
-const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime', 'TravelPay']
+const appointmentsArray = ['Appointments', 'AppointmentsTestTime', 'TravelPay']
 const notificationsArray = ['SettingsScreen', 'PushNotifications']
 // TODO: The rest of the Overpay/Copay screens still need to be added to project
 const medicalCopaysArray = ['Payments']
