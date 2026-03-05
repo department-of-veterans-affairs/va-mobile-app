@@ -226,7 +226,12 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
       ) : debtsError ? (
         serviceErrorAlert()
       ) : isEmpty ? (
-        <EmptyStateMessage title={t('debts.empty.title')} body={t('debts.empty.body')} phone={t('8008270648')} />
+        <EmptyStateMessage
+          title={t('debts.empty.title')}
+          body={t('debts.empty.body')}
+          phone={t('8008270648')}
+          internationalPhone={true}
+        />
       ) : (
         <>
           {renderContent()}

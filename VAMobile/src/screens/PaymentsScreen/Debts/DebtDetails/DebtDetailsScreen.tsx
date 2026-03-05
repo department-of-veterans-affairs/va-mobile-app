@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -39,14 +39,38 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
   const navigateTo = useRouteNavigation()
 
   function renderAlert() {
+    const showFSRLink = debtInfo.i18nKey === 'submitFinancialStatusReport'
+    const fsrUrl = 'https://www.va.gov/forms/5655/'
+
     return (
       <AlertWithHaptics
         variant={debtInfo.variant === 'info' ? 'info' : 'warning'}
-        expandable={false} // TODO: change to true when alert content is added
+        expandable={true}
         header={t(`debts.details.alert.header.${debtInfo.i18nKey}`, {
           endDate: debtInfo.endDate,
         })}>
-        {/* TODO: add alert content */}
+        <TextView>
+          <Trans
+            i18nKey={t(`debt.details.alert.message.${debtInfo.i18nKey}`)}
+            components={{
+              bold: <TextView variant="MobileBodyBold" />,
+            }}
+            values={{
+              balance: debtInfo.balance,
+              endDate: debtInfo.endDate,
+              type: debtInfo.type,
+            }}
+          />
+        </TextView>
+
+        {showFSRLink ? (
+          <LinkWithAnalytics
+            type="url"
+            url={fsrUrl}
+            text={t('debts.requestHelp.relief.link')}
+            a11yHint={`${t('debts.requestHelp.relief.link')} ${t('mobileBodyLink.a11yHint')}`}
+          />
+        ) : null}
       </AlertWithHaptics>
     )
   }

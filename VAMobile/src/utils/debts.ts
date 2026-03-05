@@ -19,6 +19,8 @@ export type DebtInfo = {
   resolvable: boolean
   updatedDate?: string
   variant: string
+  type?: string
+  // expandedMessage: string
 }
 
 export type DebtLetterInfo = {
@@ -26,6 +28,14 @@ export type DebtLetterInfo = {
   title: string
   description: string
 }
+
+export const ReviewSubmissionType = {
+  CompromiseOffer: 'compromise offer',
+  Dispute: 'dispute',
+  WaiverRequest: 'waiver request',
+} as const
+
+export type ReviewSubmissionType = (typeof ReviewSubmissionType)[keyof typeof ReviewSubmissionType]
 
 // Leveraged from web implementation:
 // vets-website/src/applications/combined-debt-portal/debt-letters/containers/DebtDetails.jsx
@@ -90,6 +100,26 @@ const getUpdatedDate = (debt: DebtRecord): string | undefined => {
   return undefined
 }
 
+const getUnderReviewType = (diaryCode?: string): string | undefined => {
+  switch (diaryCode) {
+    case '811':
+      return 'compromise offer'
+    case '821':
+    case '822':
+    case '825':
+      return 'dispute'
+    case '801':
+    case '802':
+    case '803':
+    case '804':
+    case '809':
+    case '820':
+      return 'waiver request'
+    default:
+      return undefined
+  }
+}
+
 // Leverated from web implementation:
 // vets-website/src/applications/combined-debt-portal/debt-letters/const/diary-codes/debtSummaryCardContent.js
 export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
@@ -98,24 +128,41 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
   const codeKey = Object.keys(deductionCodeMapping).find((key) => deductionCodeMapping[key].includes(deductionCode))
   const header = codeKey ? t(codeKey) : debt.attributes.benefitType
   let i18nKey: string, resolvable: boolean, variant: DebtVariantTypes
+  // let expandedMessage: string = ""
+  // let messageValues: Record<string, string | number | undefined> = {}
+  let type: string | undefined
 
   switch (debt.attributes.diaryCode) {
+    // Should there be a 0 in front or no?
     case '71':
       i18nKey = 'verifyMilitaryStatus'
       resolvable = false
       variant = 'info'
+
+      // expandedMessage = t('debt.details.alert.message.verifyMilitaryStatus')
+
       break
+
     case '655':
     case '817':
       i18nKey = 'submitFinancialStatusReport'
       resolvable = true
       variant = 'info'
+
+      // expandedMessage = t('debt.details.alert.message.submitFinancialStatusReport')
+
       break
+
     case '212':
+      // Address needed
       i18nKey = 'updateAddress'
       resolvable = false
       variant = 'info'
+
+      // expandedMessage = t('debt.details.alert.message.updateAddress')
+
       break
+
     case '061':
     case '065':
     case '070':
@@ -126,58 +173,103 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
       i18nKey = 'pausedCollection'
       resolvable = false
       variant = 'info'
+
+      // expandedMessage = t('debt.details.alert.message.pausedCollection')
+
       break
-    case '439':
-    case '449':
-    case '459':
+
     case '100':
+    case '101':
     case '102':
     case '130':
     case '140':
+      // Make a payment - Currnetly due, maybe change name later?
       i18nKey = 'payOrRequestHelpBy'
       resolvable = true
       variant = 'warning'
+
+      // expandedMessage = t('debt.details.alert.message.payOrRequestHelpBy', {
+      //   balance: numberToUSDollars(debt.attributes.currentAr),
+      //   endDate: getEndDate(t, debt)
+      // })
+
       break
+
     case '109':
+    case '117':
+    case '123':
+    case '439':
+    case '449':
+    case '459':
+    case '680':
+    case '603':
+    case '613':
+      // Payment overdue
       i18nKey = 'payOrRequestHelpAvoidInterest'
       resolvable = true
       variant = 'warning'
+
+      // expandedMessage = t('debt.details.alert.message.payOrRequestHelpAvoidInterest', {
+      //   balance: numberToUSDollars(debt.attributes.currentAr),
+      //   endDate: getEndDate(t, debt)
+      // })
+
       break
-    case '117':
-      i18nKey = 'payPastDueOrRequestHelp'
-      resolvable = true
-      variant = 'warning'
-      break
-    case '123':
-      i18nKey = 'payPastDueOrRequestHelpNow'
-      resolvable = true
-      variant = 'warning'
-      break
-    case '680':
-      i18nKey = 'payOrRequestHelpSimple'
-      resolvable = true
-      variant = 'warning'
-      break
+
+    case '080':
+    case '850':
+    case '852':
+    case '860':
+    case '855':
     case '681':
     case '682':
-      i18nKey = 'treasuryReducingPayments'
-      resolvable = true
-      variant = 'info'
+      // Sent to treasury
+      i18nKey = 'contactTreasuryDMS'
+      resolvable = false
+      variant = 'warning'
+
+      // expandedMessage = t('debt.details.alert.message.contactTreasuryDMS')
+
       break
+
+    case '081':
+    case '500':
+    case '503':
+    case '510':
+      // Being Sent to treasury soon
+      i18nKey = 'referringToTreasury'
+      resolvable = true
+      variant = 'warning'
+
+      // expandedMessage = t('debt.details.alert.message.referringToTreasury')
+
+      break
+
+    case '815':
+      i18nKey = 'payCompromiseAgreement'
+      resolvable = true
+      variant = 'warning'
+
+      // expandedMessage = t('debt.details.alert.message.payCompromiseAgreement', {
+      //   balance: numberToUSDollars(debt.attributes.currentAr),
+      //   endDate: getEndDate(t, debt)
+      // })
+
+      break
+
     case '600':
     case '601':
       i18nKey = 'continueMonthlyPayments'
       resolvable = true
       variant = 'info'
+
+      // expandedMessage = t('debt.details.alert.message.continueMonthlyPayments')
+
       break
-    case '430':
-    case '431':
-      i18nKey = 'reducingEducationBenefits'
-      resolvable = true
-      variant = 'info'
-      break
-    case '101':
+
     case '450':
+    // two 101's???
+    case '101':
     case '602':
     case '607':
     case '608':
@@ -186,81 +278,41 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '614':
     case '615':
     case '617':
+    case '430':
+    case '431':
       i18nKey = 'reducingBenefitPayments'
       resolvable = true
       variant = 'info'
+
+      // expandedMessage = t('debt.details.alert.message.reducingBenefitPayments')
+
       break
-    case '603':
-    case '613':
-      i18nKey = 'makePaymentOrRequestHelp'
-      resolvable = true
-      variant = 'warning'
-      break
-    case '080':
-    case '850':
-    case '852':
-    case '860':
-    case '855':
-      i18nKey = 'contactTreasuryDMS'
-      resolvable = false
-      variant = 'warning'
-      break
-    case '081':
-    case '500':
-    case '510':
-    case '503':
-      i18nKey = 'referringToTreasury'
-      resolvable = true
-      variant = 'warning'
-      break
+
     case '811':
-      i18nKey = 'reviewCompromiseOffer'
-      resolvable = true
-      variant = 'info'
-      break
-    case '815':
-      i18nKey = 'payCompromiseAgreement'
-      resolvable = true
-      variant = 'warning'
-      break
-    case '816':
-      i18nKey = 'processingCompromisePayment'
-      resolvable = false
-      variant = 'info'
-      break
+    case '821':
+    case '822':
+    case '825':
     case '801':
     case '802':
     case '803':
     case '804':
     case '809':
     case '820':
-      i18nKey = 'reviewWaiverRequest'
+      // Under Review
+      i18nKey = 'reviewWaiverRequest' // make a new one
       resolvable = true
       variant = 'info'
+
+      // const type = getUnderReviewType(debt.attributes.diaryCode)
+      // expandedMessage = t('debt.details.alert.message.reviewWaiverRequest', {
+      //   type: type // ?? 'request', // fallback if something weird happens
+      // })
+      // messageValues = {
+      //   type: getUnderReviewType(debt.attributes.diaryCode),
+      // }
+      type = getUnderReviewType(debt.attributes.diaryCode)
       break
-    case '822':
-      i18nKey = 'reviewDispute'
-      resolvable = true
-      variant = 'info'
-      break
-    case '825':
-      i18nKey = 'reviewHearingRequest'
-      resolvable = true
-      variant = 'info'
-      break
-    case '821':
-      i18nKey = 'reviewNoticeOfDisagreement'
-      resolvable = true
-      variant = 'info'
-      break
-    case '481':
-    case '482':
-    case '483':
-    case '484':
-      i18nKey = 'reviewingAccount'
-      resolvable = false
-      variant = 'info'
-      break
+    // Do diary codes less than 100 come in with 0's or by themselves (i.e. 002 vs. 2)
     case '002':
     case '005':
     case '032':
@@ -269,13 +321,20 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '420':
     case '421':
     case '422':
-    case '425':
     case '609':
     case '627':
+    case '481':
+    case '482':
+    case '483':
+    case '484':
+    case '816':
     default:
       i18nKey = 'updatingAccount'
       resolvable = false
       variant = 'info'
+
+      // expandedMessage = t('debt.details.alert.message.updatingAccount')
+
       break
   }
 
@@ -288,6 +347,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     resolvable,
     updatedDate: getUpdatedDate(debt),
     variant,
+    type,
   }
 }
 

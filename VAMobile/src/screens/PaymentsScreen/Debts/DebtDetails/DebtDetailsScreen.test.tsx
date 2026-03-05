@@ -69,11 +69,13 @@ context('DebtDetailsScreen', () => {
 
   it('renders the alert', async () => {
     initializeTestInstance()
-    await waitFor(() =>
-      expect(
-        screen.getByRole('heading', { name: t('debts.details.alert.header.continueMonthlyPayments') }),
-      ).toBeTruthy(),
-    )
+
+    const endDate = 'October 18, 2012'
+    const expectedHeader = t('debts.details.alert.header.continueMonthlyPayments', { endDate })
+
+    await waitFor(() => {
+      expect(screen.getByRole('tab', { name: expectedHeader })).toBeTruthy()
+    })
   })
 
   it('renders the why debt link and navigates to DebtHelp screen on press', async () => {
