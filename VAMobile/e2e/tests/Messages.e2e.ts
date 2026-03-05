@@ -70,7 +70,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
 
     await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.REPLY_HELP_HEADING_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
   })
@@ -79,7 +79,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
-    await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.REPLY_HELP_HEADING_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
     await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
     await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
@@ -297,7 +297,7 @@ describe('Messages Screen', () => {
   })
 
   it(':ios: verify only use messages for non-urgent needs information', async () => {
-    await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.REPLY_HELP_HEADING_TEXT))).toExist()
   })
 
   it(':ios: new message: verify talk to the veterans crisis line now', async () => {

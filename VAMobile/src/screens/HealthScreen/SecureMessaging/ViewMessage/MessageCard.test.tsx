@@ -54,13 +54,13 @@ context('MessageCard', () => {
     expect(screen.getByText('John Smith')).toBeTruthy()
     expect(screen.getByText(getFormattedDateAndTimeZone(mockDateISO!))).toBeTruthy()
     expect(screen.getByText('Test Message Body')).toBeTruthy()
-    expect(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeTruthy()
+    expect(screen.getByLabelText(t('secureMessaging.replyHelp.helpSoonerLink'))).toBeTruthy()
     expect(screen.queryByText(t('secureMessaging.viewMessage.opened'))).toBeFalsy()
   })
 
   it('clicking on How to get help sooner for urgent needs should open largePanel', () => {
     render(<MessageCard message={messageAttributes} folderId={SecureMessagingSystemFolderIdConstants.INBOX} />)
-    fireEvent.press(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages')))
+    fireEvent.press(screen.getByLabelText(t('secureMessaging.replyHelp.helpSoonerLink')))
     expect(mockNavigationSpy).toHaveBeenCalled()
   })
 
@@ -139,7 +139,7 @@ context('MessageCard', () => {
     )
     expect(screen.queryByText('Reply')).toBeFalsy()
     expect(screen.queryByText(t('secureMessaging.startNewMessage'))).toBeFalsy()
-    expect(screen.queryByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeFalsy()
+    expect(screen.queryByLabelText(t('secureMessaging.replyHelp.helpSoonerLink'))).toBeFalsy()
   })
 
   it('should hide Reply but show Start new message when migration blocks and user has available recipients', () => {
@@ -168,7 +168,7 @@ context('MessageCard', () => {
         noProviderError={false}
       />,
     )
-    expect(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeTruthy()
+    expect(screen.getByLabelText(t('secureMessaging.replyHelp.helpSoonerLink'))).toBeTruthy()
   })
 
   it('should allow user to reply when migrationBlocksReply is false', () => {

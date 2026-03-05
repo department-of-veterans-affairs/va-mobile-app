@@ -329,7 +329,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <LinkWithAnalytics
               type="custom"
-              text={t('secureMessaging.replyHelp.onlyUseMessages')}
+              text={t('secureMessaging.replyHelp.helpSoonerLink')}
               onPress={navigateToReplyHelp}
             />
           </Box>

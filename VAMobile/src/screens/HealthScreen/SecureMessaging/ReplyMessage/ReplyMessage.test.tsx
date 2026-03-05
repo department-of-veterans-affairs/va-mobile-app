@@ -165,7 +165,7 @@ context('ReplyMessage', () => {
       expect(screen.getByText('mock sender 2')).toBeTruthy()
       expect(screen.getAllByText('mock sender 3').length).toBe(2)
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
-      fireEvent.press(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages')))
+      fireEvent.press(screen.getByLabelText(t('secureMessaging.replyHelp.helpSoonerLink')))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
     })
   })

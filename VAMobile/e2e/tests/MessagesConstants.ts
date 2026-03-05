@@ -18,7 +18,7 @@ export const MessagesE2eIdConstants = {
   FOLDERS_ID: 'foldersID',
   MESSAGES_ID: 'messagesTestID',
   REVIEW_MESSAGE_REPLY_ID: 'replyTestID',
-  ONLY_USE_MESSAGES_TEXT: 'How to get help sooner for urgent needs',
+  REPLY_HELP_HEADING_TEXT: 'How to get help sooner for urgent needs',
   ATTACHMENTS_BUTTON_ID: 'messagesAttachmentsAddFilesID',
   MESSAGE_INPUT_ID: 'reply field',
   SEND_BUTTON_ID: 'sendButtonTestID',

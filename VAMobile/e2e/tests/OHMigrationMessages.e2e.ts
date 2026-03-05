@@ -42,7 +42,7 @@ describe('OH Migration Messages', () => {
   })
 
   it('should hide the How to get help sooner for urgent needs text when migration blocks replies', async () => {
-    await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).not.toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.REPLY_HELP_HEADING_TEXT))).not.toExist()
   })
 
   it('should hide the older than 45 days alert when migration blocks replies', async () => {

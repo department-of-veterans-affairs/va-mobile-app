@@ -154,7 +154,7 @@ function MessageCard({
       <Box mb={theme.dimensions.condensedMarginBetween}>
         <LinkWithAnalytics
           type="custom"
-          text={t('secureMessaging.replyHelp.onlyUseMessages')}
+          text={t('secureMessaging.replyHelp.helpSoonerLink')}
           onPress={navigateToReplyHelp}
         />
       </Box>

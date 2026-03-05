@@ -744,7 +744,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <LinkWithAnalytics
               type="custom"
-              text={t('secureMessaging.replyHelp.onlyUseMessages')}
+              text={t('secureMessaging.replyHelp.helpSoonerLink')}
               onPress={navigateToReplyHelp}
             />
           </Box>
