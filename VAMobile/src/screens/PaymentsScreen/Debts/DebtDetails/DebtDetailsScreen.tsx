@@ -18,6 +18,8 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import ContactUsDebtButton from 'screens/PaymentsScreen/Debts/ContactUs/ContactUsDebtButton'
+import MakePaymentButton from 'screens/PaymentsScreen/Debts/MakePayment/MakePaymentButton'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import NoticeOfRightsButton from 'screens/PaymentsScreen/NoticeOfRights/NoticeOfRightsButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
@@ -38,10 +40,33 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
   const debtInfo = getDebtInfo(t, debt)
   const navigateTo = useRouteNavigation()
 
-  function renderAlert() {
-    const showFSRLink = debtInfo.i18nKey === 'submitFinancialStatusReport'
-    const fsrUrl = 'https://www.va.gov/forms/5655/'
+  function renderAlertAction() {
+    switch (debtInfo.action?.type) {
+      case 'contactUs':
+        return <ContactUsDebtButton showAskVAOption={debtInfo.action.showAskVAOption ?? true} />
+      case 'fsrLink':
+        return (
+          <LinkWithAnalytics
+            type="url"
+            url={debtInfo.action.url}
+            text={t('debts.requestHelp.relief.link')}
+            a11yHint={`${t('debts.requestHelp.relief.link')} ${t('mobileBodyLink.a11yHint')}`}
+          />
+        )
+      case 'payOnline':
+        return <MakePaymentButton debt={debt} />
+      case 'resolveOverpayment':
+        return debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtDetailsScreen" />
+      case 'treasuryPhone':
+        return (
+          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8888263127'))} phone={t('8888263127')} />
+        )
+      default:
+        return null
+    }
+  }
 
+  function renderAlert() {
     return (
       <AlertWithHaptics
         variant={debtInfo.variant === 'info' ? 'info' : 'warning'}
@@ -51,7 +76,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
         })}>
         <TextView>
           <Trans
-            i18nKey={t(`debt.details.alert.message.${debtInfo.i18nKey}`)}
+            i18nKey={`debt.details.alert.message.${debtInfo.i18nKey}`}
             components={{
               bold: <TextView variant="MobileBodyBold" />,
             }}
@@ -63,14 +88,10 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           />
         </TextView>
 
-        {showFSRLink ? (
-          <LinkWithAnalytics
-            type="url"
-            url={fsrUrl}
-            text={t('debts.requestHelp.relief.link')}
-            a11yHint={`${t('debts.requestHelp.relief.link')} ${t('mobileBodyLink.a11yHint')}`}
-          />
-        ) : null}
+        {/* // Tentative spacing */}
+        <Box mt={20} mx={-28}>
+          {renderAlertAction()}
+        </Box>
       </AlertWithHaptics>
     )
   }
