@@ -74,6 +74,7 @@ import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from 'utils/accessibility'
 import { initHideWarnings } from 'utils/consoleWarnings'
+import { handleDemoDeepLink } from 'utils/demoLinking'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale, useOnResumeForeground } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
@@ -349,12 +350,15 @@ export function AuthGuard() {
       setTappedForegroundNotification(false)
     } else if (!loggedIn) {
       dispatch(initializeAuth())
-      const listener = (event: { url: string }): void => {
+      const listener = async (event: { url: string }): Promise<void> => {
         if (event.url?.startsWith('vamobile://login-success?')) {
           dispatch(handleTokenCallbackUrl(event.url))
-        } else if (event.url?.startsWith('vamobile://')) {
-          // Store non-auth result url for navigation after login
-          setInitialDeepLink(event.url)
+        } else {
+          const demoLoginHandled = await handleDemoDeepLink(event.url, dispatch)
+          if (!demoLoginHandled && event.url?.startsWith('vamobile://')) {
+            // Store non-auth result url for navigation after login
+            setInitialDeepLink(event.url)
+          }
         }
       }
       const sub = Linking.addEventListener('url', listener)
@@ -393,13 +397,16 @@ export function AuthGuard() {
     const handleAppLaunchedByLink = async () => {
       const initialUrl = await Linking.getInitialURL()
       if (initialUrl) {
-        setInitialDeepLink(initialUrl)
-        logCampaignAnalytics(initialUrl)
+        const demoLoginHandled = await handleDemoDeepLink(initialUrl, dispatch)
+        if (!demoLoginHandled) {
+          setInitialDeepLink(initialUrl)
+          logCampaignAnalytics(initialUrl)
+        }
       }
     }
 
     handleAppLaunchedByLink()
-  }, [])
+  }, [dispatch])
 
   let content
   if (initializing || loadingRemoteConfig) {
