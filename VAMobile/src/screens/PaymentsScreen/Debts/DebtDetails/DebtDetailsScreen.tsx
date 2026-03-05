@@ -31,6 +31,9 @@ import { displayedTextPhoneNumber, numberToUSDollars } from 'utils/formattingUti
 import { useTheme } from 'utils/hooks'
 import { useRouteNavigation } from 'utils/hooks'
 
+const ALERT_BODY_HORIZONTAL_PADDING = 28
+const ALERT_ACTION_TOP_MARGIN = 20
+
 type DebtDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'DebtDetails'>
 
 function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
@@ -39,6 +42,21 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
   const theme = useTheme()
   const debtInfo = getDebtInfo(t, debt)
   const navigateTo = useRouteNavigation()
+
+  const isFullBleedCTA =
+    debtInfo.action?.type === 'resolveOverpayment' ||
+    debtInfo.action?.type === 'payOnline' ||
+    debtInfo.action?.type === 'contactUs'
+
+  function renderAlertActionContainer(action: React.ReactNode) {
+    return isFullBleedCTA ? (
+      <Box mt={ALERT_ACTION_TOP_MARGIN} mx={-ALERT_BODY_HORIZONTAL_PADDING}>
+        {action}
+      </Box>
+    ) : (
+      <Box mt={ALERT_ACTION_TOP_MARGIN}>{action}</Box>
+    )
+  }
 
   function renderAlertAction() {
     switch (debtInfo.action?.type) {
@@ -67,6 +85,8 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
   }
 
   function renderAlert() {
+    const action = renderAlertAction()
+
     return (
       <AlertWithHaptics
         variant={debtInfo.variant === 'info' ? 'info' : 'warning'}
@@ -77,9 +97,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
         <TextView>
           <Trans
             i18nKey={`debt.details.alert.message.${debtInfo.i18nKey}`}
-            components={{
-              bold: <TextView variant="MobileBodyBold" />,
-            }}
+            components={{ bold: <TextView variant="MobileBodyBold" /> }}
             values={{
               balance: debtInfo.balance,
               endDate: debtInfo.endDate,
@@ -88,10 +106,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           />
         </TextView>
 
-        {/* // Tentative spacing */}
-        <Box mt={20} mx={-28}>
-          {renderAlertAction()}
-        </Box>
+        {action ? renderAlertActionContainer(action) : null}
       </AlertWithHaptics>
     )
   }
@@ -114,10 +129,14 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {debtInfo.original}
         </TextView>
         {/* Payment due date */}
-        <TextView variant="HelperText">{t('debts.details.paymentDueDate')}</TextView>
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-          {debtInfo.endDate}
-        </TextView>
+        {debtInfo.showPaymentDueDate ? (
+          <>
+            <TextView variant="HelperText">{t('debts.details.paymentDueDate')}</TextView>
+            <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+              {debtInfo.endDate}
+            </TextView>
+          </>
+        ) : null}
         {/* Resolve debt button */}
         {debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtDetailsScreen" />}
       </>

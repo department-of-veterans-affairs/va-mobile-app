@@ -21,6 +21,7 @@ export type DebtInfo = {
   variant: string
   type?: string
   action?: DebtAlertAction
+  showPaymentDueDate: boolean
 }
 
 export type DebtLetterInfo = {
@@ -43,6 +44,14 @@ type DebtAlertAction =
   | { type: 'resolveOverpayment' }
   | { type: 'payOnline' }
   | { type: 'treasuryPhone' }
+
+// i18n keys that explcitly mention dates
+const SHOW_DUE_DATE_KEYS = new Set<string>([
+  'continueMonthlyPayments',
+  'payOrRequestHelpAvoidInterest',
+  'payOrRequestHelpBy',
+  'payCompromiseAgreement',
+])
 
 // Leveraged from web implementation:
 // vets-website/src/applications/combined-debt-portal/debt-letters/containers/DebtDetails.jsx
@@ -137,6 +146,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
   let i18nKey: string, resolvable: boolean, variant: DebtVariantTypes
   let type: string | undefined
   let action: DebtAlertAction | undefined
+  let showPaymentDueDate = false
 
   switch (debt.attributes.diaryCode) {
     case '71':
@@ -305,6 +315,8 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
       break
   }
 
+  showPaymentDueDate = SHOW_DUE_DATE_KEYS.has(i18nKey)
+
   return {
     balance: numberToUSDollars(debt.attributes.currentAr),
     endDate: getEndDate(t, debt),
@@ -316,6 +328,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     variant,
     type,
     action,
+    showPaymentDueDate,
   }
 }
 
