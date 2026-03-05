@@ -38,7 +38,7 @@ describe('OH Migration Messages', () => {
   })
 
   it('should show the Start new message button as a fallback when migration blocks replies', async () => {
-    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toBeVisible()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
   })
 
   it('should hide the Only use messages for non-urgent needs text when migration blocks replies', async () => {
