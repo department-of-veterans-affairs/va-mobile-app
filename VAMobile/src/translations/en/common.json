@@ -1563,6 +1563,8 @@
   "ohAlert.warning.secureMessaging.body": "From <bold>{{startDate}}</bold>, to <bold>{{endDate}}</bold>, you won't be able to send new messages or reply to conversations online for these facilities:",
   "ohAlert.warning.secureMessaging.note": "<bold>Note:</bold> During this time, you can still call these facilities to contact your provider.",
   "ohAlert.warning.title": "App updates will begin {{date}}",
+  "ohAlert.duplicatedRecord.title": "You may notice duplicate records for a time",
+  "ohAlert.duplicatedRecord.body": "We haven’t removed or changed any records. But recent updates may show duplicate records.",
   "onboarding.allInformationYouNeed": "With this app, you can manage your VA health care, benefits, and payments from your phone or tablet.",
   "onboarding.backA11yHint.benefitsOnboarding": "Go back to the benefits onboarding page",
   "onboarding.backA11yHint.healthOnboarding": "Go back to the health care onboarding page",
