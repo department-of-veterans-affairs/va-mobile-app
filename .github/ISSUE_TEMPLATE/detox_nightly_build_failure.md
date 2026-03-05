@@ -1,7 +1,7 @@
 ---
 name: Detox Nightly Build Failure Template
 about: Template for reporting a detox nightly build failure
-title: "(TEST 2) Bug - Detox - Fix Overnight Failures"
+title: "Bug - Detox - Fix Overnight Failures"
 labels: bug 
 assignees: SKMOstudio
 

@@ -78,7 +78,7 @@ env:
 
 jobs:
   start_slack_thread:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule'
     name: Start Slack thread
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
@@ -113,8 +113,8 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
@@ -131,7 +131,7 @@ jobs:
             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
                   e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
@@ -375,7 +375,7 @@ jobs:
           retention-days: 1
 
   output-slack-results-and-update-detox-failure-ticket:
-    if: (!cancelled()) && github.event_name == 'workflow_dispatch'
+    if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-ios, start_slack_thread]
     runs-on: ubuntu-latest
     steps:
@@ -445,7 +445,7 @@ jobs:
         if: needs.matrix-e2e-ios.result == 'failure'
         id: find_if_ticket_already_exists
         run: |
-          old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "(TEST 2) Bug - Detox - Fix Overnight Failures in:title")
+          old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           if [[ "$old_body" != "" ]]; then
             ticket_number=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
             new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" on iOS: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
