@@ -176,7 +176,7 @@ export const linking: LinkingOptions<any> = {
     } else if (
       pathParts[0] === 'track-claims' &&
       pathParts[1] === 'your-claim-letters' &&
-      pathParts[2] === 'link' &&
+      pathParts[2]?.split('?')[0] === 'link' &&
       pathParts.length === 3
     ) {
       return {

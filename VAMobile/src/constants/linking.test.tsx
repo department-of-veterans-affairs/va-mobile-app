@@ -79,6 +79,29 @@ describe('linking', () => {
 
         expect(state).toBeUndefined()
       })
+
+      it('should strip query parameters and still navigate correctly', () => {
+        const path = '/track-claims/your-claim-letters/link?messageID=456&read=true'
+        const state = linking.getStateFromPath?.(path, linkingConfig)
+
+        expect(state).toEqual({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'BenefitsTab',
+                    state: {
+                      routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        })
+      })
     })
 
     describe('claimLetters (legacy path)', () => {
