@@ -25,7 +25,7 @@ describe('OH Migration Messages', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
   })
 
-  it('should how the OH migration reply alert on the message detail screen', async () => {
+  it('should show the OH migration reply alert on the message detail screen', async () => {
     await expect(element(by.text(OHMigrationIdConstants.OH_ALERT_HEADING_TEXT))).toExist()
   })
 
@@ -38,7 +38,7 @@ describe('OH Migration Messages', () => {
   })
 
   it('should show the Start new message button as a fallback when migration blocks replies', async () => {
-    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toBeVisible()
   })
 
   it('should hide the Only use messages for non-urgent needs text when migration blocks replies', async () => {
