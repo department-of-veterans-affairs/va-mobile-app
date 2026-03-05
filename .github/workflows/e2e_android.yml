@@ -440,7 +440,7 @@ jobs:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
       - name: Make a ticket on failure (if needed)
-        if:  needs.matrix-e2e-android.result == 'failure' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
+        if: needs.matrix-e2e-android.result == 'failure' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
