@@ -144,7 +144,7 @@ function LoginScreen() {
           <AlertWithHaptics variant="info" description="DEMO MODE">
             <TextView pb={theme.dimensions.condensedMarginBetween}>{getDemoUser()}</TextView>
           </AlertWithHaptics>
-          <Box px={theme.dimensions.gutter} pt={theme.dimensions.standardMarginBetween}>
+          <Box px={theme.dimensions.gutter * 2} pt={theme.dimensions.standardMarginBetween}>
             <Button onPress={onSelectDemoUser} label={'Change Demo User'} />
           </Box>
         </>

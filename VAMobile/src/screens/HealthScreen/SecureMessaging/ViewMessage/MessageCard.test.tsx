@@ -77,6 +77,7 @@ context('MessageCard', () => {
         folderId={SecureMessagingSystemFolderIdConstants.INBOX}
         userInTriageTeam={true}
         replyExpired={false}
+        noProviderError={false}
       />,
     )
     expect(screen.getByText('Reply')).toBeTruthy()
@@ -90,6 +91,7 @@ context('MessageCard', () => {
         folderId={SecureMessagingSystemFolderIdConstants.INBOX}
         userInTriageTeam={false}
         replyExpired={false}
+        noProviderError={false}
       />,
     )
     expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
@@ -103,6 +105,7 @@ context('MessageCard', () => {
         folderId={SecureMessagingSystemFolderIdConstants.INBOX}
         userInTriageTeam={true}
         replyExpired={true}
+        noProviderError={false}
       />,
     )
     expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
@@ -116,6 +119,7 @@ context('MessageCard', () => {
         folderId={SecureMessagingSystemFolderIdConstants.INBOX}
         userInTriageTeam={false}
         replyExpired={true}
+        noProviderError={false}
       />,
     )
     expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
@@ -127,10 +131,10 @@ context('MessageCard', () => {
       <MessageCard
         message={messageAttributes}
         folderId={SecureMessagingSystemFolderIdConstants.INBOX}
-        userInTriageTeam={true}
+        userInTriageTeam={false}
         replyExpired={false}
         migrationBlocksReply={true}
-        hasAvailableRecipients={false}
+        noProviderError={true}
       />,
     )
     expect(screen.queryByText('Reply')).toBeFalsy()
@@ -146,7 +150,7 @@ context('MessageCard', () => {
         userInTriageTeam={true}
         replyExpired={false}
         migrationBlocksReply={true}
-        hasAvailableRecipients={true}
+        noProviderError={false}
       />,
     )
     expect(screen.queryByText('Reply')).toBeFalsy()
@@ -161,6 +165,7 @@ context('MessageCard', () => {
         userInTriageTeam={true}
         replyExpired={false}
         migrationBlocksReply={false}
+        noProviderError={false}
       />,
     )
     expect(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeTruthy()
@@ -174,6 +179,7 @@ context('MessageCard', () => {
         userInTriageTeam={true}
         replyExpired={false}
         migrationBlocksReply={false}
+        noProviderError={false}
       />,
     )
     expect(screen.getByText('Reply')).toBeTruthy()

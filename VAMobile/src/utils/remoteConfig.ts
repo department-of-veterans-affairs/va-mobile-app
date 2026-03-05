@@ -19,22 +19,17 @@ export type FeatureToggleType =
   | 'COEAvailable'
   | 'copayments'
   | 'appointmentsTestTime'
-  | 'decisionLettersWaygate'
+  | 'displayDuplicateRecordAlert'
   | 'hsScrollAnalytics'
   | 'inAppReview'
   | 'labsAndTests'
   | 'loadLabsAndTestsOnHomeScreen'
   | 'mhvMedicationsOracleHealthCutover'
   | 'mrHide36HrHoldTimes'
-  | 'rescheduleLink'
-  | 'submitEvidenceExpansion'
-  | 'sso'
+  | 'noErrorPhasesKimOH'
+  | 'noRecipientsKimOH'
   | 'startScheduling'
   | 'testFeature'
-  | 'travelPaySMOC'
-  | 'travelPayClaimDetails'
-  | 'travelPayStatusList'
-  | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'show5103Flow'
   | 'showCernerWarningAlert'
@@ -51,22 +46,17 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   COEAvailable: boolean
   copayments: boolean
-  decisionLettersWaygate: boolean
+  displayDuplicateRecordAlert: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
   labsAndTests: boolean
   loadLabsAndTestsOnHomeScreen: boolean
   mhvMedicationsOracleHealthCutover: boolean
   mrHide36HrHoldTimes: boolean
-  rescheduleLink: boolean
-  submitEvidenceExpansion: boolean
-  sso: boolean
+  noErrorPhasesKimOH: boolean
+  noRecipientsKimOH: boolean
   startScheduling: boolean
   testFeature: boolean
-  travelPaySMOC: boolean
-  travelPayClaimDetails: boolean
-  travelPayStatusList: boolean
-  useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   show5103Flow: boolean
   showCernerWarningAlert: boolean
@@ -84,26 +74,21 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
-  decisionLettersWaygate: true,
+  displayDuplicateRecordAlert: true,
   hsScrollAnalytics: false,
   inAppReview: true,
   labsAndTests: true,
   loadLabsAndTestsOnHomeScreen: false,
   mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
-  rescheduleLink: true,
-  submitEvidenceExpansion: true,
-  sso: true,
+  noErrorPhasesKimOH: false,
+  noRecipientsKimOH: false,
   startScheduling: false,
   testFeature: false,
-  travelPaySMOC: true,
-  travelPayClaimDetails: true,
-  travelPayStatusList: true,
-  useOldLinkComponent: true,
   internationalPhoneNumber: false,
   show5103Flow: true,
-  showCernerWarningAlert: true,
-  showCernerWhatsNew: false,
+  showCernerWarningAlert: false,
+  showCernerWhatsNew: true,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayments: false,

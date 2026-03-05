@@ -120,7 +120,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
       {
         options,
         title: t('contactInformation.phoneNumber.deleteChanges', { type: displayTitle.toLowerCase() }),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {

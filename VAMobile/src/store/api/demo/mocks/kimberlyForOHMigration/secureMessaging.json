@@ -481,7 +481,8 @@
       }
     },
     "meta": {
-      "userInTriageTeam": true
+      "userInTriageTeam": true,
+      "stationNumber": "528"
     }
   },
   "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true": {
@@ -644,7 +645,8 @@
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
         "readReceipt": "UNREAD",
-        "isOhMessage": true
+        "isOhMessage": true,
+        "ohMigrationPhase": "p2"
       },
       "relationships": {
         "attachments": {
@@ -1912,7 +1914,8 @@
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
         "readReceipt": null,
-        "isOhMessage": true
+        "isOhMessage": true,
+        "ohMigrationPhase": "p5"
       },
       "relationships": {
         "attachments": {
