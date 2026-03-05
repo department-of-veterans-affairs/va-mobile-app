@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { enableScreens } from 'react-native-screens'
 import { Provider, useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -62,13 +63,23 @@ import LoaGate from 'screens/auth/LoaGate'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, SettingsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import {
+  AnalyticsState,
+  AuthState,
+  FIRST_TIME_LOGIN,
+  NEW_SESSION,
+  SettingsState,
+  handleTokenCallbackUrl,
+  initializeAuth,
+  logInDemoMode,
+  loginStart,
+} from 'store/slices'
 import {
   AccessibilityState,
   sendUsesLargeTextAnalytics,
   sendUsesScreenReaderAnalytics,
 } from 'store/slices/accessibilitySlice'
-import { DemoState } from 'store/slices/demoSlice'
+import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
@@ -82,7 +93,9 @@ import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 import { fetchAndActivate } from 'utils/remoteConfig'
 
-const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
+import { DEMO_USER } from './screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
+
+const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED, DEMO_PASSWORD } = getEnv()
 const REMOTE_CONFIG_REFRESH = 30 // minutes
 
 enableScreens(true)
@@ -342,6 +355,34 @@ export function AuthGuard() {
     initHideWarnings()
   }, [])
 
+  const handleUrl = useCallback(
+    async (url: string) => {
+      // Security: Only allow demo mode deep linking in test or development environments
+      // This prevents unauthorized access to demo mode in production builds
+      if ((IS_TEST || __DEV__) && url?.startsWith('vamobile://login?demo=true')) {
+        const urlParts = url.split('?')
+        const query = urlParts[1]
+        const queryParts = query?.split('&') || []
+        const params: { [key: string]: string } = {}
+        queryParts.forEach((qpRaw) => {
+          const [key, val] = qpRaw.split('=')
+          params[key] = val
+        })
+
+        if (params.password === (DEMO_PASSWORD || '')) {
+          const demoUser = params.demoUser || 'kimberlyWashington'
+          await AsyncStorage.setItem(DEMO_USER, demoUser)
+          await AsyncStorage.setItem(NEW_SESSION, 'true')
+          await dispatch(updateDemoMode(true, demoUser))
+          dispatch(logInDemoMode())
+          return true
+        }
+      }
+      return false
+    },
+    [dispatch],
+  )
+
   useEffect(() => {
     console.debug('AuthGuard: initializing')
     if (loggedIn && tappedForegroundNotification) {
@@ -349,12 +390,15 @@ export function AuthGuard() {
       setTappedForegroundNotification(false)
     } else if (!loggedIn) {
       dispatch(initializeAuth())
-      const listener = (event: { url: string }): void => {
+      const listener = async (event: { url: string }): Promise<void> => {
         if (event.url?.startsWith('vamobile://login-success?')) {
           dispatch(handleTokenCallbackUrl(event.url))
-        } else if (event.url?.startsWith('vamobile://')) {
-          // Store non-auth result url for navigation after login
-          setInitialDeepLink(event.url)
+        } else {
+          const handled = await handleUrl(event.url)
+          if (!handled && event.url?.startsWith('vamobile://')) {
+            // Store non-auth result url for navigation after login
+            setInitialDeepLink(event.url)
+          }
         }
       }
       const sub = Linking.addEventListener('url', listener)
@@ -362,7 +406,7 @@ export function AuthGuard() {
         sub?.remove()
       }
     }
-  }, [dispatch, loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
+  }, [dispatch, loggedIn, tappedForegroundNotification, setTappedForegroundNotification, handleUrl])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
@@ -393,13 +437,16 @@ export function AuthGuard() {
     const handleAppLaunchedByLink = async () => {
       const initialUrl = await Linking.getInitialURL()
       if (initialUrl) {
-        setInitialDeepLink(initialUrl)
-        logCampaignAnalytics(initialUrl)
+        const handledDemo = await handleUrl(initialUrl)
+        if (!handledDemo) {
+          setInitialDeepLink(initialUrl)
+          logCampaignAnalytics(initialUrl)
+        }
       }
     }
 
     handleAppLaunchedByLink()
-  }, [])
+  }, [handleUrl])
 
   let content
   if (initializing || loadingRemoteConfig) {

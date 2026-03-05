@@ -69,6 +69,13 @@ export const CommonE2eIdConstants = {
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
+  // demo users
+  DEMO_USER_BENJAMIN_ADAMS: 'benjaminAdams',
+  DEMO_USER_CLARA_JEFFERSON: 'claraJefferson',
+  DEMO_USER_DENNIS_MADISON: 'dennisMadison',
+  DEMO_USER_JOHN_MONROE: 'johnMonroe',
+  DEMO_USER_KIMBERLY_OH_MIGRATION: 'kimberlyForOHMigration',
+  DEMO_USER_KIMBERLY_WASHINGTON: 'kimberlyWashington',
   SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
   TURN_ON_NOTIFICATIONS_TEXT: 'Turn on notifications',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
@@ -850,4 +857,59 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
     CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,
   )
   await loginToDemoMode()
+}
+
+/**
+ * Alternative to loginToDemoMode that uses deep linking to skip all manual taps.
+ * @param demoUser - The demo user to log in as.
+ * @param skipOnboarding - Whether to skip the onboarding carousel.
+ * @param pushNotifications - Whether to enable push notifications.
+ */
+export async function launchAppWithDemoMode(
+  demoUser: string = 'kimberlyWashington',
+  skipOnboarding: boolean = true,
+  pushNotifications?: boolean,
+) {
+  const launchOptions: any = {
+    newInstance: true,
+    url: `vamobile://login?demo=true&demoUser=${demoUser}&password=${DEMO_PASSWORD}`,
+    permissions: { notifications: 'YES' },
+  }
+
+  if (pushNotifications) {
+    launchOptions.userNotification = mockNotification
+  }
+
+  await device.launchApp(launchOptions)
+
+  if (skipOnboarding) {
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
+    if (ifCarouselSkipBtnExist) {
+      await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
+    }
+  }
+
+  const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
+    CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
+    true,
+  )
+  if (turnOnNotificationsBtnExist) {
+    await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+  }
+
+  const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
+  if (confirmEmailBtnExist) {
+    await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .scroll(200, 'down')
+    await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  }
+
+  const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
+  if (skipEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  }
 }

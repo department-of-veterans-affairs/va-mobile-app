@@ -759,13 +759,18 @@ const authSlice = createSlice({
   reducers: {
     dispatchInitializeAction: (state, action: PayloadAction<AuthInitializePayload>) => {
       const { loggedIn } = action.payload
+      // Security: In production, prioritize the results of initializeAuth (actual tokens) over any existing state.
+      // We only merge state for tests/dev to allow deep link pre-login.
+      const isTestOrDev = IS_TEST || __DEV__
+      const finalLoggedIn = isTestOrDev ? state.loggedIn || loggedIn : loggedIn
+
       return {
-        ...initialAuthState,
+        ...state,
         ...action.payload,
         initializing: false,
         syncing: state.syncing && loggedIn,
         firstTimeLogin: state.firstTimeLogin,
-        loggedIn: loggedIn,
+        loggedIn: finalLoggedIn,
         displayBiometricsPreferenceScreen: true,
         requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
@@ -836,6 +841,7 @@ const authSlice = createSlice({
       state.successfulLogin = true
       state.webLoginUrl = undefined
       state.loading = false
+      state.initializing = false
     },
     dispatchStartLogout: (state) => {
       state.syncing = true
