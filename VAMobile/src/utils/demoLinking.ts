@@ -18,7 +18,7 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
   const password = parsed.searchParams.get('password')
   const demoUserParam = parsed.searchParams.get('demoUser')
 
-  if (password !== (DEMO_PASSWORD || '')) {
+  if (!DEMO_PASSWORD || password !== DEMO_PASSWORD) {
     return false
   }
 
