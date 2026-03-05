@@ -207,7 +207,6 @@ describe('File for Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_HELP_BUTTON_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID))).toExist()
     await expect(element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_HELP_BUTTON_ID))).toExist()
   })
 
   it('navigates to the No Address Error screen when the user answers Yes to the Vehicle screen', async () => {
@@ -262,7 +261,6 @@ describe('File for Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_HELP_BUTTON_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID))).toExist()
     await expect(element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_HELP_BUTTON_ID))).toExist()
   })
 
   it('navigates to the Review Claim screen when the user answers Yes to the Address screen', async () => {
