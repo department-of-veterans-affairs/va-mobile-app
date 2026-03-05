@@ -24,22 +24,6 @@ context('VaccineDetailsScreen', () => {
     },
   }
 
-  const location = {
-    data: {
-      id: 'location1',
-      type: 'location',
-      attributes: {
-        name: 'facility 1',
-        address: {
-          street: '123 abc street',
-          city: 'Tiburon',
-          state: 'CA',
-          zipCode: '94920',
-        },
-      },
-    },
-  }
-
   const hasLocationVaccine = {
     id: 'HASLOCATION',
     type: 'immunization',
@@ -53,10 +37,7 @@ context('VaccineDetailsScreen', () => {
       manufacturer: null,
       note: null,
       shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
-    },
-    relationships: {
-      location: location,
-    },
+    }
   }
 
   const nullLocationVaccine = {

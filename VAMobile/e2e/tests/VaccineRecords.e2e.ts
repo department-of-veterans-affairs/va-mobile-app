@@ -55,6 +55,7 @@ describe('Vaccine Records Screen', () => {
     await expect(element(by.id('Manufacturer Moderna US, Inc.'))).toExist()
     await expect(element(by.id('Series status None noted'))).toExist()
     await expect(element(by.text('Provider'))).toExist()
+    await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
     await expect(element(by.text('Reactions'))).toExist()
     await expect(element(by.text('None noted')).atIndex(1)).toExist()
     await expect(
