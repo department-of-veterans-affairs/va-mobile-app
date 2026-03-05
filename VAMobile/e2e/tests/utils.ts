@@ -148,7 +148,7 @@ export const CommonE2eIdConstants = {
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
-  APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
+  APPLY_OVERRIDES_BUTTON_TEST_ID: 'applyOverridesTestID',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
@@ -191,7 +191,6 @@ export const CommonE2eIdConstants = {
   MILITARY_POST_OFFICE_PICKER_CONFIRM_ID: 'militaryPostOfficeConfirmID',
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
-  TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
   TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsButtonID',
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN: 'toTravelPayClaimsLinkIDHealthScreen',
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_PAYMENTS_SCREEN: 'toTravelPayClaimsLinkIDPaymentsScreen',
@@ -210,7 +209,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(120000)
+      .withTimeout(60000)
   } catch (ex) {
     await device.uninstallApp()
     await device.installApp()
@@ -353,6 +352,17 @@ export async function scrollToElement(text: string, containerID: string) {
     .toBeVisible()
     .whileElement(by.id(containerID))
     .scroll(200, 'down')
+}
+
+/**
+ * Scroll to the bottom of a container and wait for 1 second to allow animations to settle.
+ * Recommended for screens that have dynamic content or animations at the bottom.
+ *
+ * @param containerID - testID of the container to scroll in
+ */
+export async function scrollToBottomWithWait(containerID: string) {
+  await element(by.id(containerID)).scrollTo('bottom')
+  await setTimeout(1000)
 }
 
 /** Test for the presence of text 1 or more times
@@ -581,11 +591,11 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
   await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
+    await waitFor(element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
       .scroll(600, 'up')
-    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
     if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
       await loginToDemoMode()
     }
@@ -781,7 +791,7 @@ export async function toggleRemoteConfigFlag(flagName: string) {
 
   await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
   await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
 }
 
 /**
@@ -815,6 +825,7 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherSelector-${endpoint}`)).tap()
     await element(by.id('overrideAPITestID')).scroll(100, 'down')
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
+    await element(by.id(`otherStatus-${endpoint}`)).tapReturnKey()
   }
 
   await element(by.id('saveErrors')).tap()
@@ -829,8 +840,11 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
     CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID,
     CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID,
   )
-  waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
-  await element(by.id(testIdOfDesiredUser)).tap()
+  await waitFor(element(by.text(testIdOfDesiredUser)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID))
+    .scroll(200, 'down')
+  await element(by.text(testIdOfDesiredUser)).atIndex(0).tap()
   await scrollToIDThenTap(
     CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
     CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,

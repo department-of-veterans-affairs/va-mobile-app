@@ -4,7 +4,6 @@ import { travelPayKeys } from 'api/travelPay'
 import { GetTravelPayClaimDetailsResponse } from 'api/types'
 import { DowntimeFeatureTypeConstants, get } from 'store/api'
 import { useDowntime } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Fetch travel pay claim details by ID
@@ -17,15 +16,13 @@ const getClaimDetails = async (id: string): Promise<GetTravelPayClaimDetailsResp
  * Returns a query for travel pay claim details by ID
  */
 export const useTravelPayClaimDetails = (id: string, options?: { enabled?: boolean }) => {
-  const travelPayEnabled =
-    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
-  const travelPayClaimDetailsEnabled = featureEnabled('travelPayClaimDetails')
+  const travelPayEnabled = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
 
   const queryEnabled = options && typeof options.enabled !== 'undefined' ? options.enabled : true
 
   return useQuery({
     ...options,
-    enabled: travelPayEnabled && travelPayClaimDetailsEnabled && queryEnabled && !!id,
+    enabled: travelPayEnabled && queryEnabled && !!id,
     queryKey: travelPayKeys.claimDetails(id),
     queryFn: () => getClaimDetails(id),
     meta: {
