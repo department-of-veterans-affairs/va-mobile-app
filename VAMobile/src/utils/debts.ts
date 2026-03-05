@@ -250,8 +250,6 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
       break
 
     case '450':
-    // NOTE: There is also a 101 diarycode in payOrRequestHelpBy, awaiting feedback on this
-    case '101':
     case '602':
     case '607':
     case '608':
