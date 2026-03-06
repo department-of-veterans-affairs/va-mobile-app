@@ -243,7 +243,18 @@ jobs:
         uses: actions/cache@v3
         with:
           path: VAMobile/ios/output
-          key: ${{ runner.os }}-detox-ios-build-${{ hashFiles('VAMobile/yarn.lock','VAMobile/ios/Podfile.lock','VAMobile/package.json','VAMobile/src/**/*.ts','VAMobile/src/**/*.tsx','VAMobile/ios/VAMobile/**','VAMobile/ios/*.xcodeproj/**','VAMobile/ios/*.xcworkspace/**') }}
+          key: >-
+            ${{ runner.os }}-detox-ios-build-${{ hashFiles(
+            'VAMobile/yarn.lock',
+            'VAMobile/ios/Podfile.lock',
+            'VAMobile/package.json',
+            'VAMobile/src/**/*.ts',
+            'VAMobile/src/**/*.tsx',
+            'VAMobile/src/**/*.json',
+            'VAMobile/ios/VAMobile/**',
+            'VAMobile/ios/*.xcodeproj/**',
+            'VAMobile/ios/*.xcworkspace/**'
+            ) }}
 
       - name: Bundle iOS app
         if: (steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_cache == true)

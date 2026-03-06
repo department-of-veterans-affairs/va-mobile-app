@@ -319,10 +319,14 @@ describe('Messages Screen', () => {
     await element(by.text('357')).tap()
     await element(by.text('Done')).tap()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
+    await element(by.id('comboBoxTextInputID')).replaceText('VA Flagship')
+    await element(by.id('comboBoxTextInputID')).tapReturnKey()
     await element(by.text('VA Flagship mobile applications interface 2_DAYT29')).tap()
   })
 
   it(':ios: should tap the category field and select a category', async () => {
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('top')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(200, 'down')
     await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
@@ -333,12 +337,11 @@ describe('Messages Screen', () => {
   })
 
   it(':ios: should add and delete text in the subject field', async () => {
-    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)))
-      .toBeVisible()
-      .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
-      .scroll(50, 'down')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).replaceText('Testing')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).tapReturnKey()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).clearText()
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).tapReturnKey()
   })
 
   it(':ios: verify cancel action sheet display', async () => {
