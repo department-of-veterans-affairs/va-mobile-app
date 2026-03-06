@@ -76,13 +76,9 @@ export const Events = {
       },
     }
   },
-  vama_claim_letters_link: (device_type: string, timestamp: number): Event => {
+  vama_claim_letters_link: (): Event => {
     return {
       name: 'vama_claim_letters_link',
-      params: {
-        p1: device_type,
-        p2: timestamp,
-      },
     }
   },
   vama_appt_view_details: (
