@@ -221,7 +221,7 @@ jobs:
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
 
       - name: Set app environment variables
-        run: yarn env:staging
+        run: yarn env:test
 
       - name: Check for CocoaPods Cache
         if: inputs.skip_cache != true
