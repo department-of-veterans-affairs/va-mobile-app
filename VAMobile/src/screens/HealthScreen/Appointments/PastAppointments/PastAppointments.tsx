@@ -159,7 +159,7 @@ function PastAppointments({
   }
 
   const getDatePicker = () => {
-    if (featureEnabled('useOldDatePicker')) {
+    if (useOldDatePicker) {
       return (
         <Box mx={theme.dimensions.gutter} accessible={true}>
           <VAModalPicker
