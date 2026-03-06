@@ -54,7 +54,7 @@ describe('Navigation - Dark Mode', () => {
             await detoxExpect(element(by.text(verifyText)).atIndex(0)).toExist()
             // Step 3: Take a screenshot for visual regression check
             const feature = await device.takeScreenshot(verifyText)
-            checkImages(feature)
+            await checkImages(feature)
           })
         }
       }

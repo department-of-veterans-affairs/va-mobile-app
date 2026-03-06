@@ -65,7 +65,7 @@ describe('Navigation - Text Resize', () => {
               // Step 2: Verify accessibility and take screenshot
               await detoxExpect(element(by.text(verifyText)).atIndex(0)).toExist()
               const feature = await device.takeScreenshot(verifyText)
-              checkImages(feature)
+              await checkImages(feature)
               try {
                 await element(by.id(key)).tap()
               } catch (ex) {

@@ -33,7 +33,7 @@ describe('Navigation - Landscape', () => {
             // Step 3: Verify content visibility and take screenshot
             await detoxExpect(element(by.text(verifyText)).atIndex(0)).toExist()
             const feature = await device.takeScreenshot(verifyText)
-            checkImages(feature)
+            await checkImages(feature)
             await device.setOrientation('portrait')
           })
         }

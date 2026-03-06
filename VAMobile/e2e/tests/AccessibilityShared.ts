@@ -18,6 +18,10 @@ export const navigationValue: string | undefined = process.argv[7] ?? process.ar
 
 export const getTestName = (nameArray: any[]): string => {
   const name = nameArray[2] as string
+  const subNavigationArray = nameArray[1]
+  if (name === 'Details' && subNavigationArray instanceof Array) {
+    return subNavigationArray.slice(-1)[0]
+  }
   return name === ACCOUNT_SECURITY_LONG_TEXT ? 'Account security' : name
 }
 
@@ -100,7 +104,7 @@ export const navigationDic = {
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
-    ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
+    ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'Details'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines'], 'Vaccines'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines', 'January 14, 2021'], 'COVID-19 vaccine'],
     [['Allergies.e2e', 'AllergiesAccelerated.e2e'], ['Medical records', 'Allergies'], 'Allergies'],
@@ -253,20 +257,16 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
       await waitFor(element(by.text('AMLODIPINE BESYLATE 10MG TAB')))
-        .toBeVisible()
+        .toExist()
         .withTimeout(10000)
-      try {
-        await detoxExpect(element(by.text('Get prescription details')).atIndex(0)).toBeVisible()
-      } catch (e) {
-        // Specify startPositionY=0.5 — the scroll view is partially clipped
-        // by the bottom tab bar, so the default start point (near the bottom)
-        // falls outside the visible area
-        await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(200, 'down', 0.5, 0.5)
-        await waitFor(element(by.text('Get prescription details')).atIndex(0))
-          .toBeVisible()
-          .withTimeout(5000)
-      }
+      await waitFor(element(by.text('Get prescription details')).atIndex(0))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+        .scroll(100, 'down', 0.5, 0.5)
       await element(by.text('Get prescription details')).atIndex(0).tap()
+      await waitFor(element(by.text('Details')).atIndex(0))
+        .toExist()
+        .withTimeout(10000)
       await device.enableSynchronization()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
