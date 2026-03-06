@@ -59,14 +59,6 @@ jest.mock('utils/hooks/offline', () => {
   }
 })
 
-jest.mock('store/api', () => {
-  const original = jest.requireActual('store/api')
-  return {
-    ...original,
-    get: jest.fn(),
-  }
-})
-
 jest.mock('utils/remoteConfig')
 
 context('PastAppointments', () => {
