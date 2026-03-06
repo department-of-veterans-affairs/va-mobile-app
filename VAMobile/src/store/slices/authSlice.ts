@@ -75,6 +75,8 @@ export type AuthState = {
   successfulLogin?: boolean
   requestNotificationsPreferenceScreen?: boolean
   requestNotifications?: boolean
+  firstTimeLoginOverride?: boolean
+  notificationsPreferenceOverride?: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -93,6 +95,8 @@ export const initialAuthState: AuthState = {
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
   requestNotificationsPreferenceScreen: false,
   requestNotifications: false,
+  firstTimeLoginOverride: false,
+  notificationsPreferenceOverride: false,
 }
 
 /*
@@ -134,6 +138,18 @@ export const setRequestNotifications =
     dispatch(dispatchSetRequestNotifications(value))
   }
 
+export const setFirstTimeLoginOverride =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetFirstTimeLoginOverride(value))
+  }
+
+export const setNotificationsPreferenceOverride =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetNotificationsPreferenceOverride(value))
+  }
+
 /**
  * Signal the sync process is completed
  */
@@ -167,8 +183,9 @@ const clearStoredAuthCreds = async (): Promise<void> => {
  * Action to check if this is the first time a user has logged in
  */
 
-export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
-  if (IS_TEST) {
+export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) => {
+  const { firstTimeLoginOverride } = getState().auth
+  if (IS_TEST && !firstTimeLoginOverride) {
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetFirstLogin(false))
     return
@@ -193,8 +210,9 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
   dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
-export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch) => {
-  if (IS_TEST) {
+export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch, getState) => {
+  const { notificationsPreferenceOverride } = getState().auth
+  if (IS_TEST && !notificationsPreferenceOverride) {
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetNotificationsPreferenceScreen(false))
     return
@@ -788,6 +806,12 @@ const authSlice = createSlice({
     dispatchSetFirstLogin: (state, action: PayloadAction<boolean>) => {
       state.firstTimeLogin = action.payload
     },
+    dispatchSetFirstTimeLoginOverride: (state, action: PayloadAction<boolean>) => {
+      state.firstTimeLoginOverride = action.payload
+    },
+    dispatchSetNotificationsPreferenceOverride: (state, action: PayloadAction<boolean>) => {
+      state.notificationsPreferenceOverride = action.payload
+    },
     dispatchFinishSync: (state) => {
       state.syncing = false
     },
@@ -873,6 +897,8 @@ export const {
   dispatchSetNotificationsPreferenceScreen,
   dispatchSetRequestNotifications,
   dispatchSetFirstLogin,
+  dispatchSetFirstTimeLoginOverride,
+  dispatchSetNotificationsPreferenceOverride,
   dispatchFinishSync,
   dispatchUpdateStoreBiometricsPreference,
   dispatchStartAuthorizeParams,

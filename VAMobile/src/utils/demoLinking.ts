@@ -4,14 +4,14 @@ import { EnvironmentTypesConstants } from 'constants/common'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import { AppDispatch } from 'store'
 import DemoUsers from 'store/api/demo/mocks/users'
-import { NEW_SESSION, logInDemoMode } from 'store/slices'
+import { NEW_SESSION, logInDemoMode, setFirstTimeLoginOverride, setNotificationsPreferenceOverride } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import getEnv from 'utils/env'
 
 export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Promise<boolean> {
   try {
     const { DEMO_PASSWORD, ENVIRONMENT, IS_TEST } = getEnv()
-    const isTestOrDev = IS_TEST === true || __DEV__
+    const isTestOrDev = IS_TEST === true || __DEV__ || ENVIRONMENT === 'staging'
     if (!isTestOrDev || !url?.startsWith('vamobile://login?demo=true')) {
       return false
     }
@@ -30,6 +30,8 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
 
     const password = params.password
     const demoUserParam = params.demoUser
+    const skipOnboarding = params.skipOnboarding !== 'false'
+    const skipNotifications = params.skipNotifications !== 'false'
 
     // Check password if configured
     if (ENVIRONMENT !== EnvironmentTypesConstants.Production) {
@@ -43,6 +45,13 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
 
     await AsyncStorage.setItem(DEMO_USER, demoUser)
     await AsyncStorage.setItem(NEW_SESSION, 'true')
+
+    // Apply overrides for IS_TEST bypasses
+    if (IS_TEST) {
+      await dispatch(setFirstTimeLoginOverride(!skipOnboarding))
+      await dispatch(setNotificationsPreferenceOverride(!skipNotifications))
+    }
+
     await dispatch(updateDemoMode(true, demoUser))
     dispatch(logInDemoMode())
     return true

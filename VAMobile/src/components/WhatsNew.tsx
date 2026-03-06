@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSelector } from 'react-redux'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getWhatsNewConfig } from 'constants/whatsNew'
+import { RootState } from 'store'
+import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -17,6 +20,7 @@ export const WhatsNew = () => {
   const whatsNewItems = getWhatsNewConfig()
   const { data: authorizedServices } = useAuthorizedServices()
 
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [skippedFeatures, setSkippedFeatures] = useState<string[]>() //await getFeaturesSkipped()
 
   useEffect(() => {
@@ -145,7 +149,7 @@ export const WhatsNew = () => {
     }
   }, [displayWN])
 
-  if (displayWN) {
+  if (displayWN && !demoMode) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics

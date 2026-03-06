@@ -17,8 +17,7 @@ const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
 const envVars = getEnv()
-const ENV_DEMO_PASSWORD = envVars.DEMO_PASSWORD
-const DEMO_PASSWORD = process.env.DEMO_PASSWORD || ENV_DEMO_PASSWORD || ''
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD || envVars.DEMO_PASSWORD || ''
 
 const mockNotification = {
   trigger: {
@@ -871,9 +870,12 @@ export async function launchAppWithDemoMode(
   skipOnboarding: boolean = true,
   pushNotifications?: boolean,
 ) {
+  const skipNotifications = pushNotifications === undefined ? true : !pushNotifications
   const launchOptions: any = {
     newInstance: true,
-    url: `vamobile://login?demo=true&demoUser=${demoUser}&password=${encodeURIComponent(DEMO_PASSWORD || '')}`,
+    url: `vamobile://login?demo=true&demoUser=${demoUser}&password=${encodeURIComponent(
+      DEMO_PASSWORD || '',
+    )}&skipOnboarding=${skipOnboarding}&skipNotifications=${skipNotifications}`,
     permissions: { notifications: 'YES' },
   }
 

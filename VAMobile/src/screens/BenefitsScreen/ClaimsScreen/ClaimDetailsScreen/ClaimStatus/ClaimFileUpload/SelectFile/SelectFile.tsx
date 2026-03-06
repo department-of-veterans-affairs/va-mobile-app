@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
 import DocumentPicker from 'react-native-document-picker'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -19,6 +20,8 @@ import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
 import { isPdfEncrypted } from 'utils/filesystem'
+import { RootState } from 'store'
+import { DemoState } from 'store/slices/demoSlice'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const { IS_TEST } = getEnv()
@@ -35,6 +38,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const scrollViewRef = useRef<ScrollView>(null)
   const { claimID, request } = route.params
   const showActionSheet = useShowActionSheet()
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   useBeforeNavBackListener(navigation, (e) => {
     if (isActionSheetVisible) {
@@ -94,7 +98,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
 
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
-    if (IS_TEST) {
+    if (IS_TEST || demoMode) {
       navigateTo('UploadFile', { claimID, request, fileUploaded: 'test file' })
       return
     }

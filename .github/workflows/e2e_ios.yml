@@ -346,7 +346,7 @@ jobs:
         run: yarn patch-package
 
       - name: Set app environment variables
-        run: yarn env:staging
+        run: yarn env:test
 
       - name: Build Detox framework
         run: yarn detox clean-framework-cache && yarn detox build-framework-cache
