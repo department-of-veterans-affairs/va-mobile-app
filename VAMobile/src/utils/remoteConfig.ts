@@ -19,12 +19,15 @@ export type FeatureToggleType =
   | 'COEAvailable'
   | 'copayments'
   | 'appointmentsTestTime'
+  | 'displayDuplicateRecordAlert'
   | 'hsScrollAnalytics'
   | 'inAppReview'
   | 'labsAndTests'
   | 'loadLabsAndTestsOnHomeScreen'
   | 'mhvMedicationsOracleHealthCutover'
   | 'mrHide36HrHoldTimes'
+  | 'noErrorPhasesKimOH'
+  | 'noRecipientsKimOH'
   | 'startScheduling'
   | 'testFeature'
   | 'internationalPhoneNumber'
@@ -43,12 +46,15 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   COEAvailable: boolean
   copayments: boolean
+  displayDuplicateRecordAlert: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
   labsAndTests: boolean
   loadLabsAndTestsOnHomeScreen: boolean
   mhvMedicationsOracleHealthCutover: boolean
   mrHide36HrHoldTimes: boolean
+  noErrorPhasesKimOH: boolean
+  noRecipientsKimOH: boolean
   startScheduling: boolean
   testFeature: boolean
   internationalPhoneNumber: boolean
@@ -68,12 +74,15 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
+  displayDuplicateRecordAlert: true,
   hsScrollAnalytics: false,
   inAppReview: true,
   labsAndTests: true,
   loadLabsAndTestsOnHomeScreen: false,
   mhvMedicationsOracleHealthCutover: false,
   mrHide36HrHoldTimes: false,
+  noErrorPhasesKimOH: false,
+  noRecipientsKimOH: false,
   startScheduling: false,
   testFeature: false,
   internationalPhoneNumber: false,
