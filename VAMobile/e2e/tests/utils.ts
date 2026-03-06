@@ -16,7 +16,10 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
-const { DEMO_PASSWORD } = getEnv()
+const envVars = getEnv()
+const ENV_DEMO_PASSWORD = envVars.DEMO_PASSWORD
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD || ENV_DEMO_PASSWORD || ''
+
 const mockNotification = {
   trigger: {
     type: 'push',

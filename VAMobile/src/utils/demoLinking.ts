@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import { EnvironmentTypesConstants } from 'constants/common'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import { AppDispatch } from 'store'
 import DemoUsers from 'store/api/demo/mocks/users'
@@ -7,27 +8,53 @@ import { NEW_SESSION, logInDemoMode } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import getEnv from 'utils/env'
 
-const { DEMO_PASSWORD, IS_TEST } = getEnv()
-
 export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Promise<boolean> {
-  if (!(IS_TEST || __DEV__) || !url?.startsWith('vamobile://login?demo=true')) {
+  try {
+    const { DEMO_PASSWORD, ENVIRONMENT, IS_TEST } = getEnv()
+    const isTestOrDev = IS_TEST === true || __DEV__
+
+    console.debug(`handleDemoDeepLink: url=${url}, isTestOrDev=${isTestOrDev}, ENVIRONMENT=${ENVIRONMENT}`)
+
+    if (!isTestOrDev || !url?.startsWith('vamobile://login?demo=true')) {
+      console.debug('handleDemoDeepLink: not test/dev or incorrect URL scheme')
+      return false
+    }
+
+    const query = url.split('?')[1] || ''
+    const params = query.split('&').reduce(
+      (acc, part) => {
+        const [key, value] = part.split('=')
+        if (key) {
+          acc[key] = decodeURIComponent(value || '')
+        }
+        return acc
+      },
+      {} as Record<string, string>,
+    )
+
+    const password = params.password
+    const demoUserParam = params.demoUser
+
+    // Check password if configured
+    if (ENVIRONMENT !== EnvironmentTypesConstants.Production) {
+      if (DEMO_PASSWORD !== undefined && password !== DEMO_PASSWORD) {
+        console.warn('handleDemoDeepLink: password mismatch')
+        return false
+      }
+    }
+
+    const validDemoUserIds = Object.keys(DemoUsers)
+    const demoUser = demoUserParam && validDemoUserIds.includes(demoUserParam) ? demoUserParam : 'kimberlyWashington'
+
+    console.debug('handleDemoDeepLink: logging in as', demoUser)
+
+    await AsyncStorage.setItem(DEMO_USER, demoUser)
+    await AsyncStorage.setItem(NEW_SESSION, 'true')
+    await dispatch(updateDemoMode(true, demoUser))
+    dispatch(logInDemoMode())
+    return true
+  } catch (e) {
+    console.error('handleDemoDeepLink error:', e)
     return false
   }
-
-  const parsed = new URL(url)
-  const password = parsed.searchParams.get('password')
-  const demoUserParam = parsed.searchParams.get('demoUser')
-
-  if (!DEMO_PASSWORD || password !== DEMO_PASSWORD) {
-    return false
-  }
-
-  const validDemoUserIds = Object.keys(DemoUsers)
-  const demoUser = demoUserParam && validDemoUserIds.includes(demoUserParam) ? demoUserParam : 'kimberlyWashington'
-
-  await AsyncStorage.setItem(DEMO_USER, demoUser)
-  await AsyncStorage.setItem(NEW_SESSION, 'true')
-  await dispatch(updateDemoMode(true, demoUser))
-  dispatch(logInDemoMode())
-  return true
 }
