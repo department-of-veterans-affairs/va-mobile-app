@@ -19,9 +19,6 @@ jestExpect.extend({ toMatchImageSnapshot })
 const envVars = getEnv()
 const ENV_DEMO_PASSWORD = envVars.DEMO_PASSWORD
 const DEMO_PASSWORD = process.env.DEMO_PASSWORD || ENV_DEMO_PASSWORD || ''
-console.log(
-  `E2E Utils: DEMO_PASSWORD source: ${process.env.DEMO_PASSWORD ? 'process.env' : ENV_DEMO_PASSWORD ? 'getEnv()' : 'none'}, length: ${DEMO_PASSWORD?.length || 0}, IS_TEST: ${envVars.IS_TEST}`,
-)
 
 const mockNotification = {
   trigger: {

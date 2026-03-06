@@ -12,14 +12,7 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
   try {
     const { DEMO_PASSWORD, ENVIRONMENT, IS_TEST } = getEnv()
     const isTestOrDev = IS_TEST === true || __DEV__
-
-    console.debug(
-      `handleDemoDeepLink: url=${url}, isTestOrDev=${isTestOrDev}, IS_TEST=${IS_TEST}, ENVIRONMENT=${ENVIRONMENT}`,
-    )
-    console.debug(`handleDemoDeepLink: DEMO_PASSWORD length: ${DEMO_PASSWORD?.length || 0}`)
-
     if (!isTestOrDev || !url?.startsWith('vamobile://login?demo=true')) {
-      console.debug('handleDemoDeepLink: not test/dev or incorrect URL scheme')
       return false
     }
 
@@ -38,20 +31,15 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
     const password = params.password
     const demoUserParam = params.demoUser
 
-    console.debug(`handleDemoDeepLink: password param length: ${password?.length || 0}`)
-
     // Check password if configured
     if (ENVIRONMENT !== EnvironmentTypesConstants.Production) {
       if (DEMO_PASSWORD !== undefined && password !== DEMO_PASSWORD) {
-        console.warn('handleDemoDeepLink: password mismatch')
         return false
       }
     }
 
     const validDemoUserIds = Object.keys(DemoUsers)
     const demoUser = demoUserParam && validDemoUserIds.includes(demoUserParam) ? demoUserParam : 'kimberlyWashington'
-
-    console.debug('handleDemoDeepLink: logging in as', demoUser)
 
     await AsyncStorage.setItem(DEMO_USER, demoUser)
     await AsyncStorage.setItem(NEW_SESSION, 'true')
