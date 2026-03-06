@@ -310,13 +310,18 @@ jobs:
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
             # Full Suite / Nightly: Run ONLY the target test file.
-            # Optimization: Navigation.e2e and AvailabilityFramework.e2e have their own dedicated jobs in the matrix,
-            # so we skip redundant execution here to save time.
             echo "CMD=yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
           else
-            # PR / Targeted Run: Prepend prerequisites.
-            # Safety: Ensure Navigation and Availability checks run before the feature test to catch basic failures early.
-            echo "CMD=yarn e2e:android-test /e2e/tests/AccessibilityDarkMode.e2e.ts /e2e/tests/AccessibilityLandscape.e2e.ts /e2e/tests/AccessibilityTextResize.e2e.ts /e2e/tests/AvailabilityFramework.e2e.ts /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
+            # Targeted: Prepend Accessibility/AvailabilityFramework prerequisites unless the test is already one of them
+            PREREQS=""
+            case "${{matrix.testsuite}}" in
+              AccessibilityDarkMode.e2e.ts|AccessibilityLandscape.e2e.ts|AccessibilityTextResize.e2e.ts|AvailabilityFramework.e2e.ts)
+                ;;
+              *)
+                PREREQS="/e2e/tests/AccessibilityDarkMode.e2e.ts /e2e/tests/AccessibilityLandscape.e2e.ts /e2e/tests/AccessibilityTextResize.e2e.ts /e2e/tests/AvailabilityFramework.e2e.ts"
+                ;;
+            esac
+            echo "CMD=yarn e2e:android-test $PREREQS /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
           fi
 
       - name: Run e2e tests for Android
