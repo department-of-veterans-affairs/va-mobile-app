@@ -140,18 +140,25 @@ context('FolderMessages', () => {
       await waitFor(() => expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy())
     })
 
-    it('should hide the button when no recipients are returned', async () => {
+    it('should show the no care teams alert when no recipients are returned', async () => {
       mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, messages)
       mockSMAllRecipients(mockEmptyRecipients)
       initializeTestInstance(SecureMessagingSystemFolderIdConstants.SENT)
-      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+      await waitFor(() => {
+        expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
+        expect(screen.getByTestId('noCareTeamsAlertTestID')).toBeTruthy()
+        expect(screen.getByText("You're not connected to any care teams in this messaging tool")).toBeTruthy()
+      })
     })
 
-    it('should hide the button when recipients data is undefined', async () => {
+    it('should show the no care teams alert when recipients data is undefined', async () => {
       mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, messages)
       mockSMAllRecipients(undefined)
       initializeTestInstance(SecureMessagingSystemFolderIdConstants.DRAFTS)
-      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+      await waitFor(() => {
+        expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
+        expect(screen.getByTestId('noCareTeamsAlertTestID')).toBeTruthy()
+      })
     })
   })
 })

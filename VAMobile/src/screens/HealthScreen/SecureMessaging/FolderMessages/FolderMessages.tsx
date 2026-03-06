@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { Linking, ScrollView } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -14,6 +14,7 @@ import {
   AlertWithHaptics,
   Box,
   ChildTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   MessageList,
   Pagination,
@@ -26,9 +27,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import NoFolderMessages from 'screens/HealthScreen/SecureMessaging/NoFolderMessages/NoFolderMessages'
 import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
@@ -151,7 +155,22 @@ function FolderMessages({ route }: FolderMessagesProps) {
         <NoFolderMessages noRecipientsError={noRecipientsError} />
       ) : (
         <>
-          {!noRecipientsError && (
+          {noRecipientsError ? (
+            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                variant="info"
+                expandable={true}
+                header={t('secureMessaging.noCareTeams.header')}
+                description={t('secureMessaging.noCareTeams.body')}
+                testID="noCareTeamsAlertTestID">
+                <LinkWithAnalytics
+                  type="custom"
+                  text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                  onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+                />
+              </AlertWithHaptics>
+            </Box>
+          ) : (
             <Box mx={theme.dimensions.buttonPadding}>
               <Button
                 label={t('secureMessaging.startNewMessage')}

@@ -41,9 +41,11 @@ context('NoFolderMessages', () => {
       expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy()
     })
 
-    it('should hide the button when noRecipientsError is true', () => {
+    it('should show the no care teams alert when noRecipientsError is true', () => {
       initializeTestInstance(true)
       expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
+      expect(screen.getByTestId('noCareTeamsAlertTestID')).toBeTruthy()
+      expect(screen.getByText("You're not connected to any care teams in this messaging tool")).toBeTruthy()
     })
   })
 })

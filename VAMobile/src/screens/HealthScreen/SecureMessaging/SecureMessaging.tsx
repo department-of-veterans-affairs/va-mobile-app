@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { Linking, ScrollView } from 'react-native'
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -11,7 +11,7 @@ import _ from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useAllMessageRecipients, useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
-import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics } from 'components'
 import { OHAlertManager } from 'components/OHAlertManager'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
@@ -28,11 +28,14 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
+import getEnv from 'utils/env'
 import { hasErrorCode } from 'utils/errors'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { OHParentScreens } from 'utils/ohMigration'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
@@ -187,7 +190,22 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         <TermsAndConditions />
       ) : (
         <>
-          {!noRecipientsError && (
+          {noRecipientsError ? (
+            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                variant="info"
+                expandable={true}
+                header={t('secureMessaging.noCareTeams.header')}
+                description={t('secureMessaging.noCareTeams.body')}
+                testID="noCareTeamsAlertTestID">
+                <LinkWithAnalytics
+                  type="custom"
+                  text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                  onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+                />
+              </AlertWithHaptics>
+            </Box>
+          ) : (
             <Box mx={theme.dimensions.buttonPadding}>
               <Button
                 label={t('secureMessaging.startNewMessage')}

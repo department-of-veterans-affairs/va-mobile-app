@@ -1,14 +1,17 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ViewStyle } from 'react-native'
+import { Linking, ViewStyle } from 'react-native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 function NoFolderMessages({ noRecipientsError }: { noRecipientsError: boolean }) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -32,7 +35,22 @@ function NoFolderMessages({ noRecipientsError }: { noRecipientsError: boolean })
   return (
     <>
       <VAScrollView contentContainerStyle={scrollStyles}>
-        {!noRecipientsError && (
+        {noRecipientsError ? (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertWithHaptics
+              variant="info"
+              expandable={true}
+              header={t('secureMessaging.noCareTeams.header')}
+              description={t('secureMessaging.noCareTeams.body')}
+              testID="noCareTeamsAlertTestID">
+              <LinkWithAnalytics
+                type="custom"
+                text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
+              />
+            </AlertWithHaptics>
+          </Box>
+        ) : (
           <Box mx={theme.dimensions.buttonPadding}>
             <Button
               label={t('secureMessaging.startNewMessage')}
