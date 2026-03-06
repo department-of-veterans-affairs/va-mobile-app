@@ -2,7 +2,7 @@
 title: Testing
 ---
 
-# Unit Tests
+# Tests
 
 Unit tests should provide confidence that components perform as expected, surfacing regressions quickly whenever an issue occurs. Unit tests also serve as a form of documentation for engineers about how components should function. This document describes practices to help create simple, easy to maintain, solid, user-focused tests.
 
@@ -10,7 +10,7 @@ Unit tests should provide confidence that components perform as expected, surfac
 
 We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing Library](https://callstack.github.io/react-native-testing-library/). RNTL provides a set of utility functions that make React Native component testing easier and more robust. RNTL enables many of the best practices described here.
 
-## End-to-End (e2e)
+### End-to-End (e2e)
 
 As much as possible, follow these best practices when writing e2e tests. These suggestions and best practices exist to help us keep our tests fast, and balance responsibility between e2e (happy path) and business logic (unit tests).
 
