@@ -12,7 +12,7 @@ We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing 
 
 ## End-to-End (e2e)
 
-As much as possible, follow these best practices when writing e2e tests. These suggestions and best practices exist to help us keep our tests fast, and balance responsibility between e2e (happy path) and business logic (unit tests). 
+As much as possible, follow these best practices when writing e2e tests. These suggestions and best practices exist to help us keep our tests fast, and balance responsibility between e2e (happy path) and business logic (unit tests).
 
 * The tests should follow the happy path of an individual feature
 * The tests should map cleanly to a specific user journey, e.g. go from the start to the finish of accomplishing a specific task
