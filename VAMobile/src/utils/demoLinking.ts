@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { EnvironmentTypesConstants } from 'constants/common'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import { AppDispatch } from 'store'
 import DemoUsers from 'store/api/demo/mocks/users'
@@ -17,8 +16,8 @@ import getEnv from 'utils/env'
 
 export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Promise<boolean> {
   try {
-    const { DEMO_PASSWORD, ENVIRONMENT, IS_TEST } = getEnv()
-    const isTestOrDev = IS_TEST === true || __DEV__ || ENVIRONMENT === 'staging'
+    const { DEMO_PASSWORD, IS_TEST } = getEnv()
+    const isTestOrDev = IS_TEST === true || __DEV__
     if (!isTestOrDev || !url?.startsWith('vamobile://login?demo=true')) {
       return false
     }
@@ -39,34 +38,34 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
     const demoUserParam = params.demoUser
     const skipOnboarding = params.skipOnboarding !== 'false'
     const skipNotifications = params.skipNotifications !== 'false'
-    console.debug(`handleDemoDeepLink: skipOnboarding=${skipOnboarding}, skipNotifications=${skipNotifications}`)
 
-    // Check password if configured
-    if (ENVIRONMENT !== EnvironmentTypesConstants.Production) {
-      if (DEMO_PASSWORD !== undefined && password !== DEMO_PASSWORD) {
-        return false
-      }
+    if (DEMO_PASSWORD !== undefined && password !== DEMO_PASSWORD) {
+      return false
     }
 
     const validDemoUserIds = Object.keys(DemoUsers)
     const demoUser = demoUserParam && validDemoUserIds.includes(demoUserParam) ? demoUserParam : 'kimberlyWashington'
 
-    await AsyncStorage.setItem(DEMO_USER, demoUser)
-    await AsyncStorage.setItem(NEW_SESSION, 'true')
+    await Promise.all([
+      AsyncStorage.setItem(DEMO_USER, demoUser),
+      AsyncStorage.setItem(NEW_SESSION, 'true'),
+    ])
 
-    // Apply overrides for IS_TEST bypasses
+    // Set overrides before activating demo mode
     if (IS_TEST) {
-      await dispatch(setFirstTimeLoginOverride(!skipOnboarding))
-      await dispatch(setNotificationsPreferenceOverride(!skipNotifications))
+      dispatch(setFirstTimeLoginOverride(!skipOnboarding))
+      dispatch(setNotificationsPreferenceOverride(!skipNotifications))
     }
 
     // Activate demo mode so demoMode=true in store before re-checks
     await dispatch(updateDemoMode(true, demoUser))
 
-    // Now re-check with correct demoMode state
+    // Re-check with correct demoMode state
     if (IS_TEST) {
-      await dispatch(checkFirstTimeLogin())
-      await dispatch(checkRequestNotificationsPreferenceScreen())
+      await Promise.all([
+        dispatch(checkFirstTimeLogin()),
+        dispatch(checkRequestNotificationsPreferenceScreen()),
+      ])
     }
 
     dispatch(logInDemoMode())

@@ -186,9 +186,7 @@ const clearStoredAuthCreds = async (): Promise<void> => {
 export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) => {
   const { firstTimeLoginOverride } = getState().auth
   const { demoMode } = getState().demo
-  console.debug(`checkFirstTimeLogin: IS_TEST=${IS_TEST}, demoMode=${demoMode}, override=${firstTimeLoginOverride}`)
   if (IS_TEST && !firstTimeLoginOverride && demoMode) {
-    console.debug('checkFirstTimeLogin: BYPASSING onboarding due to IS_TEST')
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetFirstLogin(false))
     return
@@ -198,11 +196,9 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) =>
   // the AsyncStorage 'completed key' with a #.
   if (isAndroid()) {
     const firstLoginCompletedVal = await AsyncStorage.getItem(ANDROID_FIRST_LOGIN_COMPLETED_KEY)
-    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
     isFirstLogin = !firstLoginCompletedVal
   } else {
     const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
-    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
     isFirstLogin = !firstLoginCompletedVal
   }
 
@@ -216,19 +212,13 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) =>
 export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch, getState) => {
   const { notificationsPreferenceOverride } = getState().auth
   const { demoMode } = getState().demo
-  console.debug(
-    `checkRequestNotificationsPreferenceScreen: IS_TEST=${IS_TEST}, demoMode=${demoMode}, override=${notificationsPreferenceOverride}`,
-  )
   if (IS_TEST && !notificationsPreferenceOverride && demoMode) {
-    console.debug('checkRequestNotificationsPreferenceScreen: BYPASSING notifications due to IS_TEST')
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetNotificationsPreferenceScreen(false))
     return
   }
 
   const setNotificationsPreferenceScreenVal = await AsyncStorage.getItem(NOTIFICATION_COMPLETED_KEY)
-  console.debug(`checkRequestNotificationPreferenceScreen: is ${!setNotificationsPreferenceScreenVal}`)
-
   const shouldShowScreen = !setNotificationsPreferenceScreenVal
   dispatch(dispatchSetNotificationsPreferenceScreen(shouldShowScreen))
 }

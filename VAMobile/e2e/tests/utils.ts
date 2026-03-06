@@ -879,10 +879,6 @@ export async function launchAppWithDemoMode(
     permissions: { notifications: 'YES' },
   }
 
-  /*if (pushNotifications) {
-    launchOptions.userNotification = mockNotification
-  }*/
-
   await device.launchApp(launchOptions)
 
   if (skipOnboarding) {
