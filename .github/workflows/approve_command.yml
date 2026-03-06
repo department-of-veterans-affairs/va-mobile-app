@@ -1,6 +1,7 @@
 # Handles the /approve slash command dispatched from issue comments.
 # Triggers the release PR creation process, comments on the release issue with
-# PR links, closes the issue, and notifies Slack on failure.
+# PR links, closes the issue, and notifies Slack on failure. Note: this workflow
+# is being phased out as the release process now uses run_approval.yml instead.
 
 name: '[Release] Approve Slash Command'
 

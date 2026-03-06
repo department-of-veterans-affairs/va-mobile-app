@@ -1,5 +1,5 @@
 # Builds production release builds for iOS and Android, triggered by
-# a v*.*.* tag (created when /approve is commented on the release ticket). Queues
+# a v*.*.* tag (created by run_approval.yml when a release is approved). Queues
 # the build, notifies Slack, runs both platform builds, and alerts on failure.
 
 name: '[Build] Release Build'
