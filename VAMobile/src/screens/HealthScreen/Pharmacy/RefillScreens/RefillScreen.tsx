@@ -220,8 +220,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
           error={prescriptionHasError}
           onTryAgain={refetchPrescriptions}
         />
-      ) : filteredRefillable.length === 0 ? (
-        <NoRefills />
       ) : (
         <>
           {hasMigratingPrescriptions && isOHCutoverFlagEnabled && (
@@ -233,65 +231,74 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
               showDefaultContent={false}
             />
           )}
-          {showAlert && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="error"
-                description={t('prescriptions.refill.pleaseSelect')}
-                scrollViewRef={scrollViewRef}
-              />
-            </Box>
+          {filteredRefillable.length === 0 ? (
+            <NoRefills />
+          ) : (
+            <>
+              {showAlert && (
+                <Box mb={theme.dimensions.standardMarginBetween}>
+                  <AlertWithHaptics
+                    variant="error"
+                    description={t('prescriptions.refill.pleaseSelect')}
+                    scrollViewRef={scrollViewRef}
+                  />
+                </Box>
+              )}
+              {refillRequestHasError && (
+                <Box mb={theme.dimensions.standardMarginBetween}>
+                  <AlertWithHaptics
+                    variant="error"
+                    header={t('prescriptions.refill.error.title')}
+                    description={t('prescriptions.refill.error.description')}
+                    descriptionA11yLabel={a11yLabelVA(t('prescriptions.refill.error.description'))}
+                    scrollViewRef={scrollViewRef}
+                    primaryButton={{
+                      label: t('dismiss'),
+                      onPress: () => {
+                        resetRefillRequest()
+                      },
+                    }}
+                  />
+                </Box>
+              )}
+              <Box mx={theme.dimensions.gutter}>
+                <TextView paragraphSpacing={true} variant={'HelperText'}>
+                  {t('prescriptions.refill.instructions.requestRefills')}
+                  <TextView variant={'HelperTextBold'}>
+                    {t('prescriptions.refill.instructions.fifteenDays')}
+                    <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
+                  </TextView>
+                </TextView>
+                <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
+                  {t('prescriptions.refill.weWillMailText')}
+                </TextView>
+                <TextView
+                  mt={theme.dimensions.condensedMarginBetween}
+                  mb={theme.dimensions.condensedMarginBetween}
+                  variant={'MobileBodyBold'}
+                  accessibilityRole="header">
+                  {t('prescriptions.refill.prescriptionsCount', { count: filteredRefillable?.length })}
+                </TextView>
+              </Box>
+              <Box mb={theme.dimensions.contentMarginBottom}>
+                <SelectionList
+                  items={getListItems()}
+                  onSelectionChange={(items) => {
+                    const newSelectedCount = Object.values(items).reduce(
+                      (acc, item) => (item === true ? ++acc : acc),
+                      0,
+                    )
+                    // only update if the count changes
+                    if (selectedPrescriptionsCount !== newSelectedCount) {
+                      setAlert(false)
+                      setSelectedPrescriptionsCount(newSelectedCount)
+                      setSelectedValues(items)
+                    }
+                  }}
+                />
+              </Box>
+            </>
           )}
-          {refillRequestHasError && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="error"
-                header={t('prescriptions.refill.error.title')}
-                description={t('prescriptions.refill.error.description')}
-                descriptionA11yLabel={a11yLabelVA(t('prescriptions.refill.error.description'))}
-                scrollViewRef={scrollViewRef}
-                primaryButton={{
-                  label: t('dismiss'),
-                  onPress: () => {
-                    resetRefillRequest()
-                  },
-                }}
-              />
-            </Box>
-          )}
-          <Box mx={theme.dimensions.gutter}>
-            <TextView paragraphSpacing={true} variant={'HelperText'}>
-              {t('prescriptions.refill.instructions.requestRefills')}
-              <TextView variant={'HelperTextBold'}>
-                {t('prescriptions.refill.instructions.fifteenDays')}
-                <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
-              </TextView>
-            </TextView>
-            <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
-              {t('prescriptions.refill.weWillMailText')}
-            </TextView>
-            <TextView
-              mt={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.condensedMarginBetween}
-              variant={'MobileBodyBold'}
-              accessibilityRole="header">
-              {t('prescriptions.refill.prescriptionsCount', { count: filteredRefillable?.length })}
-            </TextView>
-          </Box>
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <SelectionList
-              items={getListItems()}
-              onSelectionChange={(items) => {
-                const newSelectedCount = Object.values(items).reduce((acc, item) => (item === true ? ++acc : acc), 0)
-                // only update if the count changes
-                if (selectedPrescriptionsCount !== newSelectedCount) {
-                  setAlert(false)
-                  setSelectedPrescriptionsCount(newSelectedCount)
-                  setSelectedValues(items)
-                }
-              }}
-            />
-          </Box>
         </>
       )}
     </FullScreenSubtask>

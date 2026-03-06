@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PrescriptionData } from 'api/types'
+import { AppointmentPhone } from 'api/types/AppointmentData'
 import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,7 +16,7 @@ export type PrescriptionsDetailsBannerProps = {
   /** Optional variant for the alert. Default is 'warning' */
   variant?: 'info' | 'warning' | 'error' | 'success'
   /** Optional phone number to display. Defaults to the standard phone number */
-  phoneNumber?: string
+  phoneNumber?: string | AppointmentPhone
   /** Optional array of prescriptions at migrating facilities to display as links */
   migratingPrescriptions?: PrescriptionData[]
   /** Optional boolean to show/hide the default body text and bullet list. Default is true */
@@ -43,7 +44,18 @@ function PrescriptionsDetailsBanner({
 
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
-  const displayPhone = phoneNumber || t('5418307563')
+  // Resolve phone number from all possible types
+  const resolvedPhoneNumber = (() => {
+    if (!phoneNumber) return undefined
+    if (typeof phoneNumber === 'string') return phoneNumber
+    if ('areaCode' in phoneNumber && 'number' in phoneNumber) {
+      const { areaCode, number: phoneNum, extension } = phoneNumber
+      return `${areaCode}-${phoneNum}${extension ? ` ext. ${extension}` : ''}`
+    }
+    return undefined
+  })()
+
+  const displayPhone = resolvedPhoneNumber || t('5418307563')
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_cerner_alert())

@@ -146,19 +146,11 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   }
 
   const getBanner = () => {
-    // Ensure phoneNumber is a string or undefined
-    const phoneNumberString: string | undefined =
-      typeof facilityPhoneNumber === 'string'
-        ? facilityPhoneNumber
-        : facilityPhoneNumber && typeof facilityPhoneNumber === 'object' && 'phone' in facilityPhoneNumber
-          ? String(facilityPhoneNumber.phone)
-          : undefined
-
     if (!shouldShowRefillButton) {
       return (
         <PrescriptionsDetailsBanner
           variant="error"
-          phoneNumber={phoneNumberString}
+          phoneNumber={facilityPhoneNumber}
           customBodyText={t('prescription.details.banner.migrating.body')}
           customHeaderText={t('prescription.details.banner.migrating.header')}
           showDefaultContent={false}
