@@ -13,6 +13,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export type DatePickerRange = {
   startDate: DateTime
@@ -164,7 +165,11 @@ const DatePicker: FC<DatePickerProps> = ({
         />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>
-        <Button onPress={handleApply} label={t('apply')} buttonType={ButtonVariants.Primary} />
+        <Button
+          onPress={handleApply}
+          label={t('apply')}
+          buttonType={featureEnabled('startScheduling') ? ButtonVariants.Secondary : ButtonVariants.Primary}
+        />
       </Box>
     </Box>
   )
