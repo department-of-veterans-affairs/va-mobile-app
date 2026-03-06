@@ -52,6 +52,7 @@ export function VeteranStatusCard({
 
   const isPortrait = useOrientation()
   const isLandscape = !isPortrait
+  const hasDodId = !!edipi?.trim()
 
   // Compute layout values based on orientation
   const horizontalPadding = isPortrait ? PORTRAIT_PADDING : LANDSCAPE_PADDING
@@ -158,14 +159,16 @@ export function VeteranStatusCard({
         )}
 
         <Box flexDirection={isLandscape ? 'row' : 'column'}>
-          <Box flex={isLandscape ? 1 : undefined}>
-            <TextView color="primaryContrast" variant={headerVariant} mt={8}>
-              {t('veteranStatus.dodIdNumber')}
-            </TextView>
-            <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDODTestID">
-              {edipi}
-            </TextView>
-          </Box>
+          {hasDodId && (
+            <Box flex={isLandscape ? 1 : undefined}>
+              <TextView color="primaryContrast" variant={headerVariant} mt={8}>
+                {t('veteranStatus.dodIdNumber')}
+              </TextView>
+              <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDODTestID">
+                {edipi}
+              </TextView>
+            </Box>
+          )}
 
           {percentText && (
             <Box flex={isLandscape ? 1 : undefined}>
