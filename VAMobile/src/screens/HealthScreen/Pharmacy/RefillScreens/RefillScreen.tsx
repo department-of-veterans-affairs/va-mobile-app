@@ -282,6 +282,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
               </Box>
               <Box mb={theme.dimensions.contentMarginBottom}>
                 <SelectionList
+                  key={filteredRefillableIds}
                   items={getListItems()}
                   onSelectionChange={(items) => {
                     const newSelectedCount = Object.values(items).reduce(
