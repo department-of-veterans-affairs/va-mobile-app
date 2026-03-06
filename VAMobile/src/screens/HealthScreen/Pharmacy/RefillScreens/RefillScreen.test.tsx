@@ -268,19 +268,19 @@ context('RefillScreen', () => {
         when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
       })
 
-      it('should not show banner when all refillable prescriptions are migrating (NoRefills shows instead)', async () => {
-        // Both mockData items are station 979 → all filtered out → NoRefills
+      it('should show banner and NoRefills when all refillable prescriptions are migrating', async () => {
+        // Both mockData items are station 979 → all filtered out → NoRefills + banner
         mockUseAuthorizedServices.mockReturnValue({
-          data: { migratingFacilitiesList: migratingFacilitiesList },
+          data: { prescriptions: true, migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
-        await waitFor(() =>
-          expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy(),
-        )
-        expect(screen.queryByText(t('prescription.refill.banner.migrating.header'))).toBeFalsy()
+        // Banner should show so users can see which prescriptions are affected
+        await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.header'))).toBeTruthy())
+        // NoRefills also shows since no selectable prescriptions remain
+        expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy()
       })
 
       it('should show banner when only some refillable prescriptions are migrating', async () => {

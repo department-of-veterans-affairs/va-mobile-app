@@ -45,17 +45,21 @@ function PrescriptionsDetailsBanner({
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
   // Resolve phone number from all possible types
-  const resolvedPhoneNumber = (() => {
-    if (!phoneNumber) return undefined
-    if (typeof phoneNumber === 'string') return phoneNumber
+  // Keep dial-safe number separate from extension for proper ClickToCallPhoneNumber behavior
+  const { dialNumber, extensionText } = (() => {
+    if (!phoneNumber) return { dialNumber: undefined, extensionText: undefined }
+    if (typeof phoneNumber === 'string') return { dialNumber: phoneNumber, extensionText: undefined }
     if ('areaCode' in phoneNumber && 'number' in phoneNumber) {
       const { areaCode, number: phoneNum, extension } = phoneNumber
-      return `${areaCode}-${phoneNum}${extension ? ` ext. ${extension}` : ''}`
+      return {
+        dialNumber: `${areaCode}${phoneNum}`,
+        extensionText: extension || undefined,
+      }
     }
-    return undefined
+    return { dialNumber: undefined, extensionText: undefined }
   })()
 
-  const displayPhone = resolvedPhoneNumber || t('5418307563')
+  const displayPhone = dialNumber || t('5418307563')
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_cerner_alert())
@@ -167,8 +171,8 @@ function PrescriptionsDetailsBanner({
             </TextView>
             <ClickToCallPhoneNumber
               phone={displayPhone}
-              displayedText={`${displayedTextPhoneNumber(displayPhone)}`}
-              a11yLabel={`${getNumberAccessibilityLabelFromString(displayPhone)}`}
+              displayedText={`${displayedTextPhoneNumber(displayPhone)}${extensionText ? `, ext. ${extensionText}` : ''}`}
+              a11yLabel={`${getNumberAccessibilityLabelFromString(displayPhone)}${extensionText ? `, extension ${extensionText}` : ''}`}
               variant={'base'}
             />
           </>
