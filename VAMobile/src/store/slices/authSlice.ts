@@ -185,7 +185,10 @@ const clearStoredAuthCreds = async (): Promise<void> => {
 
 export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) => {
   const { firstTimeLoginOverride } = getState().auth
-  if (IS_TEST && !firstTimeLoginOverride) {
+  const { demoMode } = getState().demo
+  console.debug(`checkFirstTimeLogin: IS_TEST=${IS_TEST}, demoMode=${demoMode}, override=${firstTimeLoginOverride}`)
+  if (IS_TEST && !firstTimeLoginOverride && demoMode) {
+    console.debug('checkFirstTimeLogin: BYPASSING onboarding due to IS_TEST')
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetFirstLogin(false))
     return
@@ -212,7 +215,12 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) =>
 
 export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch, getState) => {
   const { notificationsPreferenceOverride } = getState().auth
-  if (IS_TEST && !notificationsPreferenceOverride) {
+  const { demoMode } = getState().demo
+  console.debug(
+    `checkRequestNotificationsPreferenceScreen: IS_TEST=${IS_TEST}, demoMode=${demoMode}, override=${notificationsPreferenceOverride}`,
+  )
+  if (IS_TEST && !notificationsPreferenceOverride && demoMode) {
+    console.debug('checkRequestNotificationsPreferenceScreen: BYPASSING notifications due to IS_TEST')
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetNotificationsPreferenceScreen(false))
     return
@@ -792,6 +800,8 @@ const authSlice = createSlice({
         displayBiometricsPreferenceScreen: true,
         requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
         successfulLogin: isTestOrDev ? state.successfulLogin : initialAuthState.successfulLogin,
+        firstTimeLoginOverride: state.firstTimeLoginOverride,
+        notificationsPreferenceOverride: state.notificationsPreferenceOverride,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
@@ -834,6 +844,8 @@ const authSlice = createSlice({
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
         requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
+        firstTimeLoginOverride: state.firstTimeLoginOverride,
+        notificationsPreferenceOverride: state.notificationsPreferenceOverride,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {

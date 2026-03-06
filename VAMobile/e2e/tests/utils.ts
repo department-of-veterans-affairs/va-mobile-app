@@ -879,9 +879,9 @@ export async function launchAppWithDemoMode(
     permissions: { notifications: 'YES' },
   }
 
-  if (pushNotifications) {
+  /*if (pushNotifications) {
     launchOptions.userNotification = mockNotification
-  }
+  }*/
 
   await device.launchApp(launchOptions)
 
@@ -896,7 +896,7 @@ export async function launchAppWithDemoMode(
     CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
     true,
   )
-  if (turnOnNotificationsBtnExist) {
+  if (turnOnNotificationsBtnExist && skipNotifications) {
     await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
   }
 

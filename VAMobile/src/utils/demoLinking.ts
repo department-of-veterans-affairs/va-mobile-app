@@ -4,7 +4,14 @@ import { EnvironmentTypesConstants } from 'constants/common'
 import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import { AppDispatch } from 'store'
 import DemoUsers from 'store/api/demo/mocks/users'
-import { NEW_SESSION, logInDemoMode, setFirstTimeLoginOverride, setNotificationsPreferenceOverride } from 'store/slices'
+import {
+  NEW_SESSION,
+  checkFirstTimeLogin,
+  checkRequestNotificationsPreferenceScreen,
+  logInDemoMode,
+  setFirstTimeLoginOverride,
+  setNotificationsPreferenceOverride,
+} from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import getEnv from 'utils/env'
 
@@ -32,6 +39,7 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
     const demoUserParam = params.demoUser
     const skipOnboarding = params.skipOnboarding !== 'false'
     const skipNotifications = params.skipNotifications !== 'false'
+    console.debug(`handleDemoDeepLink: skipOnboarding=${skipOnboarding}, skipNotifications=${skipNotifications}`)
 
     // Check password if configured
     if (ENVIRONMENT !== EnvironmentTypesConstants.Production) {
@@ -52,7 +60,15 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
       await dispatch(setNotificationsPreferenceOverride(!skipNotifications))
     }
 
+    // Activate demo mode so demoMode=true in store before re-checks
     await dispatch(updateDemoMode(true, demoUser))
+
+    // Now re-check with correct demoMode state
+    if (IS_TEST) {
+      await dispatch(checkFirstTimeLogin())
+      await dispatch(checkRequestNotificationsPreferenceScreen())
+    }
+
     dispatch(logInDemoMode())
     return true
   } catch (e) {

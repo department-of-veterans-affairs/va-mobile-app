@@ -15,7 +15,7 @@ export const OnboardingE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await launchAppWithDemoMode(undefined, false)
+  await launchAppWithDemoMode(undefined, false, true)
 })
 
 describe('Onboarding Screen', () => {
@@ -88,7 +88,7 @@ describe('Onboarding Screen', () => {
   it('verify the notifications page is displayed after skipping', async () => {
     await device.uninstallApp()
     await device.installApp()
-    await launchAppWithDemoMode(undefined, false)
+    await launchAppWithDemoMode(undefined, false, true)
     await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     await expect(element(by.text(OnboardingE2eIdConstants.NOTIFICATIONS_PAGE_HEADER))).toExist()
   })

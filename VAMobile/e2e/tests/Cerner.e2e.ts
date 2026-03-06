@@ -1,16 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  launchAppWithDemoMode,
-  openDeveloperScreen,
-  openHealth,
-  openMessages,
-  openProfile,
-  openSettings,
-  scrollToIDThenTap,
-} from './utils'
+import { CommonE2eIdConstants, launchAppWithDemoMode, openHealth, openMessages, toggleRemoteConfigFlag } from './utils'
 
 export const CernerIdConstants = {
   GO_TO_VA_HEALTH_LINK_ID: 'goToMyVAHealthTestID',
