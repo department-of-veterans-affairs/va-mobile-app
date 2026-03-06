@@ -83,7 +83,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
 
   const getRefillVAHealthButton = () => {
     if (!shouldShowRefillButton) {
-      return <></>
+      return null
     }
 
     if (refillStatus === RefillStatusConstants.TRANSFERRED && !isOHCutoverFlagEnabled) {
@@ -92,7 +92,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
       return getRequestRefillButton()
     }
 
-    return <></>
+    return null
   }
   const getGoToMyVAHealthButton = () => {
     return (
@@ -166,7 +166,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
       )
     }
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
-      return <></>
+      return null
     }
     return <PrescriptionsDetailsBanner />
   }

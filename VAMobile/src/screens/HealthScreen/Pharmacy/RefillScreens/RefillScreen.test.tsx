@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { PrescriptionsGetData } from 'api/types'
+import { PrescriptionsGetData, PrescriptionsList } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { RefillScreen } from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillScreen'
 import * as api from 'store/api'
@@ -20,6 +20,9 @@ const mockUseAuthorizedServices = useAuthorizedServices as jest.Mock
 const mockFeatureEnabled = featureEnabled as jest.MockedFunction<typeof featureEnabled>
 
 context('RefillScreen', () => {
+  // mockData is the original 2-item fixture: both stationNumber '979', both isRefillable: true
+  // Used for base tests where all prescriptions should appear
+
   const migratingFacilitiesList = [
     {
       migrationDate: '2026-05-01',
@@ -34,6 +37,24 @@ context('RefillScreen', () => {
         p5: 'May 1, 2026',
         p6: 'May 3, 2026',
         p7: 'May 8, 2026',
+      },
+    },
+  ]
+
+  // Mix of migrating (station 979) and non-migrating (station 528) prescriptions
+  // Used for tests where banner should show alongside a remaining refillable list
+  const mixedFacilityMockData: PrescriptionsList = [
+    {
+      ...mockData[0],
+      // stationNumber '979' — matches migrating facility
+    },
+    {
+      ...mockData[1],
+      id: 'non-migrating-rx',
+      attributes: {
+        ...mockData[1].attributes,
+        stationNumber: '528',
+        facilityName: 'Other VA Medical Center',
       },
     },
   ]
@@ -75,6 +96,11 @@ context('RefillScreen', () => {
       next: '',
       last: '',
     },
+  }
+
+  const mixedFacilityMock: PrescriptionsGetData = {
+    ...mock,
+    data: mixedFacilityMockData,
   }
 
   const emptyMock: PrescriptionsGetData = {
@@ -130,19 +156,18 @@ context('RefillScreen', () => {
   beforeEach(() => {
     jest.resetAllMocks()
 
-    // Default: no migrating facilities, cutover flag off
     mockUseAuthorizedServices.mockReturnValue({
       data: {
         migratingFacilitiesList: [],
       },
     })
 
-    // Default to false for all flags — deterministic and leak-proof
     mockFeatureEnabled.mockReturnValue(false)
   })
 
   // ============================================================
   // Base behavior (cutover flag OFF, no migrating facilities)
+  // Both mockData items have stationNumber '979', isRefillable: true
   // ============================================================
   describe('when there are refillable prescriptions', () => {
     it('should show prescription info and Request Refills button', async () => {
@@ -151,7 +176,6 @@ context('RefillScreen', () => {
         .mockResolvedValue(mock)
       initializeTestInstance()
 
-      // Verify NoRefills is NOT shown
       await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
       expect(screen.queryByRole('header', { name: t('prescriptions.noRefill.header') })).toBeFalsy()
 
@@ -225,10 +249,9 @@ context('RefillScreen', () => {
       })
 
       it('should not show banner when all refillable prescriptions are migrating (NoRefills shows instead)', async () => {
+        // Both mockData items are station 979 → all filtered out → NoRefills
         mockUseAuthorizedServices.mockReturnValue({
-          data: {
-            migratingFacilitiesList: migratingFacilitiesList,
-          },
+          data: { migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
@@ -241,37 +264,19 @@ context('RefillScreen', () => {
       })
 
       it('should show banner when only some refillable prescriptions are migrating', async () => {
-        const mixedMock: PrescriptionsGetData = {
-          data: [
-            {
-              ...mockData[0],
-              // stationNumber '979' matches migrating facility
-            },
-            {
-              ...mockData[1],
-              id: 'non-migrating-id',
-              attributes: {
-                ...mockData[1].attributes,
-                stationNumber: '999',
-                facilityName: 'Other VA Facility',
-              },
-            },
-          ],
-          meta: mock.meta,
-          links: mock.links,
-        }
+        // mixedFacilityMock: one at 979 (migrating), one at 528 (not migrating)
         mockUseAuthorizedServices.mockReturnValue({
-          data: {
-            migratingFacilitiesList: migratingFacilitiesList,
-          },
+          data: { migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
-          .mockResolvedValue(mixedMock)
+          .mockResolvedValue(mixedFacilityMock)
         initializeTestInstance()
+        // Banner shows for migrating prescription
         await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.header'))).toBeTruthy())
         await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
         await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.body'))).toBeTruthy())
+        // Non-migrating prescription still in selectable list
         await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
       })
 
@@ -315,9 +320,7 @@ context('RefillScreen', () => {
       })
 
       it('should not show banner when userAuthorizedServices is undefined', async () => {
-        mockUseAuthorizedServices.mockReturnValue({
-          data: undefined,
-        })
+        mockUseAuthorizedServices.mockReturnValue({ data: undefined })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
@@ -330,9 +333,7 @@ context('RefillScreen', () => {
     describe('when cutover flag is disabled', () => {
       it('should not show banner even when prescriptions are at migrating facilities', async () => {
         mockUseAuthorizedServices.mockReturnValue({
-          data: {
-            migratingFacilitiesList: migratingFacilitiesList,
-          },
+          data: { migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
@@ -345,7 +346,7 @@ context('RefillScreen', () => {
   })
 
   // ============================================================
-  // Prescription filtering (migrating prescriptions removed from list)
+  // Prescription filtering
   // ============================================================
   describe('migrating prescription filtering', () => {
     describe('when cutover flag is enabled', () => {
@@ -355,14 +356,13 @@ context('RefillScreen', () => {
 
       it('should filter migrating prescriptions out of the refillable list', async () => {
         mockUseAuthorizedServices.mockReturnValue({
-          data: {
-            migratingFacilitiesList: migratingFacilitiesList,
-          },
+          data: { migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
         initializeTestInstance()
+        // Both prescriptions are station 979 → all filtered → NoRefills
         await waitFor(() =>
           expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy(),
         )
@@ -400,11 +400,9 @@ context('RefillScreen', () => {
     })
 
     describe('when cutover flag is disabled', () => {
-      it('should not filter migrating prescriptions from the list when flag is off', async () => {
+      it('should not filter migrating prescriptions from the list', async () => {
         mockUseAuthorizedServices.mockReturnValue({
-          data: {
-            migratingFacilitiesList: migratingFacilitiesList,
-          },
+          data: { migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
