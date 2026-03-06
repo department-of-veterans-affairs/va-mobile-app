@@ -142,7 +142,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
-  fit('verify general message details', async () => {
+  it('verify general message details', async () => {
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
     await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
     await expect(element(by.text('General: Vaccine Booster'))).toExist()
