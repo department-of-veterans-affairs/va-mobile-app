@@ -79,15 +79,12 @@ function PastAppointments({
       dateRangeA11yLabelTKey: 'pastAppointments.dateRangeA11yLabel',
       allOfTKey: 'pastAppointments.allOf',
       pastThreeMonthsTKey: 'pastAppointments.pastThreeMonths',
-    })
-      // Filter out the fourteen to twelve months option because it is not part of the past appointments time frames
-      .filter((option) => option.value !== TimeFrameTypeConstants.PAST_FOURTEEN_TO_TWELVE_MONTHS)
-      .map((option) => ({
-        ...option,
-        value: option.label,
-        timeFrame: option.value as TimeFrameType, // We know the value is a TimeFrameType because we filtered out the fourteen to twelve months option
-        testID: option.a11yLabel, // testID is used as both test id and accessibility label
-      }))
+    }).map((option) => ({
+      ...option,
+      value: option.label,
+      timeFrame: option.value as TimeFrameType, // We know the value is a TimeFrameType because we filtered out the fourteen to twelve months option
+      testID: option.a11yLabel, // testID is used as both test id and accessibility label
+    }))
     return pickerOptions
   }
 
