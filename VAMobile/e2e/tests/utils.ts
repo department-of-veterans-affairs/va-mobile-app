@@ -997,10 +997,17 @@ export async function launchAppWithDemoMode(
     }
   }
 
-  // Final wait to ensure we're past all login/onboarding screens
-  await waitFor(element(by.text('Home')))
-    .toExist()
-    .withTimeout(30000)
+  // Final wait to ensure we're past all login screens
+  if (skipOnboarding) {
+    await waitFor(element(by.text('Home')))
+      .toExist()
+      .withTimeout(30000)
+  } else {
+    // If not skipping onboarding, wait for the onboarding screen to appear
+    await waitFor(element(by.id('VAIconOnboardingLogo')))
+      .toExist()
+      .withTimeout(30000)
+  }
 
   if (skipNotifications) {
     const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
