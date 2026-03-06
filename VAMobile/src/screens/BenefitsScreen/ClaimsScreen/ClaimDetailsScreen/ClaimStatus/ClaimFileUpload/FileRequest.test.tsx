@@ -163,7 +163,7 @@ context('FileRequest', () => {
         const requests = [createRequest()]
         mockApiResponse(requests)
         renderWithData(requests)
-        await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
+        await waitFor(() => expect(screen.getByText(t('fileRequest.requestForEvidence'))).toBeTruthy())
         expect(screen.getByText('API Display Name')).toBeTruthy()
       })
 
@@ -171,7 +171,7 @@ context('FileRequest', () => {
         const requests = [createRequest({ friendlyName: null })]
         mockApiResponse(requests)
         renderWithData(requests)
-        await waitFor(() => expect(screen.getByText(t('fileRequestDetails.requestForEvidence'))).toBeTruthy())
+        await waitFor(() => expect(screen.getByText(t('fileRequest.requestForEvidence'))).toBeTruthy())
         expect(screen.getByText('API Display Name')).toBeTruthy()
       })
 
@@ -196,7 +196,7 @@ context('FileRequest', () => {
         mockApiResponse(requests)
         renderWithData(requests)
         await waitFor(() => expect(screen.getByText('Authorization to disclose information')).toBeTruthy())
-        expect(screen.queryByText(t('fileRequestDetails.requestForEvidence'))).toBeFalsy()
+        expect(screen.queryByText(t('fileRequest.requestForEvidence'))).toBeFalsy()
         expect(screen.queryByText('API Display Name')).toBeFalsy()
       })
 

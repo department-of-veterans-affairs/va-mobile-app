@@ -19,6 +19,7 @@ export type FeatureToggleType =
   | 'COEAvailable'
   | 'copayments'
   | 'appointmentsTestTime'
+  | 'evidenceRequestsUpdatedUI'
   | 'displayDuplicateRecordAlert'
   | 'hsScrollAnalytics'
   | 'inAppReview'
@@ -46,6 +47,7 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   COEAvailable: boolean
   copayments: boolean
+  evidenceRequestsUpdatedUI: boolean
   displayDuplicateRecordAlert: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
@@ -74,6 +76,7 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
+  evidenceRequestsUpdatedUI: false,
   displayDuplicateRecordAlert: true,
   hsScrollAnalytics: false,
   inAppReview: true,
