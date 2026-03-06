@@ -15,9 +15,20 @@ import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
 jest.mock('utils/remoteConfig')
 jest.mock('api/authorizedServices/getAuthorizedServices')
+jest.mock('utils/waygateConfig', () => ({
+  screenContentAllowed: jest.fn().mockReturnValue(true),
+  waygateEnabled: jest.fn().mockReturnValue(true),
+  getWaygate: jest.fn().mockReturnValue({
+    enabled: true,
+    errorMsgTitle: '',
+    errorMsgBody: '',
+    appUpdateButton: false,
+    allowFunction: true,
+    denyAccess: false,
+  }),
+}))
 
 const mockUseAuthorizedServices = useAuthorizedServices as jest.Mock
-const mockFeatureEnabled = featureEnabled as jest.MockedFunction<typeof featureEnabled>
 
 context('RefillScreen', () => {
   // mockData is the original 2-item fixture: both stationNumber '979', both isRefillable: true
@@ -154,26 +165,27 @@ context('RefillScreen', () => {
   }
 
   beforeEach(() => {
-    jest.resetAllMocks()
-
     mockUseAuthorizedServices.mockReturnValue({
       data: {
+        prescriptions: true,
         migratingFacilitiesList: [],
       },
     })
 
-    mockFeatureEnabled.mockReturnValue(false)
+    when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(false)
   })
 
   // ============================================================
   // Base behavior (cutover flag OFF, no migrating facilities)
-  // Both mockData items have stationNumber '979', isRefillable: true
   // ============================================================
   describe('when there are refillable prescriptions', () => {
-    it('should show prescription info and Request Refills button', async () => {
+    beforeEach(() => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', apiParams)
         .mockResolvedValue(mock)
+    })
+
+    it('should show prescription info and Request Refills button', async () => {
       initializeTestInstance()
 
       await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
@@ -207,34 +219,42 @@ context('RefillScreen', () => {
 
       await waitFor(() =>
         expect(
-          screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }),
+          screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }) }),
         ).toBeTruthy(),
       )
     })
   })
 
   describe('if there are no refillable prescriptions', () => {
-    it('should show NoRefills component', async () => {
+    beforeEach(() => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', apiParams)
         .mockResolvedValue(emptyMock)
+    })
+
+    it('should show NoRefills component', async () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy())
     })
   })
 
   describe('if no prescription is selected', () => {
-    it('should show alert for no prescription selected', async () => {
+    beforeEach(() => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', apiParams)
         .mockResolvedValue(mock)
+    })
+
+    it('should show alert for no prescription selected', async () => {
       initializeTestInstance()
       await waitFor(() =>
         expect(
-          screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }),
+          screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }) }),
         ).toBeTruthy(),
       )
-      fireEvent.press(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }))
+      fireEvent.press(
+        screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }) }),
+      )
       await waitFor(() => expect(screen.getByText(t('prescriptions.refill.pleaseSelect'))).toBeTruthy())
     })
   })
@@ -245,7 +265,7 @@ context('RefillScreen', () => {
   describe('migrating facilities banner', () => {
     describe('when cutover flag is enabled', () => {
       beforeEach(() => {
-        mockFeatureEnabled.mockReturnValue(true)
+        when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
       })
 
       it('should not show banner when all refillable prescriptions are migrating (NoRefills shows instead)', async () => {
@@ -264,9 +284,8 @@ context('RefillScreen', () => {
       })
 
       it('should show banner when only some refillable prescriptions are migrating', async () => {
-        // mixedFacilityMock: one at 979 (migrating), one at 528 (not migrating)
         mockUseAuthorizedServices.mockReturnValue({
-          data: { migratingFacilitiesList: migratingFacilitiesList },
+          data: { prescriptions: true, migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
@@ -274,15 +293,18 @@ context('RefillScreen', () => {
         initializeTestInstance()
         // Banner shows for migrating prescription
         await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.header'))).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText(t('prescription.refill.banner.migrating.body'))).toBeTruthy())
         // Non-migrating prescription still in selectable list
         await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
+        // Migrating prescription is NOT in the selectable list
+        expect(screen.queryByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeFalsy()
+        // Count shows 1 (only non-migrating prescription)
+        expect(screen.getByText(t('prescriptions.refill.prescriptionsCount', { count: 1 }))).toBeTruthy()
       })
 
       it('should not show banner when no prescriptions match migrating facilities', async () => {
         mockUseAuthorizedServices.mockReturnValue({
           data: {
+            prescriptions: true,
             migratingFacilitiesList: [
               {
                 migrationDate: '2026-05-01',
@@ -320,7 +342,7 @@ context('RefillScreen', () => {
       })
 
       it('should not show banner when userAuthorizedServices is undefined', async () => {
-        mockUseAuthorizedServices.mockReturnValue({ data: undefined })
+        mockUseAuthorizedServices.mockReturnValue({ data: { prescriptions: true } })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
           .mockResolvedValue(mock)
@@ -333,7 +355,7 @@ context('RefillScreen', () => {
     describe('when cutover flag is disabled', () => {
       it('should not show banner even when prescriptions are at migrating facilities', async () => {
         mockUseAuthorizedServices.mockReturnValue({
-          data: { migratingFacilitiesList: migratingFacilitiesList },
+          data: { prescriptions: true, migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
@@ -345,18 +367,15 @@ context('RefillScreen', () => {
     })
   })
 
-  // ============================================================
-  // Prescription filtering
-  // ============================================================
   describe('migrating prescription filtering', () => {
     describe('when cutover flag is enabled', () => {
       beforeEach(() => {
-        mockFeatureEnabled.mockReturnValue(true)
+        when(featureEnabled).calledWith('mhvMedicationsOracleHealthCutover').mockReturnValue(true)
       })
 
       it('should filter migrating prescriptions out of the refillable list', async () => {
         mockUseAuthorizedServices.mockReturnValue({
-          data: { migratingFacilitiesList: migratingFacilitiesList },
+          data: { prescriptions: true, migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
@@ -371,6 +390,7 @@ context('RefillScreen', () => {
       it('should not filter prescriptions when they are not at migrating facilities', async () => {
         mockUseAuthorizedServices.mockReturnValue({
           data: {
+            prescriptions: true,
             migratingFacilitiesList: [
               {
                 migrationDate: '2026-05-01',
@@ -400,9 +420,10 @@ context('RefillScreen', () => {
     })
 
     describe('when cutover flag is disabled', () => {
+      // Inherits the default `when` from top-level beforeEach (returns false)
       it('should not filter migrating prescriptions from the list', async () => {
         mockUseAuthorizedServices.mockReturnValue({
-          data: { migratingFacilitiesList: migratingFacilitiesList },
+          data: { prescriptions: true, migratingFacilitiesList: migratingFacilitiesList },
         })
         when(api.get as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions', apiParams)
@@ -418,14 +439,17 @@ context('RefillScreen', () => {
   // Prescription count header
   // ============================================================
   describe('prescription count', () => {
-    it('should show correct count after filtering', async () => {
+    beforeEach(() => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', apiParams)
         .mockResolvedValue(mock)
+    })
+
+    it('should show correct count after filtering', async () => {
       initializeTestInstance()
-      await waitFor(() =>
-        expect(screen.getByText(t('prescriptions.refill.prescriptionsCount', { count: 2 }))).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      expect(screen.queryByRole('header', { name: t('prescriptions.noRefill.header') })).toBeFalsy()
+      expect(screen.getByText(t('prescriptions.refill.prescriptionsCount', { count: 2 }))).toBeTruthy()
     })
   })
 })
