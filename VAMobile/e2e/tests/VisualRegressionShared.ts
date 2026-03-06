@@ -1,6 +1,6 @@
 /*
 Description:
-Shared data and navigation logic for the Navigation accessibility test suite.
+Shared data and navigation logic for the visual regression test suite.
 When to update:
 Update navigationDic whenever a new feature/page with the bottom nav bar is added to the app.
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
@@ -110,7 +110,7 @@ export const navigationDic = {
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
-    ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'Details'],
+    ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines'], 'Vaccines'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines', 'January 14, 2021'], 'COVID-19 vaccine'],
     [['Allergies.e2e', 'AllergiesAccelerated.e2e'], ['Medical records', 'Allergies'], 'Allergies'],
@@ -264,7 +264,7 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       // Match original Navigation.e2e.ts: fixed scroll to reveal the link, then direct tap.
       // Use by.id (the Pressable) instead of by.text (the clipped child TextView) so the
       // element remains hittable with large text sizes on iOS.
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(150, 'down', 0.5, 0.5)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(350, 'down', 0.5, 0.5)
       await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
       await device.enableSynchronization()
       return

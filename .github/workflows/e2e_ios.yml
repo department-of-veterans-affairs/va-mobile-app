@@ -351,13 +351,13 @@ jobs:
             # Full run: each matrix job runs its own test file
             echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           else
-            # Targeted: Prepend Accessibility/AvailabilityFramework prerequisites unless the test is already one of them
+            # Targeted: Prepend VisualRegression/AvailabilityFramework prerequisites unless the test is already one of them
             PREREQS=""
             case "${{matrix.testsuite}}" in
-              AccessibilityDarkMode.e2e.ts|AccessibilityLandscape.e2e.ts|AccessibilityTextResize.e2e.ts|AvailabilityFramework.e2e.ts)
+              VisualRegressionDarkMode.e2e.ts|VisualRegressionLandscape.e2e.ts|VisualRegressionTextResize.e2e.ts|AvailabilityFramework.e2e.ts)
                 ;;
               *)
-                PREREQS="/e2e/tests/AccessibilityDarkMode.e2e.ts /e2e/tests/AccessibilityLandscape.e2e.ts /e2e/tests/AccessibilityTextResize.e2e.ts /e2e/tests/AvailabilityFramework.e2e.ts"
+                PREREQS="/e2e/tests/VisualRegressionDarkMode.e2e.ts /e2e/tests/VisualRegressionLandscape.e2e.ts /e2e/tests/VisualRegressionTextResize.e2e.ts /e2e/tests/AvailabilityFramework.e2e.ts"
                 ;;
             esac
             echo "CMD=yarn e2e:ios-test $PREREQS /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"

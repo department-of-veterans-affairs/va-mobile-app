@@ -8,13 +8,13 @@ The script can run either as a full suite or a subset:
 * Subset: The script will only check the pages where the test name given in the array matches
 * the test name typed into the "List tests to test in" workflow option.
 When to update:
-Update AccessibilityShared.ts whenever a new feature/new page that has the bottom nav bar is added to the app.
+Update VisualRegressionShared.ts whenever a new feature/new page that has the bottom nav bar is added to the app.
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
 import { by, expect as detoxExpect, device, element } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { execCommand, getTestName, navigateToPage, navigationDic, shouldRunTest } from './AccessibilityShared'
+import { execCommand, getTestName, navigateToPage, navigationDic, shouldRunTest } from './VisualRegressionShared'
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
 
 // OS-level commands to simulate accessibility settings for high-density and large font scales
@@ -47,7 +47,7 @@ afterAll(async () => {
   }
 })
 
-describe('Navigation - Text Resize', () => {
+describe('Visual Regression - Text Resize', () => {
   let testsRun = false
   // Loop through all navigation scenarios and verify readability with large text
   for (const [key, value] of Object.entries(navigationDic)) {

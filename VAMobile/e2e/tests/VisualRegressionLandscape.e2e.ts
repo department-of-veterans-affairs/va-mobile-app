@@ -5,7 +5,7 @@ Specifically checks if the screen content remains accessible and correct when ro
 */
 import { by, expect as detoxExpect, device, element } from 'detox'
 
-import { getTestName, navigateToPage, navigationDic, shouldRunTest } from './AccessibilityShared'
+import { getTestName, navigateToPage, navigationDic, shouldRunTest } from './VisualRegressionShared'
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
 
 beforeAll(async () => {
@@ -13,7 +13,7 @@ beforeAll(async () => {
   await loginToDemoMode()
 })
 
-describe('Navigation - Landscape', () => {
+describe('Visual Regression - Landscape', () => {
   let testsRun = false
   // Iterate through all bottom tabs defined in navigationDic
   for (const [key, value] of Object.entries(navigationDic)) {

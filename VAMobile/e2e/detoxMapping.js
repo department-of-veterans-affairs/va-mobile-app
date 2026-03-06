@@ -2,9 +2,6 @@
 
 // Full test run - used by components, slices, translations, utils
 const fullTestRun = [
-  'AccessibilityDarkMode',
-  'AccessibilityLandscape',
-  'AccessibilityTextResize',
   'Allergies',
   'AllergiesAccelerated',
   'Appeals',
@@ -38,6 +35,9 @@ const fullTestRun = [
   'VALetters',
   'VeteransCrisisLine',
   'VeteranStatusCard',
+  'VisualRegressionDarkMode',
+  'VisualRegressionLandscape',
+  'VisualRegressionTextResize',
 ]
 
 // Authorized services array
