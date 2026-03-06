@@ -14,14 +14,14 @@ We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing 
 
 As much as possible, follow these best practices when writing e2e tests. These suggestions and best practices exist to help us keep our tests fast, and balance responsibility between e2e (happy path) and business logic (unit tests).
 
-* The tests should follow the happy path of an individual feature
-* The tests should map cleanly to a specific user journey, e.g. go from the start to the finish of accomplishing a specific task
-* They should not test every possible option (e.g. every filter option in prescriptions)
-* Prioritize execution speed -- avoid sleeping, timeouts, etc. whenever possible
-* Don't take screenshots
-* Don't perform any actions within a WebView other than ensuring that it launches
-* The tests shouldn't cover edge cases, but can flag them. Use unit tests to cover edge cases, and other off-happy-path stuff
-* Use device-specific idioms (e.g. for phone number links on Android vs iOS)
+- The tests should follow the happy path of an individual feature
+- The tests should map cleanly to a specific user journey, e.g. go from the start to the finish of accomplishing a specific task
+- They should not test every possible option (e.g. every filter option in prescriptions)
+- Prioritize execution speed -- avoid sleeping, timeouts, etc. whenever possible
+- Don't take screenshots
+- Don't perform any actions within a WebView other than ensuring that it launches
+- The tests shouldn't cover edge cases, but can flag them. Use unit tests to cover edge cases, and other off-happy-path stuff
+- Use device-specific idioms (e.g. for phone number links on Android vs iOS)
 
 ## Test coverage
 
