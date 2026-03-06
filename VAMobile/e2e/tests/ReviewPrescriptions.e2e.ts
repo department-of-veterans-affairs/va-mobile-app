@@ -23,8 +23,6 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 06/06/2022',
   PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: SLC10 TEST LAB',
   PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
-  PRESCRIPTION_PENDING_DESCRIPTION_LABEL:
-    "This list shows refill requests you've submitted. It also shows refills the  V-A  pharmacy is processing.",
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT:
     "We share tracking information here for up to 15 days, even if you've received your prescription.",
@@ -64,6 +62,7 @@ describeWithSetup('Review prescriptions list', () => {
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
 
+    // Scroll until the 'Get prescription details' link for AMLODIPINE BESYLATE 10MG TAB is accessible
     await waitFor(element(by.label('IODOQUINOL 650MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
@@ -137,7 +136,6 @@ describeWithSetup('Review prescriptions list', () => {
 
 describeWithSetup('Review prescription details', () => {
   it('should verify prescription details information', async () => {
-    // Scroll until AMLODIPINE BESYLATE 10MG TAB is entirely in view
     await waitFor(element(by.label('IODOQUINOL 650MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))

@@ -10,12 +10,8 @@ import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions, t
 
 export const PrescriptionsE2eIdConstants = {
   PRESCRIPTIONS_HEADER_TEXT: 'Prescriptions',
-  PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
   PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
   PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 06/06/2022',
-  PRESCRIPTION_PENDING_DESCRIPTION_LABEL:
-    "This list shows refill requests you've submitted. It also shows refills the  V-A  pharmacy is processing.",
-  PRESCRIPTION_PENDING_STATUS_LABEL_HEADER_TEXT: 'Active: Refill in process',
   PRESCRIPTION_REFILL_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
   PRESCRIPTION_REFILL_NUMBER_OF_PRESCRIPTION_TEXT: 'Prescriptions for refill (1)',
   PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT: device.getPlatform() === 'android' ? 'Cancel ' : 'Cancel',
@@ -40,9 +36,6 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_REFILLS_LEFT_TEXT: 'Refills left: 1',
   PRESCRIPTION_REQUEST_REFILL_ID: 'requestRefillsButtonID',
   PRESCRIPTION_FLOATING_REQUEST_REFILL_BUTTON_TEXT: 'Start refill request',
-  PRESCRIPTION_STATUS_LABEL_BODY_LABEL:
-    'A prescription that can be filled at the local  V-A  pharmacy. If this prescription is refillable, you may request a refill of this  V-A  prescription.',
-  PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: SLC10 TEST LAB',
 }
 
@@ -66,14 +59,14 @@ beforeAll(async () => {
 
 describeWithSetup('Start a refill request for a single prescription', () => {
   it('should display confirmation modal when refill request button is pressed in prescription details', async () => {
-    // Scroll until AMLODIPINE BESYLATE 10MG TAB is entirely in view
+    // Scroll until the 'Get prescription details' link for AMLODIPINE BESYLATE 10MG TAB is accessible
     await waitFor(element(by.label('IODOQUINOL 650MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
 
     await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
-    await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT))).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
@@ -102,7 +95,7 @@ describeWithSetup('Start a refill request for a single prescription', () => {
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
     ).toExist()
-    await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB')).atIndex(0)).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_WHATS_NEXT_HEADER_TEXT)),
@@ -136,7 +129,7 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
     ).toExist()
     await expect(element(by.text('0/1 selected'))).toExist()
     await expect(element(by.text('Select all'))).toExist()
-    await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB')).atIndex(0)).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
@@ -192,7 +185,7 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
     ).toExist()
-    await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB')).atIndex(0)).toExist()
+    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_WHATS_NEXT_HEADER_TEXT)),
