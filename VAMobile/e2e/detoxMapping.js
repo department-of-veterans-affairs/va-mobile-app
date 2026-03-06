@@ -93,8 +93,8 @@ const debtsArray = ['Payments']
 
 const detoxMapping = {
   directory: {
-    api: fullTestRun,
     allergies: ['Allergies', 'AllergiesAccelerated'],
+    api: fullTestRun,
     AppealDetailsScreen: ['Appeals', 'AppealsExpanded'],
     Appointments: appointmentsArray,
     authorizedServices: authorizedServicesArray,
