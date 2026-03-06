@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { when } from 'jest-when'
 
 import NoFolderMessages from 'screens/HealthScreen/SecureMessaging/NoFolderMessages/NoFolderMessages'
@@ -45,7 +46,7 @@ context('NoFolderMessages', () => {
       initializeTestInstance(true)
       expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
       expect(screen.getByTestId('noCareTeamsAlertTestID')).toBeTruthy()
-      expect(screen.getByText("You're not connected to any care teams in this messaging tool")).toBeTruthy()
+      expect(screen.getByRole('tab', { name: t('secureMessaging.noCareTeams.header') })).toBeTruthy()
     })
   })
 })
