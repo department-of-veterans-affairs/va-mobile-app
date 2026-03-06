@@ -6,9 +6,12 @@ import { DateTime } from 'luxon'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { TimeFrameTypeConstants } from 'constants/appointments'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
+import { get } from 'store/api'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
-import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
+import { RenderParams, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -58,6 +61,14 @@ jest.mock('utils/hooks/offline', () => {
   }
 })
 
+jest.mock('store/api', () => {
+  const original = jest.requireActual('store/api')
+  return {
+    ...original,
+    get: jest.fn(),
+  }
+})
+
 jest.mock('utils/remoteConfig')
 
 context('PastAppointments', () => {
@@ -66,6 +77,8 @@ context('PastAppointments', () => {
     getFormattedDateWithWeekdayForTimeZone(mockStartDateUTC, 'America/Los_Angeles') +
     ' ' +
     getFormattedTimeForTimeZone(mockStartDateUTC, 'America/Los_Angeles')
+  const mockSetTimeFrame = jest.fn()
+  const mockSetDateRange = jest.fn()
 
   const appointmentData = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
@@ -116,6 +129,8 @@ context('PastAppointments', () => {
         page={1}
         setPage={jest.fn()}
         loading={loading}
+        setTimeFrame={mockSetTimeFrame}
+        setDateRange={mockSetDateRange}
       />,
       { ...options },
     )
@@ -281,10 +296,13 @@ context('PastAppointments', () => {
   })
 
   describe('when useOldDatePicker feature toggle is true', () => {
-    it('displays the old date picker instead of the new date picker', () => {
+    beforeAll(() => {
       when(featureEnabled as jest.Mock)
         .calledWith('useOldDatePicker')
         .mockReturnValue(true)
+    })
+
+    it('displays the old date picker instead of the new date picker', () => {
       initializeTestInstance({ data: appointmentData() })
 
       expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
@@ -295,6 +313,28 @@ context('PastAppointments', () => {
       expect(screen.queryByText(t('datePicker.from'))).toBeFalsy()
       expect(screen.queryByText(t('datePicker.to'))).toBeFalsy()
       expect(screen.queryByRole('button', { name: t('apply') })).toBeFalsy()
+    })
+
+    it('sets the correct timeframe and date range when a different date range is selected', async () => {
+      const todaysDate = DateTime.local()
+      const currentYear = todaysDate.year
+
+      const expectedDateRange = {
+        startDate: todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 }).startOf('day').toISO(),
+        endDate: todaysDate.endOf('day').toISO(),
+      }
+
+      initializeTestInstance({ data: appointmentData() })
+
+      // Open the old picker and select a different range (e.g., past year).
+      fireEvent.press(screen.getByText(t('pastAppointments.pastThreeMonths')))
+      await waitFor(() => expect(screen.getByText(t('pastAppointments.allOf', { year: currentYear }))).toBeTruthy())
+      fireEvent.press(screen.getByText(t('pastAppointments.allOf', { year: currentYear })))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
+
+      // Verify that setTimeFrame and setDateRange were called with the correct arguments
+      expect(mockSetTimeFrame).toHaveBeenCalledWith(TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR)
+      expect(mockSetDateRange).toHaveBeenCalledWith(expectedDateRange)
     })
   })
 })
