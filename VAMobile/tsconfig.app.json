@@ -1,17 +1,18 @@
 {
-	"extends": "./tsconfig",
-	"compilerOptions": {
-		"isolatedModules": true,
-		"types": []
-	},
-	"exclude": [
-		"__tests__",
-		"src/testUtils.tsx",
-		"**/*.test.*",
-		"node_modules",
-		"babel.config.js",
-		"metro.config.js",
-		"jest.config.js",
-		"e2e"
-	]
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "isolatedModules": true,
+    "types": []
+  },
+  "exclude": [
+    "__tests__",
+    "src/testUtils.tsx",
+    "src/utils/tests",
+    "**/*.test.*",
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js",
+    "e2e"
+  ]
 }
