@@ -56,12 +56,7 @@ export const execCommand = (command: string) => {
  * Structure: { [BottomTabName]: [ [TestFileName, TargetLinkName | [SubNavigationSteps], VerificationText], ... ] }
  * This allows the test suite to dynamically generate navigation tests for every page.
  */
-// export const navigationDic = {
-//   Health: [
-//     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
-//     ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
-//   ],
-// }
+
 export const navigationDic = {
   Home: [
     ['HomeScreen.e2e', 'Contact us', 'Contact VA'],

@@ -41,7 +41,7 @@ env:
   # Slack API token
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
   # Tests that should always run in PRs and manual triggers (Visual Regression and Availability Framework)
-  PREREQ_TESTS: '["VisualRegressionDarkMode.e2e.ts","VisualRegressionLandscape.e2e.ts","VisualRegressionTextResize.e2e.ts","AvailabilityFramework.e2e.ts"]'
+  PREREQ_TESTS: '["VisualRegressionDarkMode.e2e.ts","VisualRegressionLandscape.e2e.ts","VisualRegressionTextResize.e2e.ts","VisualRegressionNavigation.e2e.ts","AvailabilityFramework.e2e.ts"]'
 
 jobs:
   find_detox_tests_to_run:

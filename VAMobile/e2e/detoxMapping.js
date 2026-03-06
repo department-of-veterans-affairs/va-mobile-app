@@ -40,6 +40,7 @@ const fullTestRun = [
   'VeteranStatusCard',
   'VisualRegressionDarkMode',
   'VisualRegressionLandscape',
+  'VisualRegressionNavigation',
   'VisualRegressionTextResize',
 ]
 
