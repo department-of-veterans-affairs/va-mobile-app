@@ -199,7 +199,7 @@
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD",
-            "isOhMessage": true,
+            "isOhMessage": false,
             "migratedToOracleHealth": true,
             "triageGroup": {
               "triageTeamId": 1013155,
