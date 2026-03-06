@@ -56,6 +56,12 @@ export const execCommand = (command: string) => {
  * Structure: { [BottomTabName]: [ [TestFileName, TargetLinkName | [SubNavigationSteps], VerificationText], ... ] }
  * This allows the test suite to dynamically generate navigation tests for every page.
  */
+// export const navigationDic = {
+//   Health: [
+//     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
+//     ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
+//   ],
+// }
 export const navigationDic = {
   Home: [
     ['HomeScreen.e2e', 'Contact us', 'Contact VA'],
@@ -255,18 +261,9 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-      await waitFor(element(by.text('AMLODIPINE BESYLATE 10MG TAB')))
-        .toExist()
-        .withTimeout(10000)
-      await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-        .scroll(100, 'down', 0.5, 0.5)
-      await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
-      await waitFor(element(by.text('Details')).atIndex(0))
-        .toExist()
-        .withTimeout(10000)
+      // Match original Navigation.e2e.ts: fixed scroll to reveal the link, then direct tap
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(150, 'down', 0.5, 0.5)
+      await element(by.text('Get prescription details')).atIndex(0).tap()
       await device.enableSynchronization()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
