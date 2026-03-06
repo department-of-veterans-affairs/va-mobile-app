@@ -9,8 +9,24 @@
  * sprints. Outputs the last N sprints with names and merged PR counts.
  *
  * Usage:
+ *   # Show the default number of recent sprints
  *   node sprint_closed_prs.js
+ *
+ *   # Show a specific number of recent sprints
  *   node sprint_closed_prs.js --sprints 5
+ *
+ * Requirements:
+ *   - GitHub CLI (`gh`) installed and authenticated
+ *   - Access to the `department-of-veterans-affairs/va-mobile-app` repository
+ *   - GitHub token/CLI scopes:
+ *       repo          (for PR data)
+ *       read:project  (for project/iteration data)
+ *
+ *   To ensure the required scopes:
+ *     gh auth refresh --scopes read:project
+ *
+ * This script is intended to be used from the VAMobile/QA/reporting folder
+ * as part of the VA Mobile App reporting utilities.
  */
 
 const { spawnSync } = require('child_process')
