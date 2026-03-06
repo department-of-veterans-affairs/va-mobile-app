@@ -5,7 +5,7 @@ title: Smart Banners on VA.gov
 ## What are Smart Banners?
 Smart Banners are system-native prompts that appear at the top of a mobile browser when a user visits a website that has an associated native app. They are provided and rendered by the mobile operating system — not by VA.gov itself — giving them a trusted, consistent appearance across all websites that use them.
 On iOS, Safari displays a Smart Banner automatically when a specific 'meta' tag is added to a webpage. On Android, Chrome shows a Native App Install Banner when the site meets certain technical criteria and the browser determines the user may benefit from the app.
-Both banner types display the app's name, icon, and store rating, and include a button that either opens the app (if already installed) or directs the user to the App Store or Google Play to download it. They can also be configured to deep link the user directly to a specific screen within the app, matching the page they were viewing in the browser.
+Both banner types display the app's name, icon, and include a button that either opens the app (if already installed) or directs the user to the App Store or Google Play to download it. They can also be configured to deep link the user directly to a specific screen within the app, matching the page they were viewing in the browser.
 As shown in the screenshots below, the banner appears at the very top of the browser — above VA.gov's own header, including above the Veterans Crisis Line bar.
 
 | iOS - Chrome | Android - Chrome                                                                     |
@@ -30,12 +30,7 @@ As shown in the screenshots below, the banner appears at the very top of the bro
 
 **The page has no in-app equivalent.** Static content pages, policy information, and benefit explainers don't map to a native app experience. Don't prompt an install without a clear payoff for the user.
 
-**Other interstitials are already present.** As the screenshots illustrate, the banner stacks on top of the Veterans Crisis Line bar and the VA.gov site header, consuming significant screen real estate before the Veteran even reaches the page content. Avoid the banner on pages that already carry prominent alerts or notices.
-
 ---
-
-## Analytics
-Usage of the Smart Banner from the mobile browser can be tracked via Google Analytics.  It is encouraged to track the usage of the Smart Banner to ensure it is adding value to users.  
 
 ## Summary
 
