@@ -34,6 +34,7 @@ beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   execCommand(FONT_RESIZING_LARGEST)
+  await setTimeout(2000)
   if (device.getPlatform() === 'android') {
     execCommand(DISPLAY_RESIZING_LARGEST)
     await setTimeout(2000)
