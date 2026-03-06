@@ -225,7 +225,7 @@ export function AuthGuard() {
     displayBiometricsPreferenceScreen,
     requestNotificationsPreferenceScreen,
   } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
+  const { tappedForegroundNotification, setTappedForegroundNotification, initialUrl } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -344,6 +344,20 @@ export function AuthGuard() {
   }, [])
 
   useEffect(() => {
+    const handleNotificationUrl = async () => {
+      if (!loggedIn && initialUrl) {
+        const demoLoginHandled = await handleDemoDeepLink(initialUrl, dispatch)
+        const isNavigableLink =
+          initialUrl?.startsWith('vamobile://messages/') || initialUrl?.startsWith('vamobile://appointments/')
+        if (!demoLoginHandled || isNavigableLink) {
+          setInitialDeepLink(initialUrl)
+        }
+      }
+    }
+    handleNotificationUrl()
+  }, [dispatch, initialUrl, loggedIn])
+
+  useEffect(() => {
     console.debug('AuthGuard: initializing')
     if (loggedIn && tappedForegroundNotification) {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
@@ -355,7 +369,8 @@ export function AuthGuard() {
           dispatch(handleTokenCallbackUrl(event.url))
         } else {
           const demoLoginHandled = await handleDemoDeepLink(event.url, dispatch)
-          if (!demoLoginHandled && event.url?.startsWith('vamobile://')) {
+          const isNavigableLink = event.url?.startsWith('vamobile://messages/') || event.url?.startsWith('vamobile://appointments/')
+          if (event.url?.startsWith('vamobile://') && (!demoLoginHandled || isNavigableLink)) {
             // Store non-auth result url for navigation after login
             setInitialDeepLink(event.url)
           }
@@ -398,7 +413,8 @@ export function AuthGuard() {
       const initialUrl = await Linking.getInitialURL()
       if (initialUrl) {
         const demoLoginHandled = await handleDemoDeepLink(initialUrl, dispatch)
-        if (!demoLoginHandled) {
+        const isNavigableLink = initialUrl?.startsWith('vamobile://messages/') || initialUrl?.startsWith('vamobile://appointments/')
+        if (!demoLoginHandled || isNavigableLink) {
           setInitialDeepLink(initialUrl)
           logCampaignAnalytics(initialUrl)
         }

@@ -4,21 +4,24 @@ import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Devel
 import { AppDispatch } from 'store'
 import DemoUsers from 'store/api/demo/mocks/users'
 import {
+  ANDROID_FIRST_LOGIN_COMPLETED_KEY,
+  FIRST_LOGIN_COMPLETED_KEY,
+  FIRST_LOGIN_STORAGE_VAL,
   NEW_SESSION,
+  NOTIFICATION_COMPLETED_KEY,
   checkFirstTimeLogin,
   checkRequestNotificationsPreferenceScreen,
   logInDemoMode,
-  setFirstTimeLoginOverride,
-  setNotificationsPreferenceOverride,
 } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import getEnv from 'utils/env'
+import { isAndroid } from 'utils/platform'
 
 export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Promise<boolean> {
   try {
     const { DEMO_PASSWORD, IS_TEST } = getEnv()
     const isTestOrDev = IS_TEST === true || __DEV__
-    if (!isTestOrDev || !url?.startsWith('vamobile://login?demo=true')) {
+    if (!isTestOrDev || !url?.includes('demo=true')) {
       return false
     }
 
@@ -38,23 +41,27 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
     const demoUserParam = params.demoUser
     const skipOnboarding = params.skipOnboarding !== 'false'
     const skipNotifications = params.skipNotifications !== 'false'
+    const autoLogin = params.autoLogin !== 'false'
 
-    if (DEMO_PASSWORD !== undefined && password !== DEMO_PASSWORD) {
+    if (DEMO_PASSWORD !== undefined && DEMO_PASSWORD !== '' && password !== DEMO_PASSWORD && !IS_TEST) {
       return false
     }
 
     const validDemoUserIds = Object.keys(DemoUsers)
     const demoUser = demoUserParam && validDemoUserIds.includes(demoUserParam) ? demoUserParam : 'kimberlyWashington'
 
-    await Promise.all([
-      AsyncStorage.setItem(DEMO_USER, demoUser),
-      AsyncStorage.setItem(NEW_SESSION, 'true'),
-    ])
+    await Promise.all([AsyncStorage.setItem(DEMO_USER, demoUser), AsyncStorage.setItem(NEW_SESSION, 'true')])
 
-    // Set overrides before activating demo mode
-    if (IS_TEST) {
-      dispatch(setFirstTimeLoginOverride(!skipOnboarding))
-      dispatch(setNotificationsPreferenceOverride(!skipNotifications))
+    if (skipOnboarding) {
+      if (isAndroid()) {
+        await AsyncStorage.setItem(ANDROID_FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+      } else {
+        await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+      }
+    }
+
+    if (skipNotifications) {
+      await AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
     }
 
     // Activate demo mode so demoMode=true in store before re-checks
@@ -62,13 +69,13 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
 
     // Re-check with correct demoMode state
     if (IS_TEST) {
-      await Promise.all([
-        dispatch(checkFirstTimeLogin()),
-        dispatch(checkRequestNotificationsPreferenceScreen()),
-      ])
+      await Promise.all([dispatch(checkFirstTimeLogin()), dispatch(checkRequestNotificationsPreferenceScreen())])
     }
 
-    dispatch(logInDemoMode())
+    if (autoLogin) {
+      await dispatch(logInDemoMode())
+    }
+
     return true
   } catch (e) {
     console.error('handleDemoDeepLink error:', e)

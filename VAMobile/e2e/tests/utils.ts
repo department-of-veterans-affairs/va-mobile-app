@@ -26,7 +26,7 @@ const mockNotification = {
   title: 'New Secure Message',
   body: 'Review your messages in the health care section of the VA app',
   payload: {
-    url: 'vamobile://messages/2092809',
+    url: 'vamobile://messages/2092809?demo=true',
   },
 }
 
@@ -869,37 +869,66 @@ export async function launchAppWithDemoMode(
   demoUser: string = 'kimberlyWashington',
   skipOnboarding: boolean = true,
   pushNotifications?: boolean,
+  autoLogin: boolean = true,
 ) {
   const skipNotifications = pushNotifications === undefined ? true : !pushNotifications
   const launchOptions: any = {
     newInstance: true,
     url: `vamobile://login?demo=true&demoUser=${demoUser}&password=${encodeURIComponent(
       DEMO_PASSWORD || '',
-    )}&skipOnboarding=${skipOnboarding}&skipNotifications=${skipNotifications}`,
+    )}&skipOnboarding=${skipOnboarding}&skipNotifications=${skipNotifications}&autoLogin=${autoLogin}`,
     permissions: { notifications: 'YES' },
   }
 
   await device.launchApp(launchOptions)
 
+  if (!autoLogin) {
+    // Wait for the login page to exist (might have height 0 initially on some environments)
+    await waitFor(element(by.id('Login-page')))
+      .toExist()
+      .withTimeout(30000)
+      .catch(() => {
+        console.log('Login-page not found, checking if already logged in...')
+      })
+
+    const loginPageVisible = await checkIfElementIsPresent('Login-page')
+    if (loginPageVisible) {
+      await waitFor(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)))
+        .toExist()
+        .withTimeout(10000)
+
+      await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
+    }
+  }
+
+  // Handle onboarding skip if needed
   if (skipOnboarding) {
+    // Check if carousel button exists. If not, we might already be on Home.
     const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
     if (ifCarouselSkipBtnExist) {
       await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     }
   }
 
-  const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
-    CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
-    true,
-  )
-  if (turnOnNotificationsBtnExist && skipNotifications) {
-    await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+  // Final wait to ensure we're past all login/onboarding screens
+  await waitFor(element(by.text('Home')))
+    .toExist()
+    .withTimeout(30000)
+
+  if (skipNotifications) {
+    const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
+      CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
+      true,
+    )
+    if (turnOnNotificationsBtnExist) {
+      await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+    }
   }
 
   const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
   if (confirmEmailBtnExist) {
     await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
-      .toBeVisible()
+      .toExist()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()

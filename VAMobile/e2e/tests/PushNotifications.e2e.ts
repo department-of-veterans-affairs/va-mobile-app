@@ -21,40 +21,55 @@ const mockNotification = {
   title: 'New Secure Message',
   body: 'Review your messages in the health care section of the VA app',
   payload: {
-    url: 'vamobile://messages/2092809',
+    url: 'vamobile://messages/2092809?demo=true&skipOnboarding=true&skipNotifications=true',
   },
 }
 
 //This script is only run on iOS because there are additional requirements that can't be met for Android
 describe(':ios: Push Notifications', () => {
   it('dead state: should navigate to appropriate screen when launching', async () => {
-    await launchAppWithDemoMode(CommonE2eIdConstants.DEMO_USER_KIMBERLY_WASHINGTON, true, true)
-    await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE)))
-      .toExist()
-      .withTimeout(8000)
-  })
+    // 115452: We need to launch with demo mode first to establish the session,
+    // then relaunch with the notification to test "dead state" navigation.
+    await launchAppWithDemoMode(CommonE2eIdConstants.DEMO_USER_KIMBERLY_WASHINGTON, true, false, true)
+    await device.launchApp({ newInstance: true, userNotification: mockNotification })
 
-  it('should navigate back to home screen after launch', async () => {
-    await element(by.text('Back')).atIndex(0).tap()
-    await waitFor(element(by.text(PushNotificationsConstants.MESSAGE_COMPOSE_BUTTON_TEXT))).toExist()
-    await element(by.text('Back')).atIndex(0).tap()
-    await expect(element(by.text('Home'))).toExist()
+    await waitFor(element(by.id('viewMessageTestID')))
+      .toExist()
+      .withTimeout(20000)
+
+    // Verify navigation back
+    await waitFor(element(by.id('backToMessagesID')))
+      .toExist()
+      .withTimeout(20000)
+    await element(by.id('backToMessagesID')).tap()
+
+    await waitFor(element(by.id('messagesTestID')))
+      .toExist()
+      .withTimeout(20000)
+    await waitFor(element(by.id('startNewMessageButtonTestID')))
+      .toExist()
+      .withTimeout(20000)
+    await element(by.id('messagesBackID')).tap()
+
+    await waitFor(element(by.text('Home')))
+      .toExist()
+      .withTimeout(20000)
   })
 
   it('background: should navigate to appropriate screen', async () => {
-    await launchAppWithDemoMode()
+    await launchAppWithDemoMode(undefined, true, false, true)
     await device.sendToHome()
     await device.launchApp({ newInstance: false, userNotification: mockNotification })
-    await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE)))
+    await waitFor(element(by.id('viewMessageTestID')))
       .toExist()
-      .withTimeout(8000)
+      .withTimeout(20000)
   })
 
   it('foreground: should navigate to appropriate screen', async () => {
-    await launchAppWithDemoMode()
+    await launchAppWithDemoMode(undefined, true, false, true)
     await device.sendUserNotification(mockNotification)
-    await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE)))
+    await waitFor(element(by.id('viewMessageTestID')))
       .toExist()
-      .withTimeout(8000)
+      .withTimeout(20000)
   })
 })

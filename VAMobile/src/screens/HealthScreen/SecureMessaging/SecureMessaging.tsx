@@ -165,6 +165,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   return (
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
+      backLabelTestID="messagesBackID"
       title={t('messages')}
       testID="messagesTestID"
       scrollViewProps={scrollViewProps}

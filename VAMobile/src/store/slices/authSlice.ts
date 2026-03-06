@@ -43,10 +43,10 @@ export const FIRST_TIME_LOGIN = '@store_first_time_login'
 
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
-const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
-const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
-const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
-const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
+export const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
+export const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
+export const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
+export const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 const authNonFatalErrorString = 'Auth Service Error'
 
@@ -75,8 +75,6 @@ export type AuthState = {
   successfulLogin?: boolean
   requestNotificationsPreferenceScreen?: boolean
   requestNotifications?: boolean
-  firstTimeLoginOverride?: boolean
-  notificationsPreferenceOverride?: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -92,11 +90,7 @@ export const initialAuthState: AuthState = {
   settingBiometricPreference: false,
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
-  authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
-  requestNotificationsPreferenceScreen: false,
   requestNotifications: false,
-  firstTimeLoginOverride: false,
-  notificationsPreferenceOverride: false,
 }
 
 /*
@@ -138,18 +132,6 @@ export const setRequestNotifications =
     dispatch(dispatchSetRequestNotifications(value))
   }
 
-export const setFirstTimeLoginOverride =
-  (value: boolean): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchSetFirstTimeLoginOverride(value))
-  }
-
-export const setNotificationsPreferenceOverride =
-  (value: boolean): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchSetNotificationsPreferenceOverride(value))
-  }
-
 /**
  * Signal the sync process is completed
  */
@@ -183,14 +165,7 @@ const clearStoredAuthCreds = async (): Promise<void> => {
  * Action to check if this is the first time a user has logged in
  */
 
-export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) => {
-  const { firstTimeLoginOverride } = getState().auth
-  const { demoMode } = getState().demo
-  if (IS_TEST && !firstTimeLoginOverride && demoMode) {
-    // In integration tests this will change the behavior and make it inconsistent across runs
-    dispatch(dispatchSetFirstLogin(false))
-    return
-  }
+export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
   let isFirstLogin = true
   // if we need to 'retrigger' onboarding for existing users in the future we should just increment
   // the AsyncStorage 'completed key' with a #.
@@ -209,15 +184,7 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch, getState) =>
   dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
-export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch, getState) => {
-  const { notificationsPreferenceOverride } = getState().auth
-  const { demoMode } = getState().demo
-  if (IS_TEST && !notificationsPreferenceOverride && demoMode) {
-    // In integration tests this will change the behavior and make it inconsistent across runs
-    dispatch(dispatchSetNotificationsPreferenceScreen(false))
-    return
-  }
-
+export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch) => {
   const setNotificationsPreferenceScreenVal = await AsyncStorage.getItem(NOTIFICATION_COMPLETED_KEY)
   const shouldShowScreen = !setNotificationsPreferenceScreenVal
   dispatch(dispatchSetNotificationsPreferenceScreen(shouldShowScreen))
@@ -775,23 +742,15 @@ const authSlice = createSlice({
   reducers: {
     dispatchInitializeAction: (state, action: PayloadAction<AuthInitializePayload>) => {
       const { loggedIn } = action.payload
-      // Security: In production, prioritize the results of initializeAuth (actual tokens) over any existing state.
-      // We only merge state for tests/dev to allow deep link pre-login.
       const isTestOrDev = IS_TEST || __DEV__
-      const finalLoggedIn = isTestOrDev ? state.loggedIn || loggedIn : loggedIn
 
       return {
-        ...initialAuthState,
+        ...(isTestOrDev ? state : initialAuthState),
         ...action.payload,
         initializing: false,
         syncing: state.syncing && loggedIn,
-        firstTimeLogin: state.firstTimeLogin,
-        loggedIn: finalLoggedIn,
+        loggedIn: isTestOrDev ? state.loggedIn || loggedIn : loggedIn,
         displayBiometricsPreferenceScreen: true,
-        requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
-        successfulLogin: isTestOrDev ? state.successfulLogin : initialAuthState.successfulLogin,
-        firstTimeLoginOverride: state.firstTimeLoginOverride,
-        notificationsPreferenceOverride: state.notificationsPreferenceOverride,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
@@ -805,12 +764,6 @@ const authSlice = createSlice({
     },
     dispatchSetFirstLogin: (state, action: PayloadAction<boolean>) => {
       state.firstTimeLogin = action.payload
-    },
-    dispatchSetFirstTimeLoginOverride: (state, action: PayloadAction<boolean>) => {
-      state.firstTimeLoginOverride = action.payload
-    },
-    dispatchSetNotificationsPreferenceOverride: (state, action: PayloadAction<boolean>) => {
-      state.notificationsPreferenceOverride = action.payload
     },
     dispatchFinishSync: (state) => {
       state.syncing = false
@@ -834,8 +787,6 @@ const authSlice = createSlice({
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
         requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
-        firstTimeLoginOverride: state.firstTimeLoginOverride,
-        notificationsPreferenceOverride: state.notificationsPreferenceOverride,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
@@ -899,8 +850,6 @@ export const {
   dispatchSetNotificationsPreferenceScreen,
   dispatchSetRequestNotifications,
   dispatchSetFirstLogin,
-  dispatchSetFirstTimeLoginOverride,
-  dispatchSetNotificationsPreferenceOverride,
   dispatchFinishSync,
   dispatchUpdateStoreBiometricsPreference,
   dispatchStartAuthorizeParams,

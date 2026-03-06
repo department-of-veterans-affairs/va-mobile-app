@@ -17,6 +17,7 @@ import {
 } from 'utils/homeScreenAlerts'
 import { useOpenAppStore, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
+import getEnv from 'utils/env'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()
@@ -28,7 +29,10 @@ export const EncourageUpdateAlert = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const openAppStore = useOpenAppStore()
 
+  const { IS_TEST } = getEnv()
+
   const displayEU =
+    !IS_TEST &&
     storeVersion &&
     localVersionName &&
     skippedVersion &&
