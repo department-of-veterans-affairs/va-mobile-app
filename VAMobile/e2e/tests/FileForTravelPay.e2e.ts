@@ -3,7 +3,7 @@ import { by, element, expect, waitFor } from 'detox'
 import {
   CommonE2eIdConstants,
   fillHomeAddressFields,
-  loginToDemoMode,
+  launchAppWithDemoMode,
   openAppointmentInList,
   openAppointments,
   openDismissLeavingAppPopup,
@@ -108,7 +108,7 @@ const TravelPayE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await loginToDemoMode()
+  await launchAppWithDemoMode()
   await openHealth()
   await openAppointments()
 })
