@@ -261,9 +261,11 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Match original Navigation.e2e.ts: fixed scroll to reveal the link, then direct tap
+      // Match original Navigation.e2e.ts: fixed scroll to reveal the link, then direct tap.
+      // Use by.id (the Pressable) instead of by.text (the clipped child TextView) so the
+      // element remains hittable with large text sizes on iOS.
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(150, 'down', 0.5, 0.5)
-      await element(by.text('Get prescription details')).atIndex(0).tap()
+      await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
       await device.enableSynchronization()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
