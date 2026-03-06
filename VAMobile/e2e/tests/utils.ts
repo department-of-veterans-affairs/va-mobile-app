@@ -870,7 +870,7 @@ export async function launchAppWithDemoMode(
 ) {
   const launchOptions: any = {
     newInstance: true,
-    url: `vamobile://login?demo=true&demoUser=${demoUser}&password=${DEMO_PASSWORD}`,
+    url: `vamobile://login?demo=true&demoUser=${demoUser}&password=${encodeURIComponent(DEMO_PASSWORD || '')}`,
     permissions: { notifications: 'YES' },
   }
 
