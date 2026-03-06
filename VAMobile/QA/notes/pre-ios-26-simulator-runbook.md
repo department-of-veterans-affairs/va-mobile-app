@@ -28,7 +28,7 @@ Everything else in this runbook is setup or optional workflow guidance.
 
 In Xcode:
 - Open `Settings`
-- Go to `Platforms` (or `Components` in recent versions)
+- Go to `Platforms` (called `Components` in older Xcode versions)
 - Download an iOS runtime below 26, for example `iOS 18.x` (note, also, that iOS jumped from 18 to 26 to match years `¯\_(ツ)_/¯`)
 
 ### Create a Dedicated Simulator Device
