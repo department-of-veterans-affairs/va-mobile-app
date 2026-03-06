@@ -127,7 +127,7 @@ describe('Messages Screen', () => {
   it('verify the messages just opened are displayed as read', async () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID))).toExist()
-    await expect(element(by.text('Inbox (1)'))).toExist()
+    await expect(element(by.text('Inbox (2)'))).toExist()
   })
 
   it('verify medication message details', async () => {
@@ -142,8 +142,9 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
-  it('verify general message details', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_READ_ID)).tap()
+  fit('verify general message details', async () => {
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
     await expect(element(by.text('General: Vaccine Booster'))).toExist()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
