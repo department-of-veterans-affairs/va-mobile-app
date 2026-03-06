@@ -149,7 +149,7 @@ jobs:
         run: |
           declare -A GITHUB_TO_SLACK_MAP
           GITHUB_TO_SLACK_MAP["rtwell"]="UEY4D750B"
-          GITHUB_TO_SLACK_MAP["b-rocha"]="U01AWJEH5UJ"
+          GITHUB_TO_SLACK_MAP["b_rocha"]="U01AWJEH5UJ"
           GITHUB_TO_SLACK_MAP["dumathane"]="U08HW514Y8Y"
           # Example: Convert mapping to environment variables
           for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
@@ -159,7 +159,7 @@ jobs:
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           SLACK_rtwell: $rtwell
-          SLACK_brocha: $b-rocha
+          SLACK_brocha: $b_rocha
           SLACK_dumathane: $dumathane
         run: |
           SLACK_MESSAGE=$(cat <<EOF
