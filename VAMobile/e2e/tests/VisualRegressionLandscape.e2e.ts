@@ -30,11 +30,14 @@ describe('Visual Regression - Landscape', () => {
             await navigateToPage(key, value[j])
             // Step 2: Set orientation to landscape
             await device.setOrientation('landscape')
-            // Step 3: Verify content visibility and take screenshot
-            await detoxExpect(element(by.text(verifyText)).atIndex(0)).toExist()
-            const feature = await device.takeScreenshot(verifyText)
-            await checkImages(feature)
-            await device.setOrientation('portrait')
+            try {
+              // Step 3: Verify content visibility and take screenshot
+              await detoxExpect(element(by.text(verifyText)).atIndex(0)).toExist()
+              const feature = await device.takeScreenshot(verifyText)
+              await checkImages(feature)
+            } finally {
+              await device.setOrientation('portrait')
+            }
           })
         }
       }
