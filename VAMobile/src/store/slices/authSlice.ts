@@ -23,7 +23,6 @@ import {
   AuthSetAuthorizeRequestParamsPayload,
   LOGIN_PROMPT_TYPE,
 } from 'store/api/types'
-import { dispatchSetAnalyticsLogin } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { KEYCHAIN_DEVICE_SECRET_KEY, storeDeviceSecret } from 'utils/auth'
@@ -32,6 +31,8 @@ import getEnv from 'utils/env'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
+
+import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 
 const { AUTH_ENDPOINT, AUTH_REVOKE_URL, AUTH_TOKEN_EXCHANGE_URL, AUTH_TOKEN_REFRESH_URL, ENVIRONMENT, IS_TEST } =
   getEnv()

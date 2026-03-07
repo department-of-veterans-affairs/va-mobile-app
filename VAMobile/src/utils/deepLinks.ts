@@ -13,7 +13,7 @@ import {
   checkFirstTimeLogin,
   checkRequestNotificationsPreferenceScreen,
   logInDemoMode,
-} from 'store/slices'
+} from 'store/slices/authSlice'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import getEnv from 'utils/env'
 import { isAndroid } from 'utils/platform'

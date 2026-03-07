@@ -39,6 +39,7 @@ let messageCollapsed
 let messageExpanded
 
 beforeAll(async () => {
+  await launchAppWithDemoMode()
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await openHealth()
   await openMessages()
