@@ -131,7 +131,7 @@ jobs:
           else
             # Mapping-based check (PRs) already adds prereqs in the mapping workflow
             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
-              echo "matrix=${{needs.find_detox_tests_to_run.outputs.test_matrix}}" >> "$GITHUB_OUTPUT"
+              echo 'matrix=${{needs.find_detox_tests_to_run.outputs.test_matrix}}' >> "$GITHUB_OUTPUT"
             else
               echo "matrix=" >> "$GITHUB_OUTPUT" 
             fi
