@@ -95,7 +95,6 @@ jobs:
     needs: find_detox_tests_to_run
     outputs:
       output1: ${{ steps.matrix_value.outputs.matrix }}
-      output2: ${{ steps.matrix_value.outputs.individual_matrix}}
     steps:
       - name: Generate token
         id: generate_token
@@ -117,12 +116,10 @@ jobs:
             # Full run - we don't worry about prereqs separately because they are included in the full parallel run list
             e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
             echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-            echo "individual_matrix=" >> "$GITHUB_OUTPUT"
           elif [[ "${{ inputs.tests_to_run}}" != "" ]]; then
             # Specific manually requested set - run ONLY these tests
             matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end) | unique')
             echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
-            echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
           else
             # Mapping-based check (PRs) already adds prereqs in the mapping workflow
             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
