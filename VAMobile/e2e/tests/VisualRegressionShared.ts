@@ -6,7 +6,7 @@ Update navigationDic whenever a new feature/page with the bottom nav bar is adde
 See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
 import { exec } from 'child_process'
-import { by, expect as detoxExpect, device, element, waitFor } from 'detox'
+import { by, device, element, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import { CommonE2eIdConstants } from './utils'
