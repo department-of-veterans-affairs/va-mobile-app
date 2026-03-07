@@ -5,9 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
-import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import { AppThunk } from 'store'
-import * as AuthSlice from 'store/slices/authSlice'
+import { DEMO_USER_STORAGE_KEY_STORAGE_KEY, logout } from 'store/slices/authSlice'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 const mockNavigationSpy = jest.fn()
@@ -61,7 +60,7 @@ context('DemoModeUsersScreen', () => {
       fireEvent.press(saveButton)
 
       await waitFor(() => {
-        expect(AsyncStorage.setItem).toBeCalledWith(DEMO_USER, 'claraJefferson')
+        expect(AsyncStorage.setItem).toBeCalledWith(DEMO_USER_STORAGE_KEY, 'claraJefferson')
         expect(logoutSpy).toHaveBeenCalled()
       })
     })
@@ -80,7 +79,7 @@ context('DemoModeUsersScreen', () => {
       fireEvent.press(saveButton)
 
       await waitFor(() => {
-        expect(AsyncStorage.setItem).toBeCalledWith(DEMO_USER, 'claraJefferson')
+        expect(AsyncStorage.setItem).toBeCalledWith(DEMO_USER_STORAGE_KEY, 'claraJefferson')
         expect(logoutSpy).not.toHaveBeenCalled()
         expect(goBack).toHaveBeenCalled()
       })

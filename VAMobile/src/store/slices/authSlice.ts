@@ -41,6 +41,7 @@ let inMemoryRefreshToken: string | undefined
 
 export const NEW_SESSION = '@store_new_session'
 export const FIRST_TIME_LOGIN = '@store_first_time_login'
+export const DEMO_USER_STORAGE_KEY = '@demo_user'
 
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'

@@ -22,12 +22,18 @@ import {
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import DemoAlert from 'screens/auth/LoginScreen/DemoAlert'
 import { RootState } from 'store'
 import DemoUsers, { DemoUserIds } from 'store/api/demo/mocks/users'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
-import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
+import {
+  AuthState,
+  DEMO_USER_STORAGE_KEY,
+  FIRST_TIME_LOGIN,
+  NEW_SESSION,
+  loginStart,
+  setPKCEParams,
+} from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -67,7 +73,7 @@ function LoginScreen() {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   const handleDemoUserUpdated = useCallback(async () => {
-    const storedDemoUser = await AsyncStorage.getItem(DEMO_USER)
+    const storedDemoUser = await AsyncStorage.getItem(DEMO_USER_STORAGE_KEY)
     setDemoUser(storedDemoUser || '')
     dispatch(updateDemoMode(true, storedDemoUser))
   }, [dispatch])

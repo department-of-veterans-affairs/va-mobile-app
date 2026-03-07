@@ -8,9 +8,8 @@ import { Box, FeatureLandingTemplate, RadioGroup, radioOption } from 'components
 import FloatingButton from 'components/FloatingButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import DemoUsers, { DemoUserIds } from 'store/api/demo/mocks/users'
-import { logout } from 'store/slices/authSlice'
+import { DEMO_USER_STORAGE_KEY, logout } from 'store/slices/authSlice'
 import { useAppDispatch } from 'utils/hooks'
 
 type DemoModeUsersScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'DemoModeUsers'>
@@ -23,7 +22,7 @@ function DemoModeUsersScreen({ navigation, route }: DemoModeUsersScreenSettingsS
   const { fromLogin } = route.params
 
   useEffect(() => {
-    AsyncStorage.getItem(DEMO_USER).then((storedDemoUser) => {
+    AsyncStorage.getItem(DEMO_USER_STORAGE_KEY).then((storedDemoUser) => {
       if (storedDemoUser) {
         setDemoUser(storedDemoUser)
       }
@@ -40,7 +39,7 @@ function DemoModeUsersScreen({ navigation, route }: DemoModeUsersScreenSettingsS
     return (
       <FloatingButton
         onPress={async () => {
-          await AsyncStorage.setItem(DEMO_USER, demoUser)
+          await AsyncStorage.setItem(DEMO_USER_STORAGE_KEY, demoUser)
           if (fromLogin) {
             navigation.goBack()
           } else {

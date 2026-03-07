@@ -29,12 +29,12 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
+import { DocumentPickerResponse } from 'api/types'
 import { Events } from 'constants/analytics'
 import { MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS, WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
 import {

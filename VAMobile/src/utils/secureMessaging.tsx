@@ -16,6 +16,7 @@ import {
   SecureMessagingFolderList,
   SecureMessagingMessageList,
 } from 'api/types'
+import { DocumentPickerResponse } from 'api/types'
 import { Box, InlineTextWithIconsProps, LinkWithAnalytics, MessageListItemObj, PickerItem, TextView } from 'components'
 import Unread from 'components/VAIcon/svgs/Unread.svg'
 import { Events } from 'constants/analytics'
@@ -28,7 +29,6 @@ import {
   READ,
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import theme from 'styles/themes/standardTheme'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { generateTestIDForInlineTextIconList, isErrorObject } from 'utils/common'

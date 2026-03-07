@@ -27,7 +27,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { AnalyticsState, OfflineState, setOfflineDebugEnabled } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
+import { AuthState, DEMO_USER_STORAGE_KEY_STORAGE_KEY, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
 import getEnv, { EnvVars } from 'utils/env'
 import {
@@ -42,8 +42,6 @@ import { useAlert, useAppDispatch, useGiveFeedback, useRouteNavigation, useTheme
 import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
-
-export const DEMO_USER = '@demo_user'
 
 function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const snackbar = useSnackbar()
@@ -108,7 +106,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       loadHideWarnings()
     }, []),
   )
-  // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
     const asyncVal = (await AsyncStorage.getItem(key)) || ''
     setStateFun(asyncVal)

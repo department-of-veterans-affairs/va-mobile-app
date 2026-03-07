@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import analytics from '@react-native-firebase/analytics'
 
-import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import { AppDispatch } from 'store'
 import DemoUsers from 'store/api/demo/mocks/users'
 import {
   ANDROID_FIRST_LOGIN_COMPLETED_KEY,
+  DEMO_USER_STORAGE_KEY,
   FIRST_LOGIN_COMPLETED_KEY,
   FIRST_LOGIN_STORAGE_VAL,
   NEW_SESSION,
@@ -83,7 +83,10 @@ export async function handleDemoDeepLink(url: string, dispatch: AppDispatch): Pr
     const validDemoUserIds = Object.keys(DemoUsers)
     const demoUser = demoUserParam && validDemoUserIds.includes(demoUserParam) ? demoUserParam : 'kimberlyWashington'
 
-    await Promise.all([AsyncStorage.setItem(DEMO_USER, demoUser), AsyncStorage.setItem(NEW_SESSION, 'true')])
+    await Promise.all([
+      AsyncStorage.setItem(DEMO_USER_STORAGE_KEY, demoUser),
+      AsyncStorage.setItem(NEW_SESSION, 'true'),
+    ])
 
     if (skipOnboarding) {
       const key = isAndroid() ? ANDROID_FIRST_LOGIN_COMPLETED_KEY : FIRST_LOGIN_COMPLETED_KEY

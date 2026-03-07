@@ -2,22 +2,12 @@ import React, { ReactNode } from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { LetterTypes } from 'api/types'
+import { DocumentPickerResponse, LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 import { ScreenIDTypes } from 'store/api/types'
-
-export type DocumentPickerResponse = {
-  uri: string
-  fileCopyUri: string
-  copyError?: string
-  type: string
-  name: string
-  size: number
-  base64?: string
-}
 
 export type BenefitsStackParamList = {
   Benefits: undefined
