@@ -52,7 +52,7 @@ import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { useAppIsOnline } from 'utils/hooks/offline'
-import { isAndroid, isIOS, isIpad } from 'utils/platform'
+import { isAndroid, isIOS } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
 const textAlign = isIOS() ? 'center' : 'left'
@@ -465,7 +465,6 @@ export function useAttachments(): [
         options,
         title: t('secureMessaging.attachments.removeAttachment'),
         destructiveButtonIndex: 0,
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
@@ -628,7 +627,6 @@ export function useShowActionSheet(): (
       containerStyle: { backgroundColor: currentTheme.colors.background.contentBox, marginBottom: insets.bottom },
       ...options,
       options: casedOptionsText,
-      cancelButtonIndex: isIpad() ? undefined : options.options.length - 1,
     }
 
     showActionSheetWithOptions(sheetOptions, callback)

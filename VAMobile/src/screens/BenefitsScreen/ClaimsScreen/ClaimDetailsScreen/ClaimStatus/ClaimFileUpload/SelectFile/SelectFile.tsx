@@ -105,7 +105,6 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
     showActionSheet(
       {
         options,
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         setIsActionSheetVisible(false)

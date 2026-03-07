@@ -89,7 +89,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         message: request
           ? t('fileUpload.discard.confirm.message.requestFile')
           : t('fileUpload.discard.confirm.message.submitEvidenceFile'),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {
@@ -194,7 +193,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         options,
         title: t('fileUpload.submit.confirm.title'),
         message: t('fileUpload.submit.confirm.message'),
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
@@ -286,7 +284,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     showActionSheet(
       {
         options,
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         setIsActionSheetVisible(false)

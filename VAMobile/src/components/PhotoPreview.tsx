@@ -66,7 +66,6 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
         options,
         title: t('removePhoto'),
         destructiveButtonIndex: 0,
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {

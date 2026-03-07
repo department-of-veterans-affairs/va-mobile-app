@@ -35,7 +35,10 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
   const navigateTo = useRouteNavigation()
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentConfig = getFeatureToggles()
-  const [toggles, setToggles] = useState({ ...currentConfig })
+  const sortedConfig = Object.fromEntries(
+    Object.entries(currentConfig).sort(([a], [b]) => a.localeCompare(b)),
+  ) as typeof currentConfig
+  const [toggles, setToggles] = useState({ ...sortedConfig })
   const currentWaygateConfig = getWaygateToggles()
   const [waygateToggles] = useState({ ...currentWaygateConfig })
   const isFocused = useIsFocused()
@@ -78,7 +81,11 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
           key={index}
           header={
             <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
-              <Button onPress={() => navigateTo('WaygateEdit', { waygateName: index, waygate: wg })} label={index} />
+              <Button
+                onPress={() => navigateTo('WaygateEdit', { waygateName: index, waygate: wg })}
+                label={index}
+                testID={index}
+              />
               <TextView variant="MobileBodyBold">{`${enabled}`}</TextView>
             </Box>
           }
@@ -121,7 +128,20 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
       title={t('remoteConfig.title')}
-      testID="remoteConfigTestID">
+      testID="remoteConfigTestID"
+      headerButton={{
+        label: 'Apply',
+        icon: { name: 'Check', fill: theme.colors.icon.active },
+        onPress: () => {
+          if (JSON.stringify(currentConfig) === JSON.stringify(toggles)) {
+            snackbar.show('No values changed', { isError: true })
+            return
+          }
+          dispatch(logout())
+          setDebugConfig(toggles)
+        },
+        testID: 'applyOverridesTestID',
+      }}>
       <Box mb={contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
@@ -133,21 +153,6 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
           Override Toggles
         </TextView>
         {toggleList()}
-        <Box mt={theme.dimensions.contentMarginTop}>
-          <TextArea>
-            <Button
-              onPress={() => {
-                if (JSON.stringify(currentConfig) === JSON.stringify(toggles)) {
-                  snackbar.show('No values changed', { isError: true })
-                  return
-                }
-                dispatch(logout())
-                setDebugConfig(toggles)
-              }}
-              label={'Apply Overrides'}
-            />
-          </TextArea>
-        </Box>
         {toggleWaygateList()}
       </Box>
     </FeatureLandingTemplate>

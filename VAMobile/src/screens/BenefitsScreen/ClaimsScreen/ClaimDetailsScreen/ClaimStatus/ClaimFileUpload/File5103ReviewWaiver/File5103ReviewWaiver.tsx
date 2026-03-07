@@ -122,7 +122,6 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
       {
         options,
         title: t('claimDetails.5103.review.waiver.alertTitle'),
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {

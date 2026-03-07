@@ -123,7 +123,6 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
       {
         options,
         title: t('askForClaimDecision.alertTitle'),
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {

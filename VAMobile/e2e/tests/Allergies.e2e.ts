@@ -17,14 +17,14 @@ import {
 
 export const AllergiesE2eIdConstants = {
   ALLERGY_1_ID: 'Penicillins allergy January 10, 2023',
-  ALLERGY_2_ID: 'Peanuts allergy May 15, 2022',
-  ALLERGY_3_ID: 'Shellfish allergy November 05, 2021',
-  ALLERGY_4_ID: 'Pollen allergy April 10, 2021',
+  ALLERGY_2_ID: 'Coconut (substance) allergy November 08, 2024',
+  ALLERGY_3_ID: 'Radish (substance) allergy January 01, 1966',
+  ALLERGY_4_ID: 'Grass pollen (substance) allergy January 01, 2022',
   ALLERGY_5_ID: 'Dust allergy December 22, 2020',
-  ALLERGY_6_ID: 'Latex allergy August 20, 2020',
-  ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
+  ALLERGY_6_ID: 'Penicillin allergy January 01, 2002',
+  ALLERGY_7_ID: 'ASPIRIN allergy ', // trailing space needed due to date being null
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 5 of 6',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison',
 }
 
 beforeAll(async () => {
@@ -35,7 +35,7 @@ beforeAll(async () => {
   await openAllergyRecords()
 })
 
-describe.skip('Allergies Screen', () => {
+describe('Allergies Screen', () => {
   it('should show allergy list content', async () => {
     await expect(element(by.text('Allergies'))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID))).toExist()
@@ -52,14 +52,14 @@ describe.skip('Allergies Screen', () => {
   })
 
   it('verify details screen fields', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).tap()
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID)).tap()
     await expect(element(by.text('Details'))).toExist()
-    await expect(element(by.text('July 12, 2020'))).toExist()
-    await expect(element(by.text('Sulfonamides allergy'))).toExist()
-    await expect(element(by.text('Medication'))).toExist()
-    await expect(element(by.text('Dr. Alicia'))).toExist()
-    await expect(element(by.text('None noted'))).toExist()
-    await expect(element(by.text('Sulfonamides'))).toExist()
+    await expect(element(by.text('November 08, 2024'))).toExist()
+    await expect(element(by.text('Coconut (substance) allergy'))).toExist()
+    await expect(element(by.text('Food'))).toExist()
+    await expect(element(by.text(' Victoria A Borland'))).toExist()
+    await expect(element(by.text('Pruritus'))).toExist()
+    await expect(element(by.text('This allergy duplicates an allergy entered into VistA'))).toExist()
     await expect(
       element(
         by.text(
@@ -74,7 +74,7 @@ describe.skip('Allergies Screen', () => {
   })
 
   it('verify disclaimer is displayed even when all fields are populated', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID)).tap()
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).tap()
     await expect(element(by.text('None noted '))).not.toExist()
     await expect(
       element(

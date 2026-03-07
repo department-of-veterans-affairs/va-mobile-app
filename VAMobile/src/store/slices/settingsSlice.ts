@@ -10,6 +10,7 @@ export type SettingsState = {
   loadingRemoteConfig: boolean
   remoteConfigActivated: boolean
   displayEmailConfirmationAlert: boolean
+  displayDuplicateRecordAlert: boolean
 }
 
 export const initialSettingsState: SettingsState = {
@@ -17,6 +18,7 @@ export const initialSettingsState: SettingsState = {
   loadingRemoteConfig: false,
   remoteConfigActivated: false,
   displayEmailConfirmationAlert: false,
+  displayDuplicateRecordAlert: false,
 }
 
 const STORAGE_HAPTICS_KEY = '@store_settings_haptics'
@@ -60,6 +62,12 @@ export const updateDisplayEmailConfirmationAlert =
     dispatch(dispatchDisplayEmailConfirmationAlert(value))
   }
 
+export const updateDisplayDuplicateRecordAlert =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchDisplayDuplicateRecordAlert(value))
+  }
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -80,6 +88,9 @@ const settingsSlice = createSlice({
     dispatchDisplayEmailConfirmationAlert: (state, action: PayloadAction<boolean>) => {
       state.displayEmailConfirmationAlert = action.payload
     },
+    dispatchDisplayDuplicateRecordAlert: (state, action: PayloadAction<boolean>) => {
+      state.displayDuplicateRecordAlert = action.payload
+    },
   },
 })
 
@@ -88,5 +99,6 @@ const {
   dispatchUpdateLoadingRemoteConfig,
   dispatchFinishLoadingRemoteConfig,
   dispatchDisplayEmailConfirmationAlert,
+  dispatchDisplayDuplicateRecordAlert,
 } = settingsSlice.actions
 export default settingsSlice.reducer

@@ -107,16 +107,14 @@ function PaymentsScreen({}: PaymentsScreenProps) {
           <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
         )}
       </Box>
-      {featureEnabled('travelPayStatusList') && (
-        <Box ml={theme.dimensions.gutter}>
-          <LinkWithAnalytics
-            type="custom"
-            text={t('travelPay.claims.viewYourClaims')}
-            testID="toTravelPayClaimsLinkIDPaymentsScreen"
-            onPress={() => navigateToTravelClaims(navigateTo)}
-          />
-        </Box>
-      )}
+      <Box ml={theme.dimensions.gutter}>
+        <LinkWithAnalytics
+          type="custom"
+          text={t('travelPay.claims.viewYourClaims')}
+          testID="toTravelPayClaimsLinkIDPaymentsScreen"
+          onPress={() => navigateToTravelClaims(navigateTo)}
+        />
+      </Box>
     </CategoryLanding>
   )
 }

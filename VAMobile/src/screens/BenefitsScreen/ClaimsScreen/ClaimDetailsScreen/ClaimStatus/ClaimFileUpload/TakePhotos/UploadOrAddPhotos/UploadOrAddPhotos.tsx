@@ -85,7 +85,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
           ? t('fileUpload.discard.confirm.message.requestPhotos')
           : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
         destructiveButtonIndex: 0,
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
@@ -198,7 +197,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         options,
         title: t('fileUpload.submit.confirm.title'),
         message: t('fileUpload.submit.confirm.message'),
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {

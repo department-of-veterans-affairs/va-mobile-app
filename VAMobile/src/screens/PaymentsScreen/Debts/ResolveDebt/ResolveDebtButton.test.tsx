@@ -51,7 +51,6 @@ context('ResolveDebtButton', () => {
         ],
         title: t('debts.resolveOverpayment'),
         message: t('debts.resolveOverpayment.how'),
-        cancelButtonIndex: 3,
       }),
       expect.any(Function),
     )

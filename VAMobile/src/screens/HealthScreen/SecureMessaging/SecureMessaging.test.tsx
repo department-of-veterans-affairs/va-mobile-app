@@ -98,4 +98,95 @@ context('SecureMessaging', () => {
       )
     })
   })
+  describe('start new message button visibility', () => {
+    const mockRecipients = {
+      data: [
+        {
+          id: '1',
+          type: 'mock',
+          attributes: {
+            triageTeamId: 1,
+            name: 'Test Team',
+            relationType: 'PATIENT',
+            preferredTeam: true,
+            stationNumber: '123',
+          },
+        },
+      ],
+      meta: {
+        sort: { name: 'ASC' as const },
+        careSystems: [],
+      },
+    }
+
+    const mockEmptyRecipients = {
+      data: [],
+      meta: {
+        sort: { name: 'ASC' as const },
+        careSystems: [],
+      },
+    }
+
+    const mockFolders = {
+      data: [],
+      inboxUnreadCount: 0,
+    }
+
+    const mockInboxMessages = {
+      data: [],
+      meta: {
+        pagination: {
+          totalEntries: 0,
+        },
+      },
+    }
+
+    it('should show the start new message button when recipients are available', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockInboxMessages)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(mockFolders)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(mockRecipients)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy())
+    })
+
+    it('should hide the start new message button when no recipients are returned', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockInboxMessages)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(mockFolders)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(mockEmptyRecipients)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+    })
+
+    it('should hide the start new message button when recipients data is undefined', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockInboxMessages)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(mockFolders)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(undefined)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+    })
+  })
 })

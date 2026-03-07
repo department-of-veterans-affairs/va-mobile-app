@@ -11,10 +11,8 @@ import {
 } from 'api/types'
 import ClaimExamAppointment from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/ClaimExamAppointment'
 import { context, render } from 'testUtils'
-import { when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
-import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
@@ -73,7 +71,6 @@ context('ClaimExamAppointment', () => {
     showScheduleLink: true,
   }
   const initializeTestInstance = (attributes: AppointmentAttributes, subType: AppointmentDetailsSubType): void => {
-    when(featureEnabled).calledWith('rescheduleLink').mockReturnValue(true)
     render(
       <ClaimExamAppointment
         appointmentID={'1'}

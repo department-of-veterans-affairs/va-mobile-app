@@ -7,7 +7,6 @@ import { TimeFrameType } from 'constants/timeframes'
 import { DowntimeFeatureTypeConstants, Params, get } from 'store/api'
 import { getDateRangeFromTimeFrame } from 'utils/dateUtils'
 import { useDowntime } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Fetch paginated travel pay claims
@@ -33,8 +32,7 @@ const getClaims = async (params: GetTravelPayClaimsParams): Promise<GetTravelPay
  * Returns a query for paginated travel pay claims
  */
 export const useTravelPayClaims = (timeFrameType: TimeFrameType) => {
-  const travelPayEnabled =
-    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPayStatusList')
+  const travelPayEnabled = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
 
   return useInfiniteQuery({
     queryKey: [travelPayKeys.claims, timeFrameType],
