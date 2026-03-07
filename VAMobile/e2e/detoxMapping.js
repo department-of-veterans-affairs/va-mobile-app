@@ -1,7 +1,14 @@
 // Reusable array variables for detox mapping
 
 // Full test run - used by components, slices, translations, utils
+const afTests = ['AF_Benefits', 'AF_Health', 'AF_Home', 'AF_Payments', 'AF_Profile', 'AvailabilityFramework']
+
 const fullTestRun = [
+  'AF_Benefits',
+  'AF_Health',
+  'AF_Home',
+  'AF_Payments',
+  'AF_Profile',
   'Allergies',
   'AllergiesAccelerated',
   'Appeals',

@@ -860,12 +860,6 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       }
     }
   }
-
-  if (AFUseCase !== 'AllowFunction') {
-    if (AFUseCase === 'DenyContent' && AFUseCaseUpgrade) {
-      await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase, undefined)
-    }
-  }
 }
 
 /** Toggle the specified remote config feature flag
