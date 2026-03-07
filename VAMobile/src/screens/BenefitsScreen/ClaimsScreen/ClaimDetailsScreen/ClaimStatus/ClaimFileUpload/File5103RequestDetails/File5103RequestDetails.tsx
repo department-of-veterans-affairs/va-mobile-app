@@ -172,7 +172,7 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
                 <Button
                   buttonType={ButtonVariants.Secondary}
                   label={t('claimDetails.5103.submit.evidence')}
-                  onPress={() => navigateTo('File5103SubmitEvidence', { claimID, request })}
+                  onPress={() => navigateTo('File5103SubmitEvidence', { claimID, request, provider })}
                 />
               </Box>
             </Box>

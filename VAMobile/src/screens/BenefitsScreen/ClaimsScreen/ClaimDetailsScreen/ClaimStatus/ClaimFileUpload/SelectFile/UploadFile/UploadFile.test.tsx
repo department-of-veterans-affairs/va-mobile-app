@@ -12,6 +12,7 @@ import { QueriesData, context, mockNavProps, render } from 'testUtils'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
+const mockMutate = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -24,6 +25,14 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+jest.mock('api/claimsAndAppeals', () => ({
+  ...jest.requireActual('api/claimsAndAppeals'),
+  useUploadFileToClaim: () => ({
+    mutate: mockMutate,
+    isPending: false,
+  }),
+}))
+
 context('UploadFile', () => {
   let navigateToSpy: jest.Mock
   const request = {
@@ -33,7 +42,7 @@ context('UploadFile', () => {
     uploaded: false,
     uploadsAllowed: true,
   }
-  const renderWithData = (imageUploaded?: ImagePickerResponse): void => {
+  const renderWithData = (imageUploaded?: ImagePickerResponse, provider?: string): void => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
 
@@ -54,17 +63,14 @@ context('UploadFile', () => {
     const props = mockNavProps(
       undefined,
       { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() },
-      { params: { claimID: '0', request, fileUploaded: file, imageUploaded } },
+      { params: { claimID: '0', request, fileUploaded: file, imageUploaded, provider } },
     )
 
     render(<UploadFile {...props} />, { queriesData })
   }
 
-  beforeEach(() => {
-    renderWithData()
-  })
-
   it('initializes correctly', () => {
+    renderWithData()
     expect(screen.getByRole('header', { name: t('fileUpload.uploadFiles') })).toBeTruthy()
     expect(screen.getByTestId('File 1 0.1 kilobytes')).toBeTruthy()
     expect(screen.getByLabelText('Document type picker required')).toBeTruthy()
@@ -73,6 +79,10 @@ context('UploadFile', () => {
   })
 
   describe('on click of the upload button', () => {
+    beforeEach(() => {
+      renderWithData()
+    })
+
     it('should display an error if the checkbox is not checked', async () => {
       fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
       await waitFor(() => {
@@ -94,6 +104,46 @@ context('UploadFile', () => {
       fireEvent.press(screen.getByLabelText(t('fileUpload.evidenceOnly')))
       fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') }))
       expect(mockAlertSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('navigation after successful upload', () => {
+    const fillAndSubmitForm = async () => {
+      fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' })))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
+      fireEvent.press(screen.getByLabelText(t('fileUpload.evidenceOnly')))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') })))
+    }
+
+    beforeEach(() => {
+      mockNavigationSpy.mockReset()
+      mockAlertSpy.mockImplementation((_: unknown, callback: (idx: number) => void) => callback(0))
+      mockMutate.mockImplementation((_: unknown, options: { onSuccess: () => void }) => options.onSuccess())
+    })
+
+    it('navigates to ClaimDetailsScreen with provider when provider param is set', async () => {
+      renderWithData(undefined, 'lighthouseV2')
+      await fillAndSubmitForm()
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID: '0',
+          claimType: 'ACTIVE',
+          provider: 'lighthouseV2',
+        }),
+      )
+    })
+
+    it('navigates to ClaimDetailsScreen without provider when provider param is not set', async () => {
+      renderWithData()
+      await fillAndSubmitForm()
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID: '0',
+          claimType: 'ACTIVE',
+          provider: undefined,
+        }),
+      )
     })
   })
 })

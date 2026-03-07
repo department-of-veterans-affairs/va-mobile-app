@@ -25,7 +25,7 @@ function File5103SubmitEvidence({ navigation, route }: File5103SubmitEvidencePro
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { claimID, request } = route.params
+  const { claimID, request, provider } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { type, status, uploadDate, documents, suspenseDate } = request
 
@@ -70,12 +70,12 @@ function File5103SubmitEvidence({ navigation, route }: File5103SubmitEvidencePro
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    navigateTo('SelectFile', { claimID, request })
+    navigateTo('SelectFile', { claimID, request, provider })
   }
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
-    navigateTo('TakePhotos', { claimID, request })
+    navigateTo('TakePhotos', { claimID, request, provider })
   }
 
   return (

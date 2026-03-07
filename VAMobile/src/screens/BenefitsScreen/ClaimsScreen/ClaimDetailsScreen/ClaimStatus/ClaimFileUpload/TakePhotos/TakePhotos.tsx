@@ -29,7 +29,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { claimID, request } = route.params
+  const { claimID, request, provider } = route.params
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
@@ -49,7 +49,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
-      navigateTo('UploadOrAddPhotos', { claimID, request, firstImageResponse: response })
+      navigateTo('UploadOrAddPhotos', { claimID, request, firstImageResponse: response, provider })
     }
   }
 

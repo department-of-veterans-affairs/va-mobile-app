@@ -33,7 +33,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const [errorA11y, setErrorA11y] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-  const { claimID, request } = route.params
+  const { claimID, request, provider } = route.params
   const showActionSheet = useShowActionSheet()
 
   useBeforeNavBackListener(navigation, (e) => {
@@ -81,7 +81,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
 
       setError('')
       setErrorA11y('')
-      navigateTo('UploadFile', { claimID, request, fileUploaded: document })
+      navigateTo('UploadFile', { claimID, request, fileUploaded: document, provider })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
       if (DocumentPicker.isCancel(docError as Error)) {
@@ -95,7 +95,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
-      navigateTo('UploadFile', { claimID, request, fileUploaded: 'test file' })
+      navigateTo('UploadFile', { claimID, request, fileUploaded: 'test file', provider })
       return
     }
 
