@@ -333,14 +333,9 @@ jobs:
           name: built-ios-app
           path: VAMobile/ios/output/Build/Products/Release-iphonesimulator/VAMobile.app
 
-      - name: Determine Test Command
-        id: test_command
-        run: |
-          echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
-
       - name: Run e2e tests for iOS
         id: run_e2e_tests
-        run: ${{ env.CMD }}
+        run: yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless
 
       - name: Upload e2e-junit
         if: failure() || success()

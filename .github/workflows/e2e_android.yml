@@ -294,11 +294,6 @@ jobs:
           name: built-android-app
           path: VAMobile/android/app/build/outputs/apk
 
-      - name: Determine Test Command
-        id: test_command
-        run: |
-          echo "CMD=yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
-
       - name: Run e2e tests for Android
         id: run_e2e_tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -315,7 +310,7 @@ jobs:
             adb shell input keyevent 82
             mkdir -p artifacts
             # Run the command and capture logcat on failure
-            ${{ env.CMD }} || (adb devices | grep "\tdevice" && timeout 60s adb logcat -d > artifacts/logcat.txt || echo "Device not found or logcat timed out" && exit 1)
+            yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1 || (adb devices | grep "\tdevice" && timeout 60s adb logcat -d > artifacts/logcat.txt || echo "Device not found or logcat timed out" && exit 1)
             # Force-kill the emulator by process name (not -f/full cmdline) so teardown doesn't hang.
             pkill -9 qemu-system-x86 || true
 
