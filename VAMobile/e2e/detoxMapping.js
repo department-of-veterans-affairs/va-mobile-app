@@ -35,7 +35,6 @@ const fullTestRun = [
   'LoginScreen',
   'Messages',
   'MilitaryInformation',
-  'Navigation',
   'OHMigrationMessages',
   'Onboarding',
   'Payments',
@@ -53,6 +52,10 @@ const fullTestRun = [
   'VALetters',
   'VeteransCrisisLine',
   'VeteranStatusCard',
+  'VisualRegressionDarkMode',
+  'VisualRegressionLandscape',
+  'VisualRegressionNavigation',
+  'VisualRegressionTextResize',
 ]
 
 // Authorized services array

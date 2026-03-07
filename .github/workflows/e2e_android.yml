@@ -105,7 +105,6 @@ jobs:
     needs: find_detox_tests_to_run
     outputs:
       output1: ${{ steps.matrix_value.outputs.matrix }}
-      output2: ${{ steps.matrix_value.outputs.individual_matrix}}
     steps:
       - name: Generate token
         id: generate_token
@@ -121,41 +120,20 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-              e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
-              echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-              echo "individual_matrix=" >> "$GITHUB_OUTPUT"
-            else
-              if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
-                echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
-                echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
-              else
-                echo "matrix=" >> "$GITHUB_OUTPUT" 
-              fi
-            fi
+          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ "${{ github.event_name }}" == "schedule" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+            # Full run - we don't worry about prereqs separately because they are included in the full parallel run list
+            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
+            echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+            # Specific manually requested set - run ONLY these tests
+            matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end) | unique')
+            echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
           else
+            # Mapping-based check (PRs) already adds prereqs in the mapping workflow
             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
-              echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
-              if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'map(select(.name | endswith(".e2e.ts"))) | map(.name)')
-                  echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-                  echo "individual_matrix=" >> "$GITHUB_OUTPUT"
-                else
-                  if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                    matrix_val=$(echo '${{ toJson(inputs.tests_to_run) }}' | jq -c 'fromjson | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
-                    echo "matrix=$matrix_val" >> "$GITHUB_OUTPUT"
-                    echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
-                  else
-                    echo "matrix=" >> "$GITHUB_OUTPUT" 
-                  fi
-                fi
-              else
-                resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
-                echo "matrix=$resp" >> "$GITHUB_OUTPUT"
-              fi
+              echo 'matrix=${{needs.find_detox_tests_to_run.outputs.test_matrix}}' >> "$GITHUB_OUTPUT"
+            else
+              echo "matrix=" >> "$GITHUB_OUTPUT" 
             fi
           fi
         env:
@@ -319,16 +297,7 @@ jobs:
       - name: Determine Test Command
         id: test_command
         run: |
-          if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            # Full Suite / Nightly: Run ONLY the target test file.
-            # Optimization: Navigation.e2e and AF_*.e2e have their own dedicated jobs in the matrix,
-            # so we skip redundant execution here to save time.
-            echo "CMD=yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
-          else
-            # PR / Targeted Run: Prepend prerequisites.
-            # Safety: Ensure Navigation and Availability checks run before the feature test to catch basic failures early.
-            echo "CMD=yarn e2e:android-test /e2e/tests/Navigation.e2e.ts /e2e/tests/AvailabilityFrameworkBenefits.e2e.ts /e2e/tests/AvailabilityFrameworkHealth.e2e.ts /e2e/tests/AvailabilityFrameworkHome.e2e.ts /e2e/tests/AvailabilityFrameworkPayments.e2e.ts /e2e/tests/AvailabilityFrameworkProfile.e2e.ts /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
-          fi
+          echo "CMD=yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --retries 1" >> "$GITHUB_ENV"
 
       - name: Run e2e tests for Android
         id: run_e2e_tests
