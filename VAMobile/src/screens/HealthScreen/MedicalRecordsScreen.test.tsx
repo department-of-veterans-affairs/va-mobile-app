@@ -64,7 +64,9 @@ context('MedicalRecordsScreen', () => {
 
   beforeEach(() => {
     mockUseFacilitiesInfo.mockReturnValue({
-      data: [{ id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: false, miles: '3.17' }],
+      data: [
+        { id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: false, miles: '3.17' },
+      ],
     })
   })
 
@@ -128,7 +130,9 @@ context('MedicalRecordsScreen', () => {
   describe('DuplicateRecordAlert', () => {
     it('should display the alert when feature flag is enabled and user has cerner facilities', () => {
       mockUseFacilitiesInfo.mockReturnValue({
-        data: [{ id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: true, miles: '3.17' }],
+        data: [
+          { id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: true, miles: '3.17' },
+        ],
       })
       initializeTestInstance(true, true, true)
       expect(screen.getByText('You may notice duplicate records for a time')).toBeTruthy()
@@ -180,7 +184,9 @@ context('MedicalRecordsScreen', () => {
 
     it('should not display the alert when feature flag is disabled', () => {
       mockUseFacilitiesInfo.mockReturnValue({
-        data: [{ id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: true, miles: '3.17' }],
+        data: [
+          { id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: true, miles: '3.17' },
+        ],
       })
       initializeTestInstance(true, true, false)
       expect(screen.queryByText('You may notice duplicate records for a time')).toBeFalsy()
@@ -215,7 +221,9 @@ context('MedicalRecordsScreen', () => {
 
     it('should not display the alert when migration alerts are showing even with cerner facilities', () => {
       mockUseFacilitiesInfo.mockReturnValue({
-        data: [{ id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: true, miles: '3.17' }],
+        data: [
+          { id: '358', name: 'FacilityOne', city: 'Cheyenne', state: 'WY', cerner: true, miles: '3.17' },
+        ],
       })
       const migratingFacilitiesList = [
         {

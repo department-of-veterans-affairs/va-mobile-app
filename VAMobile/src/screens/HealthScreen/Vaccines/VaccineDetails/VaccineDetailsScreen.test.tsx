@@ -37,7 +37,7 @@ context('VaccineDetailsScreen', () => {
       manufacturer: null,
       note: null,
       shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
-    },
+    }
   }
 
   const nullLocationVaccine = {
