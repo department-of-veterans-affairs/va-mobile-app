@@ -66,9 +66,9 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigateTo('ClaimDetailsScreen', { claimID, claimType })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType, provider })
     }
-  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
+  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType, provider])
 
   const borderStyles: BoxProps = {
     borderStyle: 'solid',
