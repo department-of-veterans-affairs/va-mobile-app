@@ -1,5 +1,5 @@
 /** AF tests for Home tab: HomeScreen shortcuts, VeteransCrisisLine, VeteranStatusCard */
-import { describeAF } from './AFShared'
+import { describeAF } from './AvailabilityFrameworkShared'
 
 const AFNavigationHome = [
   ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact us'],

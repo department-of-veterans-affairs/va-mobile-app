@@ -1,7 +1,8 @@
 /**
  * Shared helpers for Availability Framework (AF) e2e tests.
  *
- * The AF tests are split by domain (AF_Profile, AF_Home, AF_Health, AF_Benefits, AF_Payments)
+ * The AF tests are split by domain (AvailabilityFrameworkProfile, AvailabilityFrameworkHome,
+ * AvailabilityFrameworkHealth, AvailabilityFrameworkBenefits, AvailabilityFrameworkPayments)
  * so they can run in parallel CI jobs. Each domain file defines its navigation array and
  * delegates to `describeAF` which handles targeted (AFValue) vs full-suite execution.
  */

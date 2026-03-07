@@ -1,5 +1,5 @@
 /** AF tests for Benefits tab: DisabilityRatings, Claims/Appeals, Letters, BenefitLetters */
-import { describeAF } from './AFShared'
+import { describeAF } from './AvailabilityFrameworkShared'
 
 const AFNavigationBenefits = [
   ['DisabilityRatings.e2e', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],

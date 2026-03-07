@@ -1,5 +1,5 @@
 /** AF tests for Health tab: Appointments, Messages, Prescriptions, VaccineRecords */
-import { describeAF } from './AFShared'
+import { describeAF } from './AvailabilityFrameworkShared'
 
 const AFNavigationHealth = [
   [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'WG_Appointments', 'Health', 'Appointments'],

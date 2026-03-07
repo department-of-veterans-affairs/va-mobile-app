@@ -1,5 +1,5 @@
 /** AF tests for Payments tab: PaymentHistory, PaymentDetails, DirectDeposit */
-import { describeAF } from './AFShared'
+import { describeAF } from './AvailabilityFrameworkShared'
 
 const AFNavigationPayments = [
   ['Payments.e2e', 'WG_PaymentHistory', 'Payments', 'VA payment history'],

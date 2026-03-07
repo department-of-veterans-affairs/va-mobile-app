@@ -2,10 +2,11 @@
  * AF template-level tests. Verifies AF behavior on each screen template type
  * (ChildTemplate, FeatureLandingTemplate, LargePanel, FullScreenSubtask).
  *
- * Individual feature AF tests are split into domain files: AF_Profile, AF_Home,
- * AF_Health, AF_Benefits, AF_Payments.
+ * Individual feature AF tests are split into domain files: AvailabilityFrameworkProfile,
+ * AvailabilityFrameworkHome, AvailabilityFrameworkHealth, AvailabilityFrameworkBenefits,
+ * AvailabilityFrameworkPayments.
  */
-import { runTests } from './AFShared'
+import { runTests } from './AvailabilityFrameworkShared'
 
 const AFNavigationNoIndividual = [
   ['ChildTemplate', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],

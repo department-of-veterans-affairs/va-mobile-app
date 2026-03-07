@@ -363,7 +363,7 @@ jobs:
             echo "CMD=yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           else
             # Targeted: Prepend prerequisites for safety
-            echo "CMD=yarn e2e:ios-test /e2e/tests/Navigation.e2e.ts /e2e/tests/AF_Benefits.e2e.ts /e2e/tests/AF_Health.e2e.ts /e2e/tests/AF_Home.e2e.ts /e2e/tests/AF_Payments.e2e.ts /e2e/tests/AF_Profile.e2e.ts /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
+            echo "CMD=yarn e2e:ios-test /e2e/tests/Navigation.e2e.ts /e2e/tests/AvailabilityFrameworkBenefits.e2e.ts /e2e/tests/AvailabilityFrameworkHealth.e2e.ts /e2e/tests/AvailabilityFrameworkHome.e2e.ts /e2e/tests/AvailabilityFrameworkPayments.e2e.ts /e2e/tests/AvailabilityFrameworkProfile.e2e.ts /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000 --retries 1 --headless" >> "$GITHUB_ENV"
           fi
 
       - name: Run e2e tests for iOS

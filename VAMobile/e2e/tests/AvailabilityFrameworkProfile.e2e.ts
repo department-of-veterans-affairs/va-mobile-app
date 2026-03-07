@@ -1,5 +1,5 @@
 /** AF tests for Profile tab: PersonalInformation, ContactInformation, MilitaryInformation, Settings */
-import { describeAF } from './AFShared'
+import { describeAF } from './AvailabilityFrameworkShared'
 
 const AFNavigationProfile = [
   ['PersonalInformationScreen.e2e', 'WG_PersonalInformation', 'Profile', 'Personal information'],
