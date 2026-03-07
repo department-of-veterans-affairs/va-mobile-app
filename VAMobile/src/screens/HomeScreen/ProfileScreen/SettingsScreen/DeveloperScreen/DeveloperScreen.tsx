@@ -27,7 +27,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { AnalyticsState, OfflineState, setOfflineDebugEnabled } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { AuthState, DEMO_USER_STORAGE_KEY_STORAGE_KEY, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
+import { AuthState, DEMO_USER_STORAGE_KEY, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
 import getEnv, { EnvVars } from 'utils/env'
 import {

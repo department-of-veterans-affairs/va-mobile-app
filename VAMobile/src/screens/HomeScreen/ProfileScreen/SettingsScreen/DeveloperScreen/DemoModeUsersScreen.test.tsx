@@ -6,7 +6,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import { AppThunk } from 'store'
-import { DEMO_USER_STORAGE_KEY_STORAGE_KEY, logout } from 'store/slices/authSlice'
+import { DEMO_USER_STORAGE_KEY, logout } from 'store/slices/authSlice'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 const mockNavigationSpy = jest.fn()
