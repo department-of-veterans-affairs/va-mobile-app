@@ -18,10 +18,10 @@ const getClaim = async (id: string, provider?: string): Promise<ClaimData | unde
  * Returns a query for user Claim
  */
 export const useClaim = (id: string, provider?: string, options?: { enabled?: boolean }) => {
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices, isError: authorizedServicesError } = useAuthorizedServices()
   const effectiveProvider = userAuthorizedServices?.cstMultiClaimProvider ? provider : undefined
 
-  const servicesReady = !provider || userAuthorizedServices !== undefined
+  const servicesReady = !provider || userAuthorizedServices !== undefined || authorizedServicesError
 
   return useQuery({
     ...options,

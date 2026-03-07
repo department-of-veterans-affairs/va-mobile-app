@@ -56,10 +56,9 @@ context('getClaim', () => {
       when(useAuthorizedServices as jest.Mock).mockReturnValue({ data: undefined })
     })
 
-    it('does not fetch when provider is given but authorized services has not resolved', async () => {
+    it('does not fetch when provider is given but authorized services has not resolved', () => {
       renderQuery(() => useClaim('123', 'lighthouse'))
 
-      await new Promise((resolve) => setTimeout(resolve, 0))
       expect(get).not.toHaveBeenCalled()
     })
 
@@ -69,6 +68,23 @@ context('getClaim', () => {
         .mockResolvedValueOnce({ data: mockClaimData })
 
       const { result } = renderQuery(() => useClaim('123'))
+      await waitFor(() => expect(result.current.data).toEqual(mockClaimData))
+
+      expect(get).toHaveBeenCalledWith('/v0/claim/123', {})
+    })
+  })
+
+  describe('authorized services error', () => {
+    beforeEach(() => {
+      when(useAuthorizedServices as jest.Mock).mockReturnValue({ data: undefined, isError: true })
+    })
+
+    it('fetches without provider query param when authorized services errors', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/claim/123', {})
+        .mockResolvedValueOnce({ data: mockClaimData })
+
+      const { result } = renderQuery(() => useClaim('123', 'lighthouse'))
       await waitFor(() => expect(result.current.data).toEqual(mockClaimData))
 
       expect(get).toHaveBeenCalledWith('/v0/claim/123', {})
