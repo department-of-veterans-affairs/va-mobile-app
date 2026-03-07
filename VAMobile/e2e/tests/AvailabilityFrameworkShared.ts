@@ -28,6 +28,10 @@ export function runTests(testRun, AFNavigationArray, x) {
       await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
       await verifyAF(AFNavigationArray[x], 'DenyContent', true)
     }
+    // Reinstall app to clear stored remote config overrides between features,
+    // preventing stale waygates from interfering with subsequent tests
+    await device.uninstallApp()
+    await device.installApp()
   })
 }
 
