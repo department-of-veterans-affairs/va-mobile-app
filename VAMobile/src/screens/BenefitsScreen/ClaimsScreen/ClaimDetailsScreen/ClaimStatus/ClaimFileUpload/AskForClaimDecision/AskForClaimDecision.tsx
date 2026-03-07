@@ -64,9 +64,9 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigateTo('ClaimDetailsScreen', { claimID, claimType })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType, provider })
     }
-  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
+  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType, provider])
 
   const onCancelPress = () => {
     if (claim) {

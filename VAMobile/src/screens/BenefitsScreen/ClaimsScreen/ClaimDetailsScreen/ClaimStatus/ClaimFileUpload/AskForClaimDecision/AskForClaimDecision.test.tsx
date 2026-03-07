@@ -10,11 +10,13 @@ import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
 const mockNavigationSpy = jest.fn()
+const mockAlertSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
+    useShowActionSheet: () => mockAlertSpy,
   }
 })
 
@@ -23,7 +25,18 @@ when(api.get as jest.Mock)
   .mockResolvedValue({})
 
 context('AskForClaimDecision', () => {
-  const initializeTestInstance = (): void => {
+  const claimData = {
+    ...claim,
+    id: '600156928',
+    type: 'evss_claims',
+    attributes: {
+      ...claim.attributes,
+      open: false,
+      decisionLetterSent: true,
+    },
+  }
+
+  const initializeTestInstance = (provider?: string): void => {
     const props = mockNavProps(
       undefined,
       {
@@ -31,21 +44,13 @@ context('AskForClaimDecision', () => {
         goBack: jest.fn(),
       },
       {
-        params: { claimID: '600156928' },
+        params: { claimID: '600156928', provider },
       },
     )
     const queriesData: QueriesData = [
       {
         queryKey: [claimsAndAppealsKeys.claim, '600156928'],
-        data: {
-          ...claim,
-          id: '600156928',
-          type: 'evss_claims',
-          attributes: {
-            ...claim.attributes,
-            open: false,
-          },
-        },
+        data: claimData,
       },
     ]
     render(<AskForClaimDecision {...props} />, { queriesData })
@@ -122,6 +127,43 @@ context('AskForClaimDecision', () => {
       initializeTestInstance()
       await waitFor(() =>
         expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
+      )
+    })
+  })
+
+  describe('navigation after successful submit', () => {
+    beforeEach(() => {
+      mockNavigationSpy.mockReset()
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {})
+        .mockResolvedValue({ data: claimData })
+      ;(api.post as jest.Mock).mockResolvedValue({})
+      mockAlertSpy.mockImplementation((_: unknown, callback: (idx: number) => void) => callback(0))
+    })
+
+    it('navigates to ClaimDetailsScreen with provider when provider param is set', async () => {
+      initializeTestInstance('lighthouseV2')
+      await waitFor(() => fireEvent.press(screen.getByText(t('askForClaimDecision.haveSubmittedAllEvidence'))))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('askForClaimDecision.submit') })))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID: '600156928',
+          claimType: 'CLOSED',
+          provider: 'lighthouseV2',
+        }),
+      )
+    })
+
+    it('navigates to ClaimDetailsScreen without provider when provider param is not set', async () => {
+      initializeTestInstance()
+      await waitFor(() => fireEvent.press(screen.getByText(t('askForClaimDecision.haveSubmittedAllEvidence'))))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('askForClaimDecision.submit') })))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID: '600156928',
+          claimType: 'CLOSED',
+          provider: undefined,
+        }),
       )
     })
   })
