@@ -608,9 +608,10 @@ describe('No Care Teams Alert', () => {
       .toBeVisible()
       .withTimeout(10000)
     await element(by.text('Sent')).tap()
+    // Wait for folder messages and recipients to load before checking for the alert
     await waitFor(element(by.id('noCareTeamsAlertTestID')))
       .toExist()
-      .withTimeout(10000)
+      .withTimeout(30000)
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
   })
 })
