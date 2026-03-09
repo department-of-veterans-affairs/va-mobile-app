@@ -54,7 +54,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
     enabled: isFocused && screenContentAllowed('WG_FolderMessages'),
   })
   const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
-  const [noRecipientsError, setNoRecipientsError] = useState(true)
+  const [noRecipientsError, setNoRecipientsError] = useState(false)
   const {
     data: recipientsResponse,
     isFetched: hasLoadedRecipients,

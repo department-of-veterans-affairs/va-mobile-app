@@ -593,7 +593,7 @@ describe('No Care Teams Alert', () => {
   })
 
   it('should display the correct alert header text', async () => {
-    await expect(element(by.text("You're not connected to any care teams in this messaging tool"))).toExist()
+    await expect(element(by.text('You’re not connected to any care teams in this messaging tool'))).toExist()
   })
 
   it('should expand the alert and show the body text and facility link', async () => {
