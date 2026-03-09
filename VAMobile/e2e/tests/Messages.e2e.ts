@@ -579,6 +579,7 @@ describe('Messages Screen', () => {
 describe('No Care Teams Alert', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag('noRecipientsKimOH')
+    await loginToDemoMode()
     await changeDemoModeUser('Kimberly For OH Migration')
     await openHealth()
     await openMessages()
