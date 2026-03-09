@@ -26,12 +26,12 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
+  AlertWithHaptics,
   Box,
   FieldType,
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
-  LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
   TextArea,
@@ -281,11 +281,6 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     }
   }
 
-  const navigateToReplyHelp = () => {
-    logAnalyticsEvent(Events.vama_sm_nonurgent())
-    navigateTo('ReplyHelp')
-  }
-
   function renderForm() {
     return (
       <Box>
@@ -297,6 +292,19 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           errorList={errorList}
           replyTriageError={replyTriageError}
         />
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="info"
+            header={t('secureMessaging.startNewMessage.nonurgent.title')}
+            testID={'replyNonUrgentWarning'}
+            scrollViewRef={scrollViewRef}>
+            <TextView accessible variant="MobileBody">
+              {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
+              <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.nonurgent.threeDays')}</TextView>
+              {t('secureMessaging.startNewMessage.nonurgent.reply')}
+            </TextView>
+          </AlertWithHaptics>
+        </Box>
         <TextArea>
           <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
             {t('secureMessaging.formMessage.to')}
@@ -324,13 +332,6 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
               resetErrors={resetErrors}
               setResetErrors={setResetErrors}
               setErrorList={setErrorList}
-            />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('secureMessaging.replyHelp.onlyUseMessages')}
-              onPress={navigateToReplyHelp}
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>

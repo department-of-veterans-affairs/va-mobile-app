@@ -481,12 +481,11 @@ context('EditDraft', () => {
     })
   })
 
-  describe('on click of the collapsible view', () => {
-    it('should show the Reply Help panel', async () => {
+  describe('non-urgent warning alert', () => {
+    it('should display the non-urgent warning alert at the top of the form', async () => {
       mockEditDraftEndpoints({ messageId: 3, thread, message, recipients, folderMessages })
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
-      await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
+      await waitFor(() => expect(screen.getByText('Only use messages for non-urgent needs')).toBeTruthy())
     })
   })
 

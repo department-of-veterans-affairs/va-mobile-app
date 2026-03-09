@@ -685,11 +685,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       )
     }
 
-    const navigateToReplyHelp = () => {
-      logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigateTo('ReplyHelp')
-    }
-
     const renderButton = () => {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -714,6 +709,19 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           errorList={errorList}
           replyTriageError={replyTriageError}
         />
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="info"
+            header={t('secureMessaging.startNewMessage.nonurgent.title')}
+            testID={'editDraftNonUrgentWarning'}
+            scrollViewRef={scrollViewRef}>
+            <TextView accessible variant="MobileBody">
+              {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
+              <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.nonurgent.threeDays')}</TextView>
+              {t('secureMessaging.startNewMessage.nonurgent.reply')}
+            </TextView>
+          </AlertWithHaptics>
+        </Box>
         <TextArea>
           {message && isReplyDraft && (
             <>
@@ -739,13 +747,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               resetErrors={resetErrors}
               setResetErrors={setResetErrors}
               setErrorList={setErrorList}
-            />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('secureMessaging.replyHelp.onlyUseMessages')}
-              onPress={navigateToReplyHelp}
             />
           </Box>
           {!replyDisabled && renderButton()}
