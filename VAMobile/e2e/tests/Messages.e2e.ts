@@ -66,7 +66,10 @@ describe('Messages Screen', () => {
 
   it('verify message OLDER than 45 days information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID))).toBeVisible()
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
 
     await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
