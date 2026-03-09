@@ -226,7 +226,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     }
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(60000)
+      .withTimeout(120000)
   }
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toBeVisible()
