@@ -11,18 +11,11 @@
             "doseNumber": "Booster",
             "doseSeries": 1,
             "groupName": "FLU",
+            "location": null,
             "manufacturer": null,
             "note": "Dose #45 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Vomiting",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": null,
-              "links": {
-                "related": null
-              }
-            }
           }
         },
         {
@@ -34,21 +27,11 @@
             "doseNumber": "Series 1",
             "doseSeries": 1,
             "groupName": "FLU",
+            "location": "Cheyenne VA Medical Center",
             "manufacturer": null,
             "note": "Dose #47 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Other",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-4KG3N5YUSPTWD3DAFMLMRL5V5U000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-4KG3N5YUSPTWD3DAFMLMRL5V5U000000"
-              }
-            }
           }
         },
         {
@@ -60,21 +43,11 @@
             "doseNumber": "Booster",
             "doseSeries": 1,
             "groupName": "Td",
+            "location": "Washington VA Medical Center",
             "manufacturer": null,
             "note": "Dose #3 of 8 of Td (adult) preservative free vaccine administered.",
             "reaction": "Respiratory distress",
             "shortDescription": "Td (adult) preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-2FPCKUIXVR7RJLLG34XVWGZERM000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-2FPCKUIXVR7RJLLG34XVWGZERM000000"
-              }
-            }
           }
         },
         {
@@ -86,21 +59,11 @@
             "doseNumber": "Booster",
             "doseSeries": 1,
             "groupName": "FLU",
+            "location": "Washington VA Medical Center",
             "manufacturer": null,
             "note": "Dose #48 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Anaphylaxis or collapse",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-2FPCKUIXVR7RJLLG34XVWGZERM000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-2FPCKUIXVR7RJLLG34XVWGZERM000000"
-              }
-            }
           }
         },
         {
@@ -112,21 +75,11 @@
             "doseNumber": "Series 1",
             "doseSeries": 2,
             "groupName": "FLU",
+            "location": "Cheyenne VA Medical Center",
             "manufacturer": null,
             "note": "Dose #49 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Convulsions",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000"
-              }
-            }
           }
         },
         {
@@ -138,18 +91,11 @@
             "doseNumber": null,
             "doseSeries": null,
             "groupName": "FLU",
+            "location": null,
             "manufacturer": null,
             "note": "Dose #46 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Vomiting",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": null,
-              "links": {
-                "related": null
-              }
-            }
           }
         },
         {
@@ -161,21 +107,11 @@
             "doseNumber": "Series 1",
             "doseSeries": 2,
             "groupName": "FLU",
+            "location": "Cheyenne VA Medical Center",
             "manufacturer": null,
             "note": "Dose #50 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Local reaction or swelling",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000"
-              }
-            }
           }
         },
         {
@@ -187,18 +123,11 @@
             "doseNumber": null,
             "doseSeries": null,
             "groupName": "PneumoPCV",
+            "location": null,
             "manufacturer": null,
             "note": "Dose #1 of 5 of Pneumococcal conjugate PCV 13 vaccine administered.",
             "reaction": "Vomiting",
             "shortDescription": "Pneumococcal conjugate PCV 13"
-          },
-          "relationships": {
-            "location": {
-              "data": null,
-              "links": {
-                "related": null
-              }
-            }
           }
         },
         {
@@ -210,21 +139,11 @@
             "doseNumber": "Series 1",
             "doseSeries": 2,
             "groupName": "FLU",
+            "location": "Washington VA Medical Center",
             "manufacturer": null,
             "note": "Dose #51 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Vomiting",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-2FPCKUIXVR7RJLLG34XVWGZERM000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-2FPCKUIXVR7RJLLG34XVWGZERM000000"
-              }
-            }
           }
         },
         {
@@ -236,21 +155,11 @@
             "doseNumber": "Series 1",
             "doseSeries": 1,
             "groupName": "PneumoPPV",
+            "location": "Cheyenne VA Medical Center",
             "manufacturer": null,
             "note": "Dose #1 of 1 of pneumococcal polysaccharide vaccine  23 valent vaccine administered.",
             "reaction": "Other",
             "shortDescription": "pneumococcal polysaccharide vaccine  23 valent"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000"
-              }
-            }
           }
         },
         {
@@ -262,21 +171,11 @@
             "doseNumber": null,
             "doseSeries": null,
             "groupName": "FLU",
+            "location": "Washington VA Medical Center",
             "manufacturer": null,
             "note": "Dose #52 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Anaphylaxis or collapse",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-2FPCKUIXVR7RJLLG34XVWGZERM000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-2FPCKUIXVR7RJLLG34XVWGZERM000000"
-              }
-            }
           }
         },
         {
@@ -288,18 +187,11 @@
             "doseNumber": null,
             "doseSeries": null,
             "groupName": "FLU",
+            "location": null,
             "manufacturer": null,
             "note": "Dose #53 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Fever",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": null,
-              "links": {
-                "related": null
-              }
-            }
           }
         },
         {
@@ -311,21 +203,11 @@
             "doseNumber": null,
             "doseSeries": null,
             "groupName": "FLU",
+            "location": "Cheyenne VA Medical Center",
             "manufacturer": null,
             "note": "Dose #54 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
             "reaction": "Respiratory distress",
             "shortDescription": "Influenza  seasonal  injectable  preservative free"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000"
-              }
-            }
           }
         },
         {
@@ -337,21 +219,11 @@
             "doseNumber": "Series 1",
             "doseSeries": 1,
             "groupName": "COVID-19",
+            "location": "Cheyenne VA Medical Center",
             "manufacturer": "Moderna US, Inc.",
             "note": "Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.",
             "reaction": "No reaction noted",
             "shortDescription": "COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000"
-              }
-            }
           }
         },
         {
@@ -363,21 +235,11 @@
             "doseNumber": null,
             "doseSeries": null,
             "groupName": "COVID-19",
+            "location": "Cheyenne VA Medical Center",
             "manufacturer": "Moderna US, Inc.",
             "note": "Dose #2 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.",
             "reaction": null,
             "shortDescription": "COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose"
-          },
-          "relationships": {
-            "location": {
-              "data": {
-                "id": "I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000",
-                "type": "location"
-              },
-              "links": {
-                "related": "staging-api.va.gov/mobile/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000"
-              }
-            }
           }
         }
       ],
@@ -395,36 +257,6 @@
         "prev": null,
         "next": "https://staging-api.va.gov/mobile/v1/health/immunizations?useCache=true&page[size]=10&page[number]=2",
         "last": "https://staging-api.va.gov/mobile/v1/health/immunizations?useCache=true&page[size]=10&page[number]=2"
-      }
-    }
-  },
-  "/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000": {
-    "data": {
-      "id": "I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000",
-      "type": "location",
-      "attributes": {
-        "name": "Cheyenne VA Medical Center",
-        "address": {
-          "street": "2360 East Pershing Boulevard",
-          "city": "Cheyenne",
-          "state": "WY",
-          "zipCode": "82001-5356"
-        }
-      }
-    }
-  },
-  "/v0/health/locations/I2-2FPCKUIXVR7RJLLG34XVWGZERM000000": {
-    "data": {
-      "id": "I2-2FPCKUIXVR7RJLLG34XVWGZERM000000",
-      "type": "location",
-      "attributes": {
-        "name": "Washington VA Medical Center",
-        "address": {
-          "street": "50 Irving Street, Northwest",
-          "city": "Washington",
-          "state": "DC",
-          "zipCode": "20422-0001"
-        }
       }
     }
   }
