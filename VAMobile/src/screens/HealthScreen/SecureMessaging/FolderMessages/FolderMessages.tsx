@@ -26,6 +26,7 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import NoFolderMessages from 'screens/HealthScreen/SecureMessaging/NoFolderMessages/NoFolderMessages'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -162,10 +163,13 @@ function FolderMessages({ route }: FolderMessagesProps) {
                 expandable={true}
                 header={t('secureMessaging.noCareTeams.header')}
                 description={t('secureMessaging.noCareTeams.body')}
+                descriptionA11yLabel={a11yLabelVA(t('secureMessaging.noCareTeams.body'))}
                 testID="noCareTeamsAlertTestID">
                 <LinkWithAnalytics
                   type="custom"
                   text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                  a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVAFacility'))}
+                  a11yHint={t('upcomingAppointmentDetails.findYourVAFacility.a11yHint')}
                   onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
                 />
               </AlertWithHaptics>

@@ -7,6 +7,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -42,10 +43,13 @@ function NoFolderMessages({ noRecipientsError }: { noRecipientsError: boolean })
               expandable={true}
               header={t('secureMessaging.noCareTeams.header')}
               description={t('secureMessaging.noCareTeams.body')}
+              descriptionA11yLabel={a11yLabelVA(t('secureMessaging.noCareTeams.body'))}
               testID="noCareTeamsAlertTestID">
               <LinkWithAnalytics
                 type="custom"
                 text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVAFacility'))}
+                a11yHint={t('upcomingAppointmentDetails.findYourVAFacility.a11yHint')}
                 onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
               />
             </AlertWithHaptics>

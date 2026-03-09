@@ -26,6 +26,7 @@ import NoAccessSM from 'screens/HealthScreen/SecureMessaging/NoAccessSM/NoAccess
 import TermsAndConditions from 'screens/HealthScreen/SecureMessaging/TermsAndConditions/TermsAndConditions'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
@@ -197,10 +198,13 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
                 expandable={true}
                 header={t('secureMessaging.noCareTeams.header')}
                 description={t('secureMessaging.noCareTeams.body')}
+                descriptionA11yLabel={a11yLabelVA(t('secureMessaging.noCareTeams.body'))}
                 testID="noCareTeamsAlertTestID">
                 <LinkWithAnalytics
                   type="custom"
                   text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                  a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVAFacility'))}
+                  a11yHint={t('upcomingAppointmentDetails.findYourVAFacility.a11yHint')}
                   onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
                 />
               </AlertWithHaptics>
