@@ -43,6 +43,7 @@ const mockOverrides = {
   overpayments: false,
   offlineMode: false,
   remoteConfigRefreshTest: false,
+  useOldDatePicker: false,
   veteranStatusCardUpdate: false,
 }
 
