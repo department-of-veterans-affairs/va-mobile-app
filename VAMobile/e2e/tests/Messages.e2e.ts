@@ -606,7 +606,8 @@ describe('No Care Teams Alert', () => {
     await element(by.id(MessagesE2eIdConstants.FOLDERS_ID)).tap()
     await waitFor(element(by.text('Sent')))
       .toBeVisible()
-      .withTimeout(10000)
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(100, 'down')
     await element(by.text('Sent')).tap()
     // Wait for folder messages and recipients to load before checking for the alert
     await waitFor(element(by.id('noCareTeamsAlertTestID')))
