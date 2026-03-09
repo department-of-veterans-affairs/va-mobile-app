@@ -1,5 +1,5 @@
 # Reusable release approval workflow. Triggers the release PR
-# creation process, adds a rocket reaction to the slash command comment, and
+# creation process, adds a rocket reaction to the approval comment, and
 # comments on the release issue with the created PR links upon completion.
 
 name: '[Release] Run Release Approval'
@@ -15,7 +15,7 @@ on:
         type: string
         required: false
       comment_id:
-        description: 'Comment ID to add a reaction to (for slash command feedback)'
+        description: 'Comment ID to add reaction to (for approval feedback)'
         type: string
         required: false
 

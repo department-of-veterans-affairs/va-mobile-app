@@ -1,6 +1,7 @@
 # Deletes remote branches whose last commit is older than 365 days
 # and that have no open PRs. Runs weekly on a schedule (dry-run by default) or
-# manually, uploads a CSV of affected branches, and notifies Slack with a summary.
+# manually, creates a CSV artifact of affected branches to the pipeline run that 
+# can be retrieved, and notifies Slack with a summary.
 
 name: '[Admin] Prune Stale Branches'
 
