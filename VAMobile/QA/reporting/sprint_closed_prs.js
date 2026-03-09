@@ -164,11 +164,14 @@ const findProject = (config, keywords) => {
   const findResult = ghGraphql(FIND_PROJECT_QUERY, { owner: config.owner, name: config.name })
   if (!findResult.ok) {
     const scopeError = findResult.error.includes('INSUFFICIENT_SCOPES') || findResult.error.includes('read:project')
-    log(
-      scopeError
-        ? '  → Skipping (missing read:project scope)\n     Fix: gh auth refresh --scopes read:project'
-        : `  → Project query error: ${findResult.error}`,
-    )
+    if (scopeError) {
+      log(
+        '  → ERROR: missing required read:project scope\n' +
+          '     Fix: gh auth refresh --scopes read:project',
+      )
+      process.exit(1)
+    }
+    log(`  → Project query error: ${findResult.error}`)
     return null
   }
 
