@@ -159,6 +159,7 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEST_ID: 'applyOverridesTestID',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
+  EVIDENCE_REQUESTS_UPDATED_UI_TEXT: 'evidenceRequestsUpdatedUI',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
@@ -214,6 +215,78 @@ export const CommonE2eIdConstants = {
  * @param skipOnboarding: Boolean value that defaults to true.  Set this to false if you want the detox test to view the onboarding carasoul on login
  * @param pushNotifications: Boolean value that tells the detox tests whether to turn on/off push notifications
  * */
+export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
+  try {
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(60000)
+  } catch (ex) {
+    await device.uninstallApp()
+    await device.installApp()
+    if (pushNotifications) {
+      await device.launchApp({
+        delete: true,
+        permissions: { notifications: 'YES' },
+        newInstance: true,
+        userNotification: mockNotification,
+      })
+    } else {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    }
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(120000)
+  }
+  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+    .toBeVisible()
+    .whileElement(by.id('Login-page'))
+    .scroll(100, 'down')
+  await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
+
+  if (DEMO_PASSWORD !== undefined) {
+    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
+  }
+
+  await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
+  await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
+
+  await waitFor(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)))
+    .toBeVisible()
+    .whileElement(by.id('Login-page'))
+    .scroll(100, 'down')
+  await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
+
+  if (skipOnboarding === true) {
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
+
+    if (ifCarouselSkipBtnExist) {
+      await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
+    }
+  }
+  const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
+    CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
+    true,
+  )
+  if (turnOnNotificationsBtnExist) {
+    await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+  }
+
+  const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
+  if (confirmEmailBtnExist) {
+    await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .scroll(200, 'down')
+    await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  }
+
+  const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
+  if (skipEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  }
+}
 
 /** this function is to see if a element is present that could sometime not be like the carousel for example
  * which will perform a check without actually performing a test and return true or false

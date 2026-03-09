@@ -21,6 +21,7 @@ const mockOverrides = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
+  evidenceRequestsUpdatedUI: false,
   displayDuplicateRecordAlert: true,
   hsScrollAnalytics: false,
   inAppReview: true,
@@ -42,6 +43,7 @@ const mockOverrides = {
   overpayments: false,
   offlineMode: false,
   remoteConfigRefreshTest: false,
+  useOldDatePicker: false,
   veteranStatusCardUpdate: false,
 }
 
