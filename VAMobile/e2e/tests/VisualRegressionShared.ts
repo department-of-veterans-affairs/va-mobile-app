@@ -29,10 +29,10 @@ export const getTestName = (nameArray: any[]): string => {
  * Determines if a specific test should run based on the 'tests_to_run' input in CI.
  * Supports partial matching of test names.
  */
-export const shouldRunTest = (nameArray: any[], value: any[]): boolean => {
+export const shouldRunTest = (nameArray: any[]): boolean => {
   if (navigationValue === undefined) return true
   if (nameArray[0] instanceof Array) {
-    for (let z = 0; z < value.length; z++) {
+    for (let z = 0; z < nameArray[0].length; z++) {
       if (navigationValue === nameArray[0][z]) return true
     }
     return false

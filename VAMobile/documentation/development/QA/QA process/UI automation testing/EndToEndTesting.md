@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Adding new e2e tests to Availability Framework and Navigation
 
-## Adding a new e2e test to navigation (Note: The only things tested are places in the app where you have the ability to navigate through the bottom navigation bar)
+## Adding a new e2e test to visual regression (Note: The only things tested are places in the app where you have the ability to navigate through the bottom navigation bar)
 
 1. Open the VisualRegressionShared.ts file
 2. Add the necessary information to navigationDic. The dictionary is broken down into the 4 sections found in the bottom navigation bar: Home, Health, Benefits, and Payments. Add new tests under the appropriate key value.

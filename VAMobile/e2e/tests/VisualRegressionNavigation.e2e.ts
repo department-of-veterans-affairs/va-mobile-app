@@ -28,7 +28,7 @@ describe('Visual Regression - Navigation Persistence', () => {
     for (let j = 0; j < value.length; j++) {
       const nameArray = value[j]
       const testName = getTestName(nameArray)
-      if (shouldRunTest(nameArray, value)) {
+      if (shouldRunTest(nameArray)) {
         testsRun = true
         it('verify navigation for: ' + testName, async () => {
           const verifyText = value[j][2] as string

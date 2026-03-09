@@ -55,7 +55,7 @@ describe('Visual Regression - Text Resize', () => {
     for (let j = 0; j < value.length; j++) {
       const nameArray = value[j]
       const testName = getTestName(nameArray)
-      if (shouldRunTest(nameArray, value)) {
+      if (shouldRunTest(nameArray)) {
         testsRun = true
         if (testName !== 'Community care' && testName !== 'Claim exam') {
           it('verify navigation text resizing for: ' + testName, async () => {
