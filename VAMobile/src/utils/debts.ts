@@ -149,7 +149,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
   let showPaymentDueDate = false
 
   switch (debt.attributes.diaryCode) {
-    case '71':
+    case '071':
       i18nKey = 'verifyMilitaryStatus'
       resolvable = false
       variant = 'info'
