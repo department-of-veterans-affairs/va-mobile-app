@@ -1,7 +1,7 @@
 # Generates App Store screenshots for iOS (iPhone and iPad) and Android
 # using Detox e2e tests in CI. It builds and runs screenshot tests on each platform,
 # combines and frames the images, and uploads them as a workflow artifact. Must be
-# triggered manually (auto-commit to PR branch was removed due to issues).
+# triggered manually.
 
 name: '[Release] Gather iOS and Android screenshots'
 
