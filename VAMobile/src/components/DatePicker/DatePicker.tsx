@@ -13,7 +13,6 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 export type DatePickerRange = {
   startDate: DateTime
@@ -29,6 +28,8 @@ export type DatePickerProps = {
   minimumDate?: DateTime
   /** Optional DateTime object that represents the maximum selectable date on each date picker */
   maximumDate?: DateTime
+  /** Optional boolean that styles the apply button as a secondary button if set to true. Defaults to false. */
+  useSecondaryApplyButton?: boolean
   /** Callback when the apply button is pressed */
   onApply: (selectedDateRange: DatePickerRange, isValid: boolean) => void
   /** Callback when the reset button is pressed */
@@ -60,6 +61,7 @@ const DatePicker: FC<DatePickerProps> = ({
   initialDateRange,
   minimumDate,
   maximumDate,
+  useSecondaryApplyButton = false,
   onApply,
   onReset,
 }) => {
@@ -168,7 +170,7 @@ const DatePicker: FC<DatePickerProps> = ({
         <Button
           onPress={handleApply}
           label={t('apply')}
-          buttonType={featureEnabled('startScheduling') ? ButtonVariants.Secondary : ButtonVariants.Primary}
+          buttonType={useSecondaryApplyButton ? ButtonVariants.Secondary : ButtonVariants.Primary}
         />
       </Box>
     </Box>

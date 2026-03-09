@@ -2,6 +2,7 @@ import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
@@ -24,6 +25,7 @@ import {
 } from 'utils/appointments'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -156,6 +158,7 @@ function PastAppointments({
         initialDateRange={invalidDateRange || datePickerRange}
         minimumDate={DateTime.local().minus({ years: 2 })}
         maximumDate={DateTime.local()}
+        useSecondaryApplyButton={featureEnabled('startScheduling')}
         onApply={handleDatePickerApply}
         onReset={handleDatePickerReset}
       />
