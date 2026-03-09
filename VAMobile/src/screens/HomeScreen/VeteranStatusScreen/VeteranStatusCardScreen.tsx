@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useVeteranStatusCard } from 'api/veteranStatusCard'
@@ -23,6 +24,7 @@ import { isValidDisabilityRating } from 'utils/claims'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useOrientation } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { deriveVscStatus } from 'utils/veteranStatusCard'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const LANDSCAPE_PADDING = 44
@@ -48,10 +50,31 @@ function VeteranStatusCardScreen({ navigation }: VeteranStatusCardScreenProps) {
   const {
     data: vscPayload,
     isError: isVeteranStatusCardError,
+    error: veteranStatusCardError,
     isLoading: isVeteranStatusCardLoading,
+    isSuccess: isVeteranStatusCardSuccess,
+    httpStatus,
   } = useVeteranStatusCard({
     enabled: isCardAllowedByWaygate,
   })
+
+  const isFocused = useIsFocused()
+
+  const shouldLogStatusRef = useRef(false)
+  const didLogStatusRef = useRef(false)
+
+  const shouldLogErrorShownRef = useRef(false)
+  const didLogErrorShownRef = useRef(false)
+
+  const errorType = useMemo(() => {
+    if (isVeteranStatusCardError) {
+      const statusCode = httpStatus ?? (veteranStatusCardError as { status?: number } | null)?.status
+      return `HTTP_ERROR_${statusCode ?? 'UNKNOWN'}`
+    }
+
+    const attrs = vscPayload?.attributes
+    return attrs?.notConfirmedReason ?? attrs?.confirmation_status ?? 'UNKNOWN'
+  }, [isVeteranStatusCardError, httpStatus, veteranStatusCardError, vscPayload])
 
   const vscCard = vscPayload?.type === 'veteran_status_card' ? vscPayload : undefined
   const vscAlert = vscPayload?.type === 'veteran_status_alert' ? vscPayload : undefined
@@ -70,17 +93,63 @@ function VeteranStatusCardScreen({ navigation }: VeteranStatusCardScreenProps) {
     registerReviewEvent()
   })
 
-  useEffect(() => {
-    if (!isCardAllowedByWaygate) {
-      logAnalyticsEvent(Events.vama_vsc_error_shown('VETERAN_STATUS_CARD_BLOCKED_BY_WAYGATE'))
-    }
-  }, [isCardAllowedByWaygate])
+  useFocusEffect(
+    useCallback(() => {
+      shouldLogStatusRef.current = true
+      didLogStatusRef.current = false
+
+      shouldLogErrorShownRef.current = true
+      didLogErrorShownRef.current = false
+      return () => {}
+    }, []),
+  )
 
   useEffect(() => {
+    if (!isFocused) return
+    if (!isCardAllowedByWaygate) return
+    if (!shouldLogStatusRef.current || didLogStatusRef.current) return
+    if (isVeteranStatusCardLoading) return
+
+    if (isVeteranStatusCardSuccess && vscPayload) {
+      const status = deriveVscStatus(vscPayload) ?? 'UNKNOWN_REASON'
+      logAnalyticsEvent(Events.vama_vsc_status(status))
+      didLogStatusRef.current = true
+      shouldLogStatusRef.current = false
+      return
+    }
+
+    if (isVeteranStatusCardError) {
+      const statusCode = httpStatus ?? (veteranStatusCardError as { status?: number } | null)?.status
+      logAnalyticsEvent(Events.vama_vsc_status(`HTTP_ERROR_${statusCode ?? 'UNKNOWN'}`))
+      didLogStatusRef.current = true
+      shouldLogStatusRef.current = false
+    }
+  }, [
+    isFocused,
+    isCardAllowedByWaygate,
+    isVeteranStatusCardLoading,
+    isVeteranStatusCardSuccess,
+    vscPayload,
+    isVeteranStatusCardError,
+    httpStatus,
+    veteranStatusCardError,
+  ])
+
+  useEffect(() => {
+    if (!isFocused) return
+    if (isCardAllowedByWaygate) return
+    logAnalyticsEvent(Events.vama_vsc_error_shown('VETERAN_STATUS_CARD_BLOCKED_BY_WAYGATE'))
+  }, [isFocused, isCardAllowedByWaygate])
+
+  useEffect(() => {
+    if (!isFocused) return
+    if (!shouldLogErrorShownRef.current || didLogErrorShownRef.current) return
     if (!showError) return
-    const reason = vscPayload?.attributes?.notConfirmedReason
-    logAnalyticsEvent(Events.vama_vsc_error_shown(reason ?? 'UNKNOWN'))
-  }, [showError, vscPayload])
+
+    logAnalyticsEvent(Events.vama_vsc_error_shown(errorType))
+    didLogErrorShownRef.current = true
+    shouldLogErrorShownRef.current = false
+  }, [isFocused, showError, errorType])
 
   const getError = () => {
     if (!vscAlert) {
