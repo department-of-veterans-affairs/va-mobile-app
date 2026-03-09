@@ -8,7 +8,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions, toggleRemoteConfigFlag } from './utils'
 
-export const PrescriptionsE2eIdConstants = {
+export const ReviewPrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
   PRESCRIPTION_FILTER_MODAL_ID: 'ModalTestID',
   PRESCRIPTION_FILTER_APPLY_ID: 'radioButtonApplyTestID',
@@ -58,9 +58,11 @@ beforeAll(async () => {
 describeWithSetup('Review prescriptions list', () => {
   it('should match the prescription page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID))).toExist()
-    await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID))).toExist()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
+    await expect(element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID))).toExist()
+    await expect(element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
+    await expect(
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT)),
+    ).toExist()
 
     // Scroll until the 'Get prescription details' link for AMLODIPINE BESYLATE 10MG TAB is accessible
     await waitFor(element(by.label('IODOQUINOL 650MG TAB')))
@@ -68,26 +70,38 @@ describeWithSetup('Review prescriptions list', () => {
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(100, 'down', 0.5, 0.5)
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
     ).toBeVisible()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_INSTRUCTIONS_TEXT)).atIndex(0)).toBeVisible()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toBeVisible()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toBeVisible()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toBeVisible()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toBeVisible()
+    await expect(
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_INSTRUCTIONS_TEXT)).atIndex(0),
+    ).toBeVisible()
+    await expect(
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0),
+    ).toBeVisible()
+    await expect(
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0),
+    ).toBeVisible()
+    await expect(
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0),
+    ).toBeVisible()
+    await expect(
+      element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0),
+    ).toBeVisible()
   })
 
   it('should display status definition after status label is tapped', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
+    await element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
     ).toBeVisible()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_BODY_LABEL))).toBeVisible()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
+    await expect(
+      element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_BODY_LABEL)),
+    ).toBeVisible()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 
   it('should verify prescriptions help modal information', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HELP_BUTTON_ID)).tap()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_HELP_BUTTON_ID)).tap()
     await expect(element(by.text('This list may not include all your medications '))).toExist()
     await expect(element(by.text('Medications not included:'))).toExist()
     await expect(element(by.text('New prescriptions not yet processed by a VA pharmacy'))).toExist()
@@ -102,11 +116,11 @@ describeWithSetup('Review prescriptions list', () => {
         ),
       ),
     ).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 
   it('should display the filter and sort menu', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
     await expect(element(by.text('All (3)'))).toExist()
     await expect(element(by.text('Active (55)'))).toExist()
     await expect(element(by.text('Discontinued (55)'))).toExist()
@@ -116,7 +130,7 @@ describeWithSetup('Review prescriptions list', () => {
     await expect(element(by.text('Transferred (55)'))).toExist()
     await expect(element(by.text('Status Not Available (55)'))).toExist()
 
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_MODAL_ID)).scrollTo('bottom')
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_MODAL_ID)).scrollTo('bottom')
 
     await expect(element(by.text('Fill date (newest to oldest)'))).toExist()
     await expect(element(by.text('Medication name (A to Z)'))).toExist()
@@ -126,11 +140,11 @@ describeWithSetup('Review prescriptions list', () => {
 
   it('should sort the prescriptions by medication name', async () => {
     await element(by.text('Medication name (A to Z)')).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
 
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_SORTED_NAME_FIRST))).toBeVisible()
+    await expect(element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_SORTED_NAME_FIRST))).toBeVisible()
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_SORTED_NAME_LAST))).toBeVisible()
+    await expect(element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_SORTED_NAME_LAST))).toBeVisible()
   })
 })
 
@@ -141,10 +155,10 @@ describeWithSetup('Review prescription details', () => {
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
 
-    await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
+    await element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
     await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A'))).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT))).toExist()
+    await expect(element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT))).toExist()
     await expect(element(by.text('TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS'))).toExist()
     await expect(element(by.text('Refills left'))).toExist()
     await expect(element(by.text('1'))).toExist()
@@ -161,20 +175,20 @@ describeWithSetup('Review prescription details', () => {
   })
 
   it('should display status definition after status label in prescription details is tapped', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
+    await element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
     ).toExist()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_BODY_LABEL))).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
+    await expect(element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_BODY_LABEL))).toExist()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 })
 
 describeWithSetup('Review prescription tracking information', () => {
   it('should filter out prescriptions without tracking information', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
     await element(by.text('Tracking (1)')).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
 
     await expect(element(by.text('Refills with tracking (1), sorted by status (A to Z)'))).toBeVisible()
     await expect(element(by.text('This list shows refills with current tracking information available.'))).toBeVisible()
@@ -183,16 +197,18 @@ describeWithSetup('Review prescription tracking information', () => {
 
   it('verify prescription tracking item specific info', async () => {
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
+    await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
     await expect(element(by.label('Prescription number 2 7 2 0 1 9 2 A')).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT))).toExist()
     await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL)),
+      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT)),
+    ).toExist()
+    await expect(
+      element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL)),
     ).toExist()
     await expect(element(by.text('Package 1 of 2'))).toExist()
     await expect(element(by.text('Tracking number')).atIndex(0)).toExist()
     await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_NUMBER)).atIndex(trackingIndex),
+      element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_NUMBER)).atIndex(trackingIndex),
     ).toExist()
     await expect(element(by.text('Delivery service: UPS')).atIndex(0)).toExist()
     await expect(element(by.label('Date shipped: October 15, 2022')).atIndex(0)).toExist()
@@ -202,7 +218,7 @@ describeWithSetup('Review prescription tracking information', () => {
   })
 
   it('verify tracking link works', async () => {
-    await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_NUMBER)).atIndex(trackingIndex).tap()
+    await element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_NUMBER)).atIndex(trackingIndex).tap()
     await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
   })

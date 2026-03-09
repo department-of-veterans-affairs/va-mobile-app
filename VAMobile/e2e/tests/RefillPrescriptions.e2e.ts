@@ -8,7 +8,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions, toggleRemoteConfigFlag } from './utils'
 
-export const PrescriptionsE2eIdConstants = {
+export const RefillPrescriptionsE2eIdConstants = {
   PRESCRIPTIONS_HEADER_TEXT: 'Prescriptions',
   PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
   PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 06/06/2022',
@@ -65,75 +65,81 @@ describeWithSetup('Start a refill request for a single prescription', () => {
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
 
-    await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT))).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
+    await element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT))).toExist()
+    await element(by.id(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).toExist()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_BUTTON_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_BUTTON_TEXT)),
     ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT))).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT))).toExist()
   })
 
   it('should close the confirmation modal when cancel is pressed', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
+    await element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).not.toExist()
   })
 
   it('should correctly display the refill request summary when request is successful', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_BUTTON_TEXT)).tap()
+    await element(by.id(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
+    await element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CONFIRMATION_BUTTON_TEXT)).tap()
 
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_TITLE_TEXT)).atIndex(0),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_TITLE_TEXT)).atIndex(0),
     ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
     ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_WHATS_NEXT_HEADER_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_WHATS_NEXT_HEADER_TEXT)),
     ).toExist()
     await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
+      element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
     ).toExist()
     await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
+      element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
     ).toExist()
   })
 
   it('should navigate back to prescriptions screen when "Go to all pending refills" is pressed', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTIONS_HEADER_TEXT))).toExist()
+    await element(
+      by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT),
+    ).tap()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTIONS_HEADER_TEXT))).toExist()
   })
 })
 
 describeWithSetup('Start a refill request for multiple prescriptions', () => {
   it('should open refill request screen when "Start refill request" button is pressed', async () => {
-    await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_FLOATING_REQUEST_REFILL_BUTTON_TEXT)).tap()
+    await element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_FLOATING_REQUEST_REFILL_BUTTON_TEXT)).tap()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_TITLE_TEXT)).atIndex(0),
-    ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_TITLE_TEXT)).atIndex(0),
     ).toExist()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NUMBER_OF_PRESCRIPTION_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT)),
+    ).toExist()
+    await expect(
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL)),
+    ).toExist()
+    await expect(
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NUMBER_OF_PRESCRIPTION_TEXT)),
     ).toExist()
     await expect(element(by.text('0/1 selected'))).toExist()
     await expect(element(by.text('Select all'))).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toExist()
+    await expect(
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILLS_LEFT_TEXT)).atIndex(0),
+    ).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toExist()
   })
 
   it('should update the selected count when the selection of a prescription item is changed', async () => {
@@ -153,53 +159,57 @@ describeWithSetup('Start a refill request for multiple prescriptions', () => {
 
   it('should display confirmation modal when refill request button is pressed', async () => {
     await element(by.label('Prescription 1 of 1.')).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
+    await element(by.id(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
 
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTIONS_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTIONS_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).toExist()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT)),
     ).toExist()
   })
 
   it('should close the confirmation modal when cancel is pressed', async () => {
     if (device.getPlatform() === 'android') {
-      await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
+      await element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).tap()
     } else {
-      await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).atIndex(1).tap()
+      await element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_CANCEL_TEXT)).atIndex(1).tap()
     }
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTIONS_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTIONS_REFILL_REQUEST_CONFIRMATION_TITLE_TEXT)),
     ).not.toExist()
   })
 
   it('should correctly display the refill request summary when request is successful', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT)).tap()
+    await element(by.id(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
+    await element(
+      by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUESTS_CONFIRMATION_BUTTON_TEXT),
+    ).tap()
 
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_TITLE_TEXT)).atIndex(0),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_TITLE_TEXT)).atIndex(0),
     ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
     ).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
     await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
     await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_WHATS_NEXT_HEADER_TEXT)),
+      element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_WHATS_NEXT_HEADER_TEXT)),
     ).toExist()
     await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
+      element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
     ).toExist()
     await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
+      element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
     ).toExist()
   })
 
   it('should navigate back to prescriptions screen when "Go to all pending refills" is pressed', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTIONS_HEADER_TEXT))).toExist()
+    await element(
+      by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT),
+    ).tap()
+    await expect(element(by.text(RefillPrescriptionsE2eIdConstants.PRESCRIPTIONS_HEADER_TEXT))).toExist()
   })
 })
