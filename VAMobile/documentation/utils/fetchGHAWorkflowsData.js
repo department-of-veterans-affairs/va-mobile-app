@@ -140,7 +140,7 @@ function parseWorkflow(fileName, userMap, usesMap) {
 
   let data
   try {
-    data = yaml.load(content, { schema: yaml.DEFAULT_SAFE_SCHEMA })
+    data = yaml.load(content)
   } catch (e) {
     console.error(`Error parsing YAML in ${fileName}:`, e.message)
     return null
