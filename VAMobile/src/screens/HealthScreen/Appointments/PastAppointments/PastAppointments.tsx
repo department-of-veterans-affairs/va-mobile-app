@@ -2,7 +2,6 @@ import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
