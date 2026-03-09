@@ -1,5 +1,5 @@
 ---
-title: Testing
+title: Tests
 ---
 
 # Tests
@@ -12,16 +12,106 @@ We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing 
 
 ### End-to-End (e2e)
 
-As much as possible, follow these best practices when writing e2e tests. These suggestions and best practices exist to help us keep our tests fast, and balance responsibility between e2e (happy path) and business logic (unit tests).
+#### Test Design
 
-- The tests should follow the happy path of an individual feature
-- The tests should map cleanly to a specific user journey, e.g. go from the start to the finish of accomplishing a specific task
-- They should not test every possible option (e.g. every filter option in prescriptions)
-- Prioritize execution speed -- avoid sleeping, timeouts, etc. whenever possible
+The goal of e2e tests is to verify happy-path user journeys quickly and reliably. Business logic and edge cases belong in unit tests.
+
+- Follow the happy path of an individual feature
+- Map tests to a specific user journey — go from start to finish of a task
+- Don't test every possible option (e.g. every filter in prescriptions)
+- Don't cover edge cases; flag them in comments and cover them in unit tests
 - Don't take screenshots
-- Don't perform any actions within a WebView other than ensuring that it launches
-- The tests shouldn't cover edge cases, but can flag them. Use unit tests to cover edge cases, and other off-happy-path stuff
+- Don't perform any actions within a WebView other than verifying it launches
+- Prioritize execution speed — avoid fixed sleeps and timeouts
 - Use device-specific idioms (e.g. for phone number links on Android vs iOS)
+
+#### Technical Patterns
+
+**Use `waitFor` instead of `setTimeout`**
+
+`waitFor` resolves as soon as the condition is met. `setTimeout` waits a fixed
+duration regardless of readiness — wasteful when fast, flaky when slow.
+
+```js
+// Avoid
+await setTimeout(2000)
+await element(by.text('Step 2')).tap()
+
+// Prefer
+await waitFor(element(by.id('step-2-id'))).toBeVisible().withTimeout(5000)
+await element(by.id('step-2-id')).tap()
+```
+
+Only use `setTimeout` when there is no observable UI condition to poll against
+(e.g. a non-state-changing animation).
+
+**Use `testID` for element queries**
+
+`by.id()` is stable. `by.text()` breaks on copy or i18n changes.
+
+```js
+// Fragile
+await expect(element(by.text('Your active claims'))).toExist()
+
+// Stable
+await expect(element(by.id('claimsHistoryID'))).toExist()
+```
+
+**Centralize test IDs in constants**
+
+Define IDs in a shared constants object per feature. Cross-feature IDs belong
+in `CommonE2eIdConstants` in `utils.ts`.
+
+```js
+export const ClaimsE2eIdConstants = {
+  CLAIMS_STATUS_ID: 'claimsStatusID',
+  FILE_REQUEST_BUTTON_ID: 'Step3FileRequestButton',
+}
+```
+
+**Use `beforeAll` for shared setup**
+
+Log in and navigate once per suite rather than repeating it in every test.
+Leave the UI in a predictable state at the end of each `it` block.
+
+```js
+beforeAll(async () => {
+  await loginToDemoMode()
+  await openBenefits()
+  await openClaims()
+})
+```
+
+**Scroll with `waitFor`, not fixed offsets**
+
+```js
+await waitFor(element(by.id('targetID')))
+  .toBeVisible()
+  .whileElement(by.id('scrollViewID'))
+  .scroll(200, 'down')
+```
+
+**Avoid dynamic strings as selectors**
+
+IDs derived from dates or data-driven content break silently when content
+changes. Use short, stable `testID` props instead.
+
+```js
+// Fragile — breaks if date format or copy changes
+const CLAIM_ID = 'Claim for compensation Received December 05, 2021 Step 1 of 5...'
+
+// Stable
+const CLAIM_ID = 'claim-1-list-item'
+```
+
+**Never hardcode credentials**
+
+Read credentials from environment variables and tolerate unset values:
+
+```js
+const { DEMO_PASSWORD } = getEnv()
+if (password !== (DEMO_PASSWORD || '')) { ... }
+```
 
 ## Test coverage
 
