@@ -92,7 +92,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       smNotInDowntime,
   })
   const { data: ohSyncStatus } = useOhSyncStatus({
-    enabled: isFocused && !!userAuthorizedServices?.secureMessaging && smNotInDowntime,
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      !!userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
   })
   const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
