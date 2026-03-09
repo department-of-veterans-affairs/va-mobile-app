@@ -40,6 +40,7 @@ export type FeatureToggleType =
   | 'overpayments'
   | 'offlineMode'
   | 'remoteConfigRefreshTest'
+  | 'useOldDatePicker'
   | 'veteranStatusCardUpdate'
 
 type FeatureToggleValues = {
@@ -68,6 +69,7 @@ type FeatureToggleValues = {
   overpayments: boolean
   offlineMode: boolean
   remoteConfigRefreshTest: boolean
+  useOldDatePicker: boolean
   veteranStatusCardUpdate: boolean
 }
 
@@ -97,6 +99,7 @@ export const defaults: FeatureToggleValues = {
   overpayments: false,
   remoteConfigRefreshTest: false,
   offlineMode: false,
+  useOldDatePicker: false,
   veteranStatusCardUpdate: false,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {

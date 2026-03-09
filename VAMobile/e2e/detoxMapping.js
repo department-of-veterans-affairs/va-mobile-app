@@ -107,6 +107,7 @@ const detoxMapping = {
   directory: {
     allergies: ['Allergies', 'AllergiesAccelerated'],
     AppealDetailsScreen: ['Appeals', 'AppealsExpanded'],
+    appointments: appointmentsArray,
     Appointments: appointmentsArray,
     authorizedServices: authorizedServicesArray,
     BenefitsScreen: benefitsScreenArray,
