@@ -496,7 +496,8 @@ export type LinkInline = {
   text: string
   href: string
   style?: 'active' | 'external' | 'default'
-  testId?: string
+  mobileText?: string | null
+  isWebview?: boolean
 }
 
 /** Inline element: telephone */

@@ -64,9 +64,7 @@ context('StructuredContentRenderer', () => {
     expect(screen.getByText('Visit')).toBeTruthy()
     const link = screen.getByRole('link', { name: 'VA Form 21-4142' })
     expect(link).toBeTruthy()
-    expect(screen.getByText('VA')).toBeTruthy()
-    expect(screen.getByText('Form')).toBeTruthy()
-    expect(screen.getByText('21-4142')).toBeTruthy()
+    expect(screen.getByText('VA Form 21-4142')).toBeTruthy()
   })
 
   it('should render content with telephone numbers', () => {

@@ -50,6 +50,43 @@ context('InlineRenderer', () => {
     expect(link.props.accessibilityLabel).toBe('Test Link')
   })
 
+  it('should render link with mobileText when provided', () => {
+    render(
+      <InlineRenderer
+        content={{
+          type: 'link',
+          text: 'VA Form 21-4142',
+          href: '/find-forms/about-form-21-4142/',
+          mobileText: 'Get VA Form 21-4142 on VA.gov',
+        }}
+      />,
+    )
+    const link = screen.getByRole('link', { name: 'Get VA Form 21-4142 on VA.gov' })
+    expect(link).toBeTruthy()
+    expect(link.props.accessibilityLabel).toBe('Get VA Form 21-4142 on VA.gov')
+  })
+
+  it('should fall back to text when mobileText is null', () => {
+    render(
+      <InlineRenderer
+        content={{
+          type: 'link',
+          text: 'Add or change direct deposit information',
+          href: '/profile/direct-deposit',
+          mobileText: null,
+        }}
+      />,
+    )
+    const link = screen.getByRole('link', { name: 'Add or change direct deposit information' })
+    expect(link.props.accessibilityLabel).toBe('Add or change direct deposit information')
+  })
+
+  it('should fall back to text when mobileText is absent', () => {
+    render(<InlineRenderer content={{ type: 'link', text: 'Legacy link text', href: '/some-path' }} />)
+    const link = screen.getByRole('link', { name: 'Legacy link text' })
+    expect(link.props.accessibilityLabel).toBe('Legacy link text')
+  })
+
   it('should render telephone', () => {
     render(<InlineRenderer content={{ type: 'telephone', contact: '8008271000' }} />)
     const link = screen.getByRole('link', { name: '8 0 0 8 2 7 1 0 0 0' })
@@ -63,8 +100,7 @@ context('InlineRenderer', () => {
     const link = screen.getByRole('link', { name: '7 1 1' })
     expect(link).toBeTruthy()
     expect(link.props.accessibilityLabel).toBe('7 1 1')
-    expect(screen.getByText('TTY:')).toBeTruthy()
-    expect(screen.getByText('711')).toBeTruthy()
+    expect(screen.getByText('TTY: 711')).toBeTruthy()
   })
 
   it('should render line break', () => {

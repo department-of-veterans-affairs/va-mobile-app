@@ -7,6 +7,4 @@ export type LinkWithAnalyticsProps = LinkProps & {
   analyticsProps?: { [key: string]: unknown }
   /** optional boolean to turn off padding */
   disablePadding?: boolean
-  /** when true, render as inline text link (e.g. inside paragraph content) */
-  inline?: boolean
 }

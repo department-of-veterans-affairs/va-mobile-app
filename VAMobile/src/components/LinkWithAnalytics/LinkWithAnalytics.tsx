@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 
 import { Link } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
-import InlineLinkComponent from 'components/LinkWithAnalytics/InlineLinkComponent'
 import { LinkWithAnalyticsProps } from 'components/LinkWithAnalytics/types'
 import { getDefinedAnalyticsProps } from 'components/LinkWithAnalytics/utils'
 import { Box } from 'components/index'
@@ -10,14 +9,9 @@ import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
-const LinkWithAnalytics: FC<LinkWithAnalyticsProps> = ({ analyticsOnPress, disablePadding, inline, ...props }) => {
-  const theme = useTheme()
-
-  if (inline) {
-    return <InlineLinkComponent analyticsOnPress={analyticsOnPress} disablePadding={disablePadding} {...props} />
-  }
-
+const LinkWithAnalytics: FC<LinkWithAnalyticsProps> = ({ analyticsOnPress, disablePadding, ...props }) => {
   const definedAnalyticsProps = getDefinedAnalyticsProps(props)
+  const theme = useTheme()
 
   const py = disablePadding ? 0 : theme.dimensions.buttonPadding
   const pr = disablePadding ? 0 : theme.dimensions.gutter
