@@ -107,21 +107,20 @@ function VeteranStatusCardScreen({ navigation }: VeteranStatusCardScreenProps) {
       <AlertWithHaptics variant={alertType} header={header} headerA11yLabel={a11yLabelVA(header)}>
         {body?.map((row: VSCAlertBodyRow, idx: number) => {
           const isLastTextItem = idx === lastTextIndex
-          const valueWithBreak = row.type === 'text' && !isLastTextItem ? `${row.value}\n` : row.value
+          const textSpacing = row.type === 'text' && !isLastTextItem ? theme.dimensions.standardMarginBetween : 0
 
           if (row.type === 'text') {
             return (
-              <TextView key={idx} variant="MobileBody">
-                {valueWithBreak}
+              <TextView key={idx} variant="MobileBody" mb={textSpacing}>
+                {row.value}
               </TextView>
             )
           }
 
           if (row.type === 'phone') {
             return (
-              <Box mt={theme.dimensions.standardMarginBetween}>
+              <Box key={idx} mt={theme.dimensions.standardMarginBetween}>
                 <ClickToCallPhoneNumber
-                  key={idx}
                   a11yLabel={a11yLabelID(row.value)}
                   displayedText={displayedTextPhoneNumber(row.value)}
                   phone={row.value}
