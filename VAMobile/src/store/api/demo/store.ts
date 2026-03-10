@@ -263,9 +263,6 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`: {
       return getFolderMessages(store, params, endpoint)
     }
-    case '/v0/messaging/health/messages/oh_sync_status': {
-      return { syncComplete: true }
-    }
     case '/v1/health/immunizations': {
       return getVaccineList(store, params, endpoint)
     }

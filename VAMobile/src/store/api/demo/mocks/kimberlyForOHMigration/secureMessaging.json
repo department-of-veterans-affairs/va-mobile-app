@@ -2698,5 +2698,16 @@
         }
       ]
     }
+  },
+  "/v0/messaging/health/messages/oh_sync_status": {
+    "data": {
+      "id": "oh_sync_status",
+      "type": "oh_sync_status",
+      "attributes": {
+        "error": null,
+        "syncComplete": false,
+        "status": null
+      }
+    }
   }
 }

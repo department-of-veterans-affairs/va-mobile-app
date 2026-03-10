@@ -29,7 +29,6 @@ export type FeatureToggleType =
   | 'mrHide36HrHoldTimes'
   | 'noErrorPhasesKimOH'
   | 'noRecipientsKimOH'
-  | 'ohSyncStatusForceIncomplete'
   | 'startScheduling'
   | 'testFeature'
   | 'internationalPhoneNumber'
@@ -58,7 +57,6 @@ type FeatureToggleValues = {
   mrHide36HrHoldTimes: boolean
   noErrorPhasesKimOH: boolean
   noRecipientsKimOH: boolean
-  ohSyncStatusForceIncomplete: boolean
   startScheduling: boolean
   testFeature: boolean
   internationalPhoneNumber: boolean
@@ -88,7 +86,6 @@ export const defaults: FeatureToggleValues = {
   mrHide36HrHoldTimes: false,
   noErrorPhasesKimOH: false,
   noRecipientsKimOH: false,
-  ohSyncStatusForceIncomplete: false,
   startScheduling: false,
   testFeature: false,
   internationalPhoneNumber: false,

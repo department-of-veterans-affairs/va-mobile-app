@@ -31,7 +31,6 @@ const mockOverrides = {
   mrHide36HrHoldTimes: false,
   noErrorPhasesKimOH: false,
   noRecipientsKimOH: false,
-  ohSyncStatusForceIncomplete: false,
   startScheduling: false,
   testFeature: false,
   appointmentsTestTime: true,

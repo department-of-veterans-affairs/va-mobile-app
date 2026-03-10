@@ -283,11 +283,16 @@ export type MoveMessageParameters = {
   newFolderID: number
 }
 
-/**
- * Response shape from the OH sync status endpoint - there may be additional properties that are not currently being used.
- * When syncComplete is false, historic messages are still being loaded
- * after a facility migration to Oracle Health.
- */
-export type OhSyncStatusData = {
+export type OhSyncStatusAttributes = {
+  error: string | null
   syncComplete: boolean
+  status: string | null
+}
+
+export type OhSyncStatusData = {
+  data: {
+    id: string
+    type: string
+    attributes: OhSyncStatusAttributes
+  }
 }
