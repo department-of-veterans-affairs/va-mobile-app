@@ -256,10 +256,12 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Match original Navigation.e2e.ts: fixed scroll to reveal the link, then direct tap.
       // Use by.id (the Pressable) instead of by.text (the clipped child TextView) so the
       // element remains hittable with large text sizes on iOS.
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(350, 'down', 0.5, 0.5)
+      await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+        .scroll(100, 'down')
       await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
       await device.enableSynchronization()
       return
