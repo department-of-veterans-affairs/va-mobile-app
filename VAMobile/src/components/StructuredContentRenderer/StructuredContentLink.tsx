@@ -1,15 +1,11 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useNavigation } from '@react-navigation/native'
-
 import { LinkInline } from 'api/types'
 import LinkWithAnalytics from 'components/LinkWithAnalytics/LinkWithAnalytics'
 import { getDefinedAnalyticsProps } from 'components/LinkWithAnalytics/utils'
 import { getLinkUrl } from 'components/StructuredContentRenderer/utils'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useExternalLink, useRouteNavigation } from 'utils/hooks'
 import { vaGovWebviewTitle } from 'utils/webview'
 
@@ -39,7 +35,6 @@ const StructuredContentLink: FC<StructuredContentLinkProps> = ({ content }) => {
 
   const launchExternalLink = useExternalLink()
   const navigateTo = useRouteNavigation()
-  const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const definedAnalyticsProps = getDefinedAnalyticsProps({
@@ -50,7 +45,6 @@ const StructuredContentLink: FC<StructuredContentLinkProps> = ({ content }) => {
   })
 
   const onPress = () => {
-    logAnalyticsEvent(Events.vama_link_click({ url, ...definedAnalyticsProps }))
     if (isWebview) {
       navigateTo('Webview', {
         url,
@@ -58,18 +52,23 @@ const StructuredContentLink: FC<StructuredContentLinkProps> = ({ content }) => {
         loadingMessage: t('webview.claims.loading'),
       })
     } else if (isDirectDepositProfileUrl(url)) {
-      const rootNav = navigation.getParent()?.getParent()
-      if (rootNav) {
-        ;(rootNav as unknown as { navigate: (name: string, params?: object) => void }).navigate('DirectDeposit')
-      } else {
-        launchExternalLink(url, definedAnalyticsProps)
-      }
+      navigateTo('DirectDeposit')
     } else {
       launchExternalLink(url, definedAnalyticsProps)
     }
   }
 
-  return <LinkWithAnalytics type="custom" text={text} a11yLabel={text} onPress={onPress} icon={{ name: 'Launch' }} />
+  const showLaunchIcon = !isWebview && !isDirectDepositProfileUrl(url)
+
+  return (
+    <LinkWithAnalytics
+      type="custom"
+      text={text}
+      a11yLabel={text}
+      onPress={onPress}
+      icon={showLaunchIcon ? { name: 'Launch' } : 'no icon'}
+    />
+  )
 }
 
 export default StructuredContentLink

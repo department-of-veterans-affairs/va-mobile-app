@@ -52,6 +52,10 @@ export const InlineRenderer = ({
 
   if (typeof content === 'string') {
     if (!content) return null
+    // Words are split into individual TextViews so that plain text wraps alongside inline
+    // elements (links, bold, etc.) inside the flexDirection="row" flexWrap="wrap" container.
+    // React Native doesn't support true inline layout mixing Text and View components, so each
+    // word needs to be a separate flex item to allow natural line breaks.
     const words = content.split(' ')
     return (
       <>
