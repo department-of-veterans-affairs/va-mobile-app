@@ -238,7 +238,13 @@ context('SecureMessaging', () => {
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(mockRecipients)
         .calledWith('/v0/messaging/health/messages/oh_sync_status')
-        .mockResolvedValue({ syncComplete: false })
+        .mockResolvedValue({
+          data: {
+            id: 'oh_sync_status',
+            type: 'oh_sync_status',
+            attributes: { error: null, syncComplete: false, status: null },
+          },
+        })
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText(t('secureMessaging.historicLoad.title'))).toBeTruthy())
     })
@@ -256,7 +262,13 @@ context('SecureMessaging', () => {
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(mockRecipients)
         .calledWith('/v0/messaging/health/messages/oh_sync_status')
-        .mockResolvedValue({ syncComplete: true })
+        .mockResolvedValue({
+          data: {
+            id: 'oh_sync_status',
+            type: 'oh_sync_status',
+            attributes: { error: null, syncComplete: true, status: null },
+          },
+        })
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText(t('secureMessaging.historicLoad.title'))).toBeNull())
     })
