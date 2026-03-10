@@ -615,7 +615,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           error={hasError}
           onTryAgain={refetchPrescriptions}
         />
-      ) : !prescriptionData?.data?.length ? (
+      ) : !allPrescriptions?.length ? (
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
