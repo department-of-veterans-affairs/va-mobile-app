@@ -8,7 +8,11 @@ jobs:
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Dependency Review
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: moderate
+          base_ref: ${{ github.event.before }}
+          head_ref: ${{ github.sha }}
