@@ -599,7 +599,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
-      ) : loadingHistory || loadingUserAuthorizedServices ? (
+      ) : loadingHistory || loadingUserAuthorizedServices || !allPrescriptions?.length ? (
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       ) : getUserAuthorizedServicesError ? (
         <ErrorComponent
@@ -615,7 +615,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           error={hasError}
           onTryAgain={refetchPrescriptions}
         />
-      ) : !allPrescriptions?.length ? (
+      ) : !prescriptionData?.data?.length ? (
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
