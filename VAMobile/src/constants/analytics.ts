@@ -1295,16 +1295,6 @@ export const Events = {
       name: 'vama_whatsnew_more',
     }
   },
-  // ObfuscatedTextView
-  vama_obf_textview: (cardName: string, revealed: boolean): Event => {
-    return {
-      name: 'vama_obf_textview',
-      params: {
-        card_name: cardName,
-        p1: revealed,
-      },
-    }
-  },
   // payment breakdown modal - see details
   vama_payment_bd_details: (): Event => {
     return {
