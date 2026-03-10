@@ -65,7 +65,7 @@ function PastAppointments({
   const endTime = maintenanceWindows?.[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
   const isAvsEnabled = featureEnabled('vaOnlineSchedulingAddOhAvs')
-
+  console.info({ isAvsEnabled: isAvsEnabled })
   const filteredAppointments = useMemo(
     () => filterAppointments(appointmentsData?.data || [], true, datePickerRange),
     [appointmentsData?.data, datePickerRange],

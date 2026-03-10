@@ -31,6 +31,7 @@ export const prefetchAvsBinaries = async (
   dispatch: AppDispatch,
   avsMetadata: SummaryMetadata[] | undefined,
 ): Promise<void> => {
+  console.info({ 'prefetchAvsBinaries called with avsMetadata': avsMetadata })
   const appointmentId = avsMetadata?.[0]?.apptId
   if (!appointmentId) {
     return
@@ -38,6 +39,7 @@ export const prefetchAvsBinaries = async (
 
   const toInclude = AfterVisitSummaryToIncludeOH
   const toFetch = avsMetadata.filter((item) => !!toInclude[item.noteType])
+  console.info({ 'prefetchAvsBinaries toFetch': toFetch, appointmentId: appointmentId })
   if (!toFetch.length) {
     return
   }
@@ -84,6 +86,7 @@ export const useAvsBinaries = (avsMetadata: SummaryMetadata[] | undefined, optio
     ),
     queryKey: avsQueryKey,
     queryFn: async () => {
+      console.info({ 'useAvsBinaries queryFn called with avsMetadata': avsMetadata })
       if (!appointmentId || !avsMetadata || avsMetadata.length === 0) {
         return undefined
       }

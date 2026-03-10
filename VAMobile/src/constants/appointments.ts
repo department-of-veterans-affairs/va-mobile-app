@@ -37,6 +37,7 @@ export const DEFAULT_UPCOMING_DAYS_LIMIT = 30
 // Oracle Health appointment summary types to include as after visit summaries
 export const AfterVisitSummaryToIncludeOH: Record<string, string> = {
   ambulatory_patient_summary: 'afterVisitSummary',
+  discharge_summary: 'afterVisitSummary',
 }
 
 // VistA does not have PDFs for after visit summaries yet

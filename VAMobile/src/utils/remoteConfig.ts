@@ -112,7 +112,7 @@ export const defaults: FeatureToggleValues = {
   remoteConfigRefreshTest: false,
   offlineMode: false,
   veteranStatusCardUpdate: false,
-  vaOnlineSchedulingAddOhAvs: false,
+  vaOnlineSchedulingAddOhAvs: true,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {
   offlineMode: '(Restart required)',

@@ -40,9 +40,12 @@ export const getListItemVals = (
   const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
   const AvsToInclude = isCerner ? AfterVisitSummaryToIncludeOH : AfterVisitSummaryToIncludeVistA
   const AvsKeys = Object.keys(AvsToInclude)
+  console.info({ 'processing summaries for AVS list items': summaries, AvsKeys })
   const filteredSummaries = summaries?.filter(
     (summary) => AvsKeys.includes(summary.noteType) && summary.binary && isValidBase64(summary.binary),
   )
+  console.info({ 'processing summary': filteredSummaries })
+
   const validSummariesByNotetype = filteredSummaries.reduce(
     (accSummaries, curr) => {
       const noteTypeName = AvsToInclude[curr.noteType]
@@ -66,6 +69,10 @@ export const getListItemVals = (
       ]
 
       const onPress = () => {
+        if (!summary.binary) {
+          console.warn('No binary found for summary:', summary)
+          return false
+        }
         createFileFromBase64(summary.binary, `${summary.name.split(' ').join('_')}_${summary.id}_${i + 1}.pdf`).then(
           (filePath) => {
             FileViewer.open(filePath, { onDismiss: handleDismiss(filePath) })
