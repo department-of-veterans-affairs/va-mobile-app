@@ -55,7 +55,6 @@ For more information on API usage for SSO, view the [Device SSO Token Exchange](
 | [`vama_login_closed`](https://analytics.google.com/analytics/web/?authuser=0&hl=en-US#/a50123418p265787033/reports/dashboard?params=_u..insightCards%3D%5B%7B%22question%22:%22notification_receive%22%7D%5D%26_u..nav%3Dmaui%26_r..dimension-value%3D%7B%22dimension%22:%22eventName%22,%22value%22:%22vama_login_closed%22%7D&collectionId=user&r=events-overview) |  | User cancelled the login session (e.g., swiped down on iOS WebView). | **Abandonment.** Friction or change of mind. |
 | [`vama_login_token_fetch`](https://analytics.google.com/analytics/web/?authuser=0&hl=en-US#/a50123418p265787033/reports/dashboard?params=_u..insightCards%3D%5B%7B%22question%22:%22notification_receive%22%7D%5D%26_u..nav%3Dmaui%26_r..dimension-value%3D%7B%22dimension%22:%22eventName%22,%22value%22:%22vama_login_token_fetch%22%7D&collectionId=user&r=events-overview)| `error` (string) | *Optional:* Fired only if the POST to exchange the code for tokens fails. | **Integration Error.** Failure communicating with SIS. |
 | [`vama_login_token_refresh`](https://analytics.google.com/analytics/web/?authuser=0&hl=en-US#/a50123418p265787033/reports/dashboard?params=_u..insightCards%3D%5B%7B%22question%22:%22notification_receive%22%7D%5D%26_u..nav%3Dmaui%26_r..dimension-value%3D%7B%22dimension%22:%22eventName%22,%22value%22:%22vama_login_token_refresh%22%7D&collectionId=user&r=events-overview)| `error` (string) | Fired when an automatic session refresh (using refresh token) fails. | **Silent Friction.** Can cause forced logouts. |
-| [`vama_login_token_store`](https://analytics.google.com/analytics/web/?authuser=0&hl=en-US#/a50123418p265787033/reports/dashboard?params=_u..insightCards%3D%5B%7B%22question%22:%22notification_receive%22%7D%5D%26_u..nav%3Dmaui%26_r..dimension-value%3D%7B%22dimension%22:%22eventName%22,%22value%22:%22vama_login_token_store%22%7D&collectionId=user&r=events-overview) | `p1` (boolean: success) | Result of saving the refresh token to the phone's secure keychain. | **Persistence.** If `false`, user must re-log every session. |
 
 A funnel report showing Sign In Screen > Login Clicked > Login Success can be found [here](https://analytics.google.com/analytics/web/?authuser=0&hl=en-US#/analysis/a50123418p265787033/edit/mCUZMmnjSwqKhd1sAHXLKA).
 
@@ -73,7 +72,6 @@ graph TD
     Bridge -- Cancel --> Closed["vama_login_closed<br/>(User swiped down/tapped cancel)"]
     Bridge -- Success --> Fetch["vama_login_token_fetch<br/>(Token Exchange)"]
     Fetch -- Success --> AppSuccess["vama_login_success<br/>(User is logged in)"]
-    AppSuccess --> Store["vama_login_token_store<br/>(Securely saving credentials)"]
     
     Fetch -- Error --> Fail["vama_login_fail / vama_login_token_fetch<br/>(Technical error)"]
 ```
