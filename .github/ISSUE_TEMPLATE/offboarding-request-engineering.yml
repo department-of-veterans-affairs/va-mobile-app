@@ -1,0 +1,75 @@
+name: Offboarding Request (Engineering)
+description: Fill out this form to request initiation of engineering offboarding for va-mobile-app
+title: "Offboarding: [name]"
+projects: ["department-of-veterans-affairs/1616"]
+labels: [user-offboarding]
+assignees:
+  - kellylein
+  - dumathane
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please read before continuing**: This issue form is to start the offboarding process for an engineer rolling off work in the VAHB Mobile App.
+        After this issue is reviewed it will be dual-assigned to a Mobile Platform offboarding point of contact and the Experience Team member who is being offboarded for completion.
+  - type: input
+    id: fullname
+    attributes:
+      label: Full Name
+      description: User's full name
+      placeholder: Alex Smith
+    validations:
+      required: true
+  - type: input
+    id: username
+    attributes:
+      label: GitHub Username
+      description: Username within the VA GitHub organization
+      placeholder: "@Alex-smith-va"
+    validations:
+      required: true
+  - type: input
+    id: vaemail
+    attributes:
+      label: VA Email Address
+      description: VA email address used to access developer systems
+      placeholder: "Alex.Smith1@va.gov"
+    validations:
+      required: true
+  - type: textarea
+    id: other_emails
+    attributes:
+      label: Other Emails
+      description: Other email addresses used to access developer systems. Add one email per line if you have multiple.
+      placeholder: |
+        user1@example.com
+        user2@example.com
+    validations:
+      required: false
+  - type: input
+    id: teamname
+    attributes:
+      label: Which team is this person on?
+      description: Exposing the primary team name helps us sort access requests
+    validations:
+      required: true
+  - type: input
+    id: vaoctopo
+    attributes:
+      label: Who is the OCTO Product Owner for this person's team?
+      description: Adding a PO helps us triage requests and know who the main point of contact is.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        The checklist items below should be left blank, as they will be filled out during the offboarding process.
+  - type: checkboxes
+    attributes:
+      label: System access to be removed by VA Mobile Platform
+      description: VA Mobile will remove the user's access to the following systems
+      options:
+        - label: App Store Connect
+        - label: TestFlight
+        - label: Firebase
+        - label: App Tester

@@ -6,12 +6,13 @@ import { DateTime } from 'luxon'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
-import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
+import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
 import { Events } from 'constants/analytics'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameDropDatePickerValue } from 'constants/timeframes'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -22,8 +23,10 @@ import {
   getPastAppointmentDateRange,
   getPastTimeFrame,
 } from 'utils/appointments'
+import { getPickerOptions } from 'utils/dateUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -32,6 +35,14 @@ type PastAppointmentsProps = {
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
   setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
   scrollViewRef: RefObject<ScrollView>
+}
+
+type PastAppointmentsDatePickerOption = {
+  label: string
+  value: string
+  a11yLabel: string
+  dates: TimeFrameDropDatePickerValue
+  timeFrame: TimeFrameType
 }
 
 function PastAppointments({
@@ -50,16 +61,45 @@ function PastAppointments({
   const [onApplyClicked, setOnApplyClicked] = useState(false)
   const [invalidDateRange, setInvalidDateRange] = useState<DatePickerRange>()
 
+  const useOldDatePicker = featureEnabled('useOldDatePicker')
   const datePickerRange = getDatePickerRange(dateRange)
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { maintenanceWindows } = useMaintenanceWindows()
   const endTime = maintenanceWindows?.[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
 
-  const filteredAppointments = useMemo(
-    () => filterAppointments(appointmentsData?.data || [], true, datePickerRange),
-    [appointmentsData?.data, datePickerRange],
-  )
+  useEffect(() => {
+    if (onApplyClicked) {
+      setOnApplyClicked(false)
+    }
+  }, [onApplyClicked])
+
+  const getPastAppointmentsPickerOptions = (): Array<PastAppointmentsDatePickerOption> => {
+    const pickerOptions = getPickerOptions(t, {
+      dateRangeA11yLabelTKey: 'pastAppointments.dateRangeA11yLabel',
+      allOfTKey: 'pastAppointments.allOf',
+      pastThreeMonthsTKey: 'pastAppointments.pastThreeMonths',
+    }).map((option) => ({
+      ...option,
+      value: option.label,
+      timeFrame: option.value as TimeFrameType, // We know the value is a TimeFrameType because we filtered out the fourteen to twelve months option
+      testID: option.a11yLabel, // testID is used as both test id and accessibility label
+    }))
+    return pickerOptions
+  }
+
+  const pickerOptions = getPastAppointmentsPickerOptions()
+  const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
+
+  const filteredAppointments = useMemo(() => {
+    if (useOldDatePicker) {
+      return datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS ||
+        datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR
+        ? filterAppointments(appointmentsData?.data || [], true)
+        : appointmentsData?.data
+    }
+    return filterAppointments(appointmentsData?.data || [], true, datePickerRange)
+  }, [appointmentsData?.data, datePickerOption, datePickerRange, useOldDatePicker])
 
   const pagination = {
     currentPage: page,
@@ -73,11 +113,19 @@ function PastAppointments({
     [filteredAppointments, page, perPage],
   )
 
-  useEffect(() => {
-    if (onApplyClicked) {
-      setOnApplyClicked(false)
+  const setValuesOnPickerSelect = (selectValue: string): void => {
+    const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
+    if (curSelectedRange) {
+      const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
+      const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+      if (startDate && endDate) {
+        setTimeFrame(curSelectedRange.timeFrame)
+        setDateRange({ startDate: startDate, endDate: endDate })
+        setPage(1)
+      }
+      setDatePickerOption(curSelectedRange)
     }
-  }, [onApplyClicked])
+  }
 
   const handleDatePickerApply = (selectedDateRange: DatePickerRange, isValid: boolean) => {
     if (isValid) {
@@ -108,6 +156,34 @@ function PastAppointments({
     setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
     setDateRange(getPastAppointmentDateRange())
     setPage(1)
+  }
+
+  const getDatePicker = () => {
+    if (useOldDatePicker) {
+      return (
+        <Box mx={theme.dimensions.gutter} accessible={true}>
+          <VAModalPicker
+            selectedValue={datePickerOption.value}
+            onSelectionChange={setValuesOnPickerSelect}
+            pickerOptions={pickerOptions}
+            labelKey={'pastAppointments.selectADateRange'}
+            testID="getDateRangeTestID"
+            confirmTestID="pastApptsDateRangeConfirmID"
+            cancelTestID="pastApptsDateRangeCancelID"
+          />
+        </Box>
+      )
+    }
+    return (
+      <DatePicker
+        labelKey={'pastAppointments.selectAPastDateRange'}
+        initialDateRange={invalidDateRange || datePickerRange}
+        minimumDate={DateTime.local().minus({ years: 2 })}
+        maximumDate={DateTime.local()}
+        onApply={handleDatePickerApply}
+        onReset={handleDatePickerReset}
+      />
+    )
   }
 
   const onPastAppointmentPress = (appointment: AppointmentData): void => {
@@ -151,14 +227,7 @@ function PastAppointments({
           />
         </Box>
       )}
-      <DatePicker
-        labelKey={'pastAppointments.selectAPastDateRange'}
-        initialDateRange={invalidDateRange || datePickerRange}
-        minimumDate={DateTime.local().minus({ years: 2 })}
-        maximumDate={DateTime.local()}
-        onApply={handleDatePickerApply}
-        onReset={handleDatePickerReset}
-      />
+      {getDatePicker()}
       {travelPayInDowntime && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics
