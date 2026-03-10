@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { LinkInline } from 'api/types'
 import LinkWithAnalytics from 'components/LinkWithAnalytics/LinkWithAnalytics'
-import { getDefinedAnalyticsProps } from 'components/LinkWithAnalytics/utils'
 import { getLinkUrl } from 'components/StructuredContentRenderer/utils'
 import { NAMESPACE } from 'constants/namespaces'
 import { useExternalLink, useRouteNavigation } from 'utils/hooks'
@@ -37,13 +36,6 @@ const StructuredContentLink: FC<StructuredContentLinkProps> = ({ content }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const definedAnalyticsProps = getDefinedAnalyticsProps({
-    type: 'url',
-    url,
-    text,
-    a11yLabel: text,
-  })
-
   const onPress = () => {
     if (isWebview) {
       navigateTo('Webview', {
@@ -54,7 +46,7 @@ const StructuredContentLink: FC<StructuredContentLinkProps> = ({ content }) => {
     } else if (isDirectDepositProfileUrl(url)) {
       navigateTo('DirectDeposit')
     } else {
-      launchExternalLink(url, definedAnalyticsProps)
+      launchExternalLink(url)
     }
   }
 

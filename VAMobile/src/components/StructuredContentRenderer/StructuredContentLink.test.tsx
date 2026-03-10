@@ -98,7 +98,7 @@ context('StructuredContentLink', () => {
     )
     fireEvent.press(screen.getByRole('link', { name: 'External link' }))
 
-    expect(mockLaunchExternalLink).toHaveBeenCalledWith('https://example.com/', expect.any(Object))
+    expect(mockLaunchExternalLink).toHaveBeenCalledWith('https://example.com/')
   })
 
   it('does not show the Launch icon for webview links', () => {
