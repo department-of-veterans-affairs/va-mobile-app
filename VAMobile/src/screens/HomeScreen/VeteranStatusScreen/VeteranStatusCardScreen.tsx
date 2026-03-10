@@ -111,9 +111,11 @@ function VeteranStatusCardScreen({ navigation }: VeteranStatusCardScreenProps) {
 
           if (row.type === 'text') {
             return (
-              <TextView key={idx} variant="MobileBody" mb={textSpacing}>
-                {row.value}
-              </TextView>
+              <Box key={idx} mb={textSpacing}>
+                <TextView accessible variant="MobileBody">
+                  {row.value}
+                </TextView>
+              </Box>
             )
           }
 
