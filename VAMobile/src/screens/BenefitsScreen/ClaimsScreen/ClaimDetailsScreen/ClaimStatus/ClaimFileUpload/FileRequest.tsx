@@ -101,7 +101,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       const textLines: Array<TextLine> = hasOverrides
         ? [{ text: friendlyName }]
         : [
-            { text: t('fileRequestDetails.requestForEvidence') },
+            { text: t('fileRequest.requestForEvidence') },
             { text: displayName || '', variant: 'HelperText', color: 'bodyText' },
           ]
 
@@ -110,8 +110,8 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       const a11yText = hasOverrides
         ? friendlyName
         : displayName
-          ? `${t('fileRequestDetails.requestForEvidence')}. ${displayName}`
-          : t('fileRequestDetails.requestForEvidence')
+          ? `${t('fileRequest.requestForEvidence')}. ${displayName}`
+          : t('fileRequest.requestForEvidence')
       const hasUploaded = hasUploadedOrReceived(request)
       const item: DefaultListItemObj = {
         textLines,

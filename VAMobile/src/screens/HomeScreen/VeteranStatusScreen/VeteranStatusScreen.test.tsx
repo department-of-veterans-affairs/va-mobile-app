@@ -398,6 +398,43 @@ context('VeteranStatusScreen', () => {
         const sixtyPercentText = t('disabilityRating.percent', { combinedPercent: 60 })
         expect(await screen.findByText(sixtyPercentText)).toBeTruthy()
       })
+
+      it('shows the DoD ID field when edipi exists', async () => {
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscCardConfirmedNoRating }])
+
+        expect(await screen.findByText(t('veteranStatus.dodIdNumber'))).toBeTruthy()
+        expect(screen.getByText('1100377582')).toBeTruthy()
+      })
+
+      it('hides the DoD ID field when edipi is an empty string', async () => {
+        const vscCardNoEdipi = {
+          ...vscCardConfirmedNoRating,
+          attributes: {
+            ...vscCardConfirmedNoRating.attributes,
+            edipi: '',
+          },
+        }
+
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscCardNoEdipi }])
+
+        expect(screen.queryByText(t('veteranStatus.dodIdNumber'))).toBeNull()
+        expect(screen.queryByTestId('veteranStatusDODTestID')).toBeNull()
+      })
+
+      it('hides the DoD ID field when edipi is undefined', async () => {
+        const vscCardNoEdipi = {
+          ...vscCardConfirmedNoRating,
+          attributes: {
+            ...vscCardConfirmedNoRating.attributes,
+            edipi: undefined,
+          },
+        }
+
+        renderWithNewVsc([{ queryKey: veteranStatusCardKeys.card, data: vscCardNoEdipi }])
+
+        expect(screen.queryByText(t('veteranStatus.dodIdNumber'))).toBeNull()
+        expect(screen.queryByTestId('veteranStatusDODTestID')).toBeNull()
+      })
     })
   })
 })

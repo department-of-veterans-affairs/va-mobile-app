@@ -1,4 +1,4 @@
-import { VaccineListPayload, VaccineLocationPayload } from 'api/types/VaccineData'
+import { VaccineListPayload } from 'api/types/VaccineData'
 import { Params } from 'store/api/api'
 import { DemoStore } from 'store/api/demo/store'
 
@@ -13,15 +13,12 @@ export type VaccineList = {
   }
 }
 
-export type VaccineDemoStore = {
-  '/v0/health/locations/I2-3JYDMXC6RXTU4H25KRVXATSEJQ000000': VaccineLocationPayload
-  '/v0/health/locations/I2-2FPCKUIXVR7RJLLG34XVWGZERM000000': VaccineLocationPayload
-} & VaccineList
+export type VaccineDemoStore = VaccineList
 
 /**
  * Type to define the mock returns to keep type safety
  */
-export type VaccineDemoReturnTypes = undefined | VaccineListPayload | VaccineLocationPayload
+export type VaccineDemoReturnTypes = undefined | VaccineListPayload
 
 export const getVaccineList = (store: DemoStore, params: Params, endpoint: string): VaccineListPayload => {
   const page = params['page[number]']

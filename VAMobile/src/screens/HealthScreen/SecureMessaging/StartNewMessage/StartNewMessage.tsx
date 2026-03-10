@@ -8,6 +8,7 @@ import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-comp
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   secureMessagingKeys,
@@ -41,6 +42,7 @@ import {
   TextArea,
   TextView,
 } from 'components'
+import { MigrationErrorMessage } from 'components/MigrationErrorMessage'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -61,6 +63,7 @@ import {
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
+import { OHParentScreens, getMigrationsInErrorState } from 'utils/ohMigration'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -116,6 +119,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
+  const {
+    data: userAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    isFetched: hasLoadedUserAuthorizedServices,
+    refetch: refetchAuthServices,
+    isFetching: refetchingAuthServices,
+  } = useAuthorizedServices()
   const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
   const recipients = recipientsResponse?.data
 
@@ -146,6 +156,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   // Ref for use in snackbar callbacks to ensure we have the latest messageData
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)
   messageDataRef.current = messageData
+
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
@@ -443,6 +454,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
+  const allMigrationsInErrorState = getMigrationsInErrorState(
+    userAuthorizedServices?.migratingFacilitiesList || [],
+    OHParentScreens.SecureMessaging,
+  )
+
   function renderContent() {
     if (noProviderError) {
       return (
@@ -476,6 +492,14 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             </TextView>
           </AlertWithHaptics>
         </Box>
+        {allMigrationsInErrorState.length > 0 &&
+          allMigrationsInErrorState.map((migration) => (
+            <MigrationErrorMessage
+              key={migration.migrationDate}
+              migration={migration}
+              parentScreen={OHParentScreens.SecureMessaging}
+            />
+          ))}
         {cernerFacilities.length > 0 && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertWithHaptics
@@ -523,7 +547,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  const hasError = recipientsError || signatureError || folderMessagesError
+  const hasError = recipientsError || signatureError || folderMessagesError || getUserAuthorizedServicesError
 
   const isLoading =
     !hasLoadedRecipients ||
@@ -534,7 +558,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     refetchingRecipients ||
     refetchingSignature ||
     !hasLoadedFolderMessages ||
-    refetchingFolderMessages
+    refetchingFolderMessages ||
+    !hasLoadedUserAuthorizedServices ||
+    refetchingAuthServices
 
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -557,9 +583,21 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         }
 
   const refetchData = () => {
-    if (recipientsError) return refetchRecipients
-    if (signatureError) return refetchSignature
-    if (folderMessagesError) return refetchFolderMessages
+    if (getUserAuthorizedServicesError) {
+      refetchAuthServices()
+      return
+    }
+    if (recipientsError) {
+      refetchRecipients()
+      return
+    }
+    if (signatureError) {
+      refetchSignature()
+      return
+    }
+    if (folderMessagesError) {
+      refetchFolderMessages()
+    }
   }
 
   return (
@@ -578,7 +616,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
-          error={recipientsError || signatureError || folderMessagesError}
+          error={recipientsError || signatureError || folderMessagesError || getUserAuthorizedServicesError}
           onTryAgain={refetchData}
         />
       ) : (
