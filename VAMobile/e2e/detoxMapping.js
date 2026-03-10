@@ -15,18 +15,20 @@ const fullTestRun = [
   'DecisionLetters',
   'DirectDeposit',
   'DisabilityRatings',
+  'FileForTravelPay',
   'HomeScreen',
   'LabsAndTests',
   'LoginScreen',
   'Messages',
   'MilitaryInformation',
-  'Navigation',
+  'OHMigrationMessages',
   'Onboarding',
   'Payments',
   'PersonalInformationScreen',
   'Prescriptions',
   'ProfileScreen',
   'PushNotifications',
+  'ReviewAppointments',
   'ReviewClaimDetails',
   'SettingsScreen',
   'SignIn',
@@ -36,6 +38,10 @@ const fullTestRun = [
   'VALetters',
   'VeteransCrisisLine',
   'VeteranStatusCard',
+  'VisualRegressionDarkMode',
+  'VisualRegressionLandscape',
+  'VisualRegressionNavigation',
+  'VisualRegressionTextResize',
 ]
 
 // Authorized services array
@@ -54,6 +60,8 @@ const authorizedServicesArray = [
   'Payments',
   'Prescriptions',
   'Messages',
+  'OHMigrationMessages',
+  'ReviewAppointments',
   'VeteranStatusCard',
 ]
 
@@ -61,8 +69,11 @@ const healthScreenArray = [
   'Appointments',
   'AppointmentsExpanded',
   'AppointmentsTestTime',
+  'FileForTravelPay',
   'Messages',
+  'OHMigrationMessages',
   'Prescriptions',
+  'ReviewAppointments',
   'TravelPay',
   'VaccineRecords',
 ]
@@ -82,7 +93,14 @@ const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims', 'ReviewCl
 const contactInfoArray = ['ContactInformation', 'VALetters']
 const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
 const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
-const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime', 'TravelPay']
+const appointmentsArray = [
+  'Appointments',
+  'AppointmentsExpanded',
+  'AppointmentsTestTime',
+  'TravelPay',
+  'FileForTravelPay',
+  'ReviewAppointments',
+]
 const notificationsArray = ['SettingsScreen', 'PushNotifications']
 // TODO: The rest of the Overpay/Copay screens still need to be added to project
 const medicalCopaysArray = ['Payments']
@@ -92,6 +110,7 @@ const detoxMapping = {
   directory: {
     allergies: ['Allergies', 'AllergiesAccelerated'],
     AppealDetailsScreen: ['Appeals', 'AppealsExpanded'],
+    appointments: appointmentsArray,
     Appointments: appointmentsArray,
     authorizedServices: authorizedServicesArray,
     BenefitsScreen: benefitsScreenArray,
@@ -140,8 +159,8 @@ const detoxMapping = {
     prescriptions: ['Prescriptions'],
     ProfileScreen: profileScreenArray,
     RequestNotifications: ['Onboarding'],
-    secureMessaging: ['Messages'],
-    SecureMessaging: ['Messages'],
+    secureMessaging: ['Messages', 'OHMigrationMessages'],
+    SecureMessaging: ['Messages', 'OHMigrationMessages'],
     SettingsScreen: ['SettingsScreen'],
     slices: fullTestRun,
     SplashScreen: ['Onboarding', 'LoginScreen'],
@@ -149,8 +168,8 @@ const detoxMapping = {
     styles: [],
     SyncScreen: [],
     translations: fullTestRun,
-    travelPay: ['TravelPay', 'TravelPayClaims'],
-    TravelPay: ['TravelPay', 'TravelPayClaims'],
+    travelPay: ['FileForTravelPay', 'TravelPay', 'TravelPayClaims'],
+    TravelPay: ['FileForTravelPay', 'TravelPay', 'TravelPayClaims'],
     types: fullTestRun,
     utils: fullTestRun,
     vaccines: ['VaccineRecords'],
@@ -207,11 +226,11 @@ const detoxMapping = {
     'profile.json': profileScreenArray,
     'profile.ts': profileScreenArray,
     'screens.ts': fullTestRun,
-    'secureMessaging.json': ['Messages'],
-    'secureMessaging.ts': ['Messages'],
+    'secureMessaging.json': ['Messages', 'OHMigrationMessages'],
+    'secureMessaging.ts': ['Messages', 'OHMigrationMessages'],
     'states.ts': ['ContactInformation'],
     'store.ts': [],
-    'travelPay.ts': ['TravelPay', 'TravelPayClaims'],
+    'travelPay.ts': ['FileForTravelPay', 'TravelPay', 'TravelPayClaims'],
     'users.ts': [],
     'utils.ts': [],
     'vaccine.json': ['VaccineRecords'],
