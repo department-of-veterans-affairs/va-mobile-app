@@ -1,8 +1,12 @@
 import { device } from 'detox'
+import { DateTime } from 'luxon'
+
+const dateFieldFormat = 'DDD'
+const twentyFiveDaysEarlierText = DateTime.local().minus({ days: 25 }).toFormat(dateFieldFormat)
 
 export const MessagesE2eIdConstants = {
-  MESSAGE_1_ID: 'Unread: Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
-  MESSAGE_1_READ_ID: 'Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
+  MESSAGE_1_ID: `Unread: Ratana, Narin  ${twentyFiveDaysEarlierText} Medication: Naproxen side effects`,
+  MESSAGE_1_READ_ID: `Ratana, Narin  ${twentyFiveDaysEarlierText} Medication: Naproxen side effects`,
   MESSAGE_2_ID: 'Unread: Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
   MESSAGE_2_READ_ID: 'Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
   MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md August 26, 2024 General: Your requested info',
