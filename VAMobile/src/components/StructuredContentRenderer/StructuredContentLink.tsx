@@ -5,7 +5,7 @@ import { LinkInline } from 'api/types'
 import LinkWithAnalytics from 'components/LinkWithAnalytics/LinkWithAnalytics'
 import { getLinkUrl } from 'components/StructuredContentRenderer/utils'
 import { NAMESPACE } from 'constants/namespaces'
-import { useExternalLink, useRouteNavigation } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 import { vaGovWebviewTitle } from 'utils/webview'
 
 /** True if the URL is the VA.gov profile direct deposit path (any env). */
@@ -25,14 +25,13 @@ type StructuredContentLinkProps = {
 /**
  * Renders a link from structured content (e.g. evidence request overrides) with
  * ticket-specific behavior: in-app webview when isWebview, in-app Direct Deposit
- * screen for profile direct deposit URL, otherwise external browser.
+ * screen for profile direct deposit URL, otherwise external browser via LinkWithAnalytics type="url".
  */
 const StructuredContentLink: FC<StructuredContentLinkProps> = ({ content }) => {
   const url = getLinkUrl(content.href)
   const text = content.mobileText ?? content.text
   const { isWebview } = content
 
-  const launchExternalLink = useExternalLink()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -45,22 +44,15 @@ const StructuredContentLink: FC<StructuredContentLinkProps> = ({ content }) => {
       })
     } else if (isDirectDepositProfileUrl(url)) {
       navigateTo('DirectDeposit')
-    } else {
-      launchExternalLink(url)
     }
   }
 
-  const showLaunchIcon = !isWebview && !isDirectDepositProfileUrl(url)
+  const external = !isWebview && !isDirectDepositProfileUrl(url)
+  if (external) {
+    return <LinkWithAnalytics type="url" url={url} text={text} />
+  }
 
-  return (
-    <LinkWithAnalytics
-      type="custom"
-      text={text}
-      a11yLabel={text}
-      onPress={onPress}
-      icon={showLaunchIcon ? { name: 'Launch' } : 'no icon'}
-    />
-  )
+  return <LinkWithAnalytics type="custom" text={text} a11yLabel={text} onPress={onPress} />
 }
 
 export default StructuredContentLink
