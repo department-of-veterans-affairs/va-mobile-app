@@ -256,20 +256,15 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Use by.id (the Pressable) instead of by.text (the clipped child TextView) so the
-      // element remains hittable with large text sizes on iOS.
-      // Use direct scroll (not whileElement) because the prescription list scroll view
-      // doesn't pass Detox's 100% visibility threshold due to the filter/sort bar.
-      for (let i = 0; i < 10; i++) {
-        try {
-          await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
-            .toBeVisible()
-            .withTimeout(1000)
-          break
-        } catch {
-          await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(150, 'down', 0.5, 0.5)
-        }
-      }
+      // Wait for the scroll view to settle, then scroll to reveal the details link.
+      // Uses by.id (the Pressable) instead of by.text so it remains hittable with large text.
+      await waitFor(element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)))
+        .toBeVisible()
+        .withTimeout(5000)
+      await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+        .scroll(150, 'down')
       await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
       await device.enableSynchronization()
       return
