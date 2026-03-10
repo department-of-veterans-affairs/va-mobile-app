@@ -256,15 +256,21 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Wait for the scroll view to settle, then scroll to reveal the details link.
-      // Uses by.id (the Pressable) instead of by.text so it remains hittable with large text.
-      await waitFor(element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)))
-        .toBeVisible()
-        .withTimeout(5000)
-      await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-        .scroll(150, 'down')
+      // Scroll until the details link is visible. Uses by.id (the Pressable) instead of
+      // by.text so it remains hittable with large text. Loop is needed because
+      // FeatureLandingAndChildTemplate's VAScrollView frame extends behind the floating
+      // footer button and tab bar, failing Detox's 100% visibility requirement for
+      // whileElement().scroll().
+      for (let i = 0; i < 10; i++) {
+        try {
+          await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
+            .toBeVisible()
+            .withTimeout(1000)
+          break
+        } catch {
+          await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(150, 'down', 0.5, 0.5)
+        }
+      }
       await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
       await device.enableSynchronization()
       return
