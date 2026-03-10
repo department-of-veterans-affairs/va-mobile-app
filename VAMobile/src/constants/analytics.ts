@@ -76,6 +76,11 @@ export const Events = {
       },
     }
   },
+  vama_claim_letters_link: (): Event => {
+    return {
+      name: 'vama_claim_letters_link',
+    }
+  },
   vama_appt_view_details: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,
