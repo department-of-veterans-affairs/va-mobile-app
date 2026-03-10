@@ -14,5 +14,5 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: moderate
-          base_ref: ${{ github.event.before }}
-          head_ref: ${{ github.sha }}
+          base-ref: ${{ github.event.before }}
+          head-ref: ${{ github.event.after }}
