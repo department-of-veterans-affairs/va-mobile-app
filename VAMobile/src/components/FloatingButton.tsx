@@ -24,6 +24,7 @@ const FloatingButton: FC<FloatingButtonProps> = ({ isHidden, ...buttonProps }: F
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScale = useWindowDimensions().fontScale
   
+  // TODO: Centralize this threshold with screen-level FAB placement checks to avoid drift.
   // Render in-place if screen reader enabled OR font scale is in a clearly large-text range.
   // useWindowDimensions().fontScale is reactive to iOS Dynamic Type changes.
   const shouldRenderInPlace = screenReaderEnabled || fontScale >= 1.5

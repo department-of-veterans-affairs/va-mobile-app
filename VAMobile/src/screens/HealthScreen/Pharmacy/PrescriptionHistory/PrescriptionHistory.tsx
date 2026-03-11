@@ -130,6 +130,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScale = useWindowDimensions().fontScale
+  // TODO: Centralize this threshold with other FAB placement checks to avoid drift.
   // Keep FAB placement logic aligned with the screen-reader path when text is large.
   const useInlineFab = screenReaderEnabled || fontScale >= 1.5
   const [displayNonVAMedsAlert, setDisplayNonVaMedsAlert] = useState<boolean>(false)
