@@ -2,16 +2,13 @@ import React from 'react'
 import { TextStyle } from 'react-native'
 
 import { InlineContent } from 'api/types'
-import { Box, LinkWithAnalytics, TextView } from 'components'
-import StructuredContentLink from 'components/StructuredContentRenderer/StructuredContentLink'
+import { TextView } from 'components'
 import type { FontVariant } from 'components/TextView'
-import {
-  displayedTextPhoneNumber,
-  getNumberAccessibilityLabelFromString,
-  getNumbersFromString,
-} from 'utils/formattingUtils'
+import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 const italicTextStyle: TextStyle = { fontStyle: 'italic' }
+
 /** Extracts plain text from InlineContent for use in accessibility labels. */
 export const getAccessibilityLabel = (content: InlineContent): string => {
   if (content == null) return ''
@@ -40,33 +37,29 @@ type InlineRendererProps = {
   styleOverride?: TextStyle
 }
 
-/** Renders inline content (bold, italic, link, telephone, lineBreak). */
+/**
+ * Renders text-like inline content (string, bold, italic, lineBreak) as nested
+ * TextView nodes. Must be placed inside a parent TextView for proper inline layout.
+ * Links and telephones are skipped (rendered as block-level elements by BlockRenderer).
+ */
 export const InlineRenderer = ({
   content,
   variantOverride,
   styleOverride,
 }: InlineRendererProps): React.ReactElement | null => {
   const variant = variantOverride ?? 'MobileBody'
+  const theme = useTheme()
+  const { condensedMarginBetween } = theme.dimensions
 
   if (content == null) return null
 
   if (typeof content === 'string') {
     if (!content) return null
-    // Words are split into individual TextViews so that plain text wraps alongside inline
-    // elements (links, bold, etc.) inside the flexDirection="row" flexWrap="wrap" container.
-    // React Native doesn't support true inline layout mixing Text and View components, so each
-    // word needs to be a separate flex item to allow natural line breaks.
-    const words = content.split(' ')
     return (
-      <>
-        {words.map((word, i) => (
-          <TextView key={i} variant={variant} style={styleOverride}>
-            {word}
-            {i < words.length - 1 ? ' ' : ''}
-          </TextView>
-        ))}
-      </>
-    ) as React.ReactElement
+      <TextView variant={variant} style={styleOverride} mb={condensedMarginBetween}>
+        {content}
+      </TextView>
+    )
   }
 
   if (Array.isArray(content)) {
@@ -90,23 +83,14 @@ export const InlineRenderer = ({
           styleOverride={{ ...styleOverride, ...italicTextStyle }}
         />
       )
-    case 'link': {
-      return <StructuredContentLink content={content} />
-    }
-    case 'telephone': {
-      const digits = getNumbersFromString(content.contact)
-      const displayText = content.tty
-        ? `TTY: ${displayedTextPhoneNumber(content.contact)}`
-        : displayedTextPhoneNumber(content.contact)
-      const a11yLabel = getNumberAccessibilityLabelFromString(content.contact)
-      return content.tty ? (
-        <LinkWithAnalytics type="call TTY" TTYnumber={digits} text={displayText} a11yLabel={a11yLabel} />
-      ) : (
-        <LinkWithAnalytics type="call" phoneNumber={digits} text={displayText} a11yLabel={a11yLabel} />
-      )
-    }
     case 'lineBreak':
-      return <Box width="100%" height={0} accessible={false} />
+      return <TextView mb={condensedMarginBetween}>{'\n'}</TextView>
+    case 'link':
+    case 'telephone':
+      // Links and telephones render as View-based components (Pressable/Box) which cannot
+      // nest inside a Text tree. BlockRenderer extracts them and renders them as block-level
+      // elements below the paragraph text.
+      return null
     default:
       return null
   }

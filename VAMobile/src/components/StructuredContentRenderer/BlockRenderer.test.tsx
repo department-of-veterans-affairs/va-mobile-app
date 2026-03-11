@@ -10,12 +10,25 @@ import { context, render } from 'testUtils'
 context('BlockRenderer', () => {
   it('should render paragraph with text content', () => {
     render(<BlockRenderer block={{ type: 'paragraph', content: 'Simple paragraph text' }} />)
-    expect(screen.getByText('Simple')).toBeTruthy()
-    expect(screen.getByText('paragraph')).toBeTruthy()
-    expect(screen.getByText('text')).toBeTruthy()
+    expect(screen.getByText('Simple paragraph text')).toBeTruthy()
   })
 
-  it('should render paragraph with inline elements', () => {
+  it('should render paragraph with inline bold and italic', () => {
+    render(
+      <BlockRenderer
+        block={{
+          type: 'paragraph',
+          content: ['Text with ', { type: 'bold', content: 'bold' }, ' and ', { type: 'italic', content: 'italic' }],
+        }}
+      />,
+    )
+    expect(screen.getByText('Text with ')).toBeTruthy()
+    expect(screen.getByText('bold')).toBeTruthy()
+    expect(screen.getByText(' and ')).toBeTruthy()
+    expect(screen.getByText('italic')).toBeTruthy()
+  })
+
+  it('should extract link from paragraph and render as block-level element', () => {
     render(
       <BlockRenderer
         block={{
@@ -24,8 +37,34 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('Visit')).toBeTruthy()
+    expect(screen.getByText('Visit ')).toBeTruthy()
     expect(screen.getByRole('link', { name: 'VA.gov' })).toBeTruthy()
+  })
+
+  it('should extract telephone from paragraph and render as block-level element', () => {
+    render(
+      <BlockRenderer
+        block={{
+          type: 'paragraph',
+          content: ['Call us:', { type: 'lineBreak' as const }, { type: 'telephone' as const, contact: '8008271000' }],
+        }}
+      />,
+    )
+    expect(screen.getByText('Call us:')).toBeTruthy()
+    expect(screen.getByRole('link', { name: '8 0 0 8 2 7 1 0 0 0' })).toBeTruthy()
+    expect(screen.getByText('800-827-1000')).toBeTruthy()
+  })
+
+  it('should render paragraph with only a link (no text content)', () => {
+    render(
+      <BlockRenderer
+        block={{
+          type: 'paragraph',
+          content: { type: 'link', text: 'Download form', href: '/form' },
+        }}
+      />,
+    )
+    expect(screen.getByRole('link', { name: 'Download form' })).toBeTruthy()
   })
 
   it('should render bullet list', () => {
@@ -38,10 +77,9 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getAllByText('Item')).toHaveLength(3)
-    expect(screen.getByText('1')).toBeTruthy()
-    expect(screen.getByText('2')).toBeTruthy()
-    expect(screen.getByText('3')).toBeTruthy()
+    expect(screen.getByText('Item 1')).toBeTruthy()
+    expect(screen.getByText('Item 2')).toBeTruthy()
+    expect(screen.getByText('Item 3')).toBeTruthy()
   })
 
   it('should render numbered list', () => {
@@ -59,24 +97,32 @@ context('BlockRenderer', () => {
     expect(screen.getByText('Third')).toBeTruthy()
   })
 
-  it('should render list with inline elements in items', () => {
+  it('should render list with inline bold in items', () => {
     render(
       <BlockRenderer
         block={{
           type: 'list',
           style: 'bullet',
-          items: [
-            'Simple item',
-            ['Item with ', { type: 'bold', content: 'bold text' }],
-            { type: 'link', text: 'Link item', href: '/test' },
-          ],
+          items: ['Simple item', ['Item with ', { type: 'bold', content: 'bold text' }]],
         }}
       />,
     )
-    expect(screen.getByText('Simple')).toBeTruthy()
-    expect(screen.getAllByText('item').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('bold')).toBeTruthy()
-    expect(screen.getByText('text')).toBeTruthy()
+    expect(screen.getByText('Simple item')).toBeTruthy()
+    expect(screen.getByText('Item with ')).toBeTruthy()
+    expect(screen.getByText('bold text')).toBeTruthy()
+  })
+
+  it('should render list item with link as block-level element', () => {
+    render(
+      <BlockRenderer
+        block={{
+          type: 'list',
+          style: 'bullet',
+          items: ['Text item', { type: 'link', text: 'Link item', href: '/test' }],
+        }}
+      />,
+    )
+    expect(screen.getByText('Text item')).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Link item' })).toBeTruthy()
   })
 
@@ -128,14 +174,12 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getAllByText('Valid').length).toBeGreaterThanOrEqual(2)
-    expect(screen.getAllByText('item').length).toBeGreaterThanOrEqual(2)
-    expect(screen.getByText('1')).toBeTruthy()
-    expect(screen.getByText('2')).toBeTruthy()
+    expect(screen.getByText('Valid item 1')).toBeTruthy()
+    expect(screen.getByText('Valid item 2')).toBeTruthy()
     expect(screen.queryByText('  ')).toBeNull()
   })
 
-  it('should keep object/array items for InlineRenderer to handle', () => {
+  it('should keep object/array items for rendering', () => {
     render(
       <BlockRenderer
         block={{
@@ -151,11 +195,10 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('String')).toBeTruthy()
-    expect(screen.getAllByText('item').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('Bold')).toBeTruthy()
-    expect(screen.getByText('object')).toBeTruthy()
-    expect(screen.getByText('Array')).toBeTruthy()
+    expect(screen.getByText('String item')).toBeTruthy()
+    expect(screen.getByText('Bold object')).toBeTruthy()
+    expect(screen.getByText('Array ')).toBeTruthy()
+    expect(screen.getByText('item')).toBeTruthy()
   })
 
   it('should filter out empty arrays', () => {
@@ -173,9 +216,9 @@ context('BlockRenderer', () => {
         }}
       />,
     )
-    expect(screen.getByText('string')).toBeTruthy()
-    expect(screen.getByText('object')).toBeTruthy()
-    expect(screen.getAllByText('Valid').length).toBeGreaterThanOrEqual(3)
+    expect(screen.getByText('Valid string')).toBeTruthy()
+    expect(screen.getByText('Valid object')).toBeTruthy()
+    expect(screen.getByText('Valid')).toBeTruthy()
     expect(screen.getByText(' array')).toBeTruthy()
   })
 })

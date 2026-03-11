@@ -31,9 +31,8 @@ context('StructuredContentRenderer', () => {
         testID="structured"
       />,
     )
-    expect(screen.getByText('First')).toBeTruthy()
-    expect(screen.getByText('Second')).toBeTruthy()
-    expect(screen.getAllByText('paragraph')).toHaveLength(2)
+    expect(screen.getByText('First paragraph')).toBeTruthy()
+    expect(screen.getByText('Second paragraph')).toBeTruthy()
   })
 
   it('should render paragraph and list blocks', () => {
@@ -52,42 +51,39 @@ context('StructuredContentRenderer', () => {
         testID="structured"
       />,
     )
-    expect(screen.getByText('Here')).toBeTruthy()
-    expect(screen.getByText('list:')).toBeTruthy()
-    expect(screen.getAllByText('Item')).toHaveLength(2)
-    expect(screen.getByText('1')).toBeTruthy()
-    expect(screen.getByText('2')).toBeTruthy()
+    expect(screen.getByText('Here is a list:')).toBeTruthy()
+    expect(screen.getByText('Item 1')).toBeTruthy()
+    expect(screen.getByText('Item 2')).toBeTruthy()
   })
 
-  it('should render content with links', () => {
+  it('should render content with links as block-level elements', () => {
     render(<StructuredContentRenderer content={contentWithLink} testID="structured" />)
-    expect(screen.getByText('Visit')).toBeTruthy()
+    expect(screen.getByText('Visit ')).toBeTruthy()
     const link = screen.getByRole('link', { name: 'VA Form 21-4142' })
     expect(link).toBeTruthy()
-    expect(screen.getByText('VA Form 21-4142')).toBeTruthy()
   })
 
-  it('should render content with telephone numbers', () => {
+  it('should render content with telephone numbers as block-level elements', () => {
     const content: StructuredContent = {
       blocks: [
         {
           type: 'paragraph',
           content: [
-            'Call us at ',
+            'If you need help, call:',
+            { type: 'lineBreak' as const },
             { type: 'telephone' as const, contact: '8008271000' },
-            ' or TTY ',
-            { type: 'telephone' as const, contact: '711', tty: true },
           ],
+        },
+        {
+          type: 'paragraph',
+          content: ['TTY:', { type: 'lineBreak' as const }, { type: 'telephone' as const, contact: '711', tty: true }],
         },
       ],
     }
     render(<StructuredContentRenderer content={content} testID="structured" />)
-    expect(screen.getByText('Call')).toBeTruthy()
-    expect(screen.getByText('us')).toBeTruthy()
-    expect(screen.getByText('at')).toBeTruthy()
-    expect(screen.getByText('or')).toBeTruthy()
-    expect(screen.getByText('TTY')).toBeTruthy()
+    expect(screen.getByText('If you need help, call:')).toBeTruthy()
     expect(screen.getByRole('link', { name: '8 0 0 8 2 7 1 0 0 0' })).toBeTruthy()
+    expect(screen.getByText('TTY:')).toBeTruthy()
     expect(screen.getByRole('link', { name: '7 1 1' })).toBeTruthy()
   })
 
@@ -111,17 +107,16 @@ context('StructuredContentRenderer', () => {
       ],
     }
     render(<StructuredContentRenderer content={content} testID="structured" />)
-    expect(screen.getByText('For')).toBeTruthy()
-    expect(screen.getByText('benefits')).toBeTruthy()
-    expect(screen.getByText('claim,')).toBeTruthy()
-    expect(screen.getByText('Personal')).toBeTruthy()
-    expect(screen.getAllByText('information').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('Medical')).toBeTruthy()
-    expect(screen.getByText('treatments')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'For your benefits claim, we need your permission to request your personal information from a non-VA source, like a private doctor or hospital.',
+      ),
+    ).toBeTruthy()
+    expect(screen.getByText('Personal information may include:')).toBeTruthy()
+    expect(screen.getByText('Medical treatments')).toBeTruthy()
     expect(screen.getByText('Hospitalizations')).toBeTruthy()
     expect(screen.getByText('Psychotherapy')).toBeTruthy()
-    expect(screen.getByText('Outpatient')).toBeTruthy()
-    expect(screen.getByText('care')).toBeTruthy()
+    expect(screen.getByText('Outpatient care')).toBeTruthy()
   })
 
   it('should return null for invalid content', () => {

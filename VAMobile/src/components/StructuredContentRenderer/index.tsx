@@ -19,7 +19,7 @@ const StructuredContentRenderer = ({ content, testID }: StructuredContentRendere
   return (
     <Box testID={testID}>
       {content.blocks.map((block, idx) => (
-        <BlockRenderer key={idx} block={block} />
+        <BlockRenderer key={idx} block={block} isLast={idx === content.blocks.length - 1} />
       ))}
     </Box>
   )

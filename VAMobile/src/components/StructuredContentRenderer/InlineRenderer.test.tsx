@@ -8,114 +8,68 @@ import { InlineRenderer } from 'components/StructuredContentRenderer/InlineRende
 import { context, render } from 'testUtils'
 
 context('InlineRenderer', () => {
-  it('should render string content', () => {
+  it('should render string content as a single text node', () => {
     render(<InlineRenderer content="Plain text" />)
-    expect(screen.getByText('Plain')).toBeTruthy()
-    expect(screen.getByText('text')).toBeTruthy()
+    expect(screen.getByText('Plain text')).toBeTruthy()
   })
 
   it('should render array of strings', () => {
-    render(<InlineRenderer content={['Hello', ' ', 'World']} />)
+    render(
+      <TextView>
+        <InlineRenderer content={['Hello', ' ', 'World']} />
+      </TextView>,
+    )
     expect(screen.getByText('Hello')).toBeTruthy()
     expect(screen.getByText('World')).toBeTruthy()
   })
 
-  it('should render mixed array with links', () => {
-    render(<InlineRenderer content={['Visit ', { type: 'link', text: 'VA.gov', href: '/test' }, ' for more info']} />)
-    expect(screen.getByText('Visit')).toBeTruthy()
-    expect(screen.getByText('for')).toBeTruthy()
-    expect(screen.getByText('more')).toBeTruthy()
-    expect(screen.getByText('info')).toBeTruthy()
-    const link = screen.getByRole('link', { name: 'VA.gov' })
-    expect(link).toBeTruthy()
-    expect(link.props.accessibilityLabel).toBe('VA.gov')
-  })
-
   it('should render bold text', () => {
     render(<InlineRenderer content={{ type: 'bold', content: 'Bold text' }} />)
-    expect(screen.getByText('Bold')).toBeTruthy()
-    expect(screen.getByText('text')).toBeTruthy()
+    expect(screen.getByText('Bold text')).toBeTruthy()
   })
 
   it('should render italic text', () => {
     render(<InlineRenderer content={{ type: 'italic', content: 'Italic text' }} />)
-    expect(screen.getByText('Italic')).toBeTruthy()
-    expect(screen.getByText('text')).toBeTruthy()
+    expect(screen.getByText('Italic text')).toBeTruthy()
   })
 
-  it('should render link', () => {
-    render(<InlineRenderer content={{ type: 'link', text: 'Test Link', href: '/test' }} />)
-    const link = screen.getByRole('link', { name: 'Test Link' })
-    expect(link).toBeTruthy()
-    expect(link.props.accessibilityLabel).toBe('Test Link')
-  })
-
-  it('should render link with mobileText when provided', () => {
+  it('should render line break as newline character', () => {
     render(
-      <InlineRenderer
-        content={{
-          type: 'link',
-          text: 'VA Form 21-4142',
-          href: '/find-forms/about-form-21-4142/',
-          mobileText: 'Get VA Form 21-4142 on VA.gov',
-        }}
-      />,
+      <TextView>
+        <InlineRenderer content={['Before', { type: 'lineBreak' }, 'After'] as InlineContent} />
+      </TextView>,
     )
-    const link = screen.getByRole('link', { name: 'Get VA Form 21-4142 on VA.gov' })
-    expect(link).toBeTruthy()
-    expect(link.props.accessibilityLabel).toBe('Get VA Form 21-4142 on VA.gov')
+    expect(screen.getByText('Before')).toBeTruthy()
+    expect(screen.getByText('After')).toBeTruthy()
   })
 
-  it('should fall back to text when mobileText is null', () => {
-    render(
-      <InlineRenderer
-        content={{
-          type: 'link',
-          text: 'Add or change direct deposit information',
-          href: '/profile/direct-deposit',
-          mobileText: null,
-        }}
-      />,
-    )
-    const link = screen.getByRole('link', { name: 'Add or change direct deposit information' })
-    expect(link.props.accessibilityLabel).toBe('Add or change direct deposit information')
-  })
-
-  it('should fall back to text when mobileText is absent', () => {
-    render(<InlineRenderer content={{ type: 'link', text: 'Legacy link text', href: '/some-path' }} />)
-    const link = screen.getByRole('link', { name: 'Legacy link text' })
-    expect(link.props.accessibilityLabel).toBe('Legacy link text')
-  })
-
-  it('should render telephone', () => {
-    render(<InlineRenderer content={{ type: 'telephone', contact: '8008271000' }} />)
-    const link = screen.getByRole('link', { name: '8 0 0 8 2 7 1 0 0 0' })
-    expect(link).toBeTruthy()
-    expect(link.props.accessibilityLabel).toBe('8 0 0 8 2 7 1 0 0 0')
-    expect(screen.getByText('800-827-1000')).toBeTruthy()
-  })
-
-  it('should render telephone with TTY', () => {
-    render(<InlineRenderer content={{ type: 'telephone', contact: '711', tty: true }} />)
-    const link = screen.getByRole('link', { name: '7 1 1' })
-    expect(link).toBeTruthy()
-    expect(link.props.accessibilityLabel).toBe('7 1 1')
-    expect(screen.getByText('TTY: 711')).toBeTruthy()
-  })
-
-  it('should render line break', () => {
-    render(<InlineRenderer content={{ type: 'lineBreak' }} />)
-    expect(screen.queryByText('\n')).toBeNull()
-  })
-
-  it('should handle nested content', () => {
+  it('should handle nested content (bold + italic)', () => {
     render(
       <InlineRenderer content={{ type: 'bold', content: ['This is ', { type: 'italic', content: 'bold italic' }] }} />,
     )
-    expect(screen.getByText('This')).toBeTruthy()
-    expect(screen.getByText('is')).toBeTruthy()
-    expect(screen.getByText('bold')).toBeTruthy()
-    expect(screen.getByText('italic')).toBeTruthy()
+    expect(screen.getByText('This is ')).toBeTruthy()
+    expect(screen.getByText('bold italic')).toBeTruthy()
+  })
+
+  it('should skip link elements (rendered by BlockRenderer)', () => {
+    render(
+      <TextView>
+        <InlineRenderer content={['Before ', { type: 'link', text: 'Link', href: '/test' }, ' after']} />
+      </TextView>,
+    )
+    expect(screen.getByText('Before ')).toBeTruthy()
+    expect(screen.getByText(' after')).toBeTruthy()
+    expect(screen.queryByRole('link')).toBeNull()
+  })
+
+  it('should skip telephone elements (rendered by BlockRenderer)', () => {
+    render(
+      <TextView>
+        <InlineRenderer content={['Call ', { type: 'telephone', contact: '8008271000' }]} />
+      </TextView>,
+    )
+    expect(screen.getByText('Call ')).toBeTruthy()
+    expect(screen.queryByRole('link')).toBeNull()
   })
 
   it('should return null for invalid content', () => {
