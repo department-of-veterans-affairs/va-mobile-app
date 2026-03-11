@@ -75,6 +75,21 @@ context('StructuredContentLink', () => {
     expect(screen.getByRole('link', { name: 'External link' })).toBeTruthy()
   })
 
+  it('treats non-VA.gov URL with same path as external (does not navigate to DirectDeposit)', () => {
+    render(
+      <StructuredContentLink
+        content={{
+          type: 'link',
+          text: 'Fake direct deposit',
+          href: 'https://example.com/profile/direct-deposit',
+          isWebview: false,
+        }}
+      />,
+    )
+    fireEvent.press(screen.getByRole('link', { name: 'Fake direct deposit' }))
+    expect(mockNavigateTo).not.toHaveBeenCalledWith('DirectDeposit')
+  })
+
   it('fires vama_link_click exactly once for webview link', () => {
     render(
       <StructuredContentLink

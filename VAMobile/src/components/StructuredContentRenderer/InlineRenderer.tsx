@@ -56,7 +56,7 @@ export const InlineRenderer = ({
   if (typeof content === 'string') {
     if (!content) return null
     return (
-      <TextView variant={variant} style={styleOverride} mb={condensedMarginBetween}>
+      <TextView variant={variant} style={styleOverride}>
         {content}
       </TextView>
     )

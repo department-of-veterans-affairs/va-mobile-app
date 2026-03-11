@@ -8,13 +8,23 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation } from 'utils/hooks'
 import { vaGovWebviewTitle } from 'utils/webview'
 
-/** True if the URL is the VA.gov profile direct deposit path (any env). */
+/** True if the URL is the VA.gov profile direct deposit path (relative or absolute from va.gov). */
 const isDirectDepositProfileUrl = (url: string): boolean => {
+  const path = '/profile/direct-deposit'
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    try {
+      const resolvedPath = new URL(url, 'https://www.va.gov').pathname
+      return resolvedPath === path
+    } catch {
+      return url.includes('profile/direct-deposit')
+    }
+  }
   try {
-    const path = new URL(url, 'https://www.va.gov').pathname
-    return path === '/profile/direct-deposit'
+    const parsed = new URL(url)
+    const isVaGov = parsed.hostname === 'va.gov' || parsed.hostname.endsWith('.va.gov')
+    return isVaGov && parsed.pathname === path
   } catch {
-    return url.includes('profile/direct-deposit')
+    return false
   }
 }
 
