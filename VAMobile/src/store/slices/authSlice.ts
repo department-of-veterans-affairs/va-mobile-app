@@ -70,7 +70,6 @@ export type AuthState = {
   displayBiometricsPreferenceScreen: boolean
   codeVerifier?: string
   codeChallenge?: string
-  authorizeStateParam?: string
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
   requestNotificationsPreferenceScreen?: boolean
@@ -242,9 +241,8 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
 
 export const setPKCEParams = (): AppThunk => async (dispatch) => {
   dispatch(dispatchStartAuthorizeParams())
-  const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
-  console.debug('PKCE params: ', codeVerifier, codeChallenge, stateParam)
-  dispatch(dispatchStoreAuthorizeParams({ codeVerifier, codeChallenge, authorizeStateParam: stateParam }))
+  const { codeVerifier, codeChallenge } = await pkceAuthorizeParams()
+  dispatch(dispatchStoreAuthorizeParams({ codeVerifier, codeChallenge }))
 }
 
 export const loginStart =
@@ -435,8 +433,6 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     }
     const authResponse = (await response.json())?.data as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
-    // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
-    // state is not uniformly supported on the token exchange request so may not be necessary
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
@@ -685,7 +681,6 @@ export const handleTokenCallbackUrl =
       dispatch(dispatchStartAuthLogin(true))
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
-      // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL)
       await clearCookies()
       const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
@@ -730,14 +725,12 @@ export const sendLoginStartAnalytics =
     await logAnalyticsEvent(Events.vama_login_start(biometric))
   }
 
-export const startWebLogin = (): AppThunk => async (dispatch) => {
+export const startWebLogin = (): AppThunk => async (dispatch, getState) => {
   await clearCookies()
-  // TODO: modify code challenge and state based on
-  // what will be used in LoginSuccess.js for the token exchange.
-  // The code challenge is a SHA256 hash of the code verifier string.
+  const { codeChallenge } = getState().auth
   const params = new URLSearchParams({
     code_challenge_method: 'S256',
-    code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
+    code_challenge: codeChallenge ?? '',
     application: 'vamobile',
     oauth: 'true',
   }).toString()
@@ -801,7 +794,6 @@ const authSlice = createSlice({
         displayBiometricsPreferenceScreen: true,
         codeVerifier: state.codeVerifier,
         codeChallenge: state.codeChallenge,
-        authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
         requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
@@ -825,10 +817,9 @@ const authSlice = createSlice({
       state.authParamsLoadingState = AuthParamsLoadingStateTypeConstants.LOADING
     },
     dispatchStoreAuthorizeParams: (state, action: PayloadAction<AuthSetAuthorizeRequestParamsPayload>) => {
-      const { codeVerifier, codeChallenge, authorizeStateParam } = action.payload
+      const { codeVerifier, codeChallenge } = action.payload
       state.codeVerifier = codeVerifier
       state.codeChallenge = codeChallenge
-      state.authorizeStateParam = authorizeStateParam
       state.authParamsLoadingState = AuthParamsLoadingStateTypeConstants.READY
     },
     dispatchDemoLogin: (state) => {

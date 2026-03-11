@@ -232,10 +232,9 @@ context('authAction SIS', () => {
         dispatchStoreAuthorizeParams({
           codeVerifier: 'mylongcodeverifier',
           codeChallenge: 'mycodechallenge',
-          authorizeStateParam: '2355adfs',
         }),
       )
-      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa'))
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.AUTH_START_LOGIN })
       expect(startAction).toBeTruthy()
