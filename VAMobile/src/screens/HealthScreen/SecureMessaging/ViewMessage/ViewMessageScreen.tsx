@@ -264,7 +264,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       const folderName = folder.attributes.name
       return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent
     }).map((folder) => {
-      var label = folder.attributes.name
+      let label = folder.attributes.name
 
       const icon = {
         fill: 'base',
