@@ -19,15 +19,6 @@ on:
         required: true
 
 jobs:
-  tmate:
-    name: Setup tmate session
-    uses: mxschmitt/action-tmate@v3
-    env:
-      APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD}}
-      APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
-      APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
-      VA_MOBILE_ROBOT_GITHUB_SSH_KEY: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
-      APPSTORE_CONNECT_BASE64: ${{ secrets.APPSTORE_CONNECT_BASE64 }}
   queue_build:
     name: Queue Build
     uses: ./.github/workflows/queue_builds.yml
@@ -38,6 +29,14 @@ jobs:
     outputs:
       notes_sanitized: ${{ steps.sanitize.outputs.notes_sanitized }}
     steps:
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        env:
+          APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD}}
+          APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
+          APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+          VA_MOBILE_ROBOT_GITHUB_SSH_KEY: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
+          APPSTORE_CONNECT_BASE64: ${{ secrets.APPSTORE_CONNECT_BASE64 }}
       - id: sanitize
         env:
           NOTES_INPUT: ${{ github.event.inputs.notes }}
