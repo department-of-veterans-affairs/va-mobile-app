@@ -19,7 +19,8 @@ on:
         required: true
 
 jobs:
-  - name: Setup tmate session
+  tmate:
+    name: Setup tmate session
     uses: mxschmitt/action-tmate@v3
     env:
       APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD}}
