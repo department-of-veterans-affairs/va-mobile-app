@@ -262,13 +262,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {
       const folderName = folder.attributes.name
-      return (
-        folderName !== FolderNameTypeConstants.drafts &&
-        folderName !== FolderNameTypeConstants.sent &&
-        folderName !== FolderNameTypeConstants.deleted
-      )
+      return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent
     }).map((folder) => {
-      const label = folder.attributes.name
+      var label = folder.attributes.name
 
       const icon = {
         fill: 'base',
@@ -282,13 +278,25 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         icon.name = 'Inbox'
       }
 
+      if (label === FolderNameTypeConstants.deleted) {
+        icon.fill = 'base'
+        icon.name = 'Delete'
+        label = 'Trash'
+      }
+
       return {
         label,
         value: folder.id,
         icon,
       }
     })
-    return filteredFolder
+    return filteredFolder.sort((a, b) => {
+      if (a.label === FolderNameTypeConstants.inbox) return -1
+      if (b.label === FolderNameTypeConstants.inbox) return 1
+      if (a.label === 'Trash') return -1
+      if (b.label === 'Trash') return 1
+      return a.label.localeCompare(b.label)
+    })
   }
 
   const providerAllowsReply = !message?.replyDisabled
