@@ -25,9 +25,9 @@ export const ReviewPrescriptionsE2eIdConstants = {
   PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: Test VA Medical Center',
   PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
-  PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT:
+  PRESCRIPTION_TRACKING_DESCRIPTION_1_TEXT:
     "We share tracking information here for up to 15 days, even if you've received your prescription.",
-  PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL:
+  PRESCRIPTION_TRACKING_DESCRIPTION_2_LABEL:
     'If the delivery service changes, we may change or delete the tracking number. If you have questions, contact your local  V-A  pharmacy.',
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
@@ -186,11 +186,9 @@ describeWithSetupPrescriptions('Review prescription tracking information', () =>
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('bottom', 0.5, 0.5)
     await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
     await expect(element(by.label('Prescription number 2 7 2 0 1 9 2 A')).atIndex(0)).toExist()
+    await expect(element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_DESCRIPTION_1_TEXT))).toExist()
     await expect(
-      element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT)),
-    ).toExist()
-    await expect(
-      element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_2_LABEL)),
+      element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_DESCRIPTION_2_LABEL)),
     ).toExist()
     await expect(element(by.text('Package 1 of 2'))).toExist()
     await expect(element(by.text('Tracking number')).atIndex(0)).toExist()
