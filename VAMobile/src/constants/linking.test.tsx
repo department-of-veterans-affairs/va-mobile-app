@@ -4,6 +4,9 @@ type LinkingConfig = Parameters<NonNullable<typeof linking.getStateFromPath>>[1]
 const linkingConfig = linking.config as LinkingConfig
 
 describe('linking', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
   describe('getStateFromPath', () => {
     describe('track-claims/your-claim-letters/link', () => {
       it('should navigate to ClaimLettersScreen when path is /track-claims/your-claim-letters/link', () => {
@@ -73,11 +76,27 @@ describe('linking', () => {
         expect(state).toBeUndefined()
       })
 
-      it('should not match when path has extra segments', () => {
-        const path = '/track-claims/your-claim-letters/link/extra'
+      it('should strip query parameters and still navigate correctly', () => {
+        const path = '/track-claims/your-claim-letters/link?messageID=456&read=true'
         const state = linking.getStateFromPath?.(path, linkingConfig)
 
-        expect(state).toBeUndefined()
+        expect(state).toEqual({
+          routes: [
+            {
+              name: 'Tabs',
+              state: {
+                routes: [
+                  {
+                    name: 'BenefitsTab',
+                    state: {
+                      routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        })
       })
     })
 

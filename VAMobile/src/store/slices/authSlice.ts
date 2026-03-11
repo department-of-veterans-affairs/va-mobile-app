@@ -355,12 +355,6 @@ const storeRefreshToken = async (
     AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
   ])
-    .then(async () => {
-      await logAnalyticsEvent(Events.vama_login_token_store(true))
-    })
-    .catch(async () => {
-      await logAnalyticsEvent(Events.vama_login_token_store(false))
-    })
 }
 
 /**
