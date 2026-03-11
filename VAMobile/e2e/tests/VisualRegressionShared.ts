@@ -261,17 +261,21 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       // FeatureLandingAndChildTemplate's VAScrollView frame extends behind the floating
       // footer button and tab bar, failing Detox's 100% visibility requirement for
       // whileElement().scroll(). Can be replaced if we fix https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12914
+      const prescriptionDetailsElement = element(by.id(CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).atIndex(0)
+      let prescriptionDetailsVisible = false
       for (let i = 0; i < 10; i++) {
         try {
-          await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
-            .toBeVisible()
-            .withTimeout(1000)
+          await waitFor(prescriptionDetailsElement).toBeVisible().withTimeout(1000)
+          prescriptionDetailsVisible = true
           break
         } catch {
           await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(150, 'down', 0.5, 0.5)
         }
       }
-      await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
+      if (!prescriptionDetailsVisible) {
+        await waitFor(prescriptionDetailsElement).toBeVisible().withTimeout(1000)
+      }
+      await prescriptionDetailsElement.tap()
       await device.enableSynchronization()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
