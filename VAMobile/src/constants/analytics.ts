@@ -38,7 +38,7 @@ export const Events = {
       name: 'vama_lab_or_test_list',
       params: {
         p1: timeFrame,
-        p2: count,
+        count,
       },
     }
   },
@@ -95,7 +95,7 @@ export const Events = {
         p1: apt_id,
         p2: apt_status,
         p3: apt_type,
-        p4: days_to_apt,
+        p4: `${days_to_apt}`,
       },
     }
   },
@@ -106,7 +106,7 @@ export const Events = {
         p1: apt_id,
         p2: apt_status,
         p3: apt_type,
-        p4: days_to_apt,
+        p4: `${days_to_apt}`,
       },
     }
   },
@@ -123,7 +123,7 @@ export const Events = {
         p1: apt_id,
         p2: apt_status,
         p3: apt_type,
-        p4: days_to_apt,
+        p4: `${days_to_apt}`,
         p5: step,
       },
     }
@@ -185,11 +185,11 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
-        p4: step_expanded,
+        p3: `${claim_step}`,
+        p4: `${step_expanded}`,
         p5: claim_step_change,
         p6: claim_submitted_date,
-        p7: claim_current_step,
+        p7: `${claim_current_step}`,
       },
     }
   },
