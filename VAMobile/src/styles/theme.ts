@@ -226,6 +226,7 @@ export type VATheme = {
     buttonPadding: number
     alertBorderWidth: number
     listItemDecoratorMarginLeft: number
+    listItemMinWidth: number
     touchableMinHeight: number
     textAndButtonLargeMargin: number
     headerHeight: number

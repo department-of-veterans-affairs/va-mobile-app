@@ -51,7 +51,7 @@ type BlockRendererProps = {
 /** Renders one block: paragraph, list, or line break. */
 export const BlockRenderer = ({ block, isLast }: BlockRendererProps): React.ReactElement | null => {
   const theme = useTheme()
-  const { listItemDecoratorMarginLeft, lineItemSpacing, inputPadding } = theme.dimensions
+  const { listItemDecoratorMarginLeft, listItemMinWidth } = theme.dimensions
   const { t } = useTranslation(NAMESPACE.COMMON)
   const marginBetween = isLast ? 0 : theme.dimensions.standardMarginBetween
 
@@ -114,15 +114,15 @@ export const BlockRenderer = ({ block, isLast }: BlockRendererProps): React.Reac
                     : undefined
                 }>
                 {block.style === 'numbered' ? (
-                  <Box mr={listItemDecoratorMarginLeft} minWidth={lineItemSpacing} accessible={false}>
+                  <Box ml={listItemDecoratorMarginLeft} minWidth={listItemMinWidth} accessible={false}>
                     <TextView variant="MobileBody">{idx + 1}.</TextView>
                   </Box>
                 ) : (
-                  <Box mr={listItemDecoratorMarginLeft} mt={inputPadding} accessible={false}>
+                  <Box ml={listItemDecoratorMarginLeft} minWidth={listItemMinWidth} my="auto" accessible={false}>
                     <Box backgroundColor="bullet" height={6} width={6} />
                   </Box>
                 )}
-                <Box flex={1}>
+                <Box flex={1} ml={listItemDecoratorMarginLeft}>
                   {textContent != null && (
                     <TextView variant="MobileBody">
                       <InlineRenderer content={textContent} />
