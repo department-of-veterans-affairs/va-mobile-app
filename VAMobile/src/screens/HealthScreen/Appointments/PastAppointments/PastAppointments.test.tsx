@@ -6,11 +6,13 @@ import { DateTime } from 'luxon'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
-import { RenderParams, context, mockNavProps, render } from 'testUtils'
+import { RenderParams, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 
@@ -65,6 +67,8 @@ context('PastAppointments', () => {
     getFormattedDateWithWeekdayForTimeZone(mockStartDateUTC, 'America/Los_Angeles') +
     ' ' +
     getFormattedTimeForTimeZone(mockStartDateUTC, 'America/Los_Angeles')
+  const mockSetTimeFrame = jest.fn()
+  const mockSetDateRange = jest.fn()
 
   const appointmentData = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
@@ -115,6 +119,8 @@ context('PastAppointments', () => {
         page={1}
         setPage={jest.fn()}
         loading={loading}
+        setTimeFrame={mockSetTimeFrame}
+        setDateRange={mockSetDateRange}
       />,
       { ...options },
     )
@@ -276,6 +282,49 @@ context('PastAppointments', () => {
 
       expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
       expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
+    })
+  })
+
+  describe('when useOldDatePicker feature toggle is true', () => {
+    beforeAll(() => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('useOldDatePicker')
+        .mockReturnValue(true)
+    })
+
+    it('displays the old date picker instead of the new date picker', () => {
+      initializeTestInstance({ data: appointmentData() })
+
+      expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
+      expect(screen.getByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
+
+      expect(screen.queryByText(t('pastAppointments.selectAPastDateRange'))).toBeFalsy()
+      expect(screen.queryByText(t('reset'))).toBeFalsy()
+      expect(screen.queryByText(t('datePicker.from'))).toBeFalsy()
+      expect(screen.queryByText(t('datePicker.to'))).toBeFalsy()
+      expect(screen.queryByRole('button', { name: t('apply') })).toBeFalsy()
+    })
+
+    it('sets the correct timeframe and date range when a different date range is selected', async () => {
+      const todaysDate = DateTime.local()
+      const currentYear = todaysDate.year
+
+      const expectedDateRange = {
+        startDate: todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 }).startOf('day').toISO(),
+        endDate: todaysDate.endOf('day').toISO(),
+      }
+
+      initializeTestInstance({ data: appointmentData() })
+
+      // Open the old picker and select a different range (e.g., past year).
+      fireEvent.press(screen.getByText(t('pastAppointments.pastThreeMonths')))
+      await waitFor(() => expect(screen.getByText(t('pastAppointments.allOf', { year: currentYear }))).toBeTruthy())
+      fireEvent.press(screen.getByText(t('pastAppointments.allOf', { year: currentYear })))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
+
+      // Verify that setTimeFrame and setDateRange were called with the correct arguments
+      expect(mockSetTimeFrame).toHaveBeenCalledWith(TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR)
+      expect(mockSetDateRange).toHaveBeenCalledWith(expectedDateRange)
     })
   })
 })

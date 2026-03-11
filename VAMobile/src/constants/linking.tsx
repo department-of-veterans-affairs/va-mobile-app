@@ -6,6 +6,8 @@ import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import queryClient from 'api/queryClient'
 import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
 import { LoadingComponent } from 'components'
+import { Events } from 'constants/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
 
 const authorizedServices = queryClient.getQueryData(
   authorizedServicesKeys.authorizedServices,
@@ -176,9 +178,10 @@ export const linking: LinkingOptions<any> = {
     } else if (
       pathParts[0] === 'track-claims' &&
       pathParts[1] === 'your-claim-letters' &&
-      pathParts[2] === 'link' &&
-      pathParts.length === 3
+      pathParts[2]?.split('?')[0] === 'link'
     ) {
+      logAnalyticsEvent(Events.vama_claim_letters_link())
+
       return {
         routes: [
           {
