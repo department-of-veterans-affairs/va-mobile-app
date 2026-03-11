@@ -1,5 +1,4 @@
-<!-- There is no requirement to implement the suggestions but please respond to Copilot review comments in some way. 
-Unaddressed comments will prevent the PR from moving to the QA process -->
+There is no requirement to implement the suggestions but please respond to Copilot review comments in some way. Unaddressed comments will prevent the PR from moving to the QA process.
 
 ## Description of Change
 <!-- Please include a description of the change and context. What would a code reviewer, or a future dev, 
@@ -14,7 +13,7 @@ whether the PR is ready for review and meets expected criteria. If the requested
 the PO/OCTO stakeholder requesting that timeline and notify the mobile app Slack channel. -->
 
 ## Link to Issue
-<!-- Link to an issue using a [keyword with your issue number](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue). Your pull request is required to be linked to an issue in order for the pull request to Activate. -->
+<!-- Link to an issue using a [keyword with your issue number](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue). Your pull request is required to be linked to an issue or have the no-issue label attached. -->
 ## Code testing
 
 - [ ] Unit tests have been created or updated to cover this change
