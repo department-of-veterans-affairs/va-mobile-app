@@ -37,6 +37,21 @@ jobs:
           APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
           VA_MOBILE_ROBOT_GITHUB_SSH_KEY: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
           APPSTORE_CONNECT_BASE64: ${{ secrets.APPSTORE_CONNECT_BASE64 }}
+          DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+          # Android Key Store Key Alias
+          ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+          # Android Key Store Key Alias Password
+          ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+          # Android Key Store Key Password
+          ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
+          # App ID for Android project in Firebase
+          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          # Filepath for firebase distribution key. Also used by fastlane
+          FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+          GOOGLE_KS: ${{ secrets.GOOGLE_KS }}
+          GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
+          FIREBASE_DIST_FILE_BASE64: ${{ secrets.FIREBASE_DIST_FILE_BASE64 }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       - id: sanitize
         env:
           NOTES_INPUT: ${{ github.event.inputs.notes }}
