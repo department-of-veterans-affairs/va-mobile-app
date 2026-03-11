@@ -1,6 +1,6 @@
 ---
 title: Small code changes or bug fixes
-sidebar_position: 2
+sidebar_position: 3
 ---
 ## Full feature workflow process or pull request?  
 There is no 'minimum speed limit' in regards to applying the steps in the full feature workflow process and engaging the Mobile App Platform team for assistance in your delivery. We suggest any work that extends beyond 1 or 2 reasonably sized pull requests go through the full workflow process in order to potentially head off issues you would face at peer review/UX review. If you have questions about whether you should use the full process or the standalone pull request requirements, feel free to ask in one of our public channels.

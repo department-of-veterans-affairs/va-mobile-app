@@ -21,7 +21,8 @@ The following channels can be used to communicate async with the VA Mobile App a
 Please message our team in the above channels if you would like to request an ad hoc conversation  
 
 **Mobile Platform Resources**
-* [VA Mobile Docs site](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro/) - primary resource with written guidance for VA Mobile App Builders  
+* [VA Mobile Docs site](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro/) - primary resource with written guidance for VA Mobile App Builders
+* [Monitoring and alerting requirements](/gettingStarted/Contributing/Monitoring) - requirements and best practices for feature teams integrating with the Mobile App
 * [Design Template for Figma files](https://dsva.slack.com/archives/C018V2JCWRJ/p1742938101306709) - format and guidance for organizing VA Mobile App Figma work.
 * [Mobile PRs board](https://github.com/orgs/department-of-veterans-affairs/projects/1633/views/1) - GitHub project showing the status of all PRs related to the VA Mobile App
 * [Global Mobile board](https://github.com/orgs/department-of-veterans-affairs/projects/1631) - GitHub project showing all active and upcoming work for the VA Mobile App
