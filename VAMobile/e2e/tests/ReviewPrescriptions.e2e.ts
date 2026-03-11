@@ -6,7 +6,7 @@ This script should be updated whenever new things are added/changed in prescript
 */
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions, toggleRemoteConfigFlag } from './utils'
+import { CommonE2eIdConstants, describeWithSetupPrescriptions, toggleRemoteConfigFlag } from './utils'
 
 export const ReviewPrescriptionsE2eIdConstants = {
   PRESCRIPTION_HISTORY_SCROLL_TARGET: 'METFORMIN HCL 500MG TAB',
@@ -38,25 +38,11 @@ export const ReviewPrescriptionsE2eIdConstants = {
 
 const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 
-const describeWithSetup = (name: string, fn: jest.EmptyFunction) => {
-  describe(name, () => {
-    beforeAll(async () => {
-      await loginToDemoMode()
-      await openHealth()
-      await openPrescriptions()
-    })
-    afterAll(async () => {
-      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    })
-    fn()
-  })
-}
-
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
 })
 
-describeWithSetup('Review prescriptions list', () => {
+describeWithSetupPrescriptions('Review prescriptions list', () => {
   it('should match the prescription page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID))).toExist()
     await expect(element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID))).toExist()
@@ -149,7 +135,7 @@ describeWithSetup('Review prescriptions list', () => {
   })
 })
 
-describeWithSetup('Review prescription details', () => {
+describeWithSetupPrescriptions('Review prescription details', () => {
   it('should verify prescription details information', async () => {
     await waitFor(element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_TARGET)))
       .toBeVisible()
@@ -185,7 +171,7 @@ describeWithSetup('Review prescription details', () => {
   })
 })
 
-describeWithSetup('Review prescription tracking information', () => {
+describeWithSetupPrescriptions('Review prescription tracking information', () => {
   it('should filter out prescriptions without tracking information', async () => {
     await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
     await element(by.text('Tracking (1)')).tap()

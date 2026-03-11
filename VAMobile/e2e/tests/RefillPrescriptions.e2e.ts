@@ -6,7 +6,7 @@ This script should be updated whenever new things are added/changed in prescript
 */
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions, toggleRemoteConfigFlag } from './utils'
+import { CommonE2eIdConstants, describeWithSetupPrescriptions, toggleRemoteConfigFlag } from './utils'
 
 export const RefillPrescriptionsE2eIdConstants = {
   PRESCRIPTIONS_HEADER_TEXT: 'Prescriptions',
@@ -37,25 +37,11 @@ export const RefillPrescriptionsE2eIdConstants = {
   PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: Test VA Medical Center',
 }
 
-const describeWithSetup = (name: string, fn: jest.EmptyFunction) => {
-  describe(name, () => {
-    beforeAll(async () => {
-      await loginToDemoMode()
-      await openHealth()
-      await openPrescriptions()
-    })
-    afterAll(async () => {
-      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    })
-    fn()
-  })
-}
-
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
 })
 
-describeWithSetup('Start a refill request for a single prescription', () => {
+describeWithSetupPrescriptions('Start a refill request for a single prescription', () => {
   it('should display confirmation modal when refill request button is pressed in prescription details', async () => {
     // Scroll until the 'Get prescription details' link for AMLODIPINE BESYLATE 10MG TAB is accessible
     await waitFor(element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_TARGET)))
@@ -114,7 +100,7 @@ describeWithSetup('Start a refill request for a single prescription', () => {
   })
 })
 
-describeWithSetup('Start a refill request for multiple prescriptions', () => {
+describeWithSetupPrescriptions('Start a refill request for multiple prescriptions', () => {
   it('should open refill request screen when "Start refill request" button is pressed', async () => {
     await element(by.label(RefillPrescriptionsE2eIdConstants.PRESCRIPTION_FLOATING_REQUEST_REFILL_BUTTON_TEXT)).tap()
     await expect(
