@@ -260,7 +260,7 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       // by.text so it remains hittable with large text. Loop is needed because
       // FeatureLandingAndChildTemplate's VAScrollView frame extends behind the floating
       // footer button and tab bar, failing Detox's 100% visibility requirement for
-      // whileElement().scroll().
+      // whileElement().scroll(). Can be replaced if we fix https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12914
       for (let i = 0; i < 10; i++) {
         try {
           await waitFor(element(by.id('prescriptionDetailsTestID')).atIndex(0))
