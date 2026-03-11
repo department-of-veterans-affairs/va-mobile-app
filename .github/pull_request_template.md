@@ -13,7 +13,9 @@ whether the PR is ready for review and meets expected criteria. If the requested
 the PO/OCTO stakeholder requesting that timeline and notify the mobile app Slack channel. -->
 
 ## Link to Issue
-<!-- Link to an issue using a [keyword with your issue number](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue). Your pull request is required to be linked to an issue or have the no-issue label attached. -->
+<!-- Link to an issue using a [keyword](https://docs.github.
+com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) with your issue number such as closes "#123" or "fixes #123". Your pull request is required to be linked to an issue or have the no-issue label attached. -->
+
 ## Code testing
 
 - [ ] Unit tests have been created or updated to cover this change
