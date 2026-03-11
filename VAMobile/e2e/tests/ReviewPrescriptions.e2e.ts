@@ -9,19 +9,20 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { CommonE2eIdConstants, loginToDemoMode, openHealth, openPrescriptions, toggleRemoteConfigFlag } from './utils'
 
 export const ReviewPrescriptionsE2eIdConstants = {
+  PRESCRIPTION_HISTORY_SCROLL_TARGET: 'METFORMIN HCL 500MG TAB',
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
   PRESCRIPTION_FILTER_MODAL_ID: 'ModalTestID',
   PRESCRIPTION_FILTER_APPLY_ID: 'radioButtonApplyTestID',
   PRESCRIPTION_ALL_DESCRIPTION_LABEL:
     'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
-  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (3), sorted by status (A to Z)',
+  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (5), sorted by status (A to Z)',
   PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active',
   PRESCRIPTION_STATUS_LABEL_BODY_LABEL:
     'A prescription that can be filled at the local  V-A  pharmacy. If this prescription is refillable, you may request a refill of this  V-A  prescription.',
-  PRESCRIPTION_INSTRUCTIONS_TEXT: 'TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS',
-  PRESCRIPTION_REFILLS_LEFT_TEXT: 'Refills left: 1',
-  PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 06/06/2022',
-  PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: SLC10 TEST LAB',
+  PRESCRIPTION_INSTRUCTIONS_TEXT: 'TAKE ONE TABLET DAILY',
+  PRESCRIPTION_REFILLS_LEFT_TEXT: 'Refills left: 5',
+  PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: Date not available',
+  PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: Test VA Medical Center',
   PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_REFILL_REQUEST_DESCRIPTION_1_TEXT:
@@ -31,7 +32,7 @@ export const ReviewPrescriptionsE2eIdConstants = {
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
   PRESCRIPTION_SORTED_NAME_FIRST: 'ACETAMINOPHEN 325MG TAB',
-  PRESCRIPTION_SORTED_NAME_LAST: 'IODOQUINOL 650MG TAB',
+  PRESCRIPTION_SORTED_NAME_LAST: 'METFORMIN HCL 500MG TAB',
   PRESCRIPTION_TRACKING_NUMBER: '77298027203980000000398'.split('').join(' '),
 }
 
@@ -65,7 +66,7 @@ describeWithSetup('Review prescriptions list', () => {
     ).toExist()
 
     // Scroll until the 'Get prescription details' link for AMLODIPINE BESYLATE 10MG TAB is accessible
-    await waitFor(element(by.label('IODOQUINOL 650MG TAB')))
+    await waitFor(element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_TARGET)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(100, 'down', 0.5, 0.5)
@@ -121,7 +122,7 @@ describeWithSetup('Review prescriptions list', () => {
 
   it('should display the filter and sort menu', async () => {
     await element(by.id(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await expect(element(by.text('All (3)'))).toExist()
+    await expect(element(by.text('All (5)'))).toExist()
     await expect(element(by.text('Active (55)'))).toExist()
     await expect(element(by.text('Discontinued (55)'))).toExist()
     await expect(element(by.text('Expired (55)'))).toExist()
@@ -150,28 +151,28 @@ describeWithSetup('Review prescriptions list', () => {
 
 describeWithSetup('Review prescription details', () => {
   it('should verify prescription details information', async () => {
-    await waitFor(element(by.label('IODOQUINOL 650MG TAB')))
+    await waitFor(element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_TARGET)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
 
     await element(by.label(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
     await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
-    await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A'))).toExist()
+    await expect(element(by.label('Prescription number 1 2 3 4 5 6 7'))).toExist()
     await expect(element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT))).toExist()
-    await expect(element(by.text('TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS'))).toExist()
+    await expect(element(by.text(ReviewPrescriptionsE2eIdConstants.PRESCRIPTION_INSTRUCTIONS_TEXT))).toExist()
     await expect(element(by.text('Refills left'))).toExist()
-    await expect(element(by.text('1'))).toExist()
+    await expect(element(by.text('5'))).toExist()
     await expect(element(by.text('Fill date'))).toExist()
-    await expect(element(by.text('06/06/2022'))).toExist()
+    await expect(element(by.text('Date not available'))).toExist()
     await expect(element(by.text('Quantity'))).toExist()
-    await expect(element(by.text('15'))).toExist()
+    await expect(element(by.text('30'))).toExist()
     await expect(element(by.text('Expires on'))).toExist()
-    await expect(element(by.text('10/28/2022'))).toExist()
+    await expect(element(by.text('10/28/2026'))).toExist()
     await expect(element(by.text('Ordered on'))).toExist()
-    await expect(element(by.text('10/27/2021'))).toExist()
+    await expect(element(by.text('10/28/2025'))).toExist()
     await expect(element(by.text('VA facility'))).toExist()
-    await expect(element(by.text('SLC10 TEST LAB'))).toExist()
+    await expect(element(by.text('Test VA Medical Center'))).toExist()
   })
 
   it('should display status definition after status label in prescription details is tapped', async () => {
