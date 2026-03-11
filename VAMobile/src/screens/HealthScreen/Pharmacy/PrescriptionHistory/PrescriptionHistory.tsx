@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps, ScrollView } from 'react-native'
+import { Pressable, PressableProps, ScrollView, useWindowDimensions } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -129,6 +129,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const fontScale = useWindowDimensions().fontScale
+  // Keep FAB placement logic aligned with the screen-reader path when text is large.
+  const useInlineFab = screenReaderEnabled || fontScale >= 1.5
   const [displayNonVAMedsAlert, setDisplayNonVaMedsAlert] = useState<boolean>(false)
 
   useEffect(() => {
@@ -595,7 +598,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}
+      footerContent={useInlineFab ? undefined : getRequestRefillButton()}
       screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
@@ -622,7 +625,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           <OHAlertManager parentScreen={OHParentScreens.Medications} authorizedServices={userAuthorizedServices} />
           {getNonVAMedsAlert()}
           {getTransferAlert()}
-          {screenReaderEnabled ? getRequestRefillButton() : undefined}
+          {useInlineFab ? getRequestRefillButton() : undefined}
           {getContent()}
         </>
       )}

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { ViewStyle } from 'react-native'
+import { ViewStyle, useWindowDimensions } from 'react-native'
 
 import { Button, ButtonProps, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
@@ -16,11 +16,17 @@ export type FloatingButtonProps = {
 } & ButtonProps
 
 /**
- * Button that sticks to the bottom of its container when the screen reader is disabled and renders in-place otherwise
+ * Button that sticks to the bottom of its container when the screen reader is disabled and renders in-place otherwise.
+ * Also renders in-place when text size is significantly enlarged via accessibility settings (>= 1.5x).
  */
 const FloatingButton: FC<FloatingButtonProps> = ({ isHidden, ...buttonProps }: FloatingButtonProps) => {
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const fontScale = useWindowDimensions().fontScale
+  
+  // Render in-place if screen reader enabled OR font scale is in a clearly large-text range.
+  // useWindowDimensions().fontScale is reactive to iOS Dynamic Type changes.
+  const shouldRenderInPlace = screenReaderEnabled || fontScale >= 1.5
 
   const floatingButtonStyle: ViewStyle = {
     position: 'absolute',
@@ -43,9 +49,9 @@ const FloatingButton: FC<FloatingButtonProps> = ({ isHidden, ...buttonProps }: F
   return (
     <Box
       mx={theme.dimensions.gutter}
-      mt={!screenReaderEnabled ? 0 : theme.dimensions.standardMarginBetween}
+      mt={!shouldRenderInPlace ? 0 : theme.dimensions.standardMarginBetween}
       mb={theme.dimensions.standardMarginBetween}
-      style={!screenReaderEnabled ? floatingButtonStyle : {}}>
+      style={!shouldRenderInPlace ? floatingButtonStyle : {}}>
       <Button {...buttonProps} />
     </Box>
   )

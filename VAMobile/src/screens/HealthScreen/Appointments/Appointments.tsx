@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, useWindowDimensions } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -56,6 +56,9 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   )
   const [page, setPage] = useState(1)
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const fontScale = useWindowDimensions().fontScale
+  // Keep FAB placement logic aligned with the screen-reader path when text is large.
+  const useInlineFab = screenReaderEnabled || fontScale >= 1.5
   const connectionStatus = useAppIsOnline()
 
   const {
@@ -164,7 +167,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID"
-      footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
+      footerContent={useInlineFab || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
       backLabelTestID="appointmentsBackTestID"
       screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
       dataUpdatedAt={lastUpdatedDate}>
@@ -184,7 +187,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
         />
       ) : (
         <Box>
-          {featureEnabled('startScheduling') && screenReaderEnabled ? getStartSchedulingButton() : undefined}
+          {featureEnabled('startScheduling') && useInlineFab ? getStartSchedulingButton() : undefined}
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <SegmentedControl
               labels={controlLabels}
@@ -198,7 +201,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           <OHAlertManager parentScreen={OHParentScreens.Appointments} authorizedServices={userAuthorizedServices} />
           <Box
             mb={
-              featureEnabled('startScheduling') && !screenReaderEnabled
+              featureEnabled('startScheduling') && !useInlineFab
                 ? theme.dimensions.floatingButtonOffset
                 : theme.dimensions.contentMarginBottom
             }>

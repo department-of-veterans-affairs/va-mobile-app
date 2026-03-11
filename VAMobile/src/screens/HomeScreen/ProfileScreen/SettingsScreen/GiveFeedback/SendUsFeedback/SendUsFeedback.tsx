@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useWindowDimensions } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -19,6 +20,9 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const fontScale = useWindowDimensions().fontScale
+  // Keep FAB placement logic aligned with the screen-reader path when text is large.
+  const useInlineFab = screenReaderEnabled || fontScale >= 1.5
 
   const getStartSurveyButton = () => (
     <FloatingButton
@@ -36,10 +40,10 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('giveFeedback.send')}
       testID="sendUsFeedbackID"
-      footerContent={screenReaderEnabled ? undefined : getStartSurveyButton()}>
+      footerContent={useInlineFab ? undefined : getStartSurveyButton()}>
       <Box>
         <TextView mx={theme.dimensions.gutter}>{t('giveFeedback.send.bodyText')}</TextView>
-        {screenReaderEnabled ? getStartSurveyButton() : undefined}
+        {useInlineFab ? getStartSurveyButton() : undefined}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.floatingButtonOffset}>
           <LinkWithAnalytics
             type="custom"
