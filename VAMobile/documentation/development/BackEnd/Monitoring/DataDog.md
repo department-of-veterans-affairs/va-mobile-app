@@ -20,7 +20,7 @@ Reference existing alerts linked above to define new alerts. To receive alert me
 
 [Read more about Datadog on the official documentation](https://docs.datadoghq.com/getting_started/)
 
-For best practices on building monitors that stay healthy, including threshold tuning, required tags, evaluation windows, and alert message templates — see the Watchtower SRE playbook:
+For best practices on building monitors that stay healthy, including threshold tuning, required tags, evaluation windows, and alert message templates see the Watchtower SRE playbook:
 
 - [Creating Monitors](https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/05-creating-monitors.md)
 - [Monitor Anti-Patterns](https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/06-anti-patterns.md)
