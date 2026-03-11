@@ -20,6 +20,12 @@ Reference existing alerts linked above to define new alerts. To receive alert me
 
 [Read more about Datadog on the official documentation](https://docs.datadoghq.com/getting_started/)
 
+For best practices on building monitors that stay healthy — including threshold tuning, required tags, evaluation windows, and alert message templates — see the Watchtower SRE playbook:
+
+- [Creating Monitors](https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/05-creating-monitors.md)
+- [Monitor Anti-Patterns](https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/06-anti-patterns.md)
+- [Quick Reference](https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/quick-reference.md)
+
 ## New Issues Monitor
 
 The new issues monitor alerts us to any new errors (i.e., 400+ response status with stacktraces that have not been seen before) that occur in requests that route through the mobile module. It is configured to send an alert to the [mobile-new-issue-alerts slack channel](https://dsva.slack.com/archives/C06T6ABC9MX) anytime a new issue is seen. Many of the new issues are non-concerning and may not appear to be new at all. Changes in the stacktrace can make DataDog consider an issue "new" even if the same error has occurred before. As a result, we need to investigate each new issue to determine whether it's a problem or not.
