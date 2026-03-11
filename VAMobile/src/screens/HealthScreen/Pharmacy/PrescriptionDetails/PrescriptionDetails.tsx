@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { MutateOptions } from '@tanstack/react-query'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillRequestSummaryItems, RefillStatusConstants } from 'api/types'
 import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView } from 'components'
@@ -14,6 +15,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import RefillTag from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/RefillTag'
+import { isPrescriptionAtMigratingFacility } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/prescriptionUtils'
 import DetailsTextSections from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/DetailsTextSections'
 import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -23,6 +25,7 @@ import getEnv from 'utils/env'
 import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -37,6 +40,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
 
   const { contentMarginBottom } = theme.dimensions
 
@@ -46,7 +50,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     isRefillable,
     instructions,
     refillRemaining,
-    refillDate,
+    sortedDispensedDate,
     quantity,
     facilityName,
     facilityPhoneNumber,
@@ -56,6 +60,12 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   } = prescription?.attributes
 
   const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  const isAtMigratingFacility = isPrescriptionAtMigratingFacility(
+    prescription,
+    userAuthorizedServices?.migratingFacilitiesList,
+  )
 
   useFocusEffect(
     React.useCallback(() => {
@@ -68,14 +78,21 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
   }
 
+  // Hide refill button if the prescription is at a migrating facility
+  const shouldShowRefillButton = !(isAtMigratingFacility && isOHCutoverFlagEnabled)
+
   const getRefillVAHealthButton = () => {
-    if (refillStatus === RefillStatusConstants.TRANSFERRED) {
+    if (!shouldShowRefillButton) {
+      return null
+    }
+
+    if (refillStatus === RefillStatusConstants.TRANSFERRED && !isOHCutoverFlagEnabled) {
       return getGoToMyVAHealthButton()
     } else if (isRefillable) {
       return getRequestRefillButton()
     }
 
-    return <></>
+    return null
   }
   const getGoToMyVAHealthButton = () => {
     return (
@@ -95,7 +112,6 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
         {
           options,
           title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
-          cancelButtonIndex: 1,
         },
         (buttonIndex) => {
           switch (buttonIndex) {
@@ -130,8 +146,19 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   }
 
   const getBanner = () => {
+    if (!shouldShowRefillButton) {
+      return (
+        <PrescriptionsDetailsBanner
+          variant="error"
+          phoneNumber={facilityPhoneNumber}
+          customBodyText={t('prescription.details.banner.migrating.body')}
+          customHeaderText={t('prescription.details.banner.migrating.header')}
+          showDefaultContent={false}
+        />
+      )
+    }
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
-      return <></>
+      return null
     }
     return <PrescriptionsDetailsBanner />
   }
@@ -139,7 +166,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [lastRefilledDateFormatted, lastRefilledDateFormattedA11yLabel] = getDateTextAndLabel(
     t,
-    refillDate,
+    sortedDispensedDate,
     t('prescription.details.fillDateNotAvailable'),
   )
   const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(

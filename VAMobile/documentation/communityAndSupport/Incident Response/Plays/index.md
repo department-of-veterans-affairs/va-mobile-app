@@ -12,6 +12,7 @@ Having an existing play does not abdicate you of your responsibility to follow t
 
 - [Feature Flags](#feature-flags)
 - [Availability Framework](#availability-framework)
+- [Custom Errors](#custom-errors)
 - [Halting Release](#halting-release)
 
 ### Feature Flags
@@ -56,6 +57,12 @@ To implement an availability framework alert:
 ![featureFlagNewParameter](../../../static/img/incidentResponse/featureFlagNewParameter.png)
 ![ScreenNameCodeSnippet](../../../static/img/incidentResponse/ScreenNameCodeSnippet.png)
 ![featureFlagParameterCondition](../../../static/img/incidentResponse/featureFlagParameterCondition.png)
+
+### Custom Errors
+
+Custom Error responses are implemented on the API to quickly respond to possible long term breaking issues that are affecting the user experience in the Mobile Application. The API has a much quicker release process than the Mobile App and is therefore better suited to respond quickly to major issues that need a temporary resolution (ie. turning "off" features) so that the team has enough time to find a proper solution. These custom errors will automatically be displayed without any code changes on the Mobile App code.
+
+Please see the development guide for [custom errors](../../../development/BackEnd/Features/CustomErrorResponses/) for how it works and implementation details.
 
 ### Halting Release
 

@@ -1,10 +1,10 @@
 export const API_ROOT = 'https://test-api'
 export const AUTH_REDIRECT_URL = 'vamobile://login-success'
 export const AUTH_SCOPES = 'openid'
-export const AUTH_SIS_ENDPOINT = 'https://test.gov/sign_in'
-export const AUTH_SIS_TOKEN_EXCHANGE_URL = 'https://test.gov/sign_in/token'
-export const AUTH_SIS_REFRESH_URL = 'https://test.gov/sign_in/refresh'
-export const AUTH_SIS_REVOKE_URL = 'https://test.gov/sign_in/revoke'
+export const AUTH_ENDPOINT = 'https://test.gov/sign_in'
+export const AUTH_TOKEN_EXCHANGE_URL = 'https://test.gov/sign_in/token'
+export const AUTH_REFRESH_URL = 'https://test.gov/sign_in/refresh'
+export const AUTH_REVOKE_URL = 'https://test.gov/sign_in/revoke'
 export const SHOW_DEBUG_MENU = true
 export const IS_TEST = true
 export const WEBVIEW_URL_CHANGE_LEGAL_NAME =
@@ -60,7 +60,7 @@ export const LINK_URL_TRAVEL_PAY_ELIGIBILITY =
 export const LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT =
   'https://www.va.gov/resources/how-to-set-up-direct-deposit-for-va-travel-pay-reimbursement/'
 export const LINK_URL_TRAVEL_PAY_WEB_DETAILS = 'https://www.va.gov/my-health/travel-pay/claims/'
-export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://va.gov/my-health/appointments/schedule/type-of-care'
+export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://va.gov/my-health/appointments/schedule'
 export const LINK_URL_WAIVERS_FOR_VA_BENEFIT_DEBT = 'https://va.gov/resources/waivers-for-va-benefit-debt/'
 export const LINK_URL_REQUEST_HARDSHIP_ASSISTANCE = 'https://www.va.gov/health-care/pay-copay-bill/financial-hardship/'
 export const ENVIRONMENT = 'test'

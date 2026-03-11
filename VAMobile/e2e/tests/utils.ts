@@ -148,8 +148,9 @@ export const CommonE2eIdConstants = {
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
-  APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
-  IN_APP_FEEDBACK_TOGGLE_TEXT: 'inAppFeedback',
+  APPLY_OVERRIDES_BUTTON_TEST_ID: 'applyOverridesTestID',
+  DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
+  EVIDENCE_REQUESTS_UPDATED_UI_TEXT: 'evidenceRequestsUpdatedUI',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
@@ -191,7 +192,6 @@ export const CommonE2eIdConstants = {
   MILITARY_POST_OFFICE_PICKER_CONFIRM_ID: 'militaryPostOfficeConfirmID',
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
-  TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
   TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsButtonID',
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN: 'toTravelPayClaimsLinkIDHealthScreen',
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_PAYMENTS_SCREEN: 'toTravelPayClaimsLinkIDPaymentsScreen',
@@ -210,7 +210,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(120000)
+      .withTimeout(60000)
   } catch (ex) {
     await device.uninstallApp()
     await device.installApp()
@@ -226,7 +226,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     }
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(60000)
+      .withTimeout(120000)
   }
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toBeVisible()
@@ -264,6 +264,10 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
 
   const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
   if (confirmEmailBtnExist) {
+    await waitFor(element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .scroll(200, 'down')
     await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
     await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
@@ -351,6 +355,17 @@ export async function scrollToElement(text: string, containerID: string) {
     .scroll(200, 'down')
 }
 
+/**
+ * Scroll to the bottom of a container and wait for 1 second to allow animations to settle.
+ * Recommended for screens that have dynamic content or animations at the bottom.
+ *
+ * @param containerID - testID of the container to scroll in
+ */
+export async function scrollToBottomWithWait(containerID: string) {
+  await element(by.id(containerID)).scrollTo('bottom')
+  await setTimeout(1000)
+}
+
 /** Test for the presence of text 1 or more times
  *
  * @param text - string of the text to match
@@ -400,6 +415,93 @@ export async function checkImages(screenshotPath) {
 }
 
 /**
+ * Fills in the home address fields in the Edit Address screen
+ */
+export const fillHomeAddressFields = async ({
+  streetAddressLine1,
+  streetAddressLine2,
+  city,
+  state,
+  country,
+  zipCode,
+}: {
+  streetAddressLine1: string
+  streetAddressLine2: string
+  city: string
+  state: string
+  country: string // Only supports the first countries in the list
+  zipCode: string
+}) => {
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText(streetAddressLine2)
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)).tap()
+  await expect(element(by.text(country))).toExist()
+  await element(by.text(country)).tap()
+  await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText(city)
+  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
+    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
+  await element(by.text(state)).tap()
+  await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
+  await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText(streetAddressLine1)
+  await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
+  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText(zipCode)
+  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+}
+
+/**
+ * Executes the flow to update the entered address and save it to demo mode
+ */
+export async function updateAddress() {
+  // Save the address by using the suggested address
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+  await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)))
+    .toBeVisible()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
+
+  // Dismiss the address suggestion modal
+  try {
+    await setTimeout(2000)
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  } catch (ex) {}
+}
+
+export const openAppointmentInList = async (text: string) => {
+  try {
+    await waitFor(element(by.text(text)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+      .scroll(250, 'down')
+  } catch (ex) {
+    await waitFor(element(by.text(text)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+      .scroll(250, 'up')
+  }
+  await element(by.text(text)).tap()
+}
+
+/**
  * Single-source collection for 'open this screen' functions
  * Having multiple functions repeats the line of code, but
  * Have a single file to update if the matchers change (here, vs scattered throughout tests files)
@@ -435,14 +537,6 @@ export async function openHealth() {
 
 export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
-}
-
-export async function openTravelPayClaims({ useNativeLink = false }) {
-  if (useNativeLink) {
-    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID_HEALTH_SCREEN)).tap()
-  } else {
-    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
-  }
 }
 
 export async function openPayments() {
@@ -585,11 +679,11 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
   await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
+    await waitFor(element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
       .scroll(600, 'up')
-    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
     if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
       await loginToDemoMode()
     }
@@ -604,7 +698,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
  * @param AFUseCaseName: Name of the AF type.
  * @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
  * */
-export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
+export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName, skipAppInstall) {
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
@@ -634,8 +728,10 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
     await expect(element(by.text(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT))).not.toExist()
     await expect(element(by.text(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT))).not.toExist()
   }
-  await device.uninstallApp()
-  await device.installApp()
+  if (!skipAppInstall) {
+    await device.uninstallApp()
+    await device.installApp()
+  }
 }
 
 /** Function that allows the AF script to navigate to a certain feature
@@ -767,7 +863,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 
   if (AFUseCase !== 'AllowFunction') {
     if (AFUseCase === 'DenyContent' && AFUseCaseUpgrade) {
-      await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
+      await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase, undefined)
     }
   }
 }
@@ -783,7 +879,7 @@ export async function toggleRemoteConfigFlag(flagName: string) {
 
   await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
   await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await element(by.id(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEST_ID)).tap()
 }
 
 /**
@@ -817,6 +913,7 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherSelector-${endpoint}`)).tap()
     await element(by.id('overrideAPITestID')).scroll(100, 'down')
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
+    await element(by.id(`otherStatus-${endpoint}`)).tapReturnKey()
   }
 
   await element(by.id('saveErrors')).tap()
@@ -831,8 +928,14 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
     CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID,
     CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID,
   )
-  waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
-  await element(by.id(testIdOfDesiredUser)).tap()
-  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
+  await waitFor(element(by.text(testIdOfDesiredUser)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID))
+    .scroll(200, 'down')
+  await element(by.text(testIdOfDesiredUser)).atIndex(0).tap()
+  await scrollToIDThenTap(
+    CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID,
+    CommonE2eIdConstants.DEMO_MODE_USER_SCROLL_ID,
+  )
   await loginToDemoMode()
 }

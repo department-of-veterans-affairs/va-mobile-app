@@ -2,7 +2,7 @@
 name: Go-Live Approval Template
 about: Template for Going LIVE with a new Feature 
 title: Go-Live Approval Request - Feature Name 
-labels: front-end, content, qa
+labels: front-end, content, qa, go-live
 assignees: dumathane, kellylein, b-rocha, rtwell, mmiddaugh, eli-oat
 ---
 ## Feature requesting LIVE launch
@@ -17,6 +17,9 @@ As a VAHB Mobile App Experience Team, I believe my feature: Feature Name, is rea
 
 ## QA Regression notes
 <!-- Please include a list of all tickets or pull requests associated with your feature, and any additional notes our QA's should have for successful regression testing. -->
+
+## Visual QA Approval
+<!-- Please include the on-demand build information for a build with the feature on in its entirety for us to visually confirm. Ryan Thurlwell needs to approve this part of the ticket.-->
 
 ## Help Desk Documentation Update
 <!-- Please include for us your help desk documentation information regarding your new feature-->

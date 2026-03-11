@@ -7,7 +7,9 @@ const importKimberlyForOHMigrationData = () => {
       : import('store/api/demo/mocks/default/appointments.json'),
     import('store/api/demo/mocks/default/claims.json'),
     import('store/api/demo/mocks/default/profile.json'),
-    import('store/api/demo/mocks/default/secureMessaging.json'),
+    featureEnabled('noRecipientsKimOH')
+      ? import('store/api/demo/mocks/kimberlyForOHMigration/secureMessagingNoRecipients.json')
+      : import('store/api/demo/mocks/kimberlyForOHMigration/secureMessaging.json'),
     import('store/api/demo/mocks/default/vaccine.json'),
     import('store/api/demo/mocks/default/disabilityRating.json'),
     import('store/api/demo/mocks/default/decisionLetters.json'),
@@ -17,7 +19,9 @@ const importKimberlyForOHMigrationData = () => {
     import('store/api/demo/mocks/default/prescriptions.json'),
     import('store/api/demo/mocks/default/notifications.json'),
     import('store/api/demo/mocks/default/contactInformation.json'),
-    import('store/api/demo/mocks/kimberlyForOHMigration/getAuthorizedServices.json'),
+    featureEnabled('noErrorPhasesKimOH')
+      ? import('store/api/demo/mocks/kimberlyForOHMigration/getAuthorizedServicesNoErrorPhases.json')
+      : import('store/api/demo/mocks/kimberlyForOHMigration/getAuthorizedServices.json'),
     featureEnabled('cernerTrueForDemo')
       ? import('store/api/demo/mocks/default/getFacilitiesInfoCerner.json')
       : import('store/api/demo/mocks/default/getFacilitiesInfo.json'),

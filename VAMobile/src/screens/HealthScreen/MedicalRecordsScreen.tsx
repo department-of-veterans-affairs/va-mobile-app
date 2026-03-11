@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
-import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
+import OHAlertManager from 'components/OHAlertManager'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
@@ -15,6 +16,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
+import { OHParentScreens } from 'utils/ohMigration'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
@@ -32,11 +34,17 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const showOfflineSnackbar = useOfflineSnackbar()
 
   const { data: authorizedServices } = useAuthorizedServices()
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const hasCernerFacilities = facilitiesInfo?.some((f) => f.cerner)
 
   return (
     <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('vaMedicalRecords.title')}>
       {authorizedServices && (
-        <OHAlertManager parentScreen={OHParentScreens.MedicalRecords} authorizedServices={authorizedServices} />
+        <OHAlertManager
+          parentScreen={OHParentScreens.MedicalRecords}
+          authorizedServices={authorizedServices}
+          hasCernerFacilities={hasCernerFacilities}
+        />
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
         {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
@@ -85,22 +93,18 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           testID="viewMedicalRecordsLinkID"
         />
       </Box>
-      {featureEnabled('shareMyHealthDataLink') && (
-        <>
-          <Box mx={gutter}>
-            <TextView>{t('vaMedicalRecords.shareMyHealthDataApp')}</TextView>
-          </Box>
-          <Box mx={gutter}>
-            <LinkWithAnalytics
-              type="url"
-              url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
-              text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
-              a11yLabel={t('vaMedicalRecords.shareMyHealthDataApp.link')}
-              testID="shareMyHealthDataLinkID"
-            />
-          </Box>
-        </>
-      )}
+      <Box mx={gutter}>
+        <TextView>{t('vaMedicalRecords.shareMyHealthDataApp')}</TextView>
+      </Box>
+      <Box mx={gutter}>
+        <LinkWithAnalytics
+          type="url"
+          url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
+          text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
+          a11yLabel={t('vaMedicalRecords.shareMyHealthDataApp.link')}
+          testID="shareMyHealthDataLinkID"
+        />
+      </Box>
     </FeatureLandingTemplate>
   )
 }

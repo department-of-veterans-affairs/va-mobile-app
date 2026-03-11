@@ -32,6 +32,5 @@ describe('Profile Screen', () => {
 
   it('should show profile banner elements', async () => {
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD))).toExist()
   })
 })

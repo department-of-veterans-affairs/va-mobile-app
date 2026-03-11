@@ -76,6 +76,11 @@ export const Events = {
       },
     }
   },
+  vama_claim_letters_link: (): Event => {
+    return {
+      name: 'vama_claim_letters_link',
+    }
+  },
   vama_appt_view_details: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,
@@ -802,38 +807,30 @@ export const Events = {
       params,
     }
   },
-  vama_login_closed: (isSIS = false): Event => {
+  vama_login_closed: (): Event => {
     return {
       name: 'vama_login_closed',
-      params: {
-        sis: isSIS.toString(),
-      },
     }
   },
-  vama_login_fail: (error: Error, isSIS = false): Event => {
+  vama_login_fail: (error: Error): Event => {
     return {
       name: 'vama_login_fail',
       params: {
         error: JSON.stringify(error),
-        sis: isSIS.toString(),
       },
     }
   },
-  vama_login_start: (isSIS = true, isBiometric = false): Event => {
+  vama_login_start: (isBiometric = false): Event => {
     return {
       name: 'vama_login_start',
       params: {
-        sis: isSIS.toString(),
         p1: isBiometric.toString(),
       },
     }
   },
-  vama_login_success: (isSIS = false): Event => {
+  vama_login_success: (): Event => {
     return {
       name: 'vama_login_success',
-      params: {
-        sis: isSIS.toString(),
-      },
     }
   },
   vama_login_token_fetch: (error: Error): Event => {
@@ -849,14 +846,6 @@ export const Events = {
       name: 'vama_login_token_refresh',
       params: {
         error: JSON.stringify(error),
-      },
-    }
-  },
-  vama_login_token_store: (success: boolean): Event => {
-    return {
-      name: 'vama_login_token_store',
-      params: {
-        p1: success,
       },
     }
   },
@@ -1304,16 +1293,6 @@ export const Events = {
   vama_whatsnew_more: (): Event => {
     return {
       name: 'vama_whatsnew_more',
-    }
-  },
-  // ObfuscatedTextView
-  vama_obf_textview: (cardName: string, revealed: boolean): Event => {
-    return {
-      name: 'vama_obf_textview',
-      params: {
-        card_name: cardName,
-        p1: revealed,
-      },
     }
   },
   // payment breakdown modal - see details

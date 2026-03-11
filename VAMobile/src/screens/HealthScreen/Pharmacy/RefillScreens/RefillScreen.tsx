@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { MutateOptions } from '@tanstack/react-query'
 import { filter } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions, useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
@@ -16,13 +17,15 @@ import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import { PrescriptionListItem, getMigratingPrescriptions } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import NoRefills from 'screens/HealthScreen/Pharmacy/RefillScreens/NoRefills'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HiddenA11yElement } from 'styles/common'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useDowntime, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
@@ -36,6 +39,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   const confirmAlert = useShowActionSheet()
 
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isOHCutoverFlagEnabled = featureEnabled('mhvMedicationsOracleHealthCutover')
 
   const [showAlert, setAlert] = useState(false)
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
@@ -55,6 +59,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return prescription.attributes.isRefillable
   })
 
+  const refillable = refillablePrescriptions || []
+
   const {
     mutate: requestRefill,
     isPending: showLoadingScreenRequestRefills,
@@ -62,7 +68,25 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     reset: resetRefillRequest,
   } = useRequestRefills()
 
-  const refillable = refillablePrescriptions || []
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  const migratingPrescriptions = getMigratingPrescriptions(refillable, userAuthorizedServices?.migratingFacilitiesList)
+  const hasMigratingPrescriptions = migratingPrescriptions.length > 0
+
+  // Only filter out migrating prescriptions when the cutover flag is enabled
+  const migratingPrescriptionIds = new Set(migratingPrescriptions.map((p) => p.id))
+  const filteredRefillable =
+    isOHCutoverFlagEnabled && hasMigratingPrescriptions
+      ? refillable.filter((prescription) => !migratingPrescriptionIds.has(prescription.id))
+      : refillable
+
+  // Reset selections when the filtered list changes to prevent stale index references
+  const filteredRefillableIds = filteredRefillable.map((p) => p.id).join(',')
+  useEffect(() => {
+    setSelectedValues({})
+    setSelectedPrescriptionsCount(0)
+    setAlert(false)
+  }, [filteredRefillableIds])
 
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {
@@ -88,7 +112,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       {
         options,
         title: t('prescriptions.refillRequest.cancelMessage'),
-        cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
       },
       (buttonIndex) => {
@@ -105,14 +128,14 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     const prescriptionList: PrescriptionsList = []
     Object.values(selectedValues).forEach((isSelected, index) => {
       if (isSelected) {
-        prescriptionList.push(refillable[index])
+        prescriptionList.push(filteredRefillable[index])
       }
     })
     const prescriptionIds = prescriptionList.map((prescription) => prescription.id)
     logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
 
     const actionText =
-      selectedPrescriptionsCount === refillablePrescriptions?.length
+      selectedPrescriptionsCount === filteredRefillable?.length
         ? t('prescriptions.refill.RequestRefillButtonTitle.all')
         : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
 
@@ -121,10 +144,9 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       {
         options,
         title:
-          selectedPrescriptionsCount === refillablePrescriptions?.length
+          selectedPrescriptionsCount === filteredRefillable?.length
             ? t('prescriptions.refill.confirmationTitle.all')
             : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
-        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
@@ -148,8 +170,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   }
 
   const getListItems = () => {
-    const total = refillablePrescriptions?.length
-    const listItems: Array<SelectionListItemObj> = refillable.map((prescription, idx) => {
+    const total = filteredRefillable?.length
+    const listItems: Array<SelectionListItemObj> = filteredRefillable.map((prescription, idx) => {
       const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total }) + '.' // Period to ensure pause w/ screen reader
       return {
         content: (
@@ -166,9 +188,9 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   }
 
   const hidePrimaryButton =
-    prescriptionInDowntime || refillable.length === 0 || loadingHistory || showLoadingScreenRequestRefills
+    prescriptionInDowntime || filteredRefillable.length === 0 || loadingHistory || showLoadingScreenRequestRefills
   const primaryButtonText =
-    selectedPrescriptionsCount === refillablePrescriptions?.length
+    selectedPrescriptionsCount === filteredRefillable?.length
       ? t('prescriptions.refill.RequestRefillButtonTitle.all')
       : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
 
@@ -198,69 +220,86 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
           error={prescriptionHasError}
           onTryAgain={refetchPrescriptions}
         />
-      ) : refillable.length === 0 ? (
-        <NoRefills />
       ) : (
         <>
-          {showAlert && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="error"
-                description={t('prescriptions.refill.pleaseSelect')}
-                scrollViewRef={scrollViewRef}
-              />
-            </Box>
-          )}
-          {refillRequestHasError && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="error"
-                header={t('prescriptions.refill.error.title')}
-                description={t('prescriptions.refill.error.description')}
-                descriptionA11yLabel={a11yLabelVA(t('prescriptions.refill.error.description'))}
-                scrollViewRef={scrollViewRef}
-                primaryButton={{
-                  label: t('dismiss'),
-                  onPress: () => {
-                    resetRefillRequest()
-                  },
-                }}
-              />
-            </Box>
-          )}
-          <Box mx={theme.dimensions.gutter}>
-            <TextView paragraphSpacing={true} variant={'HelperText'}>
-              {t('prescriptions.refill.instructions.requestRefills')}
-              <TextView variant={'HelperTextBold'}>
-                {t('prescriptions.refill.instructions.fifteenDays')}
-                <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
-              </TextView>
-            </TextView>
-            <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
-              {t('prescriptions.refill.weWillMailText')}
-            </TextView>
-            <TextView
-              mt={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.condensedMarginBetween}
-              variant={'MobileBodyBold'}
-              accessibilityRole="header">
-              {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
-            </TextView>
-          </Box>
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <SelectionList
-              items={getListItems()}
-              onSelectionChange={(items) => {
-                const newSelectedCount = Object.values(items).reduce((acc, item) => (item === true ? ++acc : acc), 0)
-                // only update if the count changes
-                if (selectedPrescriptionsCount !== newSelectedCount) {
-                  setAlert(false)
-                  setSelectedPrescriptionsCount(newSelectedCount)
-                  setSelectedValues(items)
-                }
-              }}
+          {hasMigratingPrescriptions && isOHCutoverFlagEnabled && (
+            <PrescriptionsDetailsBanner
+              migratingPrescriptions={migratingPrescriptions}
+              variant="error"
+              customHeaderText={t('prescription.refill.banner.migrating.header')}
+              customFooterText={t('prescription.refill.banner.migrating.body')}
+              showDefaultContent={false}
             />
-          </Box>
+          )}
+          {filteredRefillable.length === 0 ? (
+            <NoRefills />
+          ) : (
+            <>
+              {showAlert && (
+                <Box mb={theme.dimensions.standardMarginBetween}>
+                  <AlertWithHaptics
+                    variant="error"
+                    description={t('prescriptions.refill.pleaseSelect')}
+                    scrollViewRef={scrollViewRef}
+                  />
+                </Box>
+              )}
+              {refillRequestHasError && (
+                <Box mb={theme.dimensions.standardMarginBetween}>
+                  <AlertWithHaptics
+                    variant="error"
+                    header={t('prescriptions.refill.error.title')}
+                    description={t('prescriptions.refill.error.description')}
+                    descriptionA11yLabel={a11yLabelVA(t('prescriptions.refill.error.description'))}
+                    scrollViewRef={scrollViewRef}
+                    primaryButton={{
+                      label: t('dismiss'),
+                      onPress: () => {
+                        resetRefillRequest()
+                      },
+                    }}
+                  />
+                </Box>
+              )}
+              <Box mx={theme.dimensions.gutter}>
+                <TextView paragraphSpacing={true} variant={'HelperText'}>
+                  {t('prescriptions.refill.instructions.requestRefills')}
+                  <TextView variant={'HelperTextBold'}>
+                    {t('prescriptions.refill.instructions.fifteenDays')}
+                    <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
+                  </TextView>
+                </TextView>
+                <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
+                  {t('prescriptions.refill.weWillMailText')}
+                </TextView>
+                <TextView
+                  mt={theme.dimensions.condensedMarginBetween}
+                  mb={theme.dimensions.condensedMarginBetween}
+                  variant={'MobileBodyBold'}
+                  accessibilityRole="header">
+                  {t('prescriptions.refill.prescriptionsCount', { count: filteredRefillable?.length })}
+                </TextView>
+              </Box>
+              <Box mb={theme.dimensions.contentMarginBottom}>
+                <SelectionList
+                  key={filteredRefillableIds}
+                  items={getListItems()}
+                  onSelectionChange={(items) => {
+                    const newSelectedCount = Object.values(items).reduce(
+                      (acc, item) => (item === true ? ++acc : acc),
+                      0,
+                    )
+                    // only update if the count changes
+                    if (selectedPrescriptionsCount !== newSelectedCount) {
+                      setAlert(false)
+                      setSelectedPrescriptionsCount(newSelectedCount)
+                      setSelectedValues(items)
+                    }
+                  }}
+                />
+              </Box>
+            </>
+          )}
         </>
       )}
     </FullScreenSubtask>

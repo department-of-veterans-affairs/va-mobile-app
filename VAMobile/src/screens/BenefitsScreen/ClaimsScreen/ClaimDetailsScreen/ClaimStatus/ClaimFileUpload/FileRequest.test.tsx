@@ -108,7 +108,7 @@ context('FileRequest', () => {
       renderWithData(request)
       await waitFor(() => expect(screen.getByText(t('claimPhase.youHaveFileRequestVA', { count: 1 }))).toBeTruthy())
       await waitFor(() => expect(screen.getByText(t('fileRequest.weSentYouALaterText'))).toBeTruthy())
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Request 1' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: /Request for evidence/ })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
           claimID: '600156928',
@@ -128,6 +128,90 @@ context('FileRequest', () => {
       await waitFor(() =>
         expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
       )
+    })
+  })
+
+  describe('display title logic based on friendlyName overrides', () => {
+    const createRequest = (overrides: Partial<ClaimEventData> = {}): ClaimEventData => ({
+      type: 'still_need_from_you_list',
+      date: '2020-07-16',
+      status: 'NEEDED',
+      uploaded: false,
+      uploadsAllowed: true,
+      displayName: 'API Display Name',
+      ...overrides,
+    })
+
+    const mockApiResponse = (requests: ClaimEventData[]) => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {})
+        .mockResolvedValue({
+          data: {
+            ...Claim,
+            id: '600156928',
+            attributes: {
+              ...Claim.attributes,
+              waiverSubmitted: false,
+              eventsTimeline: requests,
+            },
+          },
+        })
+    }
+
+    describe('when friendlyName is not provided (no overrides)', () => {
+      it('should display "Request for evidence" with displayName underneath when friendlyName is undefined', async () => {
+        const requests = [createRequest()]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() => expect(screen.getByText(t('fileRequest.requestForEvidence'))).toBeTruthy())
+        expect(screen.getByText('API Display Name')).toBeTruthy()
+      })
+
+      it('should display "Request for evidence" with displayName underneath when friendlyName is null', async () => {
+        const requests = [createRequest({ friendlyName: null })]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() => expect(screen.getByText(t('fileRequest.requestForEvidence'))).toBeTruthy())
+        expect(screen.getByText('API Display Name')).toBeTruthy()
+      })
+
+      it('should include displayName in accessibility label for screen reader users', async () => {
+        const requests = [createRequest()]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        // Verify the a11y label includes both the generic title AND the specific displayName
+        await waitFor(() =>
+          expect(screen.getByRole('link', { name: /Request for evidence.*API Display Name/ })).toBeTruthy(),
+        )
+      })
+    })
+
+    describe('when friendlyName is provided (has overrides)', () => {
+      it('should display friendlyName instead of "Request for evidence"', async () => {
+        const requests = [
+          createRequest({
+            friendlyName: 'Authorization to disclose information',
+          }),
+        ]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() => expect(screen.getByText('Authorization to disclose information')).toBeTruthy())
+        expect(screen.queryByText(t('fileRequest.requestForEvidence'))).toBeFalsy()
+        expect(screen.queryByText('API Display Name')).toBeFalsy()
+      })
+
+      it('should use friendlyName in accessibility label', async () => {
+        const requests = [
+          createRequest({
+            friendlyName: 'Authorization to disclose information',
+          }),
+        ]
+        mockApiResponse(requests)
+        renderWithData(requests)
+        await waitFor(() =>
+          expect(screen.getByRole('link', { name: /Authorization to disclose information/ })).toBeTruthy(),
+        )
+      })
     })
   })
 

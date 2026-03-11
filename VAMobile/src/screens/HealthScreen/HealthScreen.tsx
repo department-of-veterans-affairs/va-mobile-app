@@ -107,7 +107,13 @@ export function HealthScreen({}: HealthScreenProps) {
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
-  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
+  const copaymentsEnabled = featureEnabled('copayments')
+
+  const {
+    summary: copaysSummary,
+    isLoading: copaysLoading,
+    error: copaysError,
+  } = useMedicalCopays({ enabled: copaymentsEnabled })
 
   const copaysSubText =
     !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
@@ -160,7 +166,7 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
-        {featureEnabled('copayments') && (
+        {copaymentsEnabled && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
@@ -195,16 +201,14 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('MedicalRecordsList')}
           testID="toMedicalRecordsListID"
         />
-        {featureEnabled('travelPayStatusList') && (
-          <Box ml={theme.dimensions.gutter}>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('travelPay.claims.viewYourClaims')}
-              testID="toTravelPayClaimsLinkIDHealthScreen"
-              onPress={() => navigateToTravelClaims(navigateTo)}
-            />
-          </Box>
-        )}
+        <Box ml={theme.dimensions.gutter}>
+          <LinkWithAnalytics
+            type="custom"
+            text={t('travelPay.claims.viewYourClaims')}
+            testID="toTravelPayClaimsLinkIDHealthScreen"
+            onPress={() => navigateToTravelClaims(navigateTo)}
+          />
+        </Box>
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {!enrolledInVAHealthCare && (

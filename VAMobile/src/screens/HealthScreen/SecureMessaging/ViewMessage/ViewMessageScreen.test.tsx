@@ -2,6 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useAllMessageRecipients } from 'api/secureMessaging/getAllMessageRecipients'
 import {
   CategoryTypeFields,
   SecureMessagingFolderMessagesGetData,
@@ -14,6 +16,10 @@ import { LARGE_PAGE_SIZE } from 'constants/common'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { mockViewMessageEndpoints } from 'utils/tests/smTestHelpers'
+
+jest.mock('api/authorizedServices/getAuthorizedServices')
+jest.mock('api/secureMessaging/getAllMessageRecipients')
 
 context('ViewMessageScreen', () => {
   const thread: SecureMessagingThreadGetData = {
@@ -124,6 +130,125 @@ context('ViewMessageScreen', () => {
         recipientName: 'mock recipient name 3',
         readReceipt: 'mock read receipt',
         isOhMessage: false,
+      },
+    },
+    included: [],
+    meta: {
+      userInTriageTeam: true,
+    },
+  }
+
+  const disabledRepliesThread: SecureMessagingThreadGetData = {
+    data: [
+      {
+        id: 1,
+        type: '1',
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'mock subject 1: The initial message sets the overall thread subject header',
+          body: 'message 1 body text',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1',
+          senderId: 2,
+          senderName: 'mock sender 1',
+          recipientId: 3,
+          recipientName: 'mock recipient name 1',
+          readReceipt: 'mock read receipt 1',
+          isOhMessage: false,
+        },
+      },
+      {
+        id: 2,
+        type: '1',
+        attributes: {
+          messageId: 2,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'test 2',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '2',
+          senderId: 2,
+          senderName: 'mock sender 2',
+          recipientId: 3,
+          recipientName: 'mock recipient name 2',
+          readReceipt: 'mock read receipt 2',
+          isOhMessage: false,
+        },
+      },
+      {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '3',
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+          replyDisabled: true,
+        },
+      },
+    ],
+  }
+  const oldCannotReplyThread: SecureMessagingThreadGetData = {
+    data: [],
+  }
+  const oldCannotReplyMessage: SecureMessagingMessageGetData = {
+    data: {
+      id: 45,
+      type: '3',
+      attributes: {
+        messageId: 45,
+        category: CategoryTypeFields.other,
+        subject: 'This message should not display because it has different thread ID',
+        body: 'test',
+        hasAttachments: false,
+        attachment: false,
+        sentDate: '2013-06-06T04:00:00.000+00:00',
+        senderId: 2,
+        senderName: 'mock sender 45',
+        recipientId: 3,
+        recipientName: 'mock recipient name',
+        readReceipt: 'mock read receipt',
+        isOhMessage: false,
+        replyDisabled: true,
+      },
+    },
+    included: [],
+    meta: {
+      userInTriageTeam: true,
+    },
+  }
+
+  const cannotReplyMessage: SecureMessagingMessageGetData = {
+    data: {
+      id: 3,
+      type: '3',
+      attributes: {
+        messageId: 3,
+        category: CategoryTypeFields.other,
+        subject: '',
+        body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
+        hasAttachments: false,
+        attachment: false,
+        sentDate: '3',
+        senderId: 2,
+        senderName: 'mock sender 3',
+        recipientId: 3,
+        recipientName: 'mock recipient name 3',
+        readReceipt: 'mock read receipt',
+        isOhMessage: false,
+        replyDisabled: true,
       },
     },
     included: [],
@@ -250,6 +375,52 @@ context('ViewMessageScreen', () => {
     },
   }
 
+  beforeEach(() => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {
+        migratingFacilitiesList: [],
+      },
+      isFetched: true,
+      error: null,
+      refetch: jest.fn(),
+      isFetching: false,
+    })
+    ;(useAllMessageRecipients as jest.Mock).mockReturnValue({
+      data: {
+        data: [
+          {
+            id: 'id',
+            type: 'type',
+            attributes: {
+              triageTeamId: 0,
+              name: 'Doctor 1',
+              relationType: 'PATIENT',
+              preferredTeam: true,
+              stationNumber: '528',
+              locationName: 'test_location',
+              suggestedNameDisplay: 'test_suggested_name',
+              healthCareSystemName: 'test_healthcare_system_name',
+              ohTriageGroup: false,
+            },
+          },
+        ],
+        meta: {
+          sort: { name: 'ASC' },
+          careSystems: [
+            {
+              stationNumber: '528',
+              healthCareSystemName: 'test_healthcare_system_name',
+            },
+          ],
+        },
+      },
+      isFetched: true,
+      error: null,
+      refetch: jest.fn(),
+      isFetching: false,
+    })
+  })
+
   const initializeTestInstance = (messageID: number = 3) => {
     render(
       <ViewMessageScreen
@@ -268,13 +439,53 @@ context('ViewMessageScreen', () => {
 
   describe('when latest message is older than 45 days', () => {
     it('should have the Start new message button', async () => {
+      mockViewMessageEndpoints({
+        messageId: 45,
+        thread: oldThread,
+        message: oldMessage,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('This conversation is too old for new replies')).toBeTruthy())
+    })
+  })
+
+  describe('when provider disables replies on latest message', () => {
+    it('should have the Start new message button', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
           useCache: 'false',
         })
-        .mockResolvedValue(oldThread)
+        .mockResolvedValue(disabledRepliesThread)
         .calledWith(`/v0/messaging/health/messages/${45}`)
-        .mockResolvedValue(oldMessage)
+        .mockResolvedValue(cannotReplyMessage)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('You can’t reply to this message')).toBeTruthy())
+    })
+  })
+
+  describe('when latest message is older than 45 days and provider disbles replies', () => {
+    it('should have the Start new message button', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(oldCannotReplyThread)
+        .calledWith(`/v0/messaging/health/messages/${45}`)
+        .mockResolvedValue(oldCannotReplyMessage)
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(listOfFolders)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
@@ -286,27 +497,14 @@ context('ViewMessageScreen', () => {
       initializeTestInstance(45)
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('This conversation is too old for new replies')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('This conversation is too old for new replies')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('You can’t reply to this message')).toBeTruthy())
     })
   })
 
   describe('Should load the screen correctly', () => {
     it('renders correct amount of CollapsibleMessages', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({ messageId: 3, thread, message, folders: listOfFolders, inboxMessages: messages })
       initializeTestInstance()
       expect(screen.getByText('Loading your message...')).toBeTruthy()
       await waitFor(() => expect(screen.queryByRole('link', { name: '1-800-698-2411.Thank' })).toBeFalsy())
@@ -347,21 +545,13 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(oldThread)
-        .calledWith(`/v0/messaging/health/messages/${45}`)
-        .mockResolvedValue(messageWithTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 45,
+        thread: oldThread,
+        message: messageWithTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance(45)
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
@@ -377,21 +567,13 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(recentMessageWithTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 3,
+        thread,
+        message: recentMessageWithTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
@@ -409,21 +591,13 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(thread)
-        .calledWith(`/v0/messaging/health/messages/${3}`)
-        .mockResolvedValue(messageWithoutTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 3,
+        thread,
+        message: messageWithoutTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
@@ -459,27 +633,314 @@ context('ViewMessageScreen', () => {
         },
       }
 
-      when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
-          useCache: 'false',
-        })
-        .mockResolvedValue(oldThread)
-        .calledWith(`/v0/messaging/health/messages/${45}`)
-        .mockResolvedValue(oldMessageWithoutTriageTeam)
-        .calledWith('/v0/messaging/health/folders')
-        .mockResolvedValue(listOfFolders)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
-          page: '1',
-          per_page: LARGE_PAGE_SIZE.toString(),
-          useCache: 'false',
-        } as api.Params)
-        .mockResolvedValue(messages)
+      mockViewMessageEndpoints({
+        messageId: 45,
+        thread: oldThread,
+        message: oldMessageWithoutTriageTeam,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
 
       initializeTestInstance(45)
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
       await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
       await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
       await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+    })
+  })
+
+  describe('when message has OH migration phase blocking replies', () => {
+    const mockMigrationPhases = {
+      current: 'p3',
+      p0: 'March 1, 2026',
+      p1: 'March 15, 2026',
+      p2: 'April 1, 2026',
+      p3: 'April 24, 2026',
+      p4: 'April 27, 2026',
+      p5: 'May 1, 2026',
+      p6: 'May 3, 2026',
+      p7: 'May 8, 2026',
+    }
+
+    const mockMigrationFacilities = [
+      { facilityId: 528, facilityName: 'Test VA Medical Center' },
+      { facilityId: 123, facilityName: 'Different VA Medical Center' },
+    ]
+
+    const migrationMessage: SecureMessagingMessageGetData = {
+      data: {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: 'Migration test',
+          body: 'test body',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '3',
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+          isOhMessage: false,
+          ohMigrationPhase: 'p3',
+        },
+      },
+      included: [],
+      meta: {
+        userInTriageTeam: true,
+        stationNumber: '528',
+      },
+    }
+
+    const setupMigrationMock = (currentPhase: string, facilities = [mockMigrationFacilities[0]]) => {
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          migratingFacilitiesList: [
+            {
+              migrationDate: '2026-05-01',
+              facilities,
+              phases: { ...mockMigrationPhases, current: currentPhase },
+            },
+          ],
+        },
+        isFetched: true,
+        error: null,
+        refetch: jest.fn(),
+        isFetching: false,
+      })
+    }
+
+    const setupApiCalls = (messageID: number, messageData: SecureMessagingMessageGetData, threadData = thread) => {
+      mockViewMessageEndpoints({
+        messageId: messageID,
+        thread: threadData,
+        message: messageData,
+        folders: listOfFolders,
+        inboxMessages: messages,
+      })
+    }
+
+    it('should hide Reply and show Start new message buttons when migration blocks replies', async () => {
+      setupMigrationMock('p3')
+      setupApiCalls(3, migrationMessage)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Reply')).toBeFalsy())
+    })
+
+    describe('renderAlerts', () => {
+      it('should show migration error alert with correct header when migration blocks replies', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls(3, migrationMessage)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+      })
+
+      it('should show migration error alert body text', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls(3, migrationMessage)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(
+            screen.getByText("You can't reply to conversations with care teams at these facilities:"),
+          ).toBeTruthy(),
+        )
+      })
+
+      it('should display facility names in the migration error alert', async () => {
+        setupMigrationMock('p3', mockMigrationFacilities)
+        setupApiCalls(3, migrationMessage)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('Test VA Medical Center')).toBeTruthy())
+        await waitFor(() => expect(screen.getByText('Different VA Medical Center')).toBeTruthy())
+      })
+
+      it('should show the note about calling the facility directly', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls(3, migrationMessage)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(
+            screen.getByText('If you need to contact your care team now, call the facility directly.'),
+          ).toBeTruthy(),
+        )
+      })
+
+      it('should show the facility locator link in migration error alert', async () => {
+        setupMigrationMock('p3')
+        setupApiCalls(3, migrationMessage)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
+      })
+
+      it('should show migration error alert for p4 phase', async () => {
+        setupMigrationMock('p4')
+        const p4Message = {
+          ...migrationMessage,
+          data: {
+            ...migrationMessage.data,
+            attributes: { ...migrationMessage.data.attributes, ohMigrationPhase: 'p4' },
+          },
+        }
+        setupApiCalls(3, p4Message)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+      })
+
+      it('should show migration error alert for p5 phase', async () => {
+        setupMigrationMock('p5')
+        const p5Message = {
+          ...migrationMessage,
+          data: {
+            ...migrationMessage.data,
+            attributes: { ...migrationMessage.data.attributes, ohMigrationPhase: 'p5' },
+          },
+        }
+        setupApiCalls(3, p5Message)
+        initializeTestInstance()
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+      })
+
+      it('should take precedence over "too old for replies" alert when migration blocks replies', async () => {
+        setupMigrationMock('p4')
+        const migrationOldMessage: SecureMessagingMessageGetData = {
+          data: {
+            id: 45,
+            type: '3',
+            attributes: {
+              messageId: 45,
+              category: CategoryTypeFields.other,
+              subject: 'Old migration message',
+              body: 'test',
+              hasAttachments: false,
+              attachment: false,
+              sentDate: '2013-06-06T04:00:00.000+00:00',
+              senderId: 2,
+              senderName: 'mock sender 45',
+              recipientId: 3,
+              recipientName: 'mock recipient name',
+              readReceipt: 'mock read receipt',
+              isOhMessage: false,
+              ohMigrationPhase: 'p4',
+            },
+          },
+          included: [],
+          meta: {
+            userInTriageTeam: true,
+            stationNumber: '528',
+          },
+        }
+        setupApiCalls(45, migrationOldMessage, oldThread)
+        initializeTestInstance(45)
+        await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+        await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
+      })
+
+      it('should take precedence over "you can no longer" alert when migration blocks replies', async () => {
+        setupMigrationMock('p3')
+        const migrationNoTriageMessage: SecureMessagingMessageGetData = {
+          ...migrationMessage,
+          meta: {
+            userInTriageTeam: false,
+            stationNumber: '528',
+          },
+        }
+        setupApiCalls(3, migrationNoTriageMessage)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+        await waitFor(() =>
+          expect(screen.getByText("You can't reply to conversations at some facilities")).toBeTruthy(),
+        )
+        await waitFor(() => expect(screen.queryByTestId('secureMessagingYouCanNoLongerAlertID')).toBeFalsy())
+      })
+
+      it('should not show migration error alert when migration phase does not block replies', async () => {
+        const nonBlockingMigrationMessage: SecureMessagingMessageGetData = {
+          data: {
+            id: 3,
+            type: '3',
+            attributes: {
+              messageId: 3,
+              category: CategoryTypeFields.other,
+              subject: 'Non-blocking migration',
+              body: 'test body',
+              hasAttachments: false,
+              attachment: false,
+              sentDate: '3',
+              senderId: 2,
+              senderName: 'mock sender 3',
+              recipientId: 3,
+              recipientName: 'mock recipient name 3',
+              readReceipt: 'mock read receipt',
+              isOhMessage: false,
+              ohMigrationPhase: 'p1',
+            },
+          },
+          included: [],
+          meta: {
+            userInTriageTeam: true,
+            stationNumber: '528',
+          },
+        }
+
+        setupApiCalls(3, nonBlockingMigrationMessage)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+        await waitFor(() => expect(screen.getByText('Reply')).toBeTruthy())
+        await waitFor(() =>
+          expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
+        )
+      })
+
+      it('should show "you can no longer" alert when not in triage team and no migration blocking', async () => {
+        const messageNotInTriageTeam: SecureMessagingMessageGetData = {
+          ...message,
+          meta: {
+            userInTriageTeam: false,
+          },
+        }
+        setupApiCalls(3, messageNotInTriageTeam)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
+        await waitFor(() =>
+          expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
+        )
+      })
+
+      it('should show "too old for replies" alert when reply is expired and no migration blocking', async () => {
+        setupApiCalls(45, oldMessage, oldThread)
+        initializeTestInstance(45)
+        await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId('secureMessagingOlderThan45DaysAlertID')).toBeTruthy())
+        await waitFor(() =>
+          expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
+        )
+      })
+
+      it('should show no alerts when in triage team, not expired, and no migration blocking', async () => {
+        setupApiCalls(3, message)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+        await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
+        await waitFor(() => expect(screen.queryByTestId('secureMessagingYouCanNoLongerAlertID')).toBeFalsy())
+        await waitFor(() =>
+          expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
+        )
+      })
     })
   })
 })

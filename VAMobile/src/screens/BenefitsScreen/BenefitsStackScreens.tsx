@@ -4,9 +4,10 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
-import { LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
+import ClaimLettersScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 import { ScreenIDTypes } from 'store/api/types'
 
 export type DocumentPickerResponse = {
@@ -42,6 +43,9 @@ export type BenefitsStackParamList = {
   }
   ClaimsHistoryScreen: undefined
   TravelPayClaims: undefined
+  TravelPayClaimDetailsScreen: {
+    claimId: string
+  }
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: {
@@ -58,6 +62,12 @@ const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 
 export const getBenefitsScreens = (): Array<ReactNode> => {
   return [
+    <BenefitsStack.Screen
+      key={'ClaimLettersScreen'}
+      name="ClaimLettersScreen"
+      component={ClaimLettersScreen}
+      options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+    />,
     <BenefitsStack.Screen
       key={'ConsolidatedClaimsNote'}
       name="ConsolidatedClaimsNote"

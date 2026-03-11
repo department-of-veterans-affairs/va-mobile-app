@@ -6,9 +6,10 @@ import { DateTime } from 'luxon'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
-import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
+import { RenderParams, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -66,6 +67,8 @@ context('PastAppointments', () => {
     getFormattedDateWithWeekdayForTimeZone(mockStartDateUTC, 'America/Los_Angeles') +
     ' ' +
     getFormattedTimeForTimeZone(mockStartDateUTC, 'America/Los_Angeles')
+  const mockSetTimeFrame = jest.fn()
+  const mockSetDateRange = jest.fn()
 
   const appointmentData = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
@@ -97,16 +100,12 @@ context('PastAppointments', () => {
     ]
   }
 
-  const mockFeatureEnabled = featureEnabled as jest.Mock
-
   const initializeTestInstance = (
     appointmentsData?: AppointmentsGetData,
     loading = false,
-    travelPaySMOCEnabled = false,
     options?: RenderParams,
     maintenanceWindows?: { maintenanceWindows: DowntimeWindowsByFeatureType },
   ) => {
-    when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     const props = mockNavProps()
     useMaintenanceWindowsMock.mockReturnValue(
       maintenanceWindows || getMaintenanceWindowsPayload(['travel_pay_features']),
@@ -120,6 +119,8 @@ context('PastAppointments', () => {
         page={1}
         setPage={jest.fn()}
         loading={loading}
+        setTimeFrame={mockSetTimeFrame}
+        setDateRange={mockSetDateRange}
       />,
       { ...options },
     )
@@ -182,20 +183,9 @@ context('PastAppointments', () => {
   })
 
   describe('when travel pay is in downtime', () => {
-    it('shows downtime alert when feature flag is enabled', () => {
-      initializeTestInstance({ data: appointmentData() }, false, true)
+    it('shows downtime alert', () => {
+      initializeTestInstance({ data: appointmentData() }, false)
       expect(screen.getByText(t('travelPay.downtime.apptsTitle'))).toBeTruthy()
-      // Verify that the rest of the component is still rendered
-      expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
-      expect(screen.getByText(t('reset'))).toBeTruthy()
-      expect(screen.getByText(t('datePicker.from'))).toBeTruthy()
-      expect(screen.getByText(t('datePicker.to'))).toBeTruthy()
-      expect(screen.getByTestId(`${mockDateAndTime} Confirmed At VA Long Beach Healthcare System`)).toBeTruthy()
-    })
-
-    it('does not show downtime alert when feature flag is not enabled', () => {
-      initializeTestInstance({ data: appointmentData() }, false, false)
-      expect(screen.queryByText(t('travelPay.downtime.apptsTitle'))).toBeNull()
       // Verify that the rest of the component is still rendered
       expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
       expect(screen.getByText(t('reset'))).toBeTruthy()
@@ -207,14 +197,12 @@ context('PastAppointments', () => {
 
   describe('appointment travel pay eligibility and tag display', () => {
     it('should show travel pay tag and hide confirmed tag for eligible appointments', () => {
-      const threeDaysAgo = new Date()
-      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
-      const isoString = threeDaysAgo.toISOString()
+      const threeDaysAgo = DateTime.utc().minus({ days: 3 })
+      const isoString = threeDaysAgo.toISO()
 
       initializeTestInstance(
         { data: appointmentData(AppointmentStatusConstants.BOOKED, false, isoString) },
         false,
-        true,
         undefined,
         { maintenanceWindows: { travel_pay_features: undefined } },
       )
@@ -226,7 +214,7 @@ context('PastAppointments', () => {
     it('should show confirmed tag when travel pay is not eligible due to old date', () => {
       const oldDate = DateTime.utc().minus({ days: 31 }).toISO() // Date more than 30 days ago to make travel pay ineligible
 
-      initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.BOOKED, false, oldDate) }, false, true)
+      initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.BOOKED, false, oldDate) }, false)
 
       expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
       expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
@@ -253,7 +241,7 @@ context('PastAppointments', () => {
         },
       ]
 
-      initializeTestInstance({ data: appointmentWithNoMetadata }, false, true)
+      initializeTestInstance({ data: appointmentWithNoMetadata }, false)
 
       expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
       expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
@@ -290,10 +278,53 @@ context('PastAppointments', () => {
         },
       ]
 
-      initializeTestInstance({ data: appointmentWithErrorMetadata }, false, true)
+      initializeTestInstance({ data: appointmentWithErrorMetadata }, false)
 
       expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
       expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
+    })
+  })
+
+  describe('when useOldDatePicker feature toggle is true', () => {
+    beforeAll(() => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('useOldDatePicker')
+        .mockReturnValue(true)
+    })
+
+    it('displays the old date picker instead of the new date picker', () => {
+      initializeTestInstance({ data: appointmentData() })
+
+      expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
+      expect(screen.getByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
+
+      expect(screen.queryByText(t('pastAppointments.selectAPastDateRange'))).toBeFalsy()
+      expect(screen.queryByText(t('reset'))).toBeFalsy()
+      expect(screen.queryByText(t('datePicker.from'))).toBeFalsy()
+      expect(screen.queryByText(t('datePicker.to'))).toBeFalsy()
+      expect(screen.queryByRole('button', { name: t('apply') })).toBeFalsy()
+    })
+
+    it('sets the correct timeframe and date range when a different date range is selected', async () => {
+      const todaysDate = DateTime.local()
+      const currentYear = todaysDate.year
+
+      const expectedDateRange = {
+        startDate: todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 }).startOf('day').toISO(),
+        endDate: todaysDate.endOf('day').toISO(),
+      }
+
+      initializeTestInstance({ data: appointmentData() })
+
+      // Open the old picker and select a different range (e.g., past year).
+      fireEvent.press(screen.getByText(t('pastAppointments.pastThreeMonths')))
+      await waitFor(() => expect(screen.getByText(t('pastAppointments.allOf', { year: currentYear }))).toBeTruthy())
+      fireEvent.press(screen.getByText(t('pastAppointments.allOf', { year: currentYear })))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
+
+      // Verify that setTimeFrame and setDateRange were called with the correct arguments
+      expect(mockSetTimeFrame).toHaveBeenCalledWith(TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR)
+      expect(mockSetDateRange).toHaveBeenCalledWith(expectedDateRange)
     })
   })
 })

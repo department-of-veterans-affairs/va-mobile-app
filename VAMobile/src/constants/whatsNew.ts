@@ -1,6 +1,8 @@
 import { UserAuthorizedServicesData } from 'api/types'
+import getEnv from 'utils/env'
 import { FeatureToggleType } from 'utils/remoteConfig'
 
+const { IS_TEST } = getEnv()
 /**
  * Controls what will display on What's New alerts. Can be tied to a feature flag
  * that will cause the message not to be shown until the flag is activated.
@@ -62,17 +64,24 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureFlag: 'COEAvailable',
   },
   {
-    featureName: 'TravelListAndStatus',
-    featureFlag: 'travelPayStatusList',
-    bullets: 3,
-  },
-  {
     featureName: 'DecisionLetter',
     authorizedService: 'benefitsPushNotification',
     bullets: 1,
   },
+  {
+    featureName: 'LabsAndTests',
+    featureFlag: 'labsAndTests',
+    authorizedService: 'labsAndTestsEnabled',
+  },
+  {
+    featureName: 'StartScheduling',
+    featureFlag: 'startScheduling',
+  },
 ]
 
 export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
+  // To avoid the what's new alert from interfering with the detox tests we set the config to an empty array
+  if (IS_TEST) return []
+
   return WhatsNewConfig
 }

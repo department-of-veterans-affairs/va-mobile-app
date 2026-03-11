@@ -345,7 +345,6 @@ context('HomeScreen', () => {
 
   describe('Past Appointments module', () => {
     it('displays travel pay reimbursement eligible appointments when they exist', async () => {
-      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 5))
@@ -363,7 +362,6 @@ context('HomeScreen', () => {
     })
 
     it('navigates to Appointments screen when pressed', async () => {
-      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 5))
@@ -831,6 +829,24 @@ context('HomeScreen', () => {
         url: 'https://www.va.gov/find-locations/',
         loadingMessage: t('webview.valocation.loading'),
       })
+    })
+  })
+
+  describe('Labs and Tests prefetch', () => {
+    it('calls the labs and tests API when loadLabsAndTestsOnHomeScreen feature flag is enabled', async () => {
+      when(mockFeatureEnabled).calledWith('loadLabsAndTestsOnHomeScreen').mockReturnValue(true)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(get).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.objectContaining({ useCache: 'false' })),
+      )
+    })
+
+    it('does not call the labs and tests API when loadLabsAndTestsOnHomeScreen feature flag is disabled', async () => {
+      when(mockFeatureEnabled).calledWith('loadLabsAndTestsOnHomeScreen').mockReturnValue(false)
+      ;(get as jest.Mock).mockClear()
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      expect(get).not.toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
     })
   })
 })

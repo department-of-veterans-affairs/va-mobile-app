@@ -33,7 +33,7 @@ import {
   TextView,
 } from 'components'
 import FloatingButton from 'components/FloatingButton'
-import OHAlertManager, { OHParentScreens } from 'components/OHAlertManager'
+import OHAlertManager from 'components/OHAlertManager'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
@@ -53,6 +53,7 @@ import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
+import { OHParentScreens } from 'utils/ohMigration'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -244,7 +245,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       const mainContent = (
         <>
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
-          <Pressable {...detailsPressableProps}>
+          <Pressable {...detailsPressableProps} testID="prescriptionDetailsTestID">
             <Box
               display={'flex'}
               flexDirection={'row'}
@@ -448,8 +449,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
-          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}
-          testID="nonVAMedsAlertTestID">
+          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}>
           <Pressable {...pressableProps}>
             <TextView>
               <TextView variant="MobileBody">{t('prescription.history.nonVAMeds.message')}</TextView>
@@ -620,7 +620,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       ) : (
         <>
           <OHAlertManager parentScreen={OHParentScreens.Medications} authorizedServices={userAuthorizedServices} />
-          {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
+          {getNonVAMedsAlert()}
           {getTransferAlert()}
           {screenReaderEnabled ? getRequestRefillButton() : undefined}
           {getContent()}
