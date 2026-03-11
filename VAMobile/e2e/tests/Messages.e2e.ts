@@ -588,7 +588,7 @@ describe('No Care Teams Alert', () => {
   it('should show the no care teams alert instead of start new message button', async () => {
     await waitFor(element(by.id('noCareTeamsAlertTestID')))
       .toExist()
-      .withTimeout(10000)
+      .withTimeout(5000)
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
   })
 
@@ -612,7 +612,7 @@ describe('No Care Teams Alert', () => {
     // Wait for folder messages and recipients to load before checking for the alert
     await waitFor(element(by.id('noCareTeamsAlertTestID')))
       .toExist()
-      .withTimeout(30000)
+      .withTimeout(5000)
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
   })
 })
