@@ -1,1 +1,6 @@
-We added general improvements and fixed a few bugs.
+• Secure Messaging: "To" field now shows your selected care team name
+• Claims: Improved evidence request details with clearer submission guidance
+• Prescriptions: Transition alerts for Veterans at Oracle Health facilities
+• Medical Records: New alert about potential duplicate records for Oracle Health users
+• Veteran Status Card: Improved alert spacing and empty field handling
+• Bug fixes and improvements
