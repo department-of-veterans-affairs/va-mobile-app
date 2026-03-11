@@ -36,6 +36,36 @@ If you wanted to search for worker logs, you can paste the following in the `Sea
 @application:vets-api-worker @named_tags.class:*ClassNameOfLogger* @message_content:Mobile*
 ```
 
+## Structured logging
+
+When writing log statements, use structured keyword arguments rather than string interpolation. This keeps log messages static so Datadog can group them into patterns, makes every field queryable, and preserves full exception backtraces.
+
+```ruby
+# Good: structured fields as keyword arguments
+Rails.logger.error('Failed to retrieve eligibility details',
+                   service: 'claims',
+                   error_code: e.original_body['error'],
+                   exception: e)
+
+# Bad: string interpolation creates unique log patterns and loses backtrace
+Rails.logger.error("Failed to retrieve eligibility details: #{e.message}")
+```
+
+**Log levels**
+
+Use log levels that reflect whether an error is expected or unexpected:
+
+| Situation | Log level |
+|-----------|-----------|
+| Expected outcome — client error, validation failure (4xx) | `warn` |
+| Transient failure being retried | `warn` |
+| Unexpected system failure (5xx), bug, timeout | `error` |
+
+Logging expected errors at `error` level floods APM dashboards and leads to alert fatigue. For more detail, see the Watchtower SRE playbook:
+
+- [Prefer Structured Logs](https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/error-handling/17-prefer-structured-logs.md) — structured logging patterns, what fields to include, and real anti-patterns from vets-api
+- [Expected vs Unexpected Errors](https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/error-handling/09-expected-vs-unexpected-errors.md) — how to classify errors correctly so APM error rates reflect actual system health
+
 ## Further reading
 
 - [Lighthouse Upstream Dependencies](https://github.com/department-of-veterans-affairs/leeroy-jenkles/wiki/API-Backend-Systems#api-to-va-backend-mapping)
