@@ -12,7 +12,7 @@ You can create custom Mobile metrics within Vets API by adding new statsd entrie
 
 ## Cardinality
 
-When adding StatsD metrics, keep metric tags **low-cardinality** — meaning the tag should have a small, bounded set of possible values (e.g., status codes, form types, regions). Tagging metrics with high-cardinality values like `claim_id`, `user_id`, or `request_id` creates a new time series for every unique value, causing the metrics database to grow unboundedly and dashboards to time out.
+When adding StatsD metrics, keep metric tags **low-cardinality**, meaning the tag should have a small, bounded set of possible values (e.g., status codes, form types, regions). Tagging metrics with high-cardinality values like `claim_id`, `user_id`, or `request_id` creates a new time series for every unique value, causing the metrics database to grow unboundedly and dashboards to time out.
 
 **Use metrics for aggregation, logs for details:**
 

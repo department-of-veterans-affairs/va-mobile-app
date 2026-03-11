@@ -18,7 +18,7 @@ For backend implementation details (StatsD, Datadog APM, structured logging), se
 
 ## Dashboards
 
-New features are expected to have a dashboard in place before releasing to production. The dashboard should include response monitoring, latency, and throughput for all endpoints introduced. This centralizes data in one location and gives better visibility into new features — especially during the initial rollout period where this is most critical.
+New features are expected to have a dashboard in place before releasing to production. The dashboard should include response monitoring, latency, and throughput for all endpoints introduced. This centralizes data in one location and gives better visibility into new features, especially during the initial rollout period where this is most critical.
 
 Many of these metrics are gathered automatically by Datadog and visible via the [APM](/development/BackEnd/Monitoring/DataDog). However, adding [structured logging](/development/BackEnd/Monitoring/Logs) provides greater insight into branching logic paths and errors, and [StatsD metrics](/development/BackEnd/Monitoring/Statsd) allow for easy, powerful stats aggregation.
 
@@ -38,7 +38,7 @@ The Datadog APM includes a service section for `mobile-app`, which contains all 
 
 **All feature teams**
 
-Regardless of which team is introducing new features, the `mobile-app` service tag should remain the default. This keeps all mobile resources visible in a single APM service, making it easier to find and evaluate any resource in the mobile codebase during an incident — without the extra step of locating the responsible team's own APM service tag.
+Regardless of which team is introducing new features, the `mobile-app` service tag should remain the default. This keeps all mobile resources visible in a single APM service, making it easier to find and evaluate any resource in the mobile codebase during an incident without the extra step of locating the responsible team's own APM service tag.
 
 ---
 
