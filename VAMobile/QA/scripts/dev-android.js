@@ -1,7 +1,7 @@
 /**
- * 
+ *
  * This is an experimental script that should be considered as a WIP for now.
- * 
+ *
  * A utility script to help with QAing the VA Mobile App
  *
  * Async state pipeline (Context -> Promise<Context>)
@@ -25,7 +25,6 @@ const { execSync, spawn } = require('child_process')
 const fs = require('fs')
 const os = require('os')
 const readline = require('readline')
-
 
 // Functional Utils
 
@@ -73,7 +72,6 @@ const retry = async (fn, checks, delay = 1000) => {
   await sleep(delay)
   return retry(fn, checks - 1, delay)
 }
-
 
 // Config and Parsing
 
@@ -184,7 +182,6 @@ Examples:
 
   return { cfg: parse(DEFAULT_CONFIG, args), cleanups: [], deviceId: null }
 }
-
 
 // Domain Logic
 
@@ -547,7 +544,6 @@ const streamLogs = (ctx) => {
 
   return new Promise(() => {}) // Keep alive until signal
 }
-
 
 // Main Pipeline
 
