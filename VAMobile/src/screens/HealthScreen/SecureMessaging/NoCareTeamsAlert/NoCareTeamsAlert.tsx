@@ -14,7 +14,7 @@ function NoCareTeamsAlert() {
   const theme = useTheme()
 
   return (
-    <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+    <Box mb={theme.dimensions.standardMarginBetween}>
       <AlertWithHaptics
         variant="info"
         expandable={true}
