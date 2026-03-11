@@ -6,8 +6,7 @@ import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, SegmentedControl, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-import { use } from 'i18next'
-import _, { has } from 'underscore'
+import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useAllMessageRecipients, useFolderMessages, useFolders, useOhSyncStatus } from 'api/secureMessaging'
@@ -118,7 +117,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const scrollViewRef = useRef<ScrollView | null>(null)
 
   useEffect(() => {
-    if (ohSyncStatusData && ohSyncStatusData.data.attributes.syncComplete !== undefined) {
+    if (ohSyncStatusData) {
       setOhSyncComplete(ohSyncStatusData.data.attributes.syncComplete)
     }
   }, [ohSyncStatusData, hasFetchedOhSyncStatus])
@@ -234,13 +233,14 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
             {featureEnabled('showCernerWarningAlert') && userAuthorizedServices?.isUserAtPretransitionedOhFacility && (
               <CernerAlertSM />
             )}
-            {!ohSyncComplete && (
-              <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            {ohSyncComplete === false && (
+              <Box mb={theme.dimensions.standardMarginBetween}>
                 <AlertWithHaptics
                   variant="warning"
                   header={t('secureMessaging.historicLoad.title')}
                   description={t('secureMessaging.historicLoad.body')}
                   expandable
+                  initializeExpanded={true}
                   testID="ohSyncStatusAlertTestID"
                 />
               </Box>
