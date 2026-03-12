@@ -24,8 +24,8 @@ jobs:
       - name: get ssm
         uses: 'department-of-veterans-affairs/action-inject-ssm-secrets@latest'
         with:
-          # ssm_parameter: '/dsva-vagov/va-mobile-app/dev/ping'
-          ssm_parameter: '/dsva-vagov/va-mobile-app/KM_JB'
+          ssm_parameter: '/dsva-vagov/va-mobile-app/dev/ping'
+          # ssm_parameter: '/dsva-vagov/va-mobile-app/KM_JB'
           env_variable_name: 'PING'
 
       - name: 'Print the message'
