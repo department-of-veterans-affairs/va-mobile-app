@@ -256,12 +256,30 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      // Match original Navigation.e2e.ts: fixed scroll to reveal the link, then direct tap.
-      // Use by.id (the Pressable) instead of by.text (the clipped child TextView) so the
-      // element remains hittable with large text sizes on iOS.
-      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(350, 'down', 0.5, 0.5)
-      await element(by.id('prescriptionDetailsTestID')).atIndex(0).tap()
-      await device.enableSynchronization()
+      // Scroll until the details link is visible. Uses by.id (the Pressable) instead of
+      // by.text so it remains hittable with large text. Loop is needed because
+      // FeatureLandingAndChildTemplate's VAScrollView frame extends behind the floating
+      // footer button and tab bar, failing Detox's 100% visibility requirement for
+      // whileElement().scroll().
+      // TODO: Can be replaced if we fix https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12914
+      const prescriptionDetailsElement = element(by.id(CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).atIndex(0)
+      let prescriptionDetailsVisible = false
+      const MAX_SCROLL_ATTEMPTS = 10
+      for (let i = 0; i < MAX_SCROLL_ATTEMPTS; i++) {
+        try {
+          await waitFor(prescriptionDetailsElement).toBeVisible().withTimeout(1000)
+          prescriptionDetailsVisible = true
+          break
+        } catch {
+          await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(150, 'down', 0.5, 0.5)
+        }
+      }
+      if (!prescriptionDetailsVisible) {
+        throw new Error(
+          `Prescription details link not visible after ${MAX_SCROLL_ATTEMPTS} scroll attempts (1s timeout per attempt).`
+        )
+      }
+      await prescriptionDetailsElement.tap()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
