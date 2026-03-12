@@ -400,14 +400,13 @@ const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | un
 }
 
 type StringMap = { [key: string]: string | undefined }
-const parseCallbackUrlParams = (url: string): { code: string; state?: string } => {
+const parseCallbackUrlParams = (url: string): { code: string } => {
   const urlParts = url.split('?')
   const query = urlParts[1]
   const queryParts = query?.split('&') || []
 
   const obj: StringMap = {
     code: undefined,
-    status: undefined,
   }
 
   queryParts.forEach((qpRaw) => {
@@ -420,7 +419,6 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
   }
   return {
     code: obj.code,
-    state: obj.state,
   }
 }
 
@@ -727,10 +725,10 @@ export const sendLoginStartAnalytics =
 
 export const startWebLogin = (): AppThunk => async (dispatch, getState) => {
   await clearCookies()
-  const { codeChallenge } = getState().auth
+  const { codeChallenge = '' } = getState().auth
   const params = new URLSearchParams({
     code_challenge_method: 'S256',
-    code_challenge: codeChallenge ?? '',
+    code_challenge: codeChallenge,
     application: 'vamobile',
     oauth: 'true',
   }).toString()
