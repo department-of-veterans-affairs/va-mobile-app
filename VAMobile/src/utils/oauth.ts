@@ -3,32 +3,25 @@ import { generateBase64, generateSHA256String } from 'utils/rnSecureRandom'
 export type PKCEParameters = {
   codeVerifier: string
   codeChallenge: string
-  stateParam: string
 }
 
 /**
- * Generates code challenge, verifier, and state for PKCE authorize request
+ * Generates code challenge and verifier for PKCE authorize request.
+ *
+ * Note: The OAuth `state` parameter is intentionally omitted. PKCE with S256
+ * already prevents authorization code injection (the primary threat `state`
+ * mitigates). As a native mobile app using a custom URI scheme callback,
+ * cross-site request context does not apply the way it does for web apps.
+ * The SIS (Sign-in Service) backend does not require or validate `state`.
  */
 export const pkceAuthorizeParams = async (): Promise<PKCEParameters> => {
   const verifier = urlEncode(await generateBase64(32))
   const challenge = await generateSHA256String(verifier)
-  const state = await generateBase64(32)
   return {
     codeVerifier: verifier,
     codeChallenge: urlEncode(challenge),
-    stateParam: urlEncode(state),
   }
 }
-
-/**
- * Generates state param for PKCE token exchange request
- * Omitting this for now as OAuth spec doesn't describe using the state parameter on token requests
- */
-// export const pkceTokenParams = async (): Promise<{ stateParam: string }> => {
-//   return {
-//     stateParam: urlEncode(await generateBase64(32) || '')
-//   }
-// }
 
 /**
  * Makes input (expected to be base64 encoded) into URL-safe version by replacing plus and slash

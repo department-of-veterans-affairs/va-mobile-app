@@ -128,6 +128,12 @@ context('authAction SIS', () => {
   describe('startWebLogin', () => {
     it('should set authUrl to be launched', async () => {
       const store = realStore()
+      store.dispatch(
+        dispatchStoreAuthorizeParams({
+          codeVerifier: 'testverifier',
+          codeChallenge: 'testchallenge',
+        }),
+      )
       expect(store.getState().auth.webLoginUrl).toBeFalsy()
       await store.dispatch(startWebLogin())
       expect(store.getState().auth.webLoginUrl).toBeTruthy()
@@ -137,6 +143,12 @@ context('authAction SIS', () => {
   describe('cancelWebLogin', () => {
     it('should clear webLoginUrl', async () => {
       const store = realStore()
+      store.dispatch(
+        dispatchStoreAuthorizeParams({
+          codeVerifier: 'testverifier',
+          codeChallenge: 'testchallenge',
+        }),
+      )
       expect(store.getState().auth.webLoginUrl).toBeFalsy()
       await store.dispatch(startWebLogin())
       expect(store.getState().auth.webLoginUrl).toBeTruthy()
@@ -221,7 +233,7 @@ context('authAction SIS', () => {
       expect(endAction?.payload.error).toBeTruthy()
     })
 
-    it('should parse code and state correctly and login', async () => {
+    it('should parse authorization code from callback URL and login', async () => {
       const tokenResponse = () => {
         return Promise.resolve(mockedAuthResponse)
       }
@@ -232,10 +244,9 @@ context('authAction SIS', () => {
         dispatchStoreAuthorizeParams({
           codeVerifier: 'mylongcodeverifier',
           codeChallenge: 'mycodechallenge',
-          authorizeStateParam: '2355adfs',
         }),
       )
-      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa'))
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.AUTH_START_LOGIN })
       expect(startAction).toBeTruthy()
