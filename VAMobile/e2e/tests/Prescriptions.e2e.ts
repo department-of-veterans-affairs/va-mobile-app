@@ -6,7 +6,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
   PRESCRIPTION_FILTER_MODAL_ID: 'ModalTestID',
   PRESCRIPTION_FILTER_APPLY_ID: 'radioButtonApplyTestID',
-  PRESCRIPTION_DETAILS_LINK_ID: 'prescriptionDetailsTestID',
+  PRESCRIPTION_DETAILS_LINK_ID: CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID,
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
