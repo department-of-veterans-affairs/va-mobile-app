@@ -1,0 +1,28 @@
+name: 'Get SSM parameter'
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  ci:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Configure AWS Credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-gov-west-1
+          role-to-assume: ${{ vars.AWS_ASSUME_ROLE }}
+
+      - name: get ssm
+        uses: 'department-of-veterans-affairs/action-inject-ssm-secrets@latest'
+        with:
+          ssm_parameter: '/dsva-vagov/va-mobile-app/dev/ping'
+          env_variable_name: 'PING'
+
+      - name: 'Build & Deploy'
+        run: |
+          echo "Here you go --> $PING"
