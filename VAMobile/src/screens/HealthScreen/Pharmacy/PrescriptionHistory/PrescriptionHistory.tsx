@@ -36,7 +36,7 @@ import FloatingButton from 'components/FloatingButton'
 import OHAlertManager from 'components/OHAlertManager'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
-import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
+import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING, FAB_INLINE_FONT_SCALE_THRESHOLD } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -130,9 +130,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScale = useWindowDimensions().fontScale
-  // TODO: Centralize this threshold with other FAB placement checks to avoid drift.
   // Keep FAB placement logic aligned with the screen-reader path when text is large.
-  const useInlineFab = screenReaderEnabled || fontScale >= 1.5
+  const useInlineFab = screenReaderEnabled || fontScale >= FAB_INLINE_FONT_SCALE_THRESHOLD
   const [displayNonVAMedsAlert, setDisplayNonVaMedsAlert] = useState<boolean>(false)
 
   useEffect(() => {

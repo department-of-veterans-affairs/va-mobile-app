@@ -1,5 +1,7 @@
 export const DEFAULT_PAGE_SIZE = 10
 export const LARGE_PAGE_SIZE = 5000
+// Font-scale cutoff for switching FABs to the inline (non-floating) placement path.
+export const FAB_INLINE_FONT_SCALE_THRESHOLD = 1.5
 
 export const EnvironmentTypesConstants: {
   Staging: EnvironmentTypes

@@ -14,6 +14,7 @@ import FloatingButton from 'components/FloatingButton'
 import OHAlertManager from 'components/OHAlertManager'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
+import { FAB_INLINE_FONT_SCALE_THRESHOLD } from 'constants/common'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
@@ -57,9 +58,8 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const [page, setPage] = useState(1)
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScale = useWindowDimensions().fontScale
-  // TODO: Centralize this threshold with other FAB placement checks to avoid drift.
   // Keep FAB placement logic aligned with the screen-reader path when text is large.
-  const useInlineFab = screenReaderEnabled || fontScale >= 1.5
+  const useInlineFab = screenReaderEnabled || fontScale >= FAB_INLINE_FONT_SCALE_THRESHOLD
   const connectionStatus = useAppIsOnline()
 
   const {

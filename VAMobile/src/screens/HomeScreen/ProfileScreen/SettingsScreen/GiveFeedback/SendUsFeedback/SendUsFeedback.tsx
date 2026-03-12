@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextView } from 'components'
+import { FAB_INLINE_FONT_SCALE_THRESHOLD } from 'constants/common'
 import FloatingButton from 'components/FloatingButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -21,9 +22,8 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScale = useWindowDimensions().fontScale
-  // TODO: Centralize this threshold with other FAB placement checks to avoid drift.
   // Keep FAB placement logic aligned with the screen-reader path when text is large.
-  const useInlineFab = screenReaderEnabled || fontScale >= 1.5
+  const useInlineFab = screenReaderEnabled || fontScale >= FAB_INLINE_FONT_SCALE_THRESHOLD
 
   const getStartSurveyButton = () => (
     <FloatingButton

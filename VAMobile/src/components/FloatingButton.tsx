@@ -5,6 +5,7 @@ import { Button, ButtonProps, useIsScreenReaderEnabled } from '@department-of-ve
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { Box } from 'components'
+import { FAB_INLINE_FONT_SCALE_THRESHOLD } from 'constants/common'
 import { useTheme } from 'utils/hooks'
 
 /**
@@ -23,11 +24,10 @@ const FloatingButton: FC<FloatingButtonProps> = ({ isHidden, ...buttonProps }: F
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScale = useWindowDimensions().fontScale
-  
-  // TODO: Centralize this threshold with screen-level FAB placement checks to avoid drift.
+
   // Render in-place if screen reader enabled OR font scale is in a clearly large-text range.
   // useWindowDimensions().fontScale is reactive to iOS Dynamic Type changes.
-  const shouldRenderInPlace = screenReaderEnabled || fontScale >= 1.5
+  const shouldRenderInPlace = screenReaderEnabled || fontScale >= FAB_INLINE_FONT_SCALE_THRESHOLD
 
   const floatingButtonStyle: ViewStyle = {
     position: 'absolute',
