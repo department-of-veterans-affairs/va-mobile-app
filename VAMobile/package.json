@@ -167,8 +167,15 @@
   "resolutions": {
     "react-devtools/**/got": "^11.8.5",
     "react-devtools/electron": "^25.8.1",
-    "react-native/@react-native-community/**/fast-xml-parser": "^4.2.4",
-    "tough-cookie": "^4.1.3",
+    "fast-xml-parser": "^4.5.4",
+    "**/fast-xml-parser": "^4.5.4",
+    "eslint/**/minimatch": "^3.1.5",
+    "eslint-plugin-react/**/minimatch": "^3.1.5",
+    "react-native/**/minimatch": "^3.1.5",
+    "jest/**/minimatch": "^3.1.5",
+    "**/@typescript-eslint/typescript-estree/**/minimatch": "^9.0.6",
+    "**/cross-spawn": "^7.0.6",
+    "react-native-blob-util/**/glob": "^10.5.0",
     "watch/**/merge": "^2.1.1"
   },
   "lint-staged": {
