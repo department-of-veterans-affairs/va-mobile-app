@@ -264,8 +264,8 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       // TODO: Can be replaced if we fix https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12914
       const prescriptionDetailsElement = element(by.id(CommonE2eIdConstants.PRESCRIPTION_DETAILS_LINK_ID)).atIndex(0)
       let prescriptionDetailsVisible = false
-      const NUM_OF_SCROLL_ATTEMPTS = 10
-      for (let i = 0; i < NUM_OF_SCROLL_ATTEMPTS; i++) {
+      const MAX_SCROLL_ATTEMPTS = 10
+      for (let i = 0; i < MAX_SCROLL_ATTEMPTS; i++) {
         try {
           await waitFor(prescriptionDetailsElement).toBeVisible().withTimeout(1000)
           prescriptionDetailsVisible = true
