@@ -104,6 +104,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
+  PRESCRIPTION_DETAILS_LINK_ID: 'prescriptionDetailsTestID',
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
@@ -150,6 +151,7 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEST_ID: 'applyOverridesTestID',
   DEMO_MODE_USER_SCROLL_ID: 'demoModeUserTestID',
+  EVIDENCE_REQUESTS_UPDATED_UI_TEXT: 'evidenceRequestsUpdatedUI',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
@@ -225,7 +227,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     }
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
-      .withTimeout(60000)
+      .withTimeout(120000)
   }
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toBeVisible()

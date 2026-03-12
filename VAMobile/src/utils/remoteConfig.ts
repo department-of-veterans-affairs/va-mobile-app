@@ -19,6 +19,7 @@ export type FeatureToggleType =
   | 'COEAvailable'
   | 'copayments'
   | 'appointmentsTestTime'
+  | 'evidenceRequestsUpdatedUI'
   | 'displayDuplicateRecordAlert'
   | 'hsScrollAnalytics'
   | 'inAppReview'
@@ -39,6 +40,7 @@ export type FeatureToggleType =
   | 'overpayments'
   | 'offlineMode'
   | 'remoteConfigRefreshTest'
+  | 'useOldDatePicker'
   | 'veteranStatusCardUpdate'
 
 type FeatureToggleValues = {
@@ -46,6 +48,7 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   COEAvailable: boolean
   copayments: boolean
+  evidenceRequestsUpdatedUI: boolean
   displayDuplicateRecordAlert: boolean
   hsScrollAnalytics: boolean
   inAppReview: boolean
@@ -66,6 +69,7 @@ type FeatureToggleValues = {
   overpayments: boolean
   offlineMode: boolean
   remoteConfigRefreshTest: boolean
+  useOldDatePicker: boolean
   veteranStatusCardUpdate: boolean
 }
 
@@ -74,6 +78,7 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   COEAvailable: false,
   copayments: false,
+  evidenceRequestsUpdatedUI: false,
   displayDuplicateRecordAlert: true,
   hsScrollAnalytics: false,
   inAppReview: true,
@@ -94,6 +99,7 @@ export const defaults: FeatureToggleValues = {
   overpayments: false,
   remoteConfigRefreshTest: false,
   offlineMode: false,
+  useOldDatePicker: false,
   veteranStatusCardUpdate: false,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {

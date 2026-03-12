@@ -3,6 +3,7 @@ name: User Story
 about: Template for creating user stories and acceptance criteria 
 title: User Story
 labels: 
+type: Task
 assignees:
 ---
 
