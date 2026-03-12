@@ -168,11 +168,6 @@ const clearStoredAuthCreds = async (): Promise<void> => {
  */
 
 export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
-  if (IS_TEST) {
-    // In integration tests this will change the behavior and make it inconsistent across runs
-    dispatch(dispatchSetFirstLogin(false))
-    return
-  }
   let isFirstLogin = true
   // if we need to 'retrigger' onboarding for existing users in the future we should just increment
   // the AsyncStorage 'completed key' with a #.
@@ -194,12 +189,6 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
 }
 
 export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch) => {
-  if (IS_TEST) {
-    // In integration tests this will change the behavior and make it inconsistent across runs
-    dispatch(dispatchSetNotificationsPreferenceScreen(false))
-    return
-  }
-
   const setNotificationsPreferenceScreenVal = await AsyncStorage.getItem(NOTIFICATION_COMPLETED_KEY)
   console.debug(`checkRequestNotificationPreferenceScreen: is ${!setNotificationsPreferenceScreenVal}`)
 

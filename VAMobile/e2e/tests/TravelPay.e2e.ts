@@ -55,7 +55,7 @@ const TravelPayE2eIdConstants = {
   FILE_TRAVEL_CLAIM_TEXT: 'File travel claim',
   APPOINTMENT_FILE_TRAVEL_PAY_ALERT_PRIMARY_BUTTON_ID: 'appointmentFileTravelPayAlertPrimaryButtonTestID',
   FINISH_TRAVEL_CLAIM_LINK_ID: 'finishTravelClaimLinkID',
-  FULL_ADDRESS_TEXT_ID: 'Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
+  FULL_ADDRESS_TEXT_ID: 'home-address',
   GO_TO_APPOINTMENT_LINK_ID: 'goToAppointmentLinkID',
   GO_TO_CLAIM_DETAILS_ID: 'goToClaimDetails-mock_id',
   GO_TO_CLAIM_DETAILS_ID_PARTIAL_SUCCESS_ID: 'goToClaimDetails-mock_id_partial_success',

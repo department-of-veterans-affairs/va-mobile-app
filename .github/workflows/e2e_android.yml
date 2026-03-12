@@ -216,7 +216,7 @@ jobs:
             ) }}
 
       - name: Set app environment variables
-        run: yarn env:staging
+        run: yarn env:test
 
       - name: Bundle Android app
         if: steps.build-cache.outputs.cache-hit != 'true' || inputs.skip_cache == true
@@ -286,7 +286,7 @@ jobs:
         run: yarn patch-package
 
       - name: Set app environment variables
-        run: yarn env:staging
+        run: yarn env:test
 
       - name: Download built Android app
         uses: actions/download-artifact@v4
