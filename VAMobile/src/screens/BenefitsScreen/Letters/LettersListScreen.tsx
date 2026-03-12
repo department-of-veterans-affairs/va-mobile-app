@@ -96,6 +96,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
         return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.foreignMedicalProgram.description'),
+          descriptionA11yLabel: a11yLabelVA(t('letters.foreignMedicalProgram.description')),
           letterType,
           screenID: ScreenIDTypesConstants.FOREIGN_MEDICAL_PROGRAM_ENROLLMENT_LETTER_SCREEN_ID,
         })

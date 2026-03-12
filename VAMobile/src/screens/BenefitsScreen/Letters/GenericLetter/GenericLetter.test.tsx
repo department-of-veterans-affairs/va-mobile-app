@@ -39,6 +39,8 @@ context('GenericLetter', () => {
     it('should render correctly', () => {
       initializeTestInstance(LetterTypeConstants.foreignMedicalProgram)
       expect(screen.getByRole('button', { name: t('letters.benefitService.viewLetter') })).toBeTruthy()
+      expect(screen.getByText('header')).toBeTruthy()
+      expect(screen.getByText('desc')).toBeTruthy()
     })
   })
 })
