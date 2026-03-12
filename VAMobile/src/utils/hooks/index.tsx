@@ -10,6 +10,7 @@ import {
   Linking,
   PixelRatio,
   ScrollView,
+  useWindowDimensions,
   View,
   findNodeHandle,
 } from 'react-native'
@@ -30,7 +31,11 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
-import { MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS, WebProtocolTypesConstants } from 'constants/common'
+import {
+  FAB_INLINE_FONT_SCALE_THRESHOLD,
+  MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS,
+  WebProtocolTypesConstants,
+} from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -174,6 +179,17 @@ export const useFontScale = (): ((val: number) => number) => {
     const fs = isIOS() ? fontScale : pixelRatio
     return fs * value
   }
+}
+
+/**
+ * Hook to determine whether FABs should render in the inline path.
+ * Mirrors the screen-reader behavior when text size is large.
+ */
+export const useInlineFab = (): boolean => {
+  const screenReaderEnabled = useIsScreenReaderEnabled()
+  const fontScale = useWindowDimensions().fontScale
+
+  return screenReaderEnabled || fontScale >= FAB_INLINE_FONT_SCALE_THRESHOLD
 }
 
 /**

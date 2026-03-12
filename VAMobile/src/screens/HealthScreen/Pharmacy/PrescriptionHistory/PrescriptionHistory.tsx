@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps, ScrollView, useWindowDimensions } from 'react-native'
+import { Pressable, PressableProps, ScrollView } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { filter, find } from 'underscore'
 
@@ -36,7 +35,7 @@ import FloatingButton from 'components/FloatingButton'
 import OHAlertManager from 'components/OHAlertManager'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
-import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING, FAB_INLINE_FONT_SCALE_THRESHOLD } from 'constants/common'
+import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { CONNECTION_STATUS } from 'constants/offline'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -51,7 +50,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useInlineFab, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
 import { OHParentScreens } from 'utils/ohMigration'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
@@ -128,10 +127,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   )
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
-  const screenReaderEnabled = useIsScreenReaderEnabled()
-  const fontScale = useWindowDimensions().fontScale
-  // Keep FAB placement logic aligned with the screen-reader path when text is large.
-  const useInlineFab = screenReaderEnabled || fontScale >= FAB_INLINE_FONT_SCALE_THRESHOLD
+  const shouldUseInlineFab = useInlineFab()
   const [displayNonVAMedsAlert, setDisplayNonVaMedsAlert] = useState<boolean>(false)
 
   useEffect(() => {
@@ -598,7 +594,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={useInlineFab ? undefined : getRequestRefillButton()}
+      footerContent={shouldUseInlineFab ? undefined : getRequestRefillButton()}
       screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
@@ -625,7 +621,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           <OHAlertManager parentScreen={OHParentScreens.Medications} authorizedServices={userAuthorizedServices} />
           {getNonVAMedsAlert()}
           {getTransferAlert()}
-          {useInlineFab ? getRequestRefillButton() : undefined}
+          {shouldUseInlineFab ? getRequestRefillButton() : undefined}
           {getContent()}
         </>
       )}
