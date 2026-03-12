@@ -128,6 +128,12 @@ context('authAction SIS', () => {
   describe('startWebLogin', () => {
     it('should set authUrl to be launched', async () => {
       const store = realStore()
+      store.dispatch(
+        dispatchStoreAuthorizeParams({
+          codeVerifier: 'testverifier',
+          codeChallenge: 'testchallenge',
+        }),
+      )
       expect(store.getState().auth.webLoginUrl).toBeFalsy()
       await store.dispatch(startWebLogin())
       expect(store.getState().auth.webLoginUrl).toBeTruthy()
@@ -137,6 +143,12 @@ context('authAction SIS', () => {
   describe('cancelWebLogin', () => {
     it('should clear webLoginUrl', async () => {
       const store = realStore()
+      store.dispatch(
+        dispatchStoreAuthorizeParams({
+          codeVerifier: 'testverifier',
+          codeChallenge: 'testchallenge',
+        }),
+      )
       expect(store.getState().auth.webLoginUrl).toBeFalsy()
       await store.dispatch(startWebLogin())
       expect(store.getState().auth.webLoginUrl).toBeTruthy()
