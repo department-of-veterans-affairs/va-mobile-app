@@ -56,7 +56,7 @@ Feature teams building their own features are expected to introduce their own al
 
 **Feature teams having features built on their behalf**
 
-While not required, we recommend introducing your own alerting if you want additional visibility into your specific resources.
+Feature teams are still required to introduce their own alerting for the resources they are responsible for. If this is not possible, the Mobile team will assume responsibility for alerting on the feature team's behalf.
 
 **Aligning with the Watchtower team**
 
@@ -82,7 +82,7 @@ For details on how the Mobile team handles backend alerts, see [On-call procedur
 
 **Feature teams having features built on their behalf**
 
-The Mobile team will take the lead on any incident that arises and will be responsible for the overall resolution of the issue. We will keep the feature team informed throughout and loop them in as needed.
+Feature teams are responsible for taking the lead on any incident that may occur with their feature, regardless of who built it. If this is not possible, the Mobile team will take the lead and be responsible for the overall resolution of the issue.
 
 ---
 
