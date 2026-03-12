@@ -17,6 +17,7 @@ import {
   AppointmentTravelClaimDetails,
   getCachedAppointmentById,
 } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
 import { QueriesData, RenderParams, fireEvent, render, screen } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
@@ -242,7 +243,9 @@ describe('AppointmentTravelClaimDetails', () => {
     })
 
     it('should not display a downtime alert when travel pay is in downtime', () => {
-      useMaintenanceWindowsMock.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
+      useMaintenanceWindowsMock.mockReturnValue(
+        getMaintenanceWindowsPayload([DowntimeFeatureTypeConstants.travelPayFeatures]),
+      )
       initializeTestInstance('Upcoming', {}, undefined)
 
       // Check that the downtime alert is not displayed

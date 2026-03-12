@@ -8,6 +8,7 @@ import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWind
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { getPastAppointmentDateRange } from 'utils/appointments'
@@ -108,7 +109,7 @@ context('PastAppointments', () => {
   ) => {
     const props = mockNavProps()
     useMaintenanceWindowsMock.mockReturnValue(
-      maintenanceWindows || getMaintenanceWindowsPayload(['travel_pay_features']),
+      maintenanceWindows || getMaintenanceWindowsPayload([DowntimeFeatureTypeConstants.travelPayFeatures]),
     )
 
     render(

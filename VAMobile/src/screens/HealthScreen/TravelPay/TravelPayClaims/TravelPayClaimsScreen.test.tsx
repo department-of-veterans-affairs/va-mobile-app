@@ -6,7 +6,7 @@ import { t } from 'i18next'
 import { GetTravelPayClaimsResponse } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
-import { DowntimeFeatureTypeConstants } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { context, mockNavProps, render } from 'testUtils'
 import { createTimeFrameDateRangeMap } from 'utils/dateUtils'
 import { formatDateRangeMMMyyyy } from 'utils/formattingUtils'
@@ -379,7 +379,9 @@ context('TravelPayClaims', () => {
   describe('displaying the downtime error message', () => {
     it('should show downtime message when travel pay is in downtime', async () => {
       mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
-      mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
+      mockUseMaintenanceWindows.mockReturnValue(
+        getMaintenanceWindowsPayload([DowntimeFeatureTypeConstants.travelPayFeatures]),
+      )
 
       initializeTestInstance()
 
@@ -387,7 +389,9 @@ context('TravelPayClaims', () => {
     })
 
     it('should show downtime message even when there is an API error if travel pay is in downtime', async () => {
-      mockUseMaintenanceWindows.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
+      mockUseMaintenanceWindows.mockReturnValue(
+        getMaintenanceWindowsPayload([DowntimeFeatureTypeConstants.travelPayFeatures]),
+      )
       mockUseTravelPayClaims.mockReturnValue({
         data: undefined,
         error: new Error('API Error'),
