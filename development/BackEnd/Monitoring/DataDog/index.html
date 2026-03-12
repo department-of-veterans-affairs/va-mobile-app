@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9TZ5861JW5"></script>
 <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-9TZ5861JW5",{anonymize_ip:!0})</script><link rel="stylesheet" href="/va-mobile-app/assets/css/styles.47b1246b.css">
-<script src="/va-mobile-app/assets/js/runtime~main.57552b08.js" defer="defer"></script>
-<script src="/va-mobile-app/assets/js/main.9b2b8857.js" defer="defer"></script>
+<script src="/va-mobile-app/assets/js/runtime~main.5ce64e26.js" defer="defer"></script>
+<script src="/va-mobile-app/assets/js/main.39e21e5a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -27,6 +27,12 @@
 <p><img decoding="async" loading="lazy" alt="Using slack search to find existing monitors by searching for Datadog" src="/va-mobile-app/assets/images/datadog-slack-integration-1-fbc1c9798b0dba05b2ffb493bbd95a7f.png" width="804" height="364" class="img_ev3q">
 <img decoding="async" loading="lazy" alt="VA Digital Service slack integration dashboard with a list of available slack channels" src="/va-mobile-app/assets/images/datadog-slack-integration-2-becf3971fcf37992b370e3cf6d80860b.png" width="1999" height="1324" class="img_ev3q"></p>
 <p><a href="https://docs.datadoghq.com/getting_started/" target="_blank" rel="noopener noreferrer" class="">Read more about Datadog on the official documentation</a></p>
+<p>For best practices on building monitors that stay healthy, including threshold tuning, required tags, evaluation windows, and alert message templates see the Watchtower SRE playbook:</p>
+<ul>
+<li class=""><a href="https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/05-creating-monitors.md" target="_blank" rel="noopener noreferrer" class="">Creating Monitors</a></li>
+<li class=""><a href="https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/06-anti-patterns.md" target="_blank" rel="noopener noreferrer" class="">Monitor Anti-Patterns</a></li>
+<li class=""><a href="https://github.com/department-of-veterans-affairs/octo_watchofficer/blob/main/docs/playbook/monitoring-and-health/quick-reference.md" target="_blank" rel="noopener noreferrer" class="">Quick Reference</a></li>
+</ul>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="new-issues-monitor">New Issues Monitor<a href="#new-issues-monitor" class="hash-link" aria-label="Direct link to New Issues Monitor" title="Direct link to New Issues Monitor" translate="no">​</a></h2>
 <p>The new issues monitor alerts us to any new errors (i.e., 400+ response status with stacktraces that have not been seen before) that occur in requests that route through the mobile module. It is configured to send an alert to the <a href="https://dsva.slack.com/archives/C06T6ABC9MX" target="_blank" rel="noopener noreferrer" class="">mobile-new-issue-alerts slack channel</a> anytime a new issue is seen. Many of the new issues are non-concerning and may not appear to be new at all. Changes in the stacktrace can make DataDog consider an issue &quot;new&quot; even if the same error has occurred before. As a result, we need to investigate each new issue to determine whether it&#x27;s a problem or not.</p>
 <p>The slack posts sent from DataDog to slack link to the new issue alert, which generally does not contain enough information to understand the underlying problem. To find the stacktrace:</p>
