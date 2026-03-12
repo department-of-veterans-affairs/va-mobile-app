@@ -8,6 +8,7 @@
     "fetch-gh-data": "node utils/fetchGitHubData.js",
     "fetch-gha-data": "node utils/fetchGHAWorkflowsData.js",
     "docusaurus": "docusaurus",
+    "prestart": "yarn prebuild",
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",

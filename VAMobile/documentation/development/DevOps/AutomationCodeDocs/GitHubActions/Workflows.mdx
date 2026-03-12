@@ -3,12 +3,6 @@ sidebar_position: 1
 title: Workflows
 ---
 
-<div id="top" />
-
-# GitHub Actions Workflows
-
-This page provides an overview of the GitHub Actions workflows used in this repository. These workflows automate various parts of our CI/CD process, from code quality checks to automated testing and deployments.
-
 import data from '@site/static/data/workflows.json'
 
 import WorkflowsList, { getSlug } from './../../../../src/components/WorkflowsList'
@@ -18,5 +12,11 @@ export const toc = data.map((workflow) => ({
   id: getSlug(workflow.name),
   level: 2,
 }))
+
+<div id="top" />
+
+# GitHub Actions Workflows
+
+This page provides an overview of the GitHub Actions workflows used in this repository. These workflows automate various parts of our CI/CD process, from code quality checks to automated testing and deployments.
 
 <WorkflowsList />
