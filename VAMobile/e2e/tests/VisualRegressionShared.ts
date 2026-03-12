@@ -276,7 +276,7 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
       }
       if (!prescriptionDetailsVisible) {
         throw new Error(
-          `Prescription details link not visible after ${MAX_SCROLL_ATTEMPTS} scroll attempts (1s timeout per attempt).`
+          `Prescription details link not visible after ${MAX_SCROLL_ATTEMPTS} scroll attempts (1s timeout per attempt).`,
         )
       }
       await prescriptionDetailsElement.tap()
