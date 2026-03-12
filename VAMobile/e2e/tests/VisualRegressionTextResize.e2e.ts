@@ -1,6 +1,6 @@
 /*
 Description:
-Detox script that runs text resize accessibility tests for navigation regression.
+Detox script that runs text resize accessibility tests for visual regression.
 The script can run either as a full suite or a subset:
 * Full suite: The script will check every page outlined in navigationDic. A full suite run occurs
 * either on the nightly dev build or when you check "run full e2e test" in the workflow options
