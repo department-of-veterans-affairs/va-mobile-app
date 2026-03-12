@@ -76,7 +76,7 @@ function buildUsedByMap(files) {
 /**
  * Builds a forward "uses" map: for each workflow, records which reusable workflows it calls.
  * @param {string[]} files - Workflow filenames.
- * @param {Object.<string, {name: string}>} nameMap - Map of fileName to parsed workflow name.
+ * @param {Object.<string, string>} nameMap - Map of fileName to parsed workflow name.
  * @returns {Object.<string, Array<{name: string, fileName: string}>>}
  */
 function buildUsesMap(files, nameMap) {
@@ -140,7 +140,7 @@ function parseWorkflow(fileName, userMap, usesMap) {
 
   let data
   try {
-    data = yaml.load(content)
+    data = yaml.load(content, { schema: yaml.JSON_SCHEMA })
   } catch (e) {
     console.error(`Error parsing YAML in ${fileName}:`, e.message)
     return null
@@ -148,7 +148,7 @@ function parseWorkflow(fileName, userMap, usesMap) {
 
   if (!data) return null
 
-  const on = data.on || {}
+  const on = data.on || data.true || {}
   Object.values(on).forEach((config) => {
     if (config && typeof config === 'object') {
       delete config.secrets

@@ -110,7 +110,7 @@ const TableOfContents: React.FC<{ groupedData: Record<string, WorkflowData[]> }>
 
   return (
     <div
-      className="margin-bottom--xl p--md"
+      className="margin-bottom--xl"
       style={{ background: 'var(--ifm-color-emphasis-100)', borderRadius: '8px', padding: '1.5rem' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
         {sortedPrefixes.map((prefix) => (
