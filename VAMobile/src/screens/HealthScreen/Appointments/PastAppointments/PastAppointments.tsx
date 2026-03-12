@@ -180,6 +180,7 @@ function PastAppointments({
         initialDateRange={invalidDateRange || datePickerRange}
         minimumDate={DateTime.local().minus({ years: 2 })}
         maximumDate={DateTime.local()}
+        useSecondaryApplyButton={true}
         onApply={handleDatePickerApply}
         onReset={handleDatePickerReset}
       />
