@@ -1,5 +1,155 @@
 [
   {
+    "title": "v2.71.0",
+    "due_on": "2026-03-24T00:00:00Z",
+    "issues": [
+      {
+        "title": "Remove high traffic, non actionable events from the app code - 2",
+        "number": 12910,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12910",
+        "isPR": false
+      },
+      {
+        "title": "Claim letters analytics for deep, universal, and app links.",
+        "number": 12864,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12864",
+        "isPR": true
+      },
+      {
+        "title": "Fix OHMigration and Messages e2e",
+        "number": 12842,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12842",
+        "isPR": true
+      },
+      {
+        "title": "1185 - Hiding the DoD ID Field in the VSC",
+        "number": 12819,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12819",
+        "isPR": true
+      },
+      {
+        "title": "Fixing width of demo user select button on login",
+        "number": 12810,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12810",
+        "isPR": true
+      },
+      {
+        "title": "#133800 [Benefits Management Tools] [Team 2] Update UI to provide default content for evidence requests with no content overrides",
+        "number": 12783,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12783",
+        "isPR": true
+      },
+      {
+        "title": "Update start scheduling button appointments link",
+        "number": 12781,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12781",
+        "isPR": false
+      },
+      {
+        "title": "129520 Change the combobox header from 'All care teams' to the label for the selected care team",
+        "number": 12779,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12779",
+        "isPR": true
+      },
+      {
+        "title": "Remote Config – Move Apply Overrides button",
+        "number": 12778,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12778",
+        "isPR": true
+      },
+      {
+        "title": "change defaults",
+        "number": 12771,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12771",
+        "isPR": true
+      },
+      {
+        "title": "MHV / add MR duplicate records alert",
+        "number": 12756,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12756",
+        "isPR": true
+      },
+      {
+        "title": "1167 - [FE] Remove period of service error info from VSC",
+        "number": 12754,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12754",
+        "isPR": true
+      },
+      {
+        "title": "BUG - [sev-3] - [All] - Floating \"Start scheduling\" button is crowding out the pagination buttons at bottom of appointments",
+        "number": 12752,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12752",
+        "isPR": false
+      },
+      {
+        "title": "[iOS 26 e2e 1/2] Restore missing Cancel buttons in iOS 26",
+        "number": 12750,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12750",
+        "isPR": true
+      },
+      {
+        "title": "iOS universal link to claim letters",
+        "number": 12738,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12738",
+        "isPR": true
+      },
+      {
+        "title": "TICKET-131524/131506 :: OH Transition Alerts",
+        "number": 12735,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12735",
+        "isPR": true
+      },
+      {
+        "title": "[Spike] - Proactive NativeModule Date Picker Feature Flag/override",
+        "number": 12717,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12717",
+        "isPR": false
+      },
+      {
+        "title": "Handle alerts and button switching for OH migration scenarios.",
+        "number": 12701,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12701",
+        "isPR": true
+      },
+      {
+        "title": "Fix broken e2e tests caused by iOS 26 update",
+        "number": 12614,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12614",
+        "isPR": false
+      },
+      {
+        "title": "#131865 [Benefits Management Tools] [Team 2] Update `FileRequest` page to utilize `friendlyName` and fall back to `displayName`",
+        "number": 12612,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12612",
+        "isPR": true
+      },
+      {
+        "title": "Remove Long Outdated Remote Config options - pt. 2",
+        "number": 12540,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12540",
+        "isPR": false
+      },
+      {
+        "title": "CU - E2E Coverage for Appointments",
+        "number": 12506,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12506",
+        "isPR": false
+      },
+      {
+        "title": "129438 accept canReply attribute from vets-api",
+        "number": 12488,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12488",
+        "isPR": true
+      },
+      {
+        "title": "chore: remove location API call and update related components",
+        "number": 12346,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12346",
+        "isPR": true
+      }
+    ]
+  },
+  {
     "title": "v2.70.0",
     "due_on": "2026-03-10T00:00:00Z",
     "issues": [
