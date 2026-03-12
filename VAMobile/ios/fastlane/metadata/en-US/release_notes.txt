@@ -1,1 +1,27 @@
-We added general improvements and fixed a few bugs.
+What's new in this release:
+
+Secure Messaging
+• When composing or editing a message, the "To" field now shows the name of your selected care team instead of "All Care Teams"
+• Veterans at Oracle Health facilities in a migration state will see informational alerts in their inbox, message views, and composition screens; the compose and reply buttons are hidden where messaging is unavailable during migration
+
+Prescriptions
+• Veterans whose medications are from facilities transitioning to Oracle Health will see a transition alert on the Prescription Details page; the Request Refill button is hidden for those medications during the transition period
+
+Medical Records
+• A new dismissible alert has been added for Veterans at Oracle Health facilities, noting that duplicate records may appear temporarily while records are being consolidated
+
+Claims
+• Evidence request details now include clearer submission guidance covering what is needed, how to submit files, and how to get help
+• The evidence request list now uses clearer labels to better distinguish between different types of evidence requests
+
+Appointments
+• Fixed an issue where the Start Scheduling button overlapped the pagination controls on the appointments list
+
+Veteran Status Card
+• Improved spacing in alert messages for better readability
+• The DoD ID Number field is now hidden when no value is available, preventing an empty field from displaying
+
+iOS
+• Restored Cancel buttons that were disappearing in action sheets on iOS 26
+
+We also made general bug fixes and performance improvements.
