@@ -126,6 +126,7 @@ context('LettersListScreen', () => {
     await waitFor(() => expect(screen.getByRole('link', { name: 'Civil service preference letter' })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: t('letters.coeHomeLoan') })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Commissary letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Foreign medical program enrollment letter' })).toBeTruthy())
     await waitFor(() =>
       expect(screen.getByRole('link', { name: 'Proof of creditable prescription drug coverage letter' })).toBeTruthy(),
     )
