@@ -8,23 +8,20 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation } from 'utils/hooks'
 import { vaGovWebviewTitle } from 'utils/webview'
 
-/** True if the URL is the VA.gov profile direct deposit path (relative or absolute from va.gov). */
+/**
+ * Checks whether a URL points to the VA.gov direct deposit profile page so the
+ * app can intercept it and navigate to the native Direct Deposit screen instead.
+ * Accepts both relative paths (e.g. "/profile/direct-deposit") and absolute
+ * VA.gov URLs from any environment (e.g. "https://staging.va.gov/profile/direct-deposit").
+ * Non-VA.gov absolute URLs are rejected to avoid false positives.
+ */
 const isDirectDepositProfileUrl = (url: string): boolean => {
-  const path = '/profile/direct-deposit'
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    try {
-      const resolvedPath = new URL(url, 'https://www.va.gov').pathname
-      return resolvedPath === path
-    } catch {
-      return url.includes('profile/direct-deposit')
-    }
-  }
   try {
-    const parsed = new URL(url)
-    const isVaGov = parsed.hostname === 'va.gov' || parsed.hostname.endsWith('.va.gov')
-    return isVaGov && parsed.pathname === path
+    const { hostname, pathname } = new URL(url, 'https://www.va.gov')
+    const isVaGov = hostname === 'va.gov' || hostname.endsWith('.va.gov')
+    return isVaGov && pathname === '/profile/direct-deposit'
   } catch {
-    return false
+    return url.includes('profile/direct-deposit')
   }
 }
 
