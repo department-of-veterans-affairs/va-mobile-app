@@ -447,7 +447,7 @@ export function HomeScreen({}: HomeScreenProps) {
                     deepLink={'appointments'}
                   />
                 )}
-              {featureEnabled('travelPaySMOC') && !!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount && (
+              {!!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount && (
                 <ActivityButton
                   title={t('pastAppointments')}
                   subText={t('pastAppointments.activityButton.subText', {
@@ -599,7 +599,6 @@ export function HomeScreen({}: HomeScreenProps) {
                       <Button
                         onPress={() => {
                           setShowDisabilityRating(!showDisabilityRating)
-                          logAnalyticsEvent(Events.vama_obf_textview('disabilityRating', !showDisabilityRating))
                         }}
                         label={showDisabilityRating ? t('hide') : t('show')}
                         testID={'showDisabilityTestID'}
@@ -665,7 +664,6 @@ export function HomeScreen({}: HomeScreenProps) {
                       <Button
                         onPress={() => {
                           setShowCompensation(!showCompensation)
-                          logAnalyticsEvent(Events.vama_obf_textview('latestPayment', !showCompensation))
                         }}
                         label={showCompensation ? t('hide') : t('show')}
                         buttonType={ButtonVariants.Primary}

@@ -1,25 +1,24 @@
-const path = require("path");
+const path = require('path')
 
-const appDirectory = path.resolve(__dirname);
+const appDirectory = path.resolve(__dirname)
 
-const {presets} = require(`${appDirectory}/babel.config.js`);
+const { presets } = require(`${appDirectory}/babel.config.js`)
 
 const compileNodeModules = [
   // Add every react-native package that needs compiling
-   'react-native',
-   'react-native-keychain',
-   'rn-fetch-blob',
-    'react-native-webview',
-    
-].map((moduleName) => path.resolve(`../node_modules/${moduleName}`));
+  'react-native',
+  'react-native-keychain',
+  'rn-fetch-blob',
+  'react-native-webview',
+].map((moduleName) => path.resolve(`../node_modules/${moduleName}`))
 
 const babelLoaderConfiguration = {
-  test: /\.js$|tsx|ts|jsx?$/,
+  test: /\.(js|jsx|ts|tsx)$/,
   // Add every directory that needs to be compiled by Babel during the build.
   include: [
-     path.resolve('../src/components'), // Entry to your application
-    path.resolve( './src/*'),
-    ...compileNodeModules
+    path.resolve('../src/components'), // Entry to your application
+    path.resolve('./src/*'),
+    ...compileNodeModules,
   ],
   use: {
     loader: 'babel-loader',
@@ -29,17 +28,31 @@ const babelLoaderConfiguration = {
       plugins: ['react-native-web'],
     },
   },
-};
+}
 
 const svgLoaderConfiguration = {
   test: /\.svg$/,
   use: [
     {
+      loader: '@svgr/webpack',
+      options: {
+        prettier: false,
+        svgo: false,
+        titleProp: true,
+        ref: true,
+      },
+    },
+    {
       loader: 'file-loader',
-
+      options: {
+        name: 'static/media/[name].[hash:8].[ext]',
+      },
     },
   ],
-};
+  issuer: {
+    and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
+  },
+}
 
 const imageLoaderConfiguration = {
   test: /\.(gif|jpe?g|png)$/,
@@ -49,28 +62,24 @@ const imageLoaderConfiguration = {
       name: '[name].[ext]',
     },
   },
-};
+}
 
-module.exports = function() {
+module.exports = function () {
   return {
     name: 'docusaurus-plugin-react-native-web',
     configureWebpack(_config, isServer, utils) {
-      return { 
- 
-  resolve: {
-    extensions: [".ts", ".tsx", ".jsx", ".js"],
-    alias: {
-      "react-native$": "react-native-web",
-      "@componentsDocs": `${appDirectory}/../src/components`,
+      return {
+        resolve: {
+          extensions: ['.ts', '.tsx', '.jsx', '.js'],
+          alias: {
+            'react-native$': 'react-native-web',
+            '@componentsDocs': `${appDirectory}/../src/components`,
+          },
+        },
+        module: {
+          rules: [babelLoaderConfiguration, imageLoaderConfiguration, svgLoaderConfiguration],
+        },
+      }
     },
-  },
-  module: {
-    rules: [
-     babelLoaderConfiguration,
-       imageLoaderConfiguration,
-     svgLoaderConfiguration, 
-   ],
- },
-}}
   }
 }

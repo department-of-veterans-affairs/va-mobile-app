@@ -40,6 +40,8 @@ env:
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
   # Slack API token
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  # Tests that should always run in PRs and manual triggers (Visual Regression and Availability Framework)
+  PREREQ_TESTS: '["AvailabilityFramework.e2e.ts","VisualRegressionDarkMode.e2e.ts","VisualRegressionLandscape.e2e.ts","VisualRegressionNavigation.e2e.ts","VisualRegressionTextResize.e2e.ts"]'
 
 jobs:
   find_detox_tests_to_run:
@@ -203,7 +205,8 @@ jobs:
           if [[ "$firstInstanceFile" == "true" ]]; then
             test_matrix="[]"
           fi
-          test_matrix=$(echo $test_matrix | jq -c 'unique')
+          test_matrix=$(echo $test_matrix | jq -c 'unique | map(if endswith(".e2e.ts") then . else . + ".e2e.ts" end)')
+          test_matrix=$(echo "$test_matrix" | jq -c --argjson prereqs '${{ env.PREREQ_TESTS }}' '. + $prereqs | unique')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
         env:

@@ -6,10 +6,9 @@ import { t } from 'i18next'
 import { GetTravelPayClaimsResponse } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
-import { context, mockNavProps, render, when } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { createTimeFrameDateRangeMap } from 'utils/dateUtils'
 import { formatDateRangeMMMyyyy } from 'utils/formattingUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 // Mock screen reader hook to prevent act() warning within
 // VAModalPicker that aren't affecting these tests
@@ -185,10 +184,6 @@ context('TravelPayClaims', () => {
     )
 
     mockUseDowntime.mockImplementation(() => false)
-
-    when(featureEnabled as jest.Mock)
-      .calledWith('travelPayStatusList')
-      .mockReturnValue(true)
   }
 
   it('should show travel claims header', () => {

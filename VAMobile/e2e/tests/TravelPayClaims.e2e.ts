@@ -36,11 +36,10 @@ const TravePayClaimsE2eIds = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
 })
 
-describe.skip('Travel Pay Claims Screen', () => {
+describe('Travel Pay Claims Screen', () => {
   it('navigates from the different entry points', async () => {
     // Visit through Benefits tab
     await openBenefits()

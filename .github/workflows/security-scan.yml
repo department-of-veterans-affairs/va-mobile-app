@@ -174,10 +174,11 @@ jobs:
             while IFS= read -r line; do
               # Extract package name from the alert line
               PKG_NAME=$(echo "$line" | grep -oP '(dependencies|devDependencies|peerDependencies|optionalDependencies)\.\K[^ ]+' || true)
+              PKG_FILE=$(echo "$line" | cut -d: -f1)
 
               if [ -n "$PKG_NAME" ] && [ "$PKG_NAME" != "version" ] && [ "$PKG_NAME" != "name" ]; then
                 # Read the actual version from package.json for this package
-                ACTUAL_VERSION=$(jq -r ".dependencies[\"$PKG_NAME\"] // .devDependencies[\"$PKG_NAME\"] // .peerDependencies[\"$PKG_NAME\"] // .optionalDependencies[\"$PKG_NAME\"] // \"\"" package.json)
+                ACTUAL_VERSION=$(jq -r ".dependencies[\"$PKG_NAME\"] // .devDependencies[\"$PKG_NAME\"] // .peerDependencies[\"$PKG_NAME\"] // .optionalDependencies[\"$PKG_NAME\"] // \"\"" "$PKG_FILE")
 
                 # Strip semver prefix (^, ~, >=, etc) to get clean version number
                 CLEAN_VERSION=$(echo "$ACTUAL_VERSION" | sed 's/^[^0-9]*//')
@@ -239,11 +240,12 @@ jobs:
               while IFS= read -r line; do
                 # Extract package name from the alert line
                 PKG_NAME=$(echo "$line" | grep -oP '(dependencies|devDependencies|peerDependencies|optionalDependencies)\.\K[^ ]+' || true)
+                PKG_FILE=$(echo "$line" | cut -d: -f1)
 
                 # Only skip package.json metadata fields, NOT dependency version changes
                 if [ -n "$PKG_NAME" ]; then
                 # Read the actual version from package.json for this package
-                ACTUAL_VERSION=$(jq -r ".dependencies[\"$PKG_NAME\"] // .devDependencies[\"$PKG_NAME\"] // .peerDependencies[\"$PKG_NAME\"] // .optionalDependencies[\"$PKG_NAME\"] // \"\"" package.json)
+                ACTUAL_VERSION=$(jq -r ".dependencies[\"$PKG_NAME\"] // .devDependencies[\"$PKG_NAME\"] // .peerDependencies[\"$PKG_NAME\"] // .optionalDependencies[\"$PKG_NAME\"] // \"\"" "$PKG_FILE")
 
                 # Strip semver prefix (^, ~, >=, etc) to get clean version number
                 CLEAN_VERSION=$(echo "$ACTUAL_VERSION" | sed 's/^[^0-9]*//')
@@ -384,12 +386,7 @@ jobs:
   request_bypass_approval:
     name: Request bypass approval
     runs-on: ubuntu-latest
-    needs:
-      [
-        check_for_locked_file_changes,
-        check_approval_label,
-        remove_stale_approval_label,
-      ]
+    needs: [check_for_locked_file_changes, check_approval_label, remove_stale_approval_label]
     # Run approval when:
     # 1. Package changes detected AND node present AND (no label exists OR label was just removed)
     if: |

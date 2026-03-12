@@ -12,7 +12,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
-import { featureEnabled } from 'utils/remoteConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
@@ -59,37 +58,28 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
         accessibilityLabel={subTextA11yLabel}>
         {subText}
       </TextView>
-      {showVAGovLink &&
-        (featureEnabled('sso') ? (
-          <LinkWithAnalytics
-            type="custom"
-            onPress={() => {
-              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-                showOfflineSnackbar()
-                return
-              }
+      {showVAGovLink && (
+        <LinkWithAnalytics
+          type="custom"
+          onPress={() => {
+            if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+              showOfflineSnackbar()
+              return
+            }
 
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_SCHEDULE_APPOINTMENTS))
-              navigateTo('Webview', {
-                url: LINK_URL_SCHEDULE_APPOINTMENTS,
-                displayTitle: vaGovWebviewTitle(t),
-                loadingMessage: t('webview.appointments.loading'),
-                useSSO: true,
-              })
-            }}
-            text={t('noAppointments.visitVA')}
-            a11yLabel={a11yLabelVA(t('noAppointments.visitVA'))}
-            a11yHint={t('mobileBodyLink.a11yHint')}
-          />
-        ) : (
-          <LinkWithAnalytics
-            type="url"
-            url={LINK_URL_SCHEDULE_APPOINTMENTS}
-            text={t('noAppointments.visitVA')}
-            a11yLabel={a11yLabelVA(t('noAppointments.visitVA'))}
-            a11yHint={t('mobileBodyLink.a11yHint')}
-          />
-        ))}
+            logAnalyticsEvent(Events.vama_webview(LINK_URL_SCHEDULE_APPOINTMENTS))
+            navigateTo('Webview', {
+              url: LINK_URL_SCHEDULE_APPOINTMENTS,
+              displayTitle: vaGovWebviewTitle(t),
+              loadingMessage: t('webview.appointments.loading'),
+              useSSO: true,
+            })
+          }}
+          text={t('noAppointments.visitVA')}
+          a11yLabel={a11yLabelVA(t('noAppointments.visitVA'))}
+          a11yHint={t('mobileBodyLink.a11yHint')}
+        />
+      )}
     </Box>
   )
 }

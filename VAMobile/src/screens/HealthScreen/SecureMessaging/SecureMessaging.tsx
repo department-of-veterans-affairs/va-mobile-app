@@ -9,10 +9,10 @@ import { Button, SegmentedControl, useSnackbar } from '@department-of-veterans-a
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useFolderMessages, useFolders } from 'api/secureMessaging'
+import { useAllMessageRecipients, useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
-import { OHAlertManager, OHParentScreens } from 'components/OHAlertManager'
+import { OHAlertManager } from 'components/OHAlertManager'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
@@ -30,6 +30,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { OHParentScreens } from 'utils/ohMigration'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -46,6 +47,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const isFocused = useIsFocused()
   const {
     data: userAuthorizedServices,
+    isFetched: authorizedServicesFetched,
     error: getUserAuthorizedServicesError,
     refetch: refetchAuthServices,
     isFetching: fetchingAuthServices,
@@ -56,6 +58,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     error: foldersError,
     refetch: refetchFolder,
     isFetching: refetchingFolders,
+    isFetched: hasFetchedFolders,
   } = useFolders({
     enabled:
       isFocused &&
@@ -75,6 +78,20 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       userAuthorizedServices?.secureMessaging &&
       smNotInDowntime,
   })
+  const {
+    data: recipientsResponse,
+    isFetched: hasLoadedRecipients,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
+  } = useAllMessageRecipients({
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
+  })
+  const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), '']
@@ -84,6 +101,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
   const controlIDs = ['inboxID', 'foldersID']
   const [scrollPage, setScrollPage] = useState(1)
+  const noRecipientsError = (!recipients || recipients.length === 0) && !recipientsError
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -125,6 +143,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   }
 
   const handleRefresh = () => {
+    if (recipientsError) {
+      refetchRecipients()
+    }
     if (inboxError) {
       refetchInbox()
     } else if (foldersError) {
@@ -136,15 +157,22 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     scrollViewRef: scrollViewRef,
   }
 
-  const otherError = (foldersError || (inboxError && !termsAndConditionError)) && !refetchingFolders && !refetchingInbox
-
+  const otherError =
+    (foldersError || (inboxError && !termsAndConditionError) || recipientsError) &&
+    !refetchingFolders &&
+    !refetchingInbox &&
+    !refetchingRecipients
   return (
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
       title={t('messages')}
       testID="messagesTestID"
       scrollViewProps={scrollViewProps}
-      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}>
+      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+      isLoading={
+        !authorizedServicesFetched ||
+        (userAuthorizedServices?.secureMessaging && (!hasLoadedRecipients || !inboxFetched || !hasFetchedFolders))
+      }>
       {!smNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices && !refetchingFolders && !refetchingInbox ? (
@@ -159,13 +187,15 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         <TermsAndConditions />
       ) : (
         <>
-          <Box mx={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('secureMessaging.startNewMessage')}
-              onPress={onPress}
-              testID={'startNewMessageButtonTestID'}
-            />
-          </Box>
+          {!noRecipientsError && (
+            <Box mx={theme.dimensions.buttonPadding}>
+              <Button
+                label={t('secureMessaging.startNewMessage')}
+                onPress={onPress}
+                testID={'startNewMessageButtonTestID'}
+              />
+            </Box>
+          )}
           <Box flex={1} justifyContent="flex-start">
             <Box
               mb={theme.dimensions.standardMarginBetween}
