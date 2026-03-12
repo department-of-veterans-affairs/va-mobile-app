@@ -9,9 +9,12 @@ permissions:
   contents: read
 
 jobs:
-  ci:
+  ssm-param:
     runs-on: 'ubuntu-latest'
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Configure AWS Credentials with OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -24,6 +27,6 @@ jobs:
           ssm_parameter: '/dsva-vagov/va-mobile-app/dev/ping'
           env_variable_name: 'PING'
 
-      - name: 'Build & Deploy'
+      - name: 'Print the message'
         run: |
           echo "Here you go --> $PING"
