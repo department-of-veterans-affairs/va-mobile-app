@@ -849,14 +849,6 @@ export const Events = {
       },
     }
   },
-  vama_login_token_store: (success: boolean): Event => {
-    return {
-      name: 'vama_login_token_store',
-      params: {
-        p1: success,
-      },
-    }
-  },
   vama_mw_shown: (feature: string, start: DateTime, end: DateTime): Event => {
     return {
       name: 'vama_mw_shown',
@@ -1301,16 +1293,6 @@ export const Events = {
   vama_whatsnew_more: (): Event => {
     return {
       name: 'vama_whatsnew_more',
-    }
-  },
-  // ObfuscatedTextView
-  vama_obf_textview: (cardName: string, revealed: boolean): Event => {
-    return {
-      name: 'vama_obf_textview',
-      params: {
-        card_name: cardName,
-        p1: revealed,
-      },
     }
   },
   // payment breakdown modal - see details

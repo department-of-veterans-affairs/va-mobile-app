@@ -28,6 +28,8 @@ export type DatePickerProps = {
   minimumDate?: DateTime
   /** Optional DateTime object that represents the maximum selectable date on each date picker */
   maximumDate?: DateTime
+  /** Optional boolean that styles the apply button as a secondary button if set to true. Defaults to false. */
+  useSecondaryApplyButton?: boolean
   /** Callback when the apply button is pressed */
   onApply: (selectedDateRange: DatePickerRange, isValid: boolean) => void
   /** Callback when the reset button is pressed */
@@ -59,6 +61,7 @@ const DatePicker: FC<DatePickerProps> = ({
   initialDateRange,
   minimumDate,
   maximumDate,
+  useSecondaryApplyButton = false,
   onApply,
   onReset,
 }) => {
@@ -164,7 +167,11 @@ const DatePicker: FC<DatePickerProps> = ({
         />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>
-        <Button onPress={handleApply} label={t('apply')} buttonType={ButtonVariants.Primary} />
+        <Button
+          onPress={handleApply}
+          label={t('apply')}
+          buttonType={useSecondaryApplyButton ? ButtonVariants.Secondary : ButtonVariants.Primary}
+        />
       </Box>
     </Box>
   )
