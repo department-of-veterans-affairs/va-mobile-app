@@ -17,12 +17,12 @@ jest.mock('@department-of-veterans-affairs/mobile-component-library', () => {
 })
 
 jest.mock('components', () => {
-  const React = jest.requireActual('react')
-  const ReactNative = jest.requireActual('react-native')
+  const ReactActual = jest.requireActual('react')
+  const ReactNativeActual = jest.requireActual('react-native')
   return {
     Box: (props: { children: React.ReactNode; style?: unknown }) => {
-      return React.createElement(
-        ReactNative.View,
+      return ReactActual.createElement(
+        ReactNativeActual.View,
         { testID: 'floatingButtonRoot', style: props.style },
         props.children,
       )

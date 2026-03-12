@@ -18,7 +18,7 @@ export type FloatingButtonProps = {
 
 /**
  * Button that sticks to the bottom of its container when the screen reader is disabled and renders in-place otherwise.
- * Also renders in-place when text size is significantly enlarged via accessibility settings (>= 1.5x).
+ * Also renders in-place when text size is significantly enlarged via accessibility settings (greater than or equal to the declared constant).
  */
 const FloatingButton: FC<FloatingButtonProps> = ({ isHidden, ...buttonProps }: FloatingButtonProps) => {
   const theme = useTheme()
