@@ -280,7 +280,6 @@ export const navigateToPage = async (key: string, navigationDicValue: any[]) => 
         )
       }
       await prescriptionDetailsElement.tap()
-      await device.enableSynchronization()
       return
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
