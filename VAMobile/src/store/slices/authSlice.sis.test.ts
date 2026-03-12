@@ -221,7 +221,7 @@ context('authAction SIS', () => {
       expect(endAction?.payload.error).toBeTruthy()
     })
 
-    it('should parse code and state correctly and login', async () => {
+    it('should parse authorization code from callback URL and login', async () => {
       const tokenResponse = () => {
         return Promise.resolve(mockedAuthResponse)
       }

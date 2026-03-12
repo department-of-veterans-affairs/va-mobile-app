@@ -719,7 +719,14 @@ export const sendLoginStartAnalytics =
 
 export const startWebLogin = (): AppThunk => async (dispatch, getState) => {
   await clearCookies()
-  const { codeChallenge = '' } = getState().auth
+  const { codeChallenge, authParamsLoadingState } = getState().auth
+  if (authParamsLoadingState !== AuthParamsLoadingStateTypeConstants.READY || !codeChallenge) {
+    logNonFatalErrorToFirebase(
+      new Error('startWebLogin called before PKCE params were ready'),
+      'startWebLogin: PKCE params missing',
+    )
+    return
+  }
   const params = new URLSearchParams({
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
