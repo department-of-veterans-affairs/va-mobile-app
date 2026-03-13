@@ -155,7 +155,7 @@ context('ReplyMessage', () => {
   })
 
   describe('render correctly', () => {
-    it('should also navigate on click of Only use messages for non-urgent needs', async () => {
+    it('should display the non-urgent warning alert at the top of the form', async () => {
       expect(screen.getByText(t('secureMessaging.viewMessage.loading'))).toBeTruthy()
       await waitFor(() =>
         expect(screen.getByText(`${t('secureMessaging.formMessage.message')} ${t('required')}`)).toBeTruthy(),
@@ -165,8 +165,7 @@ context('ReplyMessage', () => {
       expect(screen.getByText('mock sender 2')).toBeTruthy()
       expect(screen.getAllByText('mock sender 3').length).toBe(2)
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
-      fireEvent.press(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages')))
-      await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
+      expect(screen.getByText(t('secureMessaging.startNewMessage.nonurgent.title'))).toBeTruthy()
     })
   })
 
