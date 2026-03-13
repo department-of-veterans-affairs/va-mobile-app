@@ -39,7 +39,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { claimID, request } = route.params
+  const { claimID, request, provider } = route.params
   const {
     standardMarginBetween,
     contentMarginBottom,
@@ -100,12 +100,12 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    navigateTo('SelectFile', { claimID, request })
+    navigateTo('SelectFile', { claimID, request, provider })
   }
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
-    navigateTo('TakePhotos', { claimID, request })
+    navigateTo('TakePhotos', { claimID, request, provider })
   }
 
   const onClaimLettersPress = () => {

@@ -59,8 +59,8 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
     }
   }, [claimType, previousClaimType])
 
-  const onClaimDetails = (id: string) => {
-    navigateTo('ClaimDetailsScreen', { claimID: id, claimType })
+  const onClaimDetails = (id: string, provider?: string) => {
+    navigateTo('ClaimDetailsScreen', { claimID: id, claimType, provider })
   }
 
   const onAppealDetails = (id: string) => {
@@ -116,7 +116,8 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
       listItems.push({
         textLines,
         a11yValue,
-        onPress: () => (type === ClaimOrAppealConstants.claim ? onClaimDetails(id) : onAppealDetails(id)),
+        onPress: () =>
+          type === ClaimOrAppealConstants.claim ? onClaimDetails(id, attributes.provider) : onAppealDetails(id),
         testId: getTestIDFromTextLines(textLines),
       })
     })

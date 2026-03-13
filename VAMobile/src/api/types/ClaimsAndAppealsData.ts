@@ -475,6 +475,7 @@ export type ClaimsAndAppealsList = {
     claimTypeCode?: string
     documentsNeeded?: boolean
     developmentLetterSent?: boolean
+    provider?: string
   }
 }
 
@@ -561,6 +562,7 @@ export type ClaimAttributesData = {
   contentionList: Array<string>
   vaRepresentative: string
   eventsTimeline: Array<ClaimEventData>
+  provider?: string
 }
 
 export type ClaimGetData = {

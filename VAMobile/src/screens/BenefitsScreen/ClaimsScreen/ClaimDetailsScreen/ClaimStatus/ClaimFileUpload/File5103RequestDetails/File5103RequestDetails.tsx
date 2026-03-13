@@ -62,7 +62,7 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
     enabled: letterID.length > 0 && letterReceivedAt.length > 0,
   })
 
-  const { claimID, request } = route.params
+  const { claimID, request, provider } = route.params
   const { cardPadding, contentMarginBottom } = theme.dimensions
   const [showLetterModal, setShowLetterModal] = useState<boolean>(false)
 
@@ -166,13 +166,13 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
               <Button
                 buttonType={ButtonVariants.Primary}
                 label={t('claimDetails.5103.review.waiver')}
-                onPress={() => navigateTo('File5103ReviewWaiver', { claimID, request })}
+                onPress={() => navigateTo('File5103ReviewWaiver', { claimID, request, provider })}
               />
               <Box mt={theme.dimensions.condensedMarginBetween}>
                 <Button
                   buttonType={ButtonVariants.Secondary}
                   label={t('claimDetails.5103.submit.evidence')}
-                  onPress={() => navigateTo('File5103SubmitEvidence', { claimID, request })}
+                  onPress={() => navigateTo('File5103SubmitEvidence', { claimID, request, provider })}
                 />
               </Box>
             </Box>

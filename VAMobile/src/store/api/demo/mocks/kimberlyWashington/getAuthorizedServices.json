@@ -24,7 +24,8 @@
           "secureMessaging": true,
           "secureMessagingOracleHealthEnabled": true,
           "userProfileUpdate": true,
-          "benefitsPushNotification": true
+          "benefitsPushNotification": true,
+          "cstMultiClaimProvider": true
         }
       }
     },

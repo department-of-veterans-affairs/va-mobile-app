@@ -37,8 +37,8 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const snackbar = useSnackbar()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { claimID } = route.params
-  const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
+  const { claimID, provider } = route.params
+  const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID, provider)
   const {
     mutate: submitClaimDecision,
     error: error,
@@ -64,9 +64,9 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigateTo('ClaimDetailsScreen', { claimID, claimType })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType, provider })
     }
-  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
+  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType, provider])
 
   const onCancelPress = () => {
     if (claim) {

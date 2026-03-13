@@ -46,7 +46,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { claimID, request: originalRequest, fileUploaded } = route.params
+  const { claimID, request: originalRequest, fileUploaded, provider } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
@@ -103,9 +103,9 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
+      navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE, provider })
     }
-  }, [filesUploadedSuccess, claimID, navigateTo])
+  }, [filesUploadedSuccess, claimID, navigateTo, provider])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)

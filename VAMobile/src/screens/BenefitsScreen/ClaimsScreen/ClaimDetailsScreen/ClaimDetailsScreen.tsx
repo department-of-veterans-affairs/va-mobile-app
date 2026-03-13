@@ -61,7 +61,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const [eFolderFileName, setEFolderFileName] = useState('')
   const [downloadFile, setDownloadFile] = useState(false)
 
-  const { claimID, claimType } = route.params
+  const { claimID, claimType, provider } = route.params
   const registerReviewEvent = useReviewEvent(true)
   const queryClient = useQueryClient()
   const {
@@ -69,7 +69,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     isFetching: loadingClaim,
     error: claimError,
     refetch: refetchClaim,
-  } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+  } = useClaim(claimID, provider, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const {
     data: eFolderDocuments,
     isFetching: loadingEFolder,
@@ -190,7 +190,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequestSubtask', { claimID, claim })
+    navigateTo('FileRequestSubtask', { claimID, claim, provider })
   }
 
   const submitEvidencePress = () => {

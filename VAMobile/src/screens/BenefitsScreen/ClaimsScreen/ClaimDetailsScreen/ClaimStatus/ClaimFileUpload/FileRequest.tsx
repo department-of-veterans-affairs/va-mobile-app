@@ -42,13 +42,13 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, claim } = route.params
+  const { claimID, claim, provider } = route.params
   const {
     data: claimFallBack,
     error: claimError,
     refetch: refetchClaim,
     isFetching: loadingClaim,
-  } = useClaim(claimID, { enabled: !claim })
+  } = useClaim(claimID, provider, { enabled: !claim })
   const requests = currentRequestsForVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
@@ -72,9 +72,9 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
 
       if (featureEnabled('show5103Flow') && is5103Notice(request.displayName || '')) {
-        navigateTo('File5103RequestDetails', { claimID, request })
+        navigateTo('File5103RequestDetails', { claimID, request, provider })
       } else {
-        navigateTo('FileRequestDetails', { claimID, request })
+        navigateTo('FileRequestDetails', { claimID, request, provider })
       }
     }
 
@@ -145,7 +145,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
         ),
       )
     }
-    navigateTo('AskForClaimDecision', { claimID })
+    navigateTo('AskForClaimDecision', { claimID, provider })
   }
 
   return (

@@ -45,7 +45,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const theme = useTheme()
   const showActionSheetWithOptions = useShowActionSheet()
   const confirmAlert = useShowActionSheet()
-  const { claimID, request: originalRequest, firstImageResponse } = route.params
+  const { claimID, request: originalRequest, firstImageResponse, provider } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
@@ -103,9 +103,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
+      navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE, provider })
     }
-  }, [filesUploadedSuccess, claimID, navigateTo])
+  }, [filesUploadedSuccess, claimID, navigateTo, provider])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)

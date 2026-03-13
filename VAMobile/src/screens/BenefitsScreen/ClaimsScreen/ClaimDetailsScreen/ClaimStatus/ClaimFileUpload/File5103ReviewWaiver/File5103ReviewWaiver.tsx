@@ -36,9 +36,9 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
   const theme = useTheme()
   const snackbar = useSnackbar()
 
-  const { claimID } = route.params
+  const { claimID, provider } = route.params
 
-  const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
+  const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID, provider)
   const {
     mutate: submitClaimDecision,
     error: error,
@@ -66,9 +66,9 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigateTo('ClaimDetailsScreen', { claimID, claimType })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType, provider })
     }
-  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
+  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType, provider])
 
   const borderStyles: BoxProps = {
     borderStyle: 'solid',

@@ -34,17 +34,19 @@ const request5103 = {
 const claimID = 'claimID'
 
 const mockNavigationSpy = jest.fn()
+const mockAlertSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
 
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
+    useShowActionSheet: () => mockAlertSpy,
   }
 })
 
 context('File5103ReviewWaiver', () => {
-  const renderWithRequest = (requests: ClaimEventData[]) => {
+  const renderWithRequest = (requests: ClaimEventData[], provider?: string, extraAttributes: object = {}) => {
     const queriesData: QueriesData = [
       {
         queryKey: [claimsAndAppealsKeys.claim, claimID],
@@ -54,6 +56,7 @@ context('File5103ReviewWaiver', () => {
             ...Claim.attributes,
             waiverSubmitted: false,
             eventsTimeline: requests,
+            ...extraAttributes,
           },
         },
       },
@@ -69,11 +72,12 @@ context('File5103ReviewWaiver', () => {
             ...Claim.attributes,
             waiverSubmitted: false,
             eventsTimeline: [request5103],
+            ...extraAttributes,
           },
         },
       })
 
-    const props = mockNavProps(undefined, undefined, { params: { claimID } })
+    const props = mockNavProps(undefined, undefined, { params: { claimID, provider } })
     render(<File5103ReviewWaiver {...props} />, { queriesData })
   }
 
@@ -92,5 +96,41 @@ context('File5103ReviewWaiver', () => {
     await waitFor(() =>
       expect(screen.getByText(t('claimDetails.5103.review.waiver.confirmation.error.checkbox'))).toBeTruthy(),
     )
+  })
+
+  describe('navigation after successful submit', () => {
+    const closedClaimAttributes = { open: false, decisionLetterSent: true }
+
+    beforeEach(() => {
+      mockNavigationSpy.mockReset()
+      ;(api.post as jest.Mock).mockResolvedValue({})
+      mockAlertSpy.mockImplementation((_: unknown, callback: (idx: number) => void) => callback(0))
+    })
+
+    it('navigates to ClaimDetailsScreen with provider when provider param is set', async () => {
+      renderWithRequest([request5103], 'lighthouseV2', closedClaimAttributes)
+      await waitFor(() => fireEvent.press(screen.getByText(t('claimDetails.5103.review.waiver.confirmation'))))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('claimDetails.5103.submit.waiver') })))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID,
+          claimType: 'CLOSED',
+          provider: 'lighthouseV2',
+        }),
+      )
+    })
+
+    it('navigates to ClaimDetailsScreen without provider when provider param is not set', async () => {
+      renderWithRequest([request5103], undefined, closedClaimAttributes)
+      await waitFor(() => fireEvent.press(screen.getByText(t('claimDetails.5103.review.waiver.confirmation'))))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('claimDetails.5103.submit.waiver') })))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID,
+          claimType: 'CLOSED',
+          provider: undefined,
+        }),
+      )
+    })
   })
 })
