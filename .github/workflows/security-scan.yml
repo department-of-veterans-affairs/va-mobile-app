@@ -178,6 +178,16 @@ jobs:
 
               if [ -n "$PKG_NAME" ] && [ "$PKG_NAME" != "version" ] && [ "$PKG_NAME" != "name" ]; then
                 # Read the actual version from package.json for this package
+                if [ ! -f "$PKG_FILE" ]; then
+                  # First, try to find an exact tracked file matching PKG_FILE
+                  PKG_FILE_PATH=$(git ls-files -- "$PKG_FILE" 2>/dev/null || true)
+                  if [ -z "$PKG_FILE_PATH" ]; then
+                    # Fall back to searching by basename, handling multiple matches deterministically
+                    PKG_BASENAME=$(basename "$PKG_FILE")
+                    PKG_FILE_PATH=$(git ls-files | grep -F -x -- "$PKG_BASENAME" | head -n1 || true)
+                  fi
+                  if [ -n "$PKG_FILE_PATH" ]; then PKG_FILE="$PKG_FILE_PATH"; fi
+                fi
                 ACTUAL_VERSION=$(jq -r ".dependencies[\"$PKG_NAME\"] // .devDependencies[\"$PKG_NAME\"] // .peerDependencies[\"$PKG_NAME\"] // .optionalDependencies[\"$PKG_NAME\"] // \"\"" "$PKG_FILE")
 
                 # Strip semver prefix (^, ~, >=, etc) to get clean version number
@@ -245,6 +255,10 @@ jobs:
                 # Only skip package.json metadata fields, NOT dependency version changes
                 if [ -n "$PKG_NAME" ]; then
                 # Read the actual version from package.json for this package
+                if [ ! -f "$PKG_FILE" ]; then
+                  PKG_FILE_PATH=$(git ls-files | grep -Fx "$PKG_FILE" | head -n1 || echo "")
+                  if [ -n "$PKG_FILE_PATH" ]; then PKG_FILE="$PKG_FILE_PATH"; fi
+                fi
                 ACTUAL_VERSION=$(jq -r ".dependencies[\"$PKG_NAME\"] // .devDependencies[\"$PKG_NAME\"] // .peerDependencies[\"$PKG_NAME\"] // .optionalDependencies[\"$PKG_NAME\"] // \"\"" "$PKG_FILE")
 
                 # Strip semver prefix (^, ~, >=, etc) to get clean version number
