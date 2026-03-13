@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -191,8 +190,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 
   // Derive OH migration phase from the first thread message or the current message
   const ohMigrationPhase = message?.ohMigrationPhase || thread?.[0]?.attributes?.ohMigrationPhase
+  const migratedToOracleHealth = message?.migratedToOracleHealth ?? thread?.[0]?.attributes?.migratedToOracleHealth
   const migrationBlocksReply = isMigrationPhaseBlockingReplies(ohMigrationPhase)
-  const stationNumber = messageData?.meta?.stationNumber
+  const stationNumber = message?.triageGroup?.stationNumber || messageData?.meta?.stationNumber || undefined
 
   useEffect(() => {
     if (threadFetched) {
@@ -434,7 +434,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
               <Trans
                 i18nKey={'secureMessaging.reply.youCantReplyMigrationMessage.body2'}
-                components={{ bold: <TextView accessible={true} variant="MobileBodyBold" /> }}
+                components={{ bold: <TextView variant="MobileBodyBold" /> }}
                 values={{
                   endDate: getMigrationEndDate(associatedErrorMigration, OHParentScreens.SecureMessaging),
                 }}
@@ -444,6 +444,21 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             <TextView accessible={true} style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
               {t('secureMessaging.reply.youCantReplyMigrationMessage.note')}
             </TextView>
+            <LinkWithAnalytics {...linkProps} />
+          </AlertWithHaptics>
+        </Box>
+      )
+    }
+
+    if (migratedToOracleHealth) {
+      return (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('secureMessaging.reply.yourMessageHasBeenMigrated')}
+            description={t('secureMessaging.reply.yourMessageHasBeenMigrated.description')}
+            descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.yourMessageHasBeenMigrated.description'))}
+            testID="secureMessagingYourMessageHasBeenMigratedAlertID">
             <LinkWithAnalytics {...linkProps} />
           </AlertWithHaptics>
         </Box>
@@ -467,11 +482,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
               {t('secureMessaging.reply.error.ifYouThink')}
             </TextView>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('upcomingAppointmentDetails.findYourVAFacility')}
-              onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
-            />
+            <LinkWithAnalytics {...linkProps} />
           </AlertWithHaptics>
         </Box>
       )
@@ -562,6 +573,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             noProviderError={noProviderError}
             migrationBlocksReply={migrationBlocksReply}
             stationNumber={stationNumber}
+            migratedToOracleHealth={migratedToOracleHealth}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>

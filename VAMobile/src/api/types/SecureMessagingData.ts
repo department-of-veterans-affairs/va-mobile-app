@@ -9,6 +9,32 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
  * MESSAGES
  */
 
+export type TriageGroup = {
+  triageTeamId: number
+  name: string
+  preferredTeam: boolean
+  active: boolean
+  stationNumber?: string | null
+  healthCareSystemName?: string | null
+  locationName?: string | null
+  locationStationNumber?: string | null
+  groupTypeEnumVal?: string | null
+  subGroupTypeEnumVal?: string | null
+  groupTypePatientDisplay?: string | null
+  subGroupTypePatientDisplay?: string | null
+  teamName?: string | null
+  leadProviderName?: string | null
+  suggestedNameDisplay?: string | null
+  description?: string | null
+  legacyName?: string | null
+  ohPoolId?: string | null
+  oplock?: number
+  createdDate?: string | null
+  modifiedDate?: string | null
+  relationType?: string | null
+  ohTriageGroup: boolean
+}
+
 export type SecureMessagingMessageAttributes = {
   messageId: number
   category: CategoryTypes
@@ -26,6 +52,8 @@ export type SecureMessagingMessageAttributes = {
   isOhMessage: boolean
   replyDisabled?: boolean
   ohMigrationPhase?: string | null
+  triageGroup?: TriageGroup | null
+  migratedToOracleHealth?: boolean
 }
 
 export type CategoryTypes =

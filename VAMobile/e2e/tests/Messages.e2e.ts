@@ -66,8 +66,11 @@ describe('Messages Screen', () => {
 
   it('verify message OLDER than 45 days information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(100, 'down')
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
 
     await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
@@ -127,7 +130,7 @@ describe('Messages Screen', () => {
   it('verify the messages just opened are displayed as read', async () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID))).toExist()
-    await expect(element(by.text('Inbox (1)'))).toExist()
+    await expect(element(by.text('Inbox (2)'))).toExist()
   })
 
   it('verify medication message details', async () => {
@@ -143,7 +146,8 @@ describe('Messages Screen', () => {
   })
 
   it('verify general message details', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_READ_ID)).tap()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
     await expect(element(by.text('General: Vaccine Booster'))).toExist()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
@@ -542,7 +546,7 @@ describe('Messages Screen', () => {
       await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).toExist()
       await expect(element(by.text('You can’t send messages to some of your care teams'))).toExist()
 
-      await expect(element(by.text('Find your VA facility'))).toExist()
+      await expect(element(by.id('goToFindLocationInfoTestID'))).toExist()
 
       await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
       await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
@@ -563,7 +567,7 @@ describe('Messages Screen', () => {
       await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).toExist()
       await expect(element(by.text('You can’t send messages to some of your care teams'))).toExist()
 
-      await expect(element(by.text('Find your VA facility'))).toExist()
+      await expect(element(by.id('goToFindLocationInfoTestID'))).toExist()
 
       await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
       await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()

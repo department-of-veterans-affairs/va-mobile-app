@@ -185,4 +185,20 @@ context('MessageCard', () => {
     expect(screen.getByText('Reply')).toBeTruthy()
     expect(screen.queryByText(t('secureMessaging.startNewMessage'))).toBeFalsy()
   })
+
+  it('should show Start new message instead of Reply when migratedToOracleHealth is true', () => {
+    render(
+      <MessageCard
+        message={messageAttributes}
+        folderId={SecureMessagingSystemFolderIdConstants.INBOX}
+        userInTriageTeam={true}
+        replyExpired={false}
+        migrationBlocksReply={false}
+        migratedToOracleHealth={true}
+        noProviderError={false}
+      />,
+    )
+    expect(screen.getByText(t('secureMessaging.startNewMessage'))).toBeTruthy()
+    expect(screen.queryByText('Reply')).toBeFalsy()
+  })
 })

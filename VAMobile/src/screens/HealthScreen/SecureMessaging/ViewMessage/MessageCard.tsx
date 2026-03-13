@@ -36,6 +36,7 @@ export type MessageCardProps = {
   userInTriageTeam?: boolean
   replyExpired?: boolean
   migrationBlocksReply?: boolean
+  migratedToOracleHealth?: boolean
   noProviderError?: boolean
   stationNumber?: string
 }
@@ -47,6 +48,7 @@ function MessageCard({
   replyExpired,
   stationNumber,
   migrationBlocksReply,
+  migratedToOracleHealth,
   noProviderError,
 }: MessageCardProps) {
   const theme = useTheme()
@@ -179,7 +181,7 @@ function MessageCard({
       return <></>
     }
 
-    if (!replyExpired && providerAllowsReply && userInTriageTeam && !migrationBlocksReply) {
+    if (!replyExpired && providerAllowsReply && userInTriageTeam && !migrationBlocksReply && !migratedToOracleHealth) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />

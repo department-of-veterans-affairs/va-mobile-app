@@ -603,7 +603,7 @@ context('ViewMessageScreen', () => {
       await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
       await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
       await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
-      await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
     })
 
     it('should show "you can no longer" alert even when message is expired (takes precedence over expired alert)', async () => {
@@ -645,7 +645,7 @@ context('ViewMessageScreen', () => {
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
       await waitFor(() => expect(screen.getByTestId('secureMessagingYouCanNoLongerAlertID')).toBeTruthy())
       await waitFor(() => expect(screen.queryByTestId('secureMessagingOlderThan45DaysAlertID')).toBeFalsy())
-      await waitFor(() => expect(screen.getByText('Find your VA facility')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
     })
   })
 
@@ -903,6 +903,40 @@ context('ViewMessageScreen', () => {
         await waitFor(() =>
           expect(screen.queryByText("You can't reply to conversations at some facilities")).toBeFalsy(),
         )
+      })
+
+      it('should show migrated to Oracle Health alert when migratedToOracleHealth is true', async () => {
+        const migratedMessage: SecureMessagingMessageGetData = {
+          data: {
+            id: 3,
+            type: '3',
+            attributes: {
+              messageId: 3,
+              category: CategoryTypeFields.other,
+              subject: 'Migrated message',
+              body: 'test body',
+              hasAttachments: false,
+              attachment: false,
+              sentDate: '3',
+              senderId: 2,
+              senderName: 'mock sender 3',
+              recipientId: 3,
+              recipientName: 'mock recipient name 3',
+              readReceipt: 'mock read receipt',
+              isOhMessage: false,
+              migratedToOracleHealth: true,
+            },
+          },
+          included: [],
+          meta: {
+            userInTriageTeam: true,
+          },
+        }
+        setupApiCalls(3, migratedMessage)
+        initializeTestInstance()
+        await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId('secureMessagingYourMessageHasBeenMigratedAlertID')).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId('goToFindLocationInfoTestID')).toBeTruthy())
       })
 
       it('should show "you can no longer" alert when not in triage team and no migration blocking', async () => {
