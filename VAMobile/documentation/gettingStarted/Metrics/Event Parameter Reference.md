@@ -5,13 +5,19 @@ sidebar_position: 4
 
 ## Overview
 
-Event parameters provide additional context about the actions captured in our events. While Google Analytics automatically collects some [standard dimensions and metrics](https://support.google.com/analytics/table/13948007?visit_id=639035750951446578-1775905048&rd=2), analyzing data not available through these built-in dimensions requires adding a custom parameter to the event and defining a corresponding custom dimension in Firebase.
+Event parameters provide additional context about the actions captured in our events. While Google Analytics 
+automatically collects some [standard dimensions and metrics](https://support.google.com/analytics/table/13948007?
+visit_id=639035750951446578-1775905048&rd=2), analyzing data not available through these built-in dimensions 
+requires adding a custom parameter to the event and defining a corresponding custom dimension or metric in Firebase.
 
-Because the number of available custom dimensions is limited, we recommend using the `generic parameter names (p1, p2, …, p11)` whenever possible.
+If the parameter is a numeric metric that measures quantity or frequency it should be a custom metric.
+
+Because the number of available custom dimensions and metrics is limited, we recommend using the 
+`generic parameter names (p1, p2, …, p11)` or an existing custom metric whenever possible.
 
 For quick reference, the table below shows the value that each generic parameter corresponds to for the events that include them. The full list of event definitions can be found in our [analytics constants file](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/dbce4aeaac76b2a49d56b9fc46f4be5cd15bce23/VAMobile/src/constants/analytics.ts).
 
-## Parameter Reference Table
+## Dimension Parameter Reference Table
 
 <div style={{ overflowX: 'scroll' }} markdown="block">
 
@@ -29,13 +35,13 @@ For quick reference, the table below shows the value that each generic parameter
  vama_claim_details_tab   | claim_id        | claim_type         | claim_step         | claim_submitted_date |                      |                      |                          |        |          |            |
  vama_claim_details_ttv   | claim_id        | claim_type         | claim_step         | claim_step_change    | ttv_claim_details    | ttv_claim_details    |                          |        |          |            |
  vama_claim_disag         | claim_id        | claim_type         | claim_step         |                      |                      |                      |                          |        |          |            |
- vama_claim_eval          | claim_id        | claim_type         | claim_step         | num_requests         |                      |                      |                          |        |          |            |
- vama_claim_eval_cancel   | claim_id        | claim_type         | claim_step         | num_requests         |                      |                      |                          |        |          |            |
- vama_claim_eval_check    | claim_id        | claim_type         | claim_step         | num_requests         |                      |                      |                          |        |          |            |
- vama_claim_eval_conf     | claim_id        | claim_type         | claim_step         | num_requests         |                      |                      |                          |        |          |            |
- vama_claim_eval_submit   | claim_id        | claim_type         | claim_step         | num_requests         |                      |                      |                          |        |          |            |
+ vama_claim_eval          | claim_id        | claim_type         | claim_step         |                      |                      |                      |                          |        |          |            |
+ vama_claim_eval_cancel   | claim_id        | claim_type         | claim_step         |                      |                      |                      |                          |        |          |            |
+ vama_claim_eval_check    | claim_id        | claim_type         | claim_step         |                      |                      |                      |                          |        |          |            |
+ vama_claim_eval_conf     | claim_id        | claim_type         | claim_step         |                      |                      |                      |                          |        |          |            |
+ vama_claim_eval_submit   | claim_id        | claim_type         | claim_step         |                      |                      |                      |                          |        |          |            |
  vama_claim_file_request  | claim_id        |                    |                    |                      |                      |                      |                          |        |          |            |
- vama_claim_review        | claim_id        | claim_type         | num_requests       |                      |                      |                      |                          |        |          |            |
+ vama_claim_review        | claim_id        | claim_type         |                    |                      |                      |                      |                          |        |          |            |
  vama_claim_status_tab    | claim_id        | claim_type         | claim_step         | claim_submitted_date |                      |                      |                          |        |          |            |
  vama_claim_submit_ev     | claim_id        |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_claim_submit_tap    | claim_id        | claim_type         |                    |                      |                      |                      |                          |        |          |            |
@@ -56,12 +62,8 @@ For quick reference, the table below shows the value that each generic parameter
  vama_evidence_type       | claim_id        | claim_request_id   | claim_request_type | evidence_method      | evidence_type        |                      |                          |        |          |            |
  vama_givefb_close        | screenName      |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_givefb_open         | linkType        |                    |                    |                      |                      |                      |                          |        |          |            |
- vama_hs_appts_load_time  | loadTime        |                    |                    |                      |                      |                      |                          |        |          |            |
- vama_hs_load_time        | loadTime        |                    |                    |                      |                      |                      |                          |        |          |            |
- vama_hs_rx_load_time     | loadTime        |                    |                    |                      |                      |                      |                          |        |          |            |
- vama_hs_sm_load_time     | loadTime        |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_lab_or_test_details | labType         |                    |                    |                      |                      |                      |                          |        |          |            |
- vama_lab_or_test_list    | timeFrame       | count              |                    |                      |                      |                      |                          |        |          |            |
+ vama_lab_or_test_list    | timeFrame       |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_link_click          | locationData    | phoneNumber        | textNumber         | TTYnumber            | url                  | type                 | text                     | testID | claim_id | claim_type | claim_step 
  vama_login_start         | isBiometric     |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_pagination          | pages           | to_page            | tab                |                      |                      |                      |                          |        |          |            |
@@ -81,7 +83,6 @@ For quick reference, the table below shows the value that each generic parameter
  vama_sm_attach_outcome   | attached        |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_sm_change_category  | messageCategory | previousCategory   |                    |                      |                      |                      |                          |        |          |            |
  vama_sm_folder_open      | folder          |                    |                    |                      |                      |                      |                          |        |          |            |
- vama_sm_folders          | draft_count     |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_sm_move_outcome     | outcome         |                    |                    |                      |                      |                      |                          |        |          |            |
  vama_sm_open             | sm_id           | location           | status             |                      |                      |                      |                          |        |          |            |
  vama_sm_save_draft       | messageCategory |                    |                    |                      |                      |                      |                          |        |          |            |
@@ -95,3 +96,20 @@ For quick reference, the table below shows the value that each generic parameter
  vama_webview             | id              |                    |                    |                      |                      |                      |                          |        |          |            |
 
 </div>
+
+## Metric Parameter Reference Table
+
+| Event Name               | loadTime | count        | totalTime |
+|--------------------------|----------|--------------|-----------|
+| vama_hs_appts_load_time  | loadTime |              |           |
+| vama_hs_load_time        | loadTime |              |           |
+| vama_hs_rx_load_time     | loadTime |              |           |
+| vama_hs_sm_load_time     | loadTime |              |           |
+| vama_load_time_outlier   | loadTime |              |           |
+| vama_lab_or_test_list    |          | count        |           |
+| vama_sm_folders          |          | draft_count  |           |
+| vama_claim_eval_check    |          | num_requests |           |
+| vama_claim_eval_conf     |          | num_requests |           |
+| vama_claim_eval_submit   |          | num_requests |           |
+| vama_claim_review        |          | num_requests |           |
+| vama_smoc_time_taken     |          |              | totalTime |

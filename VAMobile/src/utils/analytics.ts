@@ -145,3 +145,7 @@ export const logLoadTimeEvent = (eventName: string, loadTimeMs: number) => {
     logAnalyticsEvent(Events.vama_load_time_outlier(eventName, loadTimeMs))
   }
 }
+
+export const convertNumericParam = (param: number | undefined | null) => {
+  return param ? `${param}` : undefined
+}
