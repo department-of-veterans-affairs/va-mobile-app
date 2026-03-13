@@ -92,6 +92,14 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
           letterType,
           screenID: ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID,
         })
+      case LetterTypeConstants.foreignMedicalProgram:
+        return navigateTo('GenericLetter', {
+          header: letterName,
+          description: t('letters.foreignMedicalProgram.description'),
+          descriptionA11yLabel: a11yLabelVA(t('letters.foreignMedicalProgram.description')),
+          letterType,
+          screenID: ScreenIDTypesConstants.FOREIGN_MEDICAL_PROGRAM_ENROLLMENT_LETTER_SCREEN_ID,
+        })
       case LetterTypeConstants.civilService:
         return navigateTo('GenericLetter', {
           header: letterName,

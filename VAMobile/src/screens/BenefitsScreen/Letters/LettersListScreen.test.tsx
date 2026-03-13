@@ -10,6 +10,7 @@ import { LettersListScreen } from 'screens/BenefitsScreen/Letters/index'
 import * as api from 'store/api'
 import { APIError } from 'store/api/types'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigationSpy = jest.fn()
@@ -26,6 +27,10 @@ const lettersData: LettersList = [
   {
     name: 'Commissary letter',
     letterType: 'commissary',
+  },
+  {
+    name: 'Foreign Medical Program Enrollment Letter',
+    letterType: 'foreign_medical_program',
   },
   {
     name: 'Proof of Service Letter',
@@ -121,6 +126,7 @@ context('LettersListScreen', () => {
     await waitFor(() => expect(screen.getByRole('link', { name: 'Civil service preference letter' })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: t('letters.coeHomeLoan') })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Commissary letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Foreign medical program enrollment letter' })).toBeTruthy())
     await waitFor(() =>
       expect(screen.getByRole('link', { name: 'Proof of creditable prescription drug coverage letter' })).toBeTruthy(),
     )
@@ -175,6 +181,20 @@ context('LettersListScreen', () => {
           header: 'Commissary letter',
           letterType: 'commissary',
           screenID: 'COMMISSARY_LETTER_SCREEN',
+        }),
+      )
+    })
+
+    it('should call navigations navigate for Foreign Medical Program Enrollment Letter', async () => {
+      initializeTestInstance(lettersData)
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Foreign medical program enrollment letter' })))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
+          description: t('letters.foreignMedicalProgram.description'),
+          descriptionA11yLabel: a11yLabelVA(t('letters.foreignMedicalProgram.description')),
+          header: 'Foreign medical program enrollment letter',
+          letterType: 'foreign_medical_program',
+          screenID: 'FOREIGN_MEDICAL_PROGRAM_ENROLLMENT_LETTER_SCREEN',
         }),
       )
     })
