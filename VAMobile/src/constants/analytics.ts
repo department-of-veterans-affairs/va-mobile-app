@@ -258,7 +258,7 @@ export const Events = {
         p3: convertNumericParam(claim_step),
         p4: claim_step_change,
         p5: claim_submitted_date,
-        p6: `${ttv_claim_details}`,
+        p6: convertNumericParam(ttv_claim_details),
       },
     }
   },
