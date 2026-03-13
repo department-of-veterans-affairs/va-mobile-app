@@ -1,3 +1,7 @@
+# Manually triggered workflow that counts open PRs labeled
+# 'FE-Needs Review' and posts the count to a Slack channel as a reminder
+# for the team to review pending frontend PRs.
+
 name: '[Utils] FE PR Needs Review Reminder'
 
 on:

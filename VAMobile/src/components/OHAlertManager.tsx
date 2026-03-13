@@ -37,9 +37,7 @@ export const OHAlertManager = ({ parentScreen, authorizedServices, hasCernerFaci
     (migration) => getAlertState(migration.phases.current, parentScreen) !== '',
   )
 
-  const isInP6OrP7 = migratingFacilitiesList.some((migration) =>
-    ['p6', 'p7'].includes(migration.phases.current),
-  )
+  const isInP6OrP7 = migratingFacilitiesList.some((migration) => ['p6', 'p7'].includes(migration.phases.current))
 
   const showDuplicateRecordAlert =
     parentScreen === OHParentScreens.MedicalRecords &&
@@ -47,11 +45,7 @@ export const OHAlertManager = ({ parentScreen, authorizedServices, hasCernerFaci
     !hasMigrationAlerts &&
     (hasCernerFacilities || isInP6OrP7)
 
-  return (
-    <>
-      {showDuplicateRecordAlert ? <DuplicateRecordAlert /> : alerts}
-    </>
-  )
+  return <>{showDuplicateRecordAlert ? <DuplicateRecordAlert /> : alerts}</>
 }
 
 export default OHAlertManager

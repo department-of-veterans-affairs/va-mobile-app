@@ -1,5 +1,8 @@
-name: '[Admin] Milestone Linker'
+# Automatically links the nearest upcoming milestone to a PR's
+# linked issue (or the PR itself) when a PR touching app source code is merged.
+# Ensures all merged work is tracked under the correct release milestone.
 
+name: "[Admin] Auto-Link Milestone to PR"
 on:
   pull_request:
     types: closed # Trigger on relevant PR events

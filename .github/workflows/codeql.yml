@@ -1,6 +1,8 @@
----
-name: '[Code Quality] CodeQL'
+# Runs GitHub CodeQL security analysis on JavaScript code. Triggers
+# on pushes and PRs to develop and weekly on a schedule. Initializes CodeQL,
+# autobuilds the project, and performs the analysis.
 
+name: "[Code Quality] CodeQL (JavaScript)"
 on:
   push:
     branches: [develop]

@@ -1,5 +1,8 @@
-name: Lookup Slack Username
+# Reusable workflow that looks up a Slack user ID from a VA email
+# address or GitHub handle. Maps git handles to emails via a repository variable,
+# validates the @va.gov domain, and queries the Slack API to find the user ID.
 
+name: '[Utils] Lookup Slack User ID'
 on:
   workflow_dispatch:
     inputs:

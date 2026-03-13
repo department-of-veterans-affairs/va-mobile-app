@@ -1,10 +1,13 @@
-name: '[Release] Merge to main and Create PR to develop'
+# Reusable release workflow that merges the release branch to main
+# (squash merge), tags the release version, and creates a PR to merge release
+# changes back into develop. Outputs the develop PR URL and release commit hash.
 
+name: '[Release] Merge to Main and Open Develop PR'
 on:
   workflow_call:
     inputs:
       version:
-        description: 'Version Number (eg. v1.1.0)'
+        description: 'Release version number (eg. v1.1.0)'
         type: string
         required: true
     outputs:
@@ -15,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version Number (eg. v1.1.0)'
+        description: 'Release version number (eg. v1.1.0)'
         required: true
         type: string
 

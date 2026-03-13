@@ -1,10 +1,14 @@
-# This test has the opposite filter of native_build_check_android.yml so that required checks dont hang
+# A skip workflow for Android native checks.
+# This workflow triggers when VAMobile/android/** files are NOT modified.
+# It calls a reusable no-op workflow to immediately report success, ensuring that
+# PRs do not hang if this status check is marked as "Required" in branch protection rules.
+
 name: '[Code Quality] Check Native Android Builds'
 
 on:
   pull_request:
     paths:
-      - "!VAMobile/android/**"
+      - '!VAMobile/android/**'
 
 jobs:
   android_native_build:

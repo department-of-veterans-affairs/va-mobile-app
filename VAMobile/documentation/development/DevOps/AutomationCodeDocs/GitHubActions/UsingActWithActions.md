@@ -1,9 +1,9 @@
 ---
-sidebar_position: 7
+sidebar_position: 4
 sidebar_label: Using act with actions
 ---
 
-# Using Act with Github actions
+# Using Act with GitHub Actions
 
 When using GitHub Actions, you may need to work against a PR to test your logic. This can be problematic and time consuming as a PR will need to be created or updated every time.
 

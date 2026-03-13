@@ -1,10 +1,15 @@
-name: "[Release] New Release Branch"
+# Cuts a new release branch from develop at the end of each sprint.
+# Runs on a weekly schedule (Wednesdays) or manually. Executes the release_branch.sh
+# script which creates the branch and tags it to trigger the RC build. On non-release
+# weeks the scheduled run is a no-op (the script exits early based on date check).
+
+name: '[Release] New Release Branch'
 
 on:
   workflow_dispatch:
   schedule:
     # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
-    - cron: "00 6 * * 3"
+    - cron: '00 6 * * 3'
 
 jobs:
   get-workflow-environment:
