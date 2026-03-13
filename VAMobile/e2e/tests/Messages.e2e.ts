@@ -198,6 +198,17 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_CANCEL_ID)).tap()
   })
 
+  it('should show Trash and correct folder options in the move picker', async () => {
+    await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_ID)).tap()
+    await expect(element(by.text('Inbox'))).toExist()
+    await expect(element(by.text('Trash'))).toExist()
+    await expect(element(by.text('Custom Folder 2'))).toExist()
+    await expect(element(by.text('Test'))).toExist()
+    await expect(element(by.text('Drafts'))).not.toExist()
+    await expect(element(by.text('Sent'))).not.toExist()
+    await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_CANCEL_ID)).tap()
+  })
+
   it('should tap reply and verify the correct information is displayed', async () => {
     await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID)).tap()

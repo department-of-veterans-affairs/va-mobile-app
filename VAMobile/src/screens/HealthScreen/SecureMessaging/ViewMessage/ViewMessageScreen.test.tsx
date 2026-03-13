@@ -261,6 +261,17 @@ context('ViewMessageScreen', () => {
     data: [
       {
         type: 'folders',
+        id: '0',
+        attributes: {
+          folderId: 0,
+          name: 'Inbox',
+          count: 5,
+          unreadCount: 3,
+          systemFolder: true,
+        },
+      },
+      {
+        type: 'folders',
         id: '-2',
         attributes: {
           folderId: -2,
@@ -327,7 +338,7 @@ context('ViewMessageScreen', () => {
         currentPage: 1,
         perPage: 10,
         totalPages: 1,
-        totalEntries: 5,
+        totalEntries: 6,
       },
     },
     inboxUnreadCount: 0,
