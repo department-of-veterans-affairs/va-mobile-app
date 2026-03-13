@@ -1304,7 +1304,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 beforeAll(async () => {
   await toggleMultipleRemoteConfigFlags([
     { flagName: CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT, makeState: false },
-    { flagName: CommonE2eIdConstants.VA_ONLINE_SCHEDULING_ADD_OH_AVS_ID, makeState: true },
+    { flagName: CommonE2eIdConstants.VA_ONLINE_SCHEDULING_ADD_OH_AVS, makeState: true },
   ])
   await loginToDemoMode()
   await openHealth()

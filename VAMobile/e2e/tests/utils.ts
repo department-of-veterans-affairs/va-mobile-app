@@ -207,7 +207,7 @@ export const CommonE2eIdConstants = {
   SUBMIT_EVIDENCE_5103_ID: 'file5103SubmitEvidenceID',
   REQUEST_DETAILS_5103_ID: 'file5103RequestDetailsID',
   // Appointments
-  VA_ONLINE_SCHEDULING_ADD_OH_AVS_ID: 'vaOnlineSchedulingAddOhAVSID',
+  VA_ONLINE_SCHEDULING_ADD_OH_AVS: 'vaOnlineSchedulingAddOhAvs',
 }
 
 /** Logs into demo mode.
