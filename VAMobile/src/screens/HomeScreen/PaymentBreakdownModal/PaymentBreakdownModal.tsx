@@ -161,7 +161,6 @@ const PaymentBreakdownModal = React.forwardRef(({ visible, setVisible }: Payment
               <LinkWithAnalytics
                 type="custom"
                 text={t('paymentBreakdownModal.goToPaymentHistory')}
-                icon={{ name: 'Launch', fill: 'default' }}
                 onPress={() => {
                   onCancel()
                   navigateTo('PaymentsTab', {
