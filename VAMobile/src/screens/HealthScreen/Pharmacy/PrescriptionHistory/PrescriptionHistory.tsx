@@ -5,7 +5,6 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { filter, find } from 'underscore'
 
@@ -51,7 +50,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useInlineFab, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
 import { OHParentScreens } from 'utils/ohMigration'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
@@ -128,7 +127,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   )
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
-  const screenReaderEnabled = useIsScreenReaderEnabled()
+  const shouldUseInlineFab = useInlineFab()
   const [displayNonVAMedsAlert, setDisplayNonVaMedsAlert] = useState<boolean>(false)
 
   useEffect(() => {
@@ -595,7 +594,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}
+      footerContent={shouldUseInlineFab ? undefined : getRequestRefillButton()}
       screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
@@ -622,7 +621,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           <OHAlertManager parentScreen={OHParentScreens.Medications} authorizedServices={userAuthorizedServices} />
           {getNonVAMedsAlert()}
           {getTransferAlert()}
-          {screenReaderEnabled ? getRequestRefillButton() : undefined}
+          {shouldUseInlineFab ? getRequestRefillButton() : undefined}
           {getContent()}
         </>
       )}

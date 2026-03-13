@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
-
 import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextView } from 'components'
 import FloatingButton from 'components/FloatingButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useInlineFab, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type SendUsFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'SendUsFeedback'>
 
@@ -18,7 +16,7 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const screenReaderEnabled = useIsScreenReaderEnabled()
+  const shouldUseInlineFab = useInlineFab()
 
   const getStartSurveyButton = () => (
     <FloatingButton
@@ -36,10 +34,10 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('giveFeedback.send')}
       testID="sendUsFeedbackID"
-      footerContent={screenReaderEnabled ? undefined : getStartSurveyButton()}>
+      footerContent={shouldUseInlineFab ? undefined : getStartSurveyButton()}>
       <Box>
         <TextView mx={theme.dimensions.gutter}>{t('giveFeedback.send.bodyText')}</TextView>
-        {screenReaderEnabled ? getStartSurveyButton() : undefined}
+        {shouldUseInlineFab ? getStartSurveyButton() : undefined}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.floatingButtonOffset}>
           <LinkWithAnalytics
             type="custom"

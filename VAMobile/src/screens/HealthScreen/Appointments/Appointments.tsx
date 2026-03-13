@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { SegmentedControl, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -26,7 +26,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useInlineFab, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAppIsOnline } from 'utils/hooks/offline'
 import { OHParentScreens } from 'utils/ohMigration'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -55,7 +55,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
     initialTab ? TimeFrameTypeConstants.PAST_THREE_MONTHS : TimeFrameTypeConstants.UPCOMING,
   )
   const [page, setPage] = useState(1)
-  const screenReaderEnabled = useIsScreenReaderEnabled()
+  const shouldUseInlineFab = useInlineFab()
   const connectionStatus = useAppIsOnline()
 
   const {
@@ -164,7 +164,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID"
-      footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
+      footerContent={shouldUseInlineFab || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
       backLabelTestID="appointmentsBackTestID"
       screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
       dataUpdatedAt={lastUpdatedDate}>
@@ -184,7 +184,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
         />
       ) : (
         <Box>
-          {featureEnabled('startScheduling') && screenReaderEnabled ? getStartSchedulingButton() : undefined}
+          {featureEnabled('startScheduling') && shouldUseInlineFab ? getStartSchedulingButton() : undefined}
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <SegmentedControl
               labels={controlLabels}
@@ -198,7 +198,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           <OHAlertManager parentScreen={OHParentScreens.Appointments} authorizedServices={userAuthorizedServices} />
           <Box
             mb={
-              featureEnabled('startScheduling') && !screenReaderEnabled
+              featureEnabled('startScheduling') && !shouldUseInlineFab
                 ? theme.dimensions.floatingButtonOffset
                 : theme.dimensions.contentMarginBottom
             }>
