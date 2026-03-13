@@ -5,6 +5,7 @@
     "outDir": "dist/",
     "allowJs": true,
     "checkJs": false,
+    "isolatedModules": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "noImplicitAny": false,

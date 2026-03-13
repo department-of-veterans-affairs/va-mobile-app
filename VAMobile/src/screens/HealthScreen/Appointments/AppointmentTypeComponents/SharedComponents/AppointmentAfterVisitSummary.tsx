@@ -97,11 +97,11 @@ export default function AppointmentAfterVisitSummary({ attributes }: Appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isAvsEnabled = featureEnabled('vaOnlineSchedulingAddOhAvs')
   // Currently only Cerner appointments have AVS Binaries (VistA will in the future -- currently only a web version not on VAHB)
-  if (!attributes.isCerner || attributes.avsError || !attributes.avsPdf || !isAvsEnabled) return null
+  if (!attributes.isCerner || attributes.avsError || !isAvsEnabled) return null
   const listItems = getListItemVals(attributes.avsPdf, attributes.isCerner, theme, t)
 
   return (
-    <Box testID="AppointmentAfterVisitSummary" mb={theme.dimensions.standardMarginBetween}>
+    <Box testID="avs-container" mb={theme.dimensions.standardMarginBetween}>
       <TextView
         variant="MobileBodyBold"
         accessibilityRole="header"

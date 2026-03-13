@@ -13,7 +13,12 @@ import appointmentsMocks from 'store/api/demo/mocks/default/appointments.json'
 import theme from 'styles/themes/standardTheme'
 import { render } from 'testUtils'
 import { createFileFromBase64, isValidBase64 } from 'utils/filesystem'
+import { featureEnabled } from 'utils/remoteConfig'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
+
+jest.mock('utils/remoteConfig', () => ({
+  featureEnabled: jest.fn(() => false),
+}))
 
 describe('AppointmentLocation', () => {
   const initializeTestInstance = (isCerner: boolean, id: string, avsPdf: SummaryObject[] = []) => {
@@ -25,6 +30,10 @@ describe('AppointmentLocation', () => {
     }
     render(<AppointmentAfterVisitSummary attributes={attributes} />)
   }
+
+  beforeEach(() => {
+    ;(featureEnabled as jest.Mock).mockImplementation((key: string) => key === 'vaOnlineSchedulingAddOhAvs')
+  })
 
   it('should not render section for non-Cerner appointments', () => {
     initializeTestInstance(false, 'testcerner005')
@@ -162,6 +171,10 @@ describe('AppointmentAfterVisitSummary - isValidBase64', () => {
 })
 
 describe('AppointmentAfterVisitSummary - with avsError', () => {
+  beforeEach(() => {
+    ;(featureEnabled as jest.Mock).mockImplementation((key: string) => key === 'vaOnlineSchedulingAddOhAvs')
+  })
+
   it('should not render section when avsError is true', () => {
     const attributes: AppointmentAttributes = {
       ...defaultAppointmentAttributes,
