@@ -1,7 +1,16 @@
 /*
 Description:
-Detox script that runs landscape accessibility tests for navigation regression.
-Specifically checks if the screen content remains accessible and correct when rotated.
+Detox script that runs landscape accessibility tests for visual regression.
+Navigates to each page, rotates to landscape, verifies content visibility, and takes a screenshot.
+The script can run either as a full suite or a subset:
+* Full suite: The script will check every page outlined in navigationDic. A full suite run occurs
+* either on the nightly dev build or when you check "run full e2e test" in the workflow options
+* (if running manually).
+* Subset: The script will only check the pages where the test name given in the array matches
+* the test name typed into the "List tests to test in" workflow option.
+When to update:
+Update VisualRegressionShared.ts whenever a new feature/new page that has the bottom nav bar is added to the app.
+See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
 import { by, expect as detoxExpect, device, element } from 'detox'
 
