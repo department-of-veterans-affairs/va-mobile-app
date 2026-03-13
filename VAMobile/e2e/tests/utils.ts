@@ -604,6 +604,26 @@ export async function openDeveloperScreen() {
 }
 
 /**
+ * Wraps a Detox `describe` block with the common setup/teardown needed for Prescriptions E2E tests.
+ *
+ * @param name - The title of the `describe` block.
+ * @param testFn - A function that defines the tests inside the `describe` block.
+ */
+export const describeWithSetupPrescriptions = (name: string, testFn: jest.EmptyFunction) => {
+  describe(name, () => {
+    beforeAll(async () => {
+      await loginToDemoMode()
+      await openHealth()
+      await openPrescriptions()
+    })
+    afterAll(async () => {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    })
+    testFn()
+  })
+}
+
+/**
  * Going back on android and iOS
  */
 export async function backButton(backButtonName: string) {
