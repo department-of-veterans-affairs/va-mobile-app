@@ -1,8 +1,19 @@
 import { DateTime } from 'luxon'
 
 import { CategoryTypes } from 'api/types'
-import { Event, EventParams, UserAnalytic, convertNumericParam } from 'utils/analytics'
+import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 import { trimNotificationUrl } from 'utils/notifications'
+
+/**
+ * Converts an analytic parameter to a string to be properly displayed as a custom dimension
+ * @param param - analytic param to convert to string
+ */
+export const convertNumericParam = (param: number | undefined | null) => {
+  if (param === null || param === undefined) {
+    return undefined
+  }
+  return `${param}`
+}
 
 /**
  * Firebase strings have to be less than 24 chars or it doesn't go through. this lint rule enforces that.
