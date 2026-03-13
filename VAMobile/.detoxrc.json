@@ -28,15 +28,13 @@
     "simulator": {
       "type": "ios.simulator",
       "device": {
-        "type": "iPhone 17 Pro Max",
-        "os": "iOS 26.2"
+        "type": "iPhone 17 Pro Max"
       }
     },
     "ipadSimulator": {
       "type": "ios.simulator",
       "device": {
-        "type": "iPad Pro 13-inch (M5)",
-        "os": "iOS 26.2"
+        "type": "iPad Pro 13-inch (M4)"
       }
     },
     "emulator": {

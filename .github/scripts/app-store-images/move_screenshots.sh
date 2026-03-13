@@ -37,7 +37,7 @@ while IFS=$'\t' read -r image_name test_id device_type description; do
   found_image=$(find "$ARTIFACTS_DIR" -name "${image_name}.png" -print -quit)
 
   if [ -n "$found_image" ]; then
-    mv -v "$found_image" "$DEST_DIR/${device_type}-${image_name}.png"
+    cp -v "$found_image" "$DEST_DIR/${device_type}-${image_name}.png"
   else
     if [[ "$test_id" == "LettersDownload" ]]; then
       # Use the static LettersDownload images but rename them to match expected output

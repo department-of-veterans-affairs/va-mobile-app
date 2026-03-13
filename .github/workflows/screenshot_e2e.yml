@@ -114,7 +114,7 @@ jobs:
 
       - name: Run Detox iOS (iPhone) steps
         run: |
-          yarn detox test -c ios ./screenshot.e2e.ts --retries 3
+          yarn e2e:ios-screenshots
         working-directory: VAMobile
 
       - name: Upload iOS artifacts
@@ -185,7 +185,7 @@ jobs:
 
       - name: Run Detox iPad steps
         run: |
-          yarn detox test -c ipad ./screenshot.e2e.ts --retries 3
+          yarn e2e:ipad-screenshots
         working-directory: VAMobile
 
       - name: Upload iPad artifacts
@@ -250,7 +250,7 @@ jobs:
           profile: pixel_6_pro
           channel: stable
           script: |
-            yarn detox test -c android ./screenshot.e2e.ts --retries 3
+            yarn e2e:android-screenshots
 
       - name: Upload android artifacts
         uses: actions/upload-artifact@v4

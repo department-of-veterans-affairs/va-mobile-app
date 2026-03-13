@@ -154,7 +154,7 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
 
   if [[ "$DEVICE_TYPE" == "ios" ]]; then
     FINAL_WIDTH=1242
-    FINAL_HEIGHT=2208
+    FINAL_HEIGHT=2688
     ADJUSTED_TITLE_FONT_SIZE=$TITLE_FONT_SIZE
   elif [[ "$DEVICE_TYPE" == "ipad" ]]; then
     FINAL_WIDTH=2048
@@ -250,6 +250,7 @@ mkdir -p "$SCRIPT_DIR/../../../VAMobile/ios/fastlane/screenshots_ipad/en-US"
 for f in "$SCRIPT_DIR/framed_images/ipad/"*.png; do
   if [ ! -f "$f" ]; then continue; fi
   cp "$f" "$SCRIPT_DIR/../../../VAMobile/ios/fastlane/screenshots_ipad/en-US/"
+  cp "$f" "$SCRIPT_DIR/../../../VAMobile/ios/fastlane/screenshots/en-US/"
 done
 
 echo "All images processed."
