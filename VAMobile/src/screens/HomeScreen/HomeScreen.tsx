@@ -1,3 +1,4 @@
+import WhatsNewCarousel from 'components/WhatsNewCarousel/WhatsNewCarousel'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, View } from 'react-native'
@@ -385,8 +386,9 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [claimsAndAppealsQuery.data?.data])
 
   return (
-    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID" scrollViewProps={{ removeInsets: true }}>
       <Box>
+        <WhatsNewCarousel />
         <EncourageUpdateAlert />
         {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert />}
         <Box mt={theme.dimensions.condensedMarginBetween}>

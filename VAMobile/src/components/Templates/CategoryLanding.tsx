@@ -60,6 +60,8 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
 
   const fillStyle: ViewStyle = {
     paddingTop: insets.top,
+    paddingRight: insets.right,
+    paddingLeft: insets.left,
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }

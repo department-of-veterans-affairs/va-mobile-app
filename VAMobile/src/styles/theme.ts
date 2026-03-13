@@ -1,4 +1,5 @@
-import { ColorSchemeTypes } from 'styles/themes/standardTheme'
+import { ColorSchemeTypes } from 'styles/themes/standardTheme';
+
 
 export type VAButtonBackgroundColors = {
   buttonPrimary: string

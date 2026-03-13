@@ -1,6 +1,7 @@
-import { UserAuthorizedServicesData } from 'api/types'
-import getEnv from 'utils/env'
-import { FeatureToggleType } from 'utils/remoteConfig'
+import { UserAuthorizedServicesData } from 'api/types';
+import getEnv from 'utils/env';
+import { FeatureToggleType } from 'utils/remoteConfig';
+
 
 const { IS_TEST } = getEnv()
 /**
@@ -47,9 +48,8 @@ export type WhatsNewConfigItem = {
   authorizedService?: keyof UserAuthorizedServicesData
   // number of bullets included for this item. Found by <featureName>.bullet.<number>
   bullets?: number
-  // Whether there is a link included in the what's new copy. Found by <featureName>.link.url
-  // and <featureName>.link.text
-  hasLink?: boolean
+  tab?: string
+  route?: string
 }
 
 export const WhatsNewConfig: WhatsNewConfigItem[] = [
@@ -57,25 +57,31 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureName: 'PretransitionedOHInfoAlert',
     featureFlag: 'showCernerWhatsNew',
     authorizedService: 'isUserAtPretransitionedOhFacility',
-    hasLink: true,
+    tab: 'HealthTab',
   },
   {
     featureName: 'COE',
     featureFlag: 'COEAvailable',
+    tab: 'BenefitsTab',
+    route: 'LettersList',
   },
   {
     featureName: 'DecisionLetter',
     authorizedService: 'benefitsPushNotification',
-    bullets: 1,
+    route: 'NotificationsSettings',
   },
   {
     featureName: 'LabsAndTests',
     featureFlag: 'labsAndTests',
     authorizedService: 'labsAndTestsEnabled',
+    tab: 'HealthTab',
+    route: 'LabsAndTestsList',
   },
   {
     featureName: 'StartScheduling',
     featureFlag: 'startScheduling',
+    tab: 'HealthTab',
+    route: 'Appointments',
   },
 ]
 
