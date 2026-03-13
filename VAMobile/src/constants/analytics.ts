@@ -795,9 +795,9 @@ export const Events = {
         p6: params.type,
         p7: params.text,
         p8: params.testID,
-        p9: `${params.claim_id}`,
+        p9: params.claim_id,
         p10: params.claim_type,
-        p11: `${params.claim_step}`,
+        p11: params.claim_step,
       },
     }
   },
