@@ -146,6 +146,13 @@ export const logLoadTimeEvent = (eventName: string, loadTimeMs: number) => {
   }
 }
 
+/**
+ * Converts an analytic parameter to a string to be properly displayed as a custom dimension
+ * @param param - analytic param to convert to string
+ */
 export const convertNumericParam = (param: number | undefined | null) => {
-  return param ? `${param}` : undefined
+  if (param === null || param === undefined) {
+    return undefined
+  }
+  return `${param}`
 }
