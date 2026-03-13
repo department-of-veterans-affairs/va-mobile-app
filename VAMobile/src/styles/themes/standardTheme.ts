@@ -334,6 +334,7 @@ let theme: VATheme = {
     buttonPadding: 10,
     alertBorderWidth: 8,
     listItemDecoratorMarginLeft: 20,
+    listItemMinWidth: 16,
     navBarHeight: 56,
     touchableMinHeight: 44,
     textAndButtonLargeMargin: 40,

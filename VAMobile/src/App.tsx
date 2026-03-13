@@ -52,6 +52,7 @@ import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen
 import FeedbackInterceptScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/FeedbackInterceptScreen'
 import VeteransCrisisLineScreen from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from 'screens/OnboardingCarousel'
+import DirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen'
 import EditDirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
 import SplashScreen from 'screens/SplashScreen/SplashScreen'
 import { SyncScreen } from 'screens/SyncScreen'
@@ -105,6 +106,7 @@ if (isIOS()) {
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
+  DirectDeposit: undefined
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   EditDirectDeposit: {
     displayTitle: string
@@ -529,6 +531,11 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
           options={{ headerShown: false, animationEnabled: false }}
         />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
+        <RootNavStack.Screen
+          name="DirectDeposit"
+          component={DirectDepositScreen}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
         <RootNavStack.Screen
           name="EditDirectDeposit"
