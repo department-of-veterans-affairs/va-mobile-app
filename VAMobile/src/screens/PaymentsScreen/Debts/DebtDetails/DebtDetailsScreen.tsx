@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -18,6 +18,8 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import ContactUsDebtButton from 'screens/PaymentsScreen/Debts/ContactUs/ContactUsDebtButton'
+import MakePaymentButton from 'screens/PaymentsScreen/Debts/MakePayment/MakePaymentButton'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import NoticeOfRightsButton from 'screens/PaymentsScreen/NoticeOfRights/NoticeOfRightsButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
@@ -29,6 +31,9 @@ import { displayedTextPhoneNumber, numberToUSDollars } from 'utils/formattingUti
 import { useTheme } from 'utils/hooks'
 import { useRouteNavigation } from 'utils/hooks'
 
+const ALERT_BODY_HORIZONTAL_PADDING = 28
+const ALERT_ACTION_TOP_MARGIN = 20
+
 type DebtDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'DebtDetails'>
 
 function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
@@ -38,15 +43,70 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
   const debtInfo = getDebtInfo(t, debt)
   const navigateTo = useRouteNavigation()
 
+  const isFullBleedCTA =
+    debtInfo.action?.type === 'resolveOverpayment' ||
+    debtInfo.action?.type === 'payOnline' ||
+    debtInfo.action?.type === 'contactUs'
+
+  function renderAlertActionContainer(action: React.ReactNode) {
+    return isFullBleedCTA ? (
+      <Box mt={ALERT_ACTION_TOP_MARGIN} mx={-ALERT_BODY_HORIZONTAL_PADDING}>
+        {action}
+      </Box>
+    ) : (
+      <Box mt={ALERT_ACTION_TOP_MARGIN}>{action}</Box>
+    )
+  }
+
+  function renderAlertAction() {
+    switch (debtInfo.action?.type) {
+      case 'contactUs':
+        return <ContactUsDebtButton showAskVAOption={debtInfo.action.showAskVAOption ?? true} />
+      case 'fsrLink':
+        return (
+          <LinkWithAnalytics
+            type="url"
+            url={debtInfo.action.url}
+            text={t('debts.requestHelp.relief.link')}
+            a11yHint={`${t('debts.requestHelp.relief.link')} ${t('mobileBodyLink.a11yHint')}`}
+          />
+        )
+      case 'payOnline':
+        return <MakePaymentButton debt={debt} />
+      case 'resolveOverpayment':
+        return debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtDetailsScreen" />
+      case 'treasuryPhone':
+        return (
+          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8888263127'))} phone={t('8888263127')} />
+        )
+      default:
+        return null
+    }
+  }
+
   function renderAlert() {
+    const action = renderAlertAction()
+
     return (
       <AlertWithHaptics
         variant={debtInfo.variant === 'info' ? 'info' : 'warning'}
-        expandable={false} // TODO: change to true when alert content is added
+        expandable={true}
         header={t(`debts.details.alert.header.${debtInfo.i18nKey}`, {
           endDate: debtInfo.endDate,
         })}>
-        {/* TODO: add alert content */}
+        <TextView>
+          <Trans
+            i18nKey={`debt.details.alert.message.${debtInfo.i18nKey}`}
+            components={{ bold: <TextView variant="MobileBodyBold" /> }}
+            values={{
+              balance: debtInfo.balance,
+              endDate: debtInfo.endDate,
+              type: debtInfo.type,
+            }}
+          />
+        </TextView>
+
+        {action ? renderAlertActionContainer(action) : null}
       </AlertWithHaptics>
     )
   }
@@ -69,10 +129,14 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {debtInfo.original}
         </TextView>
         {/* Payment due date */}
-        <TextView variant="HelperText">{t('debts.details.paymentDueDate')}</TextView>
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-          {debtInfo.endDate}
-        </TextView>
+        {debtInfo.showPaymentDueDate ? (
+          <>
+            <TextView variant="HelperText">{t('debts.details.paymentDueDate')}</TextView>
+            <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+              {debtInfo.endDate}
+            </TextView>
+          </>
+        ) : null}
         {/* Resolve debt button */}
         {debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtDetailsScreen" />}
       </>
