@@ -36,6 +36,7 @@ const fullTestRun = [
   'TravelPayClaims',
   'VaccineRecords',
   'VALetters',
+  'ViewLetters',
   'VeteransCrisisLine',
   'VeteranStatusCard',
   'VisualRegressionDarkMode',
@@ -78,7 +79,7 @@ const healthScreenArray = [
   'VaccineRecords',
 ]
 const homeScreenArray = ['HomeScreen', 'ProfileScreen', 'VeteranStatusCard']
-const benefitsScreenArray = ['DisabilityRatings', 'Claims', 'Appeals', 'VALetters']
+const benefitsScreenArray = ['DisabilityRatings', 'Claims', 'Appeals', 'VALetters', 'ViewLetters']
 const profileScreenArray = [
   'ProfileScreen',
   'ContactInformation',
@@ -139,8 +140,8 @@ const detoxMapping = {
     HomeScreen: homeScreenArray,
     kimberlyWashington: [],
     labsAndTests: ['LabsAndTests'],
-    Letters: ['VALetters'],
-    letters: ['VALetters'],
+    Letters: ['VALetters', 'ViewLetters'],
+    letters: ['VALetters', 'ViewLetters'],
     LoginScreen: ['LoginScreen'],
     maintenanceWindows: fullTestRun,
     militaryService: ['MilitaryInformation', 'VeteranStatusCard'],
@@ -208,8 +209,8 @@ const detoxMapping = {
     'gmtTimezones.ts': appointmentsArray,
     'labsAndTests.json': ['LabsAndTests'],
     'labsAndTests.ts': ['LabsAndTests'],
-    'letters.json': ['VALetters'],
-    'letters.ts': ['VALetters'],
+    'letters.json': ['VALetters', 'ViewLetters'],
+    'letters.ts': ['VALetters', 'ViewLetters'],
     'linking.test.tsx': [],
     'linking.tsx': [],
     'medicalCopays.ts': medicalCopaysArray,
