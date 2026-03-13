@@ -1,20 +1,29 @@
 export type VeteranStatus = 'confirmed' | 'not confirmed'
 export type NotConfirmedReason = 'ERROR' | 'MORE_RESEARCH_REQUIRED' | 'NOT_TITLE_38' | 'PERSON_NOT_FOUND'
 export type ConfirmationStatus =
-  | 'DISCHONORABLE_SSC'
-  | 'INELIGIBLE_SSC'
-  | 'UNKNOWN_SSC'
-  | 'EDIPI_NO_PNL_SSC'
-  | 'CURRENTLY_SERVING_SSC'
-  | 'ERROR_SSC'
-  | 'UNCAUGHT_SSC'
-  | 'UNKNOWN_REASON'
-  | 'NO_SSC_CHECK'
-  | 'AD_DSCH_VAL_SSC'
-  | 'AD_VAL_PREV_QUAL_SSC'
-  | 'AD_VAL_PREV_RES_GRD_SSC'
-  | 'AD_UNCHAR_DSCH_SSC'
-  | 'VAL_PREV_QUAL_SSC'
+  // Missing identifiers
+  | 'INELIGIBLE_NO_ICN'
+  | 'INELIGIBLE_NO_EDIPI'
+
+  // No SSC check
+  | 'ELIGIBLE_NO_SSC_CHECK'
+  | 'INELIGIBLE_NO_SSC_CHECK'
+
+  // Eligible SSC outcomes
+  | 'ELIGIBLE_AD_DSCH_VAL_SSC'
+  | 'ELIGIBLE_AD_VAL_PREV_QUAL_SSC'
+  | 'ELIGIBLE_AD_VAL_PREV_RES_GRD_SSC'
+  | 'ELIGIBLE_AD_UNCHAR_DSCH_SSC'
+  | 'ELIGIBLE_VAL_PREV_QUAL_SSC'
+
+  // Ineligible SSC outcomes
+  | 'INELIGIBLE_DISHONORABLE_SSC'
+  | 'INELIGIBLE_SERVICE_SSC'
+  | 'INELIGIBLE_UNKNOWN_SSC'
+  | 'INELIGIBLE_EDIPI_NO_PNL_SSC'
+  | 'INELIGIBLE_CURRENTLY_SERVING_SSC'
+  | 'INELIGIBLE_ERROR_SSC'
+  | 'INELIGIBLE_UNCAUGHT_SSC'
 
 export type VeteranStatusInfo = {
   veteranStatus: VeteranStatus

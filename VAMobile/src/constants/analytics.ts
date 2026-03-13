@@ -1255,6 +1255,14 @@ export const Events = {
       },
     }
   },
+  vama_vsc_status: (status: string): Event => {
+    return {
+      name: 'vama_vsc_status',
+      params: {
+        p1: status,
+      },
+    }
+  },
   vama_webview: (url: string, id?: string): Event => {
     return {
       name: 'vama_webview',

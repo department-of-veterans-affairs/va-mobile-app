@@ -5,6 +5,8 @@ import { veteranStatusCardKeys } from 'api/veteranStatusCard'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 
+type RuntimeError = { status?: number }
+
 /**
  * Fetch veteran status card
  */
@@ -19,13 +21,15 @@ const getVeteranStatusCard = async (): Promise<VeteranStatusCardResponse | undef
  * Returns a query for a veteran status card
  */
 export const useVeteranStatusCard = (options?: { enabled?: boolean }) => {
-  return useQuery({
+  const query = useQuery<VeteranStatusCardResponse | undefined>({
     ...options,
     queryKey: veteranStatusCardKeys.card,
-    queryFn: () => getVeteranStatusCard(),
+    queryFn: getVeteranStatusCard,
     meta: {
       errorName: 'getVeteranStatusCard: Service error',
     },
     staleTime: ACTIVITY_STALE_TIME,
   })
+  const httpStatus = (query.error as RuntimeError | null)?.status
+  return { ...query, httpStatus }
 }
