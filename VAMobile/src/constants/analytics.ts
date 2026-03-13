@@ -207,11 +207,11 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
+        p3: `${claim_step}`,
         p4: claim_step_change,
         p5: claim_submitted_date,
         p6: claim_type_code,
-        p7: is_disability_comp_claim,
+        p7: `${is_disability_comp_claim}`,
       },
     }
   },
@@ -226,7 +226,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
+        p3: `${claim_step}`,
         p4: claim_submitted_date,
       },
     }
@@ -244,10 +244,10 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
+        p3: `${claim_step}`,
         p4: claim_step_change,
         p5: claim_submitted_date,
-        p6: ttv_claim_details,
+        p6: `${ttv_claim_details}`,
       },
     }
   },
@@ -257,7 +257,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
+        p3: `${claim_step}`,
       },
     }
   },
@@ -267,8 +267,8 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
-        p4: num_requests,
+        p3: `${claim_step}`,
+        p4: `${num_requests}`,
       },
     }
   },
@@ -278,8 +278,8 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
-        p4: num_requests,
+        p3: `${claim_step}`,
+        p4: `${num_requests}`,
       },
     }
   },
@@ -289,7 +289,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: num_requests,
+        count: num_requests,
       },
     }
   },
@@ -299,7 +299,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: num_requests,
+        count: num_requests,
       },
     }
   },
@@ -309,7 +309,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: num_requests,
+        count: num_requests,
       },
     }
   },
@@ -350,7 +350,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: num_requests,
+        count: num_requests,
       },
     }
   },
@@ -365,7 +365,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
+        p3: `${claim_step}`,
         p4: claim_submitted_date,
       },
     }
@@ -397,7 +397,7 @@ export const Events = {
       name: 'vama_claim_upload_compl',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -413,7 +413,7 @@ export const Events = {
       name: 'vama_claim_upload_start',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -425,7 +425,7 @@ export const Events = {
       params: {
         p1: claim_id,
         p2: claim_type,
-        p3: claim_step,
+        p3: `${claim_step}`,
       },
     }
   },
@@ -478,7 +478,7 @@ export const Events = {
         p1: errorName,
         errorMessage,
         p2: callStack,
-        p3: statusCode,
+        p3: `${statusCode}`,
         p4: endpoint,
       },
     }
@@ -487,7 +487,7 @@ export const Events = {
     return {
       name: 'vama_error_json_resp',
       params: {
-        p1: statusCode,
+        p1: `${statusCode}`,
         p2: endpoint,
       },
     }
@@ -517,7 +517,7 @@ export const Events = {
       name: 'vama_claim_cancel_1',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -533,7 +533,7 @@ export const Events = {
       name: 'vama_claim_cancel_2',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -549,7 +549,7 @@ export const Events = {
       name: 'vama_evidence_conf',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -565,7 +565,7 @@ export const Events = {
       name: 'vama_evidence_cont_1',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -583,11 +583,11 @@ export const Events = {
       name: 'vama_evidence_cont_2',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
-        p5: upload_size,
-        p6: num_photos,
+        p5: `${upload_size}`,
+        p6: `${num_photos}`,
       },
     }
   },
@@ -601,7 +601,7 @@ export const Events = {
       name: 'vama_evidence_cont_3',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -617,7 +617,7 @@ export const Events = {
       name: 'vama_evidence_start',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
       },
@@ -634,7 +634,7 @@ export const Events = {
       name: 'vama_evidence_type',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
         p4: evidence_method,
         p5: evidence_type,
@@ -714,7 +714,7 @@ export const Events = {
     return {
       name: 'vama_hs_appts_load_time',
       params: {
-        p1: loadTime,
+        loadTime,
       },
     }
   },
@@ -722,7 +722,7 @@ export const Events = {
     return {
       name: 'vama_hs_claims_load_time',
       params: {
-        p1: loadTime,
+        loadTime,
       },
     }
   },
@@ -730,7 +730,7 @@ export const Events = {
     return {
       name: 'vama_hs_rx_load_time',
       params: {
-        p1: loadTime,
+        loadTime,
       },
     }
   },
@@ -739,7 +739,7 @@ export const Events = {
       name: 'vama_load_time_outlier',
       params: {
         p1: eventName,
-        p2: loadTime,
+        loadTime,
       },
     }
   },
@@ -762,7 +762,7 @@ export const Events = {
     return {
       name: 'vama_hs_sm_load_time',
       params: {
-        p1: loadTime,
+        loadTime,
       },
     }
   },
@@ -771,7 +771,7 @@ export const Events = {
     return {
       name: 'vama_hs_load_time',
       params: {
-        p1: loadTime,
+        loadTime,
       },
     }
   },
@@ -795,9 +795,9 @@ export const Events = {
         p6: params.type,
         p7: params.text,
         p8: params.testID,
-        p9: params.claim_id,
+        p9: `${params.claim_id}`,
         p10: params.claim_type,
-        p11: params.claim_step,
+        p11: `${params.claim_step}`,
       },
     }
   },
@@ -915,8 +915,8 @@ export const Events = {
     return {
       name: 'vama_pagination',
       params: {
-        p1: pages,
-        p2: to_page,
+        p1: `${pages}`,
+        p2: `${to_page}`,
         p3: tab,
       },
     }
@@ -974,7 +974,7 @@ export const Events = {
       name: 'vama_request_details',
       params: {
         p1: claim_id,
-        p2: claim_request_id,
+        p2: `${claim_request_id}`,
         p3: claim_request_type,
       },
     }
@@ -1162,7 +1162,7 @@ export const Events = {
     return {
       name: 'vama_sm_open',
       params: {
-        p1: sm_id,
+        p1: `${sm_id}`,
         p2: location,
         p3: status,
       },
@@ -1181,7 +1181,7 @@ export const Events = {
       name: 'vama_sm_send_message',
       params: {
         p1: messageCategory,
-        p2: replyToID,
+        p2: `${replyToID}`,
       },
     }
   },
@@ -1194,7 +1194,7 @@ export const Events = {
     return {
       name: 'vama_sso_cookie_received',
       params: {
-        p1: received,
+        p1: `${received}`,
       },
     }
   },
@@ -1203,7 +1203,7 @@ export const Events = {
       name: 'vama_toggle',
       params: {
         p1: toggle_name,
-        p2: status,
+        p2: `${status}`,
         screen_name,
       },
     }
