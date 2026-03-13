@@ -8,7 +8,7 @@ import { trimNotificationUrl } from 'utils/notifications'
  * Converts an analytic parameter to a string to be properly displayed as a custom dimension
  * @param param - analytic param to convert to string
  */
-export const convertNumericParam = (param: number | undefined | null) => {
+const convertNumericParam = (param: number | undefined | null): string | undefined => {
   if (param === null || param === undefined) {
     return undefined
   }
