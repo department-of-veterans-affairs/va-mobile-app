@@ -15,9 +15,13 @@ beforeAll(async () => {
 })
 
 describe('OH Migration Messages', () => {
-  it('should navigate to messages and open a message with a blocking migration phase', async () => {
+  it('should navigate to messages and show the historic load alert when sync is not complete', async () => {
     await openHealth()
     await openMessages()
+    await expect(element(by.id('ohSyncStatusAlertTestID'))).toExist()
+  })
+
+  it('should open a message with a blocking migration phase', async () => {
     await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))

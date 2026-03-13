@@ -282,3 +282,17 @@ export type MoveMessageParameters = {
   messageID: number
   newFolderID: number
 }
+
+export type OhSyncStatusAttributes = {
+  error: string | null
+  syncComplete: boolean
+  status: string | null
+}
+
+export type OhSyncStatusData = {
+  data: {
+    id: string
+    type: string
+    attributes: OhSyncStatusAttributes
+  }
+}

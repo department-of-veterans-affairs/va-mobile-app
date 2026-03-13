@@ -1936,6 +1936,8 @@
   "secureMessaging.formMessage.allCareTeams": "All care teams",
   "secureMessaging.formMessage.weNeedMoreInfo": "We need more information",
   "secureMessaging.goToInbox": "Go to inbox",
+  "secureMessaging.historicLoad.title": "We’re still adding some of your messages here",
+  "secureMessaging.historicLoad.body": "We’re working to add all of your messages to your inbox. They should be available soon.",
   "secureMessaging.inbox": "Inbox",
   "secureMessaging.inbox.a11yHint": "You have {{inboxUnreadCount}} unread messages. Review messages in your inbox",
   "secureMessaging.inbox.messageDownError.title": "Your inbox isn’t working right now",

@@ -1,4 +1,5 @@
 import {
+  OhSyncStatusData,
   SecureMessagingFolderGetData,
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
@@ -109,6 +110,7 @@ export type SecureMessagingDemoStore = {
  * Type to define the mock returns to keep type safety
  */
 export type SecureMessagingDemoApiReturnTypes =
+  | OhSyncStatusData
   | SecureMessagingFolderGetData
   | SecureMessagingFolderMessagesGetData
   | SecureMessagingMessageGetData

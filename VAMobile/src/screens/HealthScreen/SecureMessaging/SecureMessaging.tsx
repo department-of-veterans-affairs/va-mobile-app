@@ -9,7 +9,7 @@ import { Button, SegmentedControl, useSnackbar } from '@department-of-veterans-a
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useAllMessageRecipients, useFolderMessages, useFolders } from 'api/secureMessaging'
+import { useAllMessageRecipients, useFolderMessages, useFolders, useOhSyncStatus } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { OHAlertManager } from 'components/OHAlertManager'
@@ -91,6 +91,13 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       userAuthorizedServices?.secureMessaging &&
       smNotInDowntime,
   })
+  const { data: ohSyncStatusData, isFetched: hasFetchedOhSyncStatus } = useOhSyncStatus({
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      !!userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
+  })
   const recipients = recipientsResponse?.data
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
@@ -101,12 +108,19 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
   const controlIDs = ['inboxID', 'foldersID']
   const [scrollPage, setScrollPage] = useState(1)
+  const [ohSyncComplete, setOhSyncComplete] = useState(true)
   const noRecipientsError = (!recipients || recipients.length === 0) && !recipientsError
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
   // Position reset is necessary to make the pagination component padding look consistent between pages,
   const scrollViewRef = useRef<ScrollView | null>(null)
+
+  useEffect(() => {
+    if (ohSyncStatusData) {
+      setOhSyncComplete(ohSyncStatusData.data.attributes.syncComplete)
+    }
+  }, [ohSyncStatusData, hasFetchedOhSyncStatus])
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
@@ -162,6 +176,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     !refetchingFolders &&
     !refetchingInbox &&
     !refetchingRecipients
+
   return (
     <FeatureLandingTemplate
       backLabelOnPress={navigation.goBack}
@@ -171,7 +186,8 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
       isLoading={
         !authorizedServicesFetched ||
-        (userAuthorizedServices?.secureMessaging && (!hasLoadedRecipients || !inboxFetched || !hasFetchedFolders))
+        (userAuthorizedServices?.secureMessaging &&
+          (!hasLoadedRecipients || !inboxFetched || !hasFetchedFolders || !hasFetchedOhSyncStatus))
       }>
       {!smNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
@@ -216,6 +232,18 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
             />
             {featureEnabled('showCernerWarningAlert') && userAuthorizedServices?.isUserAtPretransitionedOhFacility && (
               <CernerAlertSM />
+            )}
+            {ohSyncComplete === false && (
+              <Box mb={theme.dimensions.standardMarginBetween}>
+                <AlertWithHaptics
+                  variant="warning"
+                  header={t('secureMessaging.historicLoad.title')}
+                  description={t('secureMessaging.historicLoad.body')}
+                  expandable
+                  initializeExpanded={true}
+                  testID="ohSyncStatusAlertTestID"
+                />
+              </Box>
             )}
             <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
               {secureMessagingTab === SegmentedControlIndexes.INBOX &&
