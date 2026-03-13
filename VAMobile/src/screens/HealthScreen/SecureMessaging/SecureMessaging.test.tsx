@@ -157,7 +157,7 @@ context('SecureMessaging', () => {
       await waitFor(() => expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy())
     })
 
-    it('should hide the start new message button when no recipients are returned', async () => {
+    it('should show the no care teams alert when no recipients are returned', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
           page: '1',
@@ -170,10 +170,14 @@ context('SecureMessaging', () => {
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(mockEmptyRecipients)
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+      await waitFor(() => {
+        expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
+        expect(screen.getByTestId('noCareTeamsAlertTestID')).toBeTruthy()
+        expect(screen.getByRole('tab', { name: t('secureMessaging.noCareTeams.header') })).toBeTruthy()
+      })
     })
 
-    it('should hide the start new message button when recipients data is undefined', async () => {
+    it('should show the start new message button when recipients API returns undefined (treated as error)', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
           page: '1',
@@ -186,7 +190,12 @@ context('SecureMessaging', () => {
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(undefined)
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+      await waitFor(() => {
+        // When queryFn returns undefined, React Query treats it as an error.
+        // recipientsError is truthy, so noRecipientsError is false, and button renders.
+        expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy()
+        expect(screen.queryByTestId('noCareTeamsAlertTestID')).toBeNull()
+      })
     })
   })
 })

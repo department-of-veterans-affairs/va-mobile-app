@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { SecureMessagingFolderMessagesGetData } from 'api/types'
@@ -140,18 +141,27 @@ context('FolderMessages', () => {
       await waitFor(() => expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy())
     })
 
-    it('should hide the button when no recipients are returned', async () => {
+    it('should show the no care teams alert when no recipients are returned', async () => {
       mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, messages)
       mockSMAllRecipients(mockEmptyRecipients)
       initializeTestInstance(SecureMessagingSystemFolderIdConstants.SENT)
-      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+      await waitFor(() => {
+        expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
+        expect(screen.getByTestId('noCareTeamsAlertTestID')).toBeTruthy()
+        expect(screen.getByRole('tab', { name: t('secureMessaging.noCareTeams.header') })).toBeTruthy()
+      })
     })
 
-    it('should hide the button when recipients data is undefined', async () => {
+    it('should show the start new message button when recipients API returns undefined (treated as error)', async () => {
       mockSMFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, messages)
       mockSMAllRecipients(undefined)
       initializeTestInstance(SecureMessagingSystemFolderIdConstants.DRAFTS)
-      await waitFor(() => expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull())
+      await waitFor(() => {
+        // When queryFn returns undefined, React Query treats it as an error.
+        // recipientsError is truthy, so noRecipientsError is false, and button renders.
+        expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy()
+        expect(screen.queryByTestId('noCareTeamsAlertTestID')).toBeNull()
+      })
     })
   })
 })

@@ -4,6 +4,7 @@ import { setTimeout } from 'timers/promises'
 import { MessagesE2eIdConstants } from './MessagesConstants'
 import {
   CommonE2eIdConstants,
+  changeDemoModeUser,
   checkImages,
   loginToDemoMode,
   openHealth,
@@ -572,5 +573,46 @@ describe('Messages Screen', () => {
 
       await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     })
+  })
+})
+
+describe('No Care Teams Alert', () => {
+  beforeAll(async () => {
+    await toggleRemoteConfigFlag('noRecipientsKimOH')
+    await loginToDemoMode()
+    await changeDemoModeUser('Kimberly For OH Migration')
+    await openHealth()
+    await openMessages()
+  })
+
+  it('should show the no care teams alert instead of start new message button', async () => {
+    await waitFor(element(by.id('noCareTeamsAlertTestID')))
+      .toExist()
+      .withTimeout(5000)
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
+  })
+
+  it('should display the correct alert header text', async () => {
+    await expect(element(by.text('You’re not connected to any care teams in this messaging tool'))).toExist()
+  })
+
+  it('should expand the alert and show the body text and facility link', async () => {
+    await element(by.id('noCareTeamsAlertTestID')).tap()
+    await expect(element(by.text('If you need to contact your care team, call your VA health facility.'))).toBeVisible()
+    await expect(element(by.text('Find your VA facility'))).toBeVisible()
+  })
+
+  it('should show the no care teams alert in a folder view', async () => {
+    await element(by.id(MessagesE2eIdConstants.FOLDERS_ID)).tap()
+    await waitFor(element(by.text('Sent')))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(100, 'down')
+    await element(by.text('Sent')).tap()
+    // Wait for folder messages and recipients to load before checking for the alert
+    await waitFor(element(by.id('noCareTeamsAlertTestID')))
+      .toExist()
+      .withTimeout(5000)
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
   })
 })

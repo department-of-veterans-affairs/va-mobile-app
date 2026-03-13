@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { when } from 'jest-when'
 
 import NoFolderMessages from 'screens/HealthScreen/SecureMessaging/NoFolderMessages/NoFolderMessages'
@@ -41,9 +42,11 @@ context('NoFolderMessages', () => {
       expect(screen.getByTestId('startNewMessageButtonTestID')).toBeTruthy()
     })
 
-    it('should hide the button when noRecipientsError is true', () => {
+    it('should show the no care teams alert when noRecipientsError is true', () => {
       initializeTestInstance(true)
       expect(screen.queryByTestId('startNewMessageButtonTestID')).toBeNull()
+      expect(screen.getByTestId('noCareTeamsAlertTestID')).toBeTruthy()
+      expect(screen.getByRole('tab', { name: t('secureMessaging.noCareTeams.header') })).toBeTruthy()
     })
   })
 })

@@ -7,6 +7,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import NoCareTeamsAlert from 'screens/HealthScreen/SecureMessaging/NoCareTeamsAlert/NoCareTeamsAlert'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -32,7 +33,9 @@ function NoFolderMessages({ noRecipientsError }: { noRecipientsError: boolean })
   return (
     <>
       <VAScrollView contentContainerStyle={scrollStyles}>
-        {!noRecipientsError && (
+        {noRecipientsError ? (
+          <NoCareTeamsAlert />
+        ) : (
           <Box mx={theme.dimensions.buttonPadding}>
             <Button
               label={t('secureMessaging.startNewMessage')}

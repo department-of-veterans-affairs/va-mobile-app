@@ -23,6 +23,7 @@ import CernerAlertSM from 'screens/HealthScreen/SecureMessaging/CernerAlertSM/Ce
 import Folders from 'screens/HealthScreen/SecureMessaging/Folders/Folders'
 import Inbox from 'screens/HealthScreen/SecureMessaging/Inbox/Inbox'
 import NoAccessSM from 'screens/HealthScreen/SecureMessaging/NoAccessSM/NoAccessSM'
+import NoCareTeamsAlert from 'screens/HealthScreen/SecureMessaging/NoCareTeamsAlert/NoCareTeamsAlert'
 import TermsAndConditions from 'screens/HealthScreen/SecureMessaging/TermsAndConditions/TermsAndConditions'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -187,7 +188,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         <TermsAndConditions />
       ) : (
         <>
-          {!noRecipientsError && (
+          {noRecipientsError ? (
+            <NoCareTeamsAlert />
+          ) : (
             <Box mx={theme.dimensions.buttonPadding}>
               <Button
                 label={t('secureMessaging.startNewMessage')}

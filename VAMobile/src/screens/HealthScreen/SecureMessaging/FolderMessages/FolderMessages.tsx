@@ -24,6 +24,7 @@ import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import NoCareTeamsAlert from 'screens/HealthScreen/SecureMessaging/NoCareTeamsAlert/NoCareTeamsAlert'
 import NoFolderMessages from 'screens/HealthScreen/SecureMessaging/NoFolderMessages/NoFolderMessages'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -49,7 +50,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
     enabled: isFocused && screenContentAllowed('WG_FolderMessages'),
   })
   const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
-  const [noRecipientsError, setNoRecipientsError] = useState(true)
+  const [noRecipientsError, setNoRecipientsError] = useState(false)
   const {
     data: recipientsResponse,
     isFetched: hasLoadedRecipients,
@@ -151,7 +152,9 @@ function FolderMessages({ route }: FolderMessagesProps) {
         <NoFolderMessages noRecipientsError={noRecipientsError} />
       ) : (
         <>
-          {!noRecipientsError && (
+          {noRecipientsError ? (
+            <NoCareTeamsAlert />
+          ) : (
             <Box mx={theme.dimensions.buttonPadding}>
               <Button
                 label={t('secureMessaging.startNewMessage')}
