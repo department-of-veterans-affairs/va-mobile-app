@@ -155,6 +155,39 @@ export type AppointmentProposedTimesItem = {
 
 export type AppointmentProposedTimes = Array<AppointmentProposedTimesItem>
 
+export type Base64String = string
+
+export type SummaryMetadata = {
+  id: string // docId
+  apptId: string // used when retrieving the binary data for a specific appointment -- may differ from appointmentId
+  name: string
+  loincCodes: Array<string>
+  noteType: string
+  contentType: string
+}
+// This is used for AVS binaries now, but could extend to use for appointment list data
+export type DataWithAttributes<T, U = undefined> = {
+  data: Array<{
+    id: string
+    type?: string
+    attributes: T
+  }>
+  meta?: U | null
+}
+
+// This field is needed to link the binary data to the metadata after retrieval
+export type SummaryBinaryGetData = {
+  docId: string
+} & SummaryBinary
+
+// Only these fields added to SummaryMetadata for a full summary object
+export type SummaryBinary = {
+  error?: string | null
+  binary?: Base64String | null
+}
+
+export type SummaryObject = SummaryMetadata & SummaryBinary
+
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
   cancelId?: string
@@ -177,7 +210,7 @@ export type AppointmentAttributes = {
   travelPayEligible: boolean
   // pending appointment props
   isPending: boolean
-  typeOfCare?: string // unclear if this always undefined for confirmed appointments that was a pending appointment
+  typeOfCare?: string // typeOfCare now processed on BE for FE/VAHB... If no typeOfCare -> it is not available at the vaos controller
   friendlyLocationName?: string
   proposedTimes?: AppointmentProposedTimes
   patientPhoneNumber?: string
@@ -188,6 +221,8 @@ export type AppointmentAttributes = {
   travelPayClaim?: AppointmentTravelPayClaim
   showScheduleLink?: boolean
   isCerner?: boolean
+  avsPdf?: Array<SummaryObject>
+  avsError?: string
 }
 
 export type AppointmentData = {
@@ -236,6 +271,8 @@ export type AppointmentsGetData = {
   data: AppointmentsList
   meta?: AppointmentsGetDataMeta
 }
+
+export type AvsBinariesGetData = DataWithAttributes<SummaryBinaryGetData>
 
 export type AppointmentsList = Array<AppointmentData>
 
