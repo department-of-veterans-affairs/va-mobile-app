@@ -24,8 +24,8 @@ Consider the speed and performance of the experience. High-frequency, performanc
 
 ### Task Frequency and Complexity
 
-- **High-Frequency, Simple Tasks** (e.g., prescription refills, scheduling appointments, secure messaging): Should be native to the app for faster performance and a more seamless experience.
-- **Complex, Infrequent Tasks** (e.g., viewing labs and test results, reviewing medical records): May be better suited for a WebView or an SSO transition to a browser due to the complexity of building and maintaining these experiences natively.
+- **High-Frequency, Simple Tasks** (e.g. prescription refills, scheduling appointments, secure messaging): Should be native to the app for faster performance and a more seamless experience.
+- **Complex, Infrequent Tasks** (e.g. filling out forms, updating notification preferences, adding an accredited representative, etc.): May be better suited for a WebView or an SSO transition to a browser due to the complexity of building and maintaining these experiences natively.
 
 ---
 
@@ -34,7 +34,7 @@ Consider the speed and performance of the experience. High-frequency, performanc
 ### Native Mobile App
 
 - **Condition**:
-  Users have to install the mobile app on their hardware device(s)
+  Users have installed the mobile app on their hardware device(s)
 - **When to Use**: For high-frequency, task-oriented actions that benefit from direct interaction with native device functionality (e.g., secure messaging, prescription refills, checking claims & appeals).
 - **Example**: Prescription refills are available natively due to their frequent use and the need for performance optimization.
 - **Additional considerations**
@@ -43,22 +43,23 @@ Consider the speed and performance of the experience. High-frequency, performanc
 
 ### WebView
 
-- **Condition**: Users have to install the mobile app on their hardware device(s) and click on a link in-app
-- **When to Use**: For displaying external content or information within the app without requiring the user to leave the app or log in again. WebViews are ideal for tasks that involve retrieving information from VA.gov but don't need deep interaction.
+- **Condition**: Users have installed the mobile app on their hardware device(s) and click on a link in-app
+- **When to Use**: For displaying external content or information within the app without requiring the user to leave the app or log in again. WebViews are for tasks that involve retrieving information from VA.gov, and don't need deep interaction.
 - **Example**: "Find VA Locations" is a WebView implementation, where the top URL, navigation bar, and headers are removed, but the footer remains for key links and guidance. This simplification helps avoid confusion with non-functional elements (e.g., search or login buttons) and maximizes the mobile screen's usable space while speeding up performance.
 - **Additional considerations**: To create a streamlined experience, remove unnecessary elements like top URLs, navigation bars, and headers. This prevents redundancy with app navigation, optimizes screen space, and focuses the user on the core content.
 
-### Single Sign On (SSO) to Browser
+### Single Sign On (SSO) to WebView
 
-- **Condition**: SSO from mobile app to va.gov works -- as of October 2024, development is in progress, with estimated target delivery of December 2024. Users can access directly from a browser. Users install the mobile app on their hardware device(s), click on a link in-app, and navigate to a browser.
-- **When to Use**: For more complex or secure actions that do not have a native implementation and require authentication (e.g., viewing labs and test results).
-- **Example**: A "Labs & Tests" feature could be implemented by sending users via SSO to the authenticated VA.gov browser experience, where they can access their results without needing a fully native implementation.
+- **Condition**: SSO from mobile app to va.gov works in WebViews. Users install the mobile app on their device(s), click on a link in app, and navigate to a webpage on va.gov via a WebView.
+- **When to Use**: For more complex or secure actions that do not have a native implementation and require authentication (e.g., viewing labs and test results, accessing secure information, etc.).
+- **Example**: A "Education" or "VR&E" feature could be implemented by sending users via SSO to the authenticated VA.gov browser experience, where they can access their results without needing a fully native implementation.
 - **Additional considerations**:
   - For features where the user SSOs into a browser, an entry point needs to be built. For example, a "Labs & Tests" navigation in the Health category screen.
   - If a user is likely to need their progress saved during a task (e.g., filling out forms), it may benefit from being a web experience where users can return to it later via a web browser.
+  - Local (device based) native settings, aren't applied to WebViews—if an experienece would benefit from native customization, like text size changes, dark mode, or accessibility features, we recommend not using a webview and instead sending users to a browser. 
 
 ### External Link
 
-- **Condition**: Users can access directly from a browser. Users install the mobile app on their hardware device(s), click on a link in-app, and navigate to a browser.
+- **Condition**: Users can access directly from a browser. Users install the mobile app on their device(s), click on a link in-app, and navigate to a browser.
 - **When to Use**: For linking to informational resources that do not require authentication and are simple to navigate (e.g., informational pages).
 - **Example**: The link titled "About VA Disability Ratings" in the mobile app directs users to an external VA.gov webpage that provides extensive information without requiring login.
