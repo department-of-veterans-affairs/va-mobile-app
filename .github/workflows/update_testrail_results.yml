@@ -1,4 +1,8 @@
-name: '[e2e] Update TestRail Results'
+# Reusable workflow that uploads e2e Detox test results (JUnit XML)
+# to TestRail. Finds or creates the appropriate test run, then uses the trcli
+# tool to parse and upload results for each test suite.
+
+name: '[TestRail] Update E2E Results'
 
 on:
   workflow_call:
@@ -11,9 +15,11 @@ on:
         required: true
     inputs:
       testRail_name:
+        description: 'Name for the TestRail run (defaults to current date if blank)'
         type: string
         default: ''
       test_OS_name:
+        description: 'OS name for the test run (e.g. iOS or Android)'
         type: string
         default: ''
     outputs:

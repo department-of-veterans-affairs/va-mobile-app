@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 sidebar_label: Overview
 ---
 
@@ -9,27 +9,7 @@ sidebar_label: Overview
 
 [GitHub Actions](https://github.com/features/actions) is used to automate several processes for our project, including build automation, releases, ensuring code quality, and other workflows related to project management. Our workflows can be found on the va-mobile-app repo's [Actions tab](https://github.com/department-of-veterans-affairs/va-mobile-app/actions).
 
-## Workflows
-
-Our workflows can curently be categorized into three types: Release and Build workflows, Code Quality workflows, and Other workflows.
-
-## Build and Release Workflows
-
-We [release](../../../../gettingStarted/Releases/release-process) a new version of the app to app stores every 2 weeks. The process of building, packaging, uploading the app, updating screenshots and release notes manually can be very time consuming. We use a combination of [GitHub Actions](https://docs.github.com/en/actions) and [fastlane](https://fastlane.tools/) to automate these processes with a combination of git branching strategy, scheduled jobs, and scripting.
-
-[View Build and Release Workflows](./BuildReleaseWorkflows)
-
-## Code Quality Workflows
-
-Our automations also help us prevent bad code from shipping out by performing linting and running unit tests before PRs are allowed to pass, keeping our dependencies up todate, scanning for vulnerability, and automating [TestRail](https://www.testrail.com/) runs.
-
-[View Code Quality Workflows](./CodeQualityWorkflows)
-
-## Other Workflows
-
-We also have other workflows to help us with more general tasks, such as getting a use added to our GitHub repo, sending Slack messages, enabling slash commands on our GitHub issues, and deploying our this documentation site.
-
-[View Other Workflows](./OtherWorkflows)
+- [View documentation of all GitHub Actions workflows](./Workflows.mdx)
 
 ### Code Quality
 

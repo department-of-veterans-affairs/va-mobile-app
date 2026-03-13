@@ -1,3 +1,8 @@
+# Scans PRs for package.json dependency changes. Detects added,
+# changed, or removed packages, runs GuardDog security analysis, generates a
+# detailed review summary, and requires manual approval for dependency changes
+# via the bypass-package-lock environment protection.
+
 name: '[Security] Package Dependency Security Check'
 
 on:

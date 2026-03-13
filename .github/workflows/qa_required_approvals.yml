@@ -1,6 +1,8 @@
-# Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
+# Enforces that PRs modifying app source code have at least one
+# engineer approval and one QA team approval before merging. Checks changed
+# files against inclusion/exclusion patterns and validates review approvals.
 
-name: '[Utils] QA required approval'
+name: '[Admin] QA Required Approvals'
 
 on: pull_request
 

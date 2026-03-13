@@ -39,6 +39,9 @@
   --icon-colors : rgb(0, 113, 188);
 
   --ifm-link-decoration: underline;
+
+  /* Offset anchor link scrolling by the height of the fixed navbar */
+  scroll-padding-top: calc(var(--ifm-navbar-height) + 5px);
 }
 
 .footer {

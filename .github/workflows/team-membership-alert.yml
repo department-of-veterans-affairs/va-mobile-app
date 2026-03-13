@@ -1,3 +1,7 @@
+# Monitors the flagship-mobile-team GitHub team for new members.
+# Runs daily, compares current members against a stored list, and notifies Slack
+# when new members are detected. Updates the stored member list accordingly.
+
 name: '[Admin] Team Membership Alert'
 
 on:

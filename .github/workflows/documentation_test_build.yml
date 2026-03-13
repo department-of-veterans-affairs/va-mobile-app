@@ -1,3 +1,7 @@
+# Runs a test build of the Docusaurus documentation site on PRs
+# targeting develop that touch components, documentation, or hooks. Verifies
+# the documentation builds successfully without deploying.
+
 name: '[Documentation] Test Build'
 
 # Adapted from https://docusaurus.io/docs/deployment

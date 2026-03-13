@@ -1,3 +1,7 @@
+# Deploys the Docusaurus documentation site to GitHub Pages. Triggers
+# on pushes to develop that touch documentation files, daily on a schedule, or
+# manually. Builds the site and publishes to the gh-pages branch.
+
 name: "[Documentation] Deploy Site"
 
 # Adapted from https://docusaurus.io/docs/deployment

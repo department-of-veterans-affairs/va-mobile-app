@@ -1,3 +1,8 @@
+# Runs axe-core accessibility scans against every page of the
+# documentation site on weekday mornings. Builds the Docusaurus site, crawls
+# the sitemap, checks each URL for accessibility issues, and notifies Slack
+# with the count of pages and errors found.
+
 name: '[Documentation] Accessibility Check'
 
 on:

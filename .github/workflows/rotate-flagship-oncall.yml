@@ -1,3 +1,7 @@
+# Posts the weekly on-call assignment to the va-mobile-app-alerts
+# Slack channel every Monday. Fetches the current on-call person from PagerDuty,
+# sends a Slack notification, and updates the channel topic.
+
 name: '[Admin] Flagship Mobile Alerts Weekly On-Call Assignment'
 on:
   workflow_dispatch:

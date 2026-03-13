@@ -1,4 +1,7 @@
-name: '[Admin] Issue created notifications'
+# This workflow triggers when a new issue is opened and routes notifications to Slack
+# based on issue labels (e.g., user-onboarding, devops, go-live, project-kickoff).
+
+name: '[Admin] Issue Created Notifications'
 
 on:
   issues:
