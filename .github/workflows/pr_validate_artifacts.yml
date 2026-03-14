@@ -1,0 +1,28 @@
+# Validates a user has checked the appropriate artifact checkboxes
+# before allowing a PR to be submitted
+
+name: '[Admin] QA Required Artifacts'
+on:
+  pull_request:
+    types: [ opened, edited, synchronize, reopened ]
+  pull_request_review:
+    types: [ submitted ]
+
+jobs:
+  validate_qa_artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for QA Artifact Checkboxes
+        id: qa-artifact-checkbox
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [[ (("$PR_BODY" == *"[x] Screenshots or screen recording at **factory default**"* || "$PR_BODY" == *"[X] Screenshots or screen recording at **factory default**"*) && ("$PR_BODY" == *"[x] Screenshots in **landscape orientation**"* || "$PR_BODY" == *"[X] Screenshots in **landscape orientation**"*) && ("$PR_BODY" == *"[x] Screenshots at **2x text size**"* || "$PR_BODY" == *"[X] Screenshots at **2x text size**"*) && ("$PR_BODY" == *"[x] Screen recording of interaction"* || "$PR_BODY" == *"[X] Screen recording of interaction"*)) || ("$PR_BODY" == *"[x] Visual artifacts not applicable to this PR"* || "$PR_BODY" == *"[X] Visual artifacts not applicable to this PR"*) ]]; then
+            echo "qa_artifacts=true" >> $GITHUB_OUTPUT
+            echo "QA Artifacts included"
+            exit 0
+          else
+            echo "qa_artifacts=false" >> $GITHUB_OUTPUT
+            echo "Required QA artifacts not included"
+            exit 1
+          fi
